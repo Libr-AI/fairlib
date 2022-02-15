@@ -14,10 +14,15 @@ from pathlib import Path
 class DeepMojiDataset(BaseDataset):
 
     p_aae = 0.5 # distribution of the main label, proportion of the AAE
-    ratio = 0.8 # stereotyping, 0.5 is balanced 
     n = 100000 # target size
 
     def load_data(self):
+        # stereotyping, 0.5 is balanced 
+        if self.split == "train":
+            self.ratio = 0.8 
+        else:
+            self.ratio = 0.5 # stereotyping, 0.5 is balanced 
+
         self.data_dir = Path(self.args.data_dir) / self.split
 
         n_1 = int(self.n * self.p_aae * self.ratio) # happy AAE 

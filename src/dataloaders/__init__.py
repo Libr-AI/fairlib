@@ -6,16 +6,33 @@ from . import utils
 from collections import defaultdict
 
 def get_dataloaders(args):
-    assert args.task in ["Moji", "Bios"], "Not implemented"
-    if args.task == "Moji":
+    assert args.dataset in ["Moji", "Bios"], "Not implemented"
+    if args.dataset == "Moji":
         task_dataloader = DeepMojiDataset
-    elif args.task == "Bios":
+    elif args.dataset == "Bios":
         task_dataloader = BiosDataset
     else:
         pass
     
-    train_dataloader = task_dataloader(args=args, split="train")
-    dev_dataloader = task_dataloader(args=args, split="dev")
-    test_dataloader = task_dataloader(args=args, split="test")
+    train_data = task_dataloader(args=args, split="train")
+    dev_data = task_dataloader(args=args, split="dev")
+    test_data = task_dataloader(args=args, split="test")
 
-    return train_dataloader, dev_dataloader, test_dataloader
+
+    # DataLoader Parameters
+    tran_dataloader_params = {
+            'batch_size': args.batch_size,
+            'shuffle': True,
+            'num_workers': args.num_workers}
+
+    eval_dataloader_params = {
+            'batch_size': args.test_batch_size,
+            'shuffle': False,
+            'num_workers': args.num_workers}
+
+    # init dataloader
+    training_generator = torch.utils.data.DataLoader(train_data, **tran_dataloader_params)
+    validation_generator = torch.utils.data.DataLoader(dev_data, **eval_dataloader_params)
+    test_generator = torch.utils.data.DataLoader(test_data, **eval_dataloader_params)
+
+    return training_generator, validation_generator, test_generator
