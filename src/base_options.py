@@ -1,41 +1,39 @@
 import argparse
 import os
 import torch
-import datasets
-import utils
 import yaml
 import time
-import math
 import numpy as np
 import random
 import logging
 from contextlib import contextmanager
 
-import dataloaders
-
-class UniqueNamespace(argparse.Namespace):
-    def __init__(self, requires_unique=True):
-        self.__requires_unique = requires_unique
-        self.__set_value = {}
-
-    def requires_unique(self):
-        return self.__requires_unique
-
-    def mark_set(self, name, value):
-        if self.__requires_unique and name in self.__set_value:
-            raise argparse.ArgumentTypeError(
-                "'{}' appears several times: {}, {}.".format(
-                    name, self.__set_value[name], value))
-        self.__set_value[name] = value
+from src import utils
+from src import dataloaders
 
 class State(object):
+
+    class UniqueNamespace(argparse.Namespace):
+        def __init__(self, requires_unique=True):
+            self.__requires_unique = requires_unique
+            self.__set_value = {}
+
+        def requires_unique(self):
+            return self.__requires_unique
+
+        def mark_set(self, name, value):
+            if self.__requires_unique and name in self.__set_value:
+                raise argparse.ArgumentTypeError(
+                    "'{}' appears several times: {}, {}.".format(
+                        name, self.__set_value[name], value))
+            self.__set_value[name] = value
 
 
     __inited = False
 
     def __init__(self, opt=None):
         if opt is None:
-            self.opt = UniqueNamespace()
+            self.opt = self.UniqueNamespace()
         else:
             if isinstance(opt, argparse.Namespace):
                 opt = vars(opt)
@@ -99,7 +97,7 @@ class State(object):
         vs = self.merge()
         opt = argparse.Namespace(**vs)
         name = "Test"
-        dirs = [opt.mode, opt.dataset, name]
+        dirs = [opt.project_dir, opt.dataset, name]
         return os.path.join(opt.results_dir, *dirs)
 
 class BaseOptions(object):
@@ -152,6 +150,8 @@ class BaseOptions(object):
         for name, action_cls in action_registry.items():
             action_registry[name] = get_unique_action_cls(action_cls)
 
+        parser.add_argument('--project_dir', type=str, default=None,
+                            help='dataset root')
         parser.add_argument('--batch_size', type=pos_int, default=1024,
                             help='input batch size for training (default: 1024)')
         parser.add_argument('--test_batch_size', type=pos_int, default=1024,
@@ -186,6 +186,10 @@ class BaseOptions(object):
 
 
         # # Arguments for fair training
+        parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
+        parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
+        parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
+
         # parser.add_argument('--fairness', type=bool, default=True, help='Is the experiments towards Fairness?')
         # parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
         # parser.add_argument('--adv_lambda', type=float, default=0.8, help='hyperparameter for adversarial training')
@@ -218,8 +222,6 @@ class BaseOptions(object):
         return self.set_state(self.state)
 
     def set_state(self, state, dummy=False):
-        if state.opt.sample_n_nets is None:
-            state.opt.sample_n_nets = state.opt.n_nets
 
         base_dir = state.get_base_directory()
 
@@ -262,7 +264,7 @@ class BaseOptions(object):
                 with open(yaml_name, 'r') as f:
                     # ignore unknown ctors
                     yaml.add_multi_constructor('', lambda loader, suffix, node: None)
-                    old_yaml = yaml.load(f)  # this is a dict
+                    old_yaml = yaml.full_load(f)  # this is a dict
                 old_yaml_time = old_yaml.get('start_time', 'unknown_time')
                 for c in ':-':
                     old_yaml_time = old_yaml_time.replace(c, '_')
@@ -304,6 +306,10 @@ class BaseOptions(object):
             if state.data_dir is None:
                 state.data_dir = dataloaders.default_dataset_roots[state.dataset]
             train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)
+
+            state.opt.train_generator = train_iterator
+            state.opt.dev_generator = dev_iterator
+            state.opt.test_generator = test_iterator
 
             logging.info('train dataset size:\t{}'.format(len(train_iterator.dataset)))
             logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
