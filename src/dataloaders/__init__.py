@@ -7,21 +7,26 @@ from collections import defaultdict
 
 if sys.platform == "win32":
     default_dataset_roots = dict(
-        Moji='D:\\Project\\User_gender_removal\\data\\deepmoji\\split2\\',
-        Bios='D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios'
+        Moji= r'D:\\Project\\User_gender_removal\\data\\deepmoji\\split2\\',
+        Bios_gender= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
+        Bios_economy= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
+        Bios_both= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
     )
 else:
     default_dataset_roots = dict(
         Moji='/data/cephfs/punim1421/Dataset/deepmoji/split2/',
-        Bios='./data/cephfs/punim1421/Dataset/bios_gender_economy'
+        Bios_gender='./data/cephfs/punim1421/Dataset/bios_gender_economy',
+        Bios_economy='./data/cephfs/punim1421/Dataset/bios_gender_economy',
+        Bios_both='./data/cephfs/punim1421/Dataset/bios_gender_economy',
     )
 
 def get_dataloaders(args):
-    assert args.dataset in ["Moji", "Bios"], "Not implemented"
+    assert args.dataset in ["Moji", "Bios_gender", "Bios_economy", "Bios_both"], "Not implemented"
     if args.dataset == "Moji":
         task_dataloader = DeepMojiDataset
-    elif args.dataset == "Bios":
+    elif args.dataset in ["Bios_gender", "Bios_economy", "Bios_both"]:
         task_dataloader = BiosDataset
+        args.protected_task = args.dataset.split("_")[1]
     else:
         pass
     
