@@ -301,8 +301,8 @@ class BaseOptions(object):
             random.seed(seed)
 
             # Init the dataloaders
-
-
+            if state.data_dir is None:
+                state.data_dir = dataloaders.default_dataset_roots[state.dataset]
             train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)
 
             logging.info('train dataset size:\t{}'.format(len(train_iterator.dataset)))
