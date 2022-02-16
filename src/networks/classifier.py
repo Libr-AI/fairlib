@@ -18,13 +18,12 @@ class MLP(BaseModel):
         if args.n_hidden == 0:
             self.output_layer = nn.Linear(args.emb_size, args.num_classes)
         else:
-            self.input_layer = nn.Linear(args.emb_size, args.hidden_size)
             self.output_layer = nn.Linear(args.hidden_size, args.num_classes)
 
             # Init batch norm, dropout, and activation function
             self.init_hyperparameters()
             
-            all_hidden_layers = [self.input_layer] + [nn.Linear(args.hidden_size, args.hidden_size) for _ in range(args.n_hidden-1)]
+            all_hidden_layers = [nn.Linear(args.emb_size, args.hidden_size)] + [nn.Linear(args.hidden_size, args.hidden_size) for _ in range(args.n_hidden-1)]
 
             for _hidden_layer in all_hidden_layers:
                 self.hidden_layers.append(_hidden_layer)
@@ -32,8 +31,8 @@ class MLP(BaseModel):
                     self.hidden_layers.append(self.dropout)
                 if self.BN is not None:
                     self.hidden_layers.append(self.BN)
-                if self.activation_function is not None:
-                    self.hidden_layers.append(self.activation_function)
+                if self.AF is not None:
+                    self.hidden_layers.append(self.AF)
 
         self.init_for_training()
 

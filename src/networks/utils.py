@@ -41,7 +41,6 @@ class BaseModel(nn.Module):
         else:
             raise "not implemented yet"
 
-        
         if self.args.batch_norm:
             self.BN = nn.BatchNorm1d(self.args.hidden_size)
         else:

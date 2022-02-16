@@ -190,7 +190,7 @@ class BaseOptions(object):
                             help='gated model for augmented inputs given protected labels')
         parser.add_argument('--hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the main task classifier')
-        parser.add_argument('--n_hidden',  type=pos_int, default=2, 
+        parser.add_argument('--n_hidden',  type=int, default=2, 
                             help='number of hidden layers')
         parser.add_argument('--dropout', type=float, default=0.5,
                             help='dropout probability')
@@ -333,10 +333,6 @@ class BaseOptions(object):
             logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
             logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
             logging.info('datasets built!')
-
-            # Init the model
-            model = networks.get_main_model(state)
-            state.opt.main_model = model
 
         return state
 
