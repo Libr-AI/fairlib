@@ -97,8 +97,13 @@ class State(object):
     def get_base_directory(self):
         vs = self.merge()
         opt = argparse.Namespace(**vs)
-        name = "Test"
-        dirs = [opt.project_dir, opt.dataset, name]
+        dirs = [opt.project_dir, opt.dataset, opt.exp_id]
+        return os.path.join(opt.results_dir, *dirs)
+
+    def get_model_directory(self):
+        vs = self.merge()
+        opt = argparse.Namespace(**vs)
+        dirs = [opt.project_dir, opt.dataset, opt.exp_id, opt.model_dir]
         return os.path.join(opt.results_dir, *dirs)
 
 class BaseOptions(object):
@@ -153,6 +158,8 @@ class BaseOptions(object):
 
         parser.add_argument('--project_dir', type=str, default=None,
                             help='dataset root')
+        parser.add_argument('--exp_id', type=str, default="test",
+                            help='experiment id')
         parser.add_argument('--encoder_architecture', type=str, default="Fixed",
                             help='Fixed | BERT | DeepMoji')
         parser.add_argument('--batch_size', type=pos_int, default=1024,
@@ -163,11 +170,13 @@ class BaseOptions(object):
                             help='number of total epochs to train (default: 100)')
         parser.add_argument('--lr', type=pos_float, default=0.01, metavar='LR',
                             help='learning rate used to actually learn stuff (default: 0.01)')
+        parser.add_argument('--epochs_since_improvement', type=pos_int, default=5,
+                            help='terminate training for early stopping')
         parser.add_argument('--base_seed', type=int, default=1, metavar='S',
                             help='base random seed (default: 1)')
         parser.add_argument('--log_interval', type=int, default=100, metavar='N',
                             help='how many batches to wait before logging training status')
-        parser.add_argument('--checkpoint_interval', type=int, default=10, metavar='N',
+        parser.add_argument('--checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--dataset', type=str, default='Moji',
                             help='dataset: Moji | Bios ')
@@ -243,12 +252,16 @@ class BaseOptions(object):
 
         base_dir = state.get_base_directory()
 
+        state.opt.model_dir = state.get_model_directory()
+
         state.opt.start_time = time.strftime(r"%Y-%m-%d %H:%M:%S")
 
         state.set_output_flag(not dummy)
         
         if not dummy:
             utils.mkdir(base_dir)
+
+            utils.mkdir(state.opt.model_dir)
 
             # First thing: set logging config:
             if not state.opt.no_log:
