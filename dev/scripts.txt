@@ -1,3 +1,5 @@
 
 
 python dev_main.py --project_dir dev/logs --n_hidden 2 --dropout 0 --batch_norm --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models
+
+python dev_main.py --project_dir dev/logs --n_hidden 2 --dropout 0 --batch_norm --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --BT Reweighting --BTObj joint --dataset Bios_gender --emb_size 768 --num_classes 28

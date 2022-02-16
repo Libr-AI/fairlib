@@ -26,7 +26,7 @@ def save_checkpoint(
     _state = {
         'epoch': epoch,
         'epochs_since_improvement': epochs_since_improvement,
-        'model': model,
+        'model': model.state_dict(),
         'loss': loss,
         'dev_predictions': dev_predictions,
         'test_predictions': test_predictions,
@@ -38,7 +38,7 @@ def save_checkpoint(
     torch.save(_state, Path(checkpoint_dir) / filename)
     # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
     if is_best:
-        torch.save(_state, Path(checkpoint_dir) / 'BEST_' + filename)
+        torch.save(_state, Path(checkpoint_dir) / 'BEST_checkpoint.pth.tar')
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch, discriminator = None, staring_adv = False):
@@ -116,8 +116,7 @@ def train_epoch(model, iterator, args, epoch, discriminator = None, staring_adv 
 
         if it % args.log_interval == 0:
             logging.info((
-                    'Epoch: {:4d} [{:7d}/{:7d} ({:2.0f}%)]\tLoss: {:.4f}\t'
-                    'Data Time: {:.2f}s\tTrain Time: {:.2f}s'
+                    'Epoch: {:4d} [{:7d}/{:7d} ({:2.0f}%)]\tLoss: {:.4f}\t Data Time: {:.2f}s\tTrain Time: {:.2f}s'
                 ).format(
                     epoch, it * args.batch_size, len(iterator.dataset),
                     100. * it / len(iterator), loss, data_t, t,
@@ -241,8 +240,8 @@ class BaseModel(nn.Module):
                 args = self.args)
 
             # Check if there was an improvement
-            is_best = epoch_valid_loss > best_valid_loss
-            best_loss = min(epoch_valid_loss, best_valid_loss)
+            is_best = epoch_valid_loss < best_valid_loss
+            best_valid_loss = min(epoch_valid_loss, best_valid_loss)
 
             if not is_best:
                 epochs_since_improvement += 1
@@ -282,13 +281,13 @@ class BaseModel(nn.Module):
                 
                 logging.info("Evaluation at Epoch %d" % (epoch,))
                 logging.info((
-                    'Validation GAP: {:2.0f} \tAcc: {:2.0f} \tMacroF1: {:2.0f} \tMicroF1: {:2.0f} \t'
+                    'Validation GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
                 ).format(
                     100. * valid_scores["rms_TPR"], 100. * valid_scores["accuracy"], 
                     100. * valid_scores["macro_fscore"], 100. * valid_scores["micro_fscore"]
                 ))
                 logging.info((
-                    'Test GAP: {:2.0f} \tAcc: {:2.0f} \tMacroF1: {:2.0f} \tMicroF1: {:2.0f} \t'
+                    'Test GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
                 ).format(
                     100. * test_scores["rms_TPR"], 100. * test_scores["accuracy"], 
                     100. * test_scores["macro_fscore"], 100. * test_scores["micro_fscore"]

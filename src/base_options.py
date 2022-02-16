@@ -174,12 +174,12 @@ class BaseOptions(object):
                             help='terminate training for early stopping')
         parser.add_argument('--base_seed', type=int, default=1, metavar='S',
                             help='base random seed (default: 1)')
-        parser.add_argument('--log_interval', type=int, default=100, metavar='N',
+        parser.add_argument('--log_interval', type=int, default=50, metavar='N',
                             help='how many batches to wait before logging training status')
         parser.add_argument('--checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--dataset', type=str, default='Moji',
-                            help='dataset: Moji | Bios ')
+                            help='dataset: Moji | Bios_gender | Bios_economy | Bios_both')
         parser.add_argument('--data_dir', type=str, default=None,
                             help='dataset root')
         parser.add_argument('--results_dir', type=str, default='./results/',
