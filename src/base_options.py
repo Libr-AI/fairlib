@@ -174,8 +174,6 @@ class BaseOptions(object):
                             help='results directory')
         parser.add_argument('--model_dir', type=str, default='./models/',
                             help='directory storing trained models')
-        parser.add_argument('--dropout', action='store_true',
-                            help='if set, use dropout')
         parser.add_argument('--device_id', type=comp(int, 'ge', -1), default=0, help='device id, -1 is cpu')
         parser.add_argument('--num_workers', type=nonneg_int, default=0,
                             help='number of data loader workers')
@@ -184,8 +182,27 @@ class BaseOptions(object):
         parser.add_argument('--log_level', type=str, default='INFO',
                             help='logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL')
 
+        # Arguments for the main task model
+        parser.add_argument('--gated',  action='store_true', default=False, 
+                            help='gated model for augmented inputs given protected labels')
+        parser.add_argument('--hidden_size',  type=pos_int, default=300, 
+                            help='number of hidden units for the main task classifier')
+        parser.add_argument('--n_hidden',  type=pos_int, default=2, 
+                            help='number of hidden layers')
+        parser.add_argument('--dropout', type=float, default=0.5,
+                            help='dropout probability')
+        parser.add_argument('--emb_size', type=pos_int, default=2304,
+                            help='input embedding dimension')
+        parser.add_argument('--num_classes', type=pos_int, default=2,
+                            help='number of target classes')
+        parser.add_argument('--activation_function', type=str, default="ReLu",
+                            help='nonlinear activation function for the main task model')
+        parser.add_argument('--batch_norm',  action='store_true', default=False, 
+                            help='apply 1d batch norm to the model')
 
-        # # Arguments for fair training
+
+
+        # Arguments for fair training
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
         parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
