@@ -1,1 +1,3 @@
-python dev_main.py --project_dir dev/logs --n_hidden 2 --dropout 0 --batch_norm --results_dir D:\Project\Fair_NLP_Classification\
+
+
+python dev_main.py --project_dir dev/logs --n_hidden 2 --dropout 0 --batch_norm --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models

@@ -16,5 +16,8 @@ if __name__ == '__main__':
 
     # Init the model
     model = networks.get_main_model(state)
-    state.opt.main_model = model
+    # state.opt.main_model = model
     logging.info('Model Initialized!')
+
+    model.train_self()
+    logging.info('Finished!')

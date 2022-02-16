@@ -34,7 +34,7 @@ def save_checkpoint(
         'test_evaluations': test_evaluations
         }
 
-    filename = 'checkpoint_' + epoch + '.pth.tar'
+    filename = 'checkpoint_' + "epoch{}".format(epoch) + '.pth.tar'
     torch.save(_state, Path(checkpoint_dir) / filename)
     # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
     if is_best:
@@ -214,11 +214,11 @@ class BaseModel(nn.Module):
         else:
             self.dropout = None
     
-    def train(self):
+    def train_self(self):
         epochs_since_improvement = 0
         best_valid_loss = 1e+5
 
-        for epoch in range(self.args.epochs):
+        for epoch in range(self.args.opt.epochs):
             
             # Early stopping
             if epochs_since_improvement >= self.args.epochs_since_improvement:
