@@ -10,6 +10,7 @@ from contextlib import contextmanager
 
 from src import utils
 from src import dataloaders
+from src import networks
 
 class State(object):
 
@@ -152,6 +153,8 @@ class BaseOptions(object):
 
         parser.add_argument('--project_dir', type=str, default=None,
                             help='dataset root')
+        parser.add_argument('--encoder_architecture', type=str, default="Fixed",
+                            help='Fixed | BERT | DeepMoji')
         parser.add_argument('--batch_size', type=pos_int, default=1024,
                             help='input batch size for training (default: 1024)')
         parser.add_argument('--test_batch_size', type=pos_int, default=1024,
@@ -199,8 +202,6 @@ class BaseOptions(object):
                             help='nonlinear activation function for the main task model')
         parser.add_argument('--batch_norm',  action='store_true', default=False, 
                             help='apply 1d batch norm to the model')
-
-
 
         # Arguments for fair training
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
@@ -332,6 +333,10 @@ class BaseOptions(object):
             logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
             logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
             logging.info('datasets built!')
+
+            # Init the model
+            model = networks.get_main_model(state)
+            state.opt.main_model = model
 
         return state
 
