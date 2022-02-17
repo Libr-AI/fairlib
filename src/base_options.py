@@ -220,6 +220,16 @@ class BaseOptions(object):
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
+        parser.add_argument('--adv_batch_size', type=pos_int, default=1024,
+                            help='input batch size for discriminator training (default: 1024)')
+        parser.add_argument('--adv_test_batch_size', type=pos_int, default=1024,
+                            help='input batch size for discriminator testing (default: 1024)')
+        parser.add_argument('--adv_epochs', type=pos_int, default=100, metavar='N',
+                            help='number of total epochs to train the discriminator (default: 100)')
+        parser.add_argument('--adv_lr', type=pos_float, default=0.01, metavar='LR',
+                            help='learning rate used to actually learn adversarial stuff (default: 0.01)')
+        parser.add_argument('--adv_epochs_since_improvement', type=pos_int, default=5,
+                            help='terminate discriminator training for early stopping')
         parser.add_argument('--adv_lambda', type=float, default=0.8, help='strength of adversarial regularization')
         parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
         parser.add_argument('--adv_gated',  action='store_true', default=False, 
