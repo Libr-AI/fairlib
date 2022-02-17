@@ -220,6 +220,7 @@ class BaseOptions(object):
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
+        parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
         parser.add_argument('--adv_batch_size', type=pos_int, default=1024,
                             help='input batch size for discriminator training (default: 1024)')
         parser.add_argument('--adv_test_batch_size', type=pos_int, default=1024,
@@ -231,9 +232,6 @@ class BaseOptions(object):
         parser.add_argument('--adv_epochs_since_improvement', type=pos_int, default=5,
                             help='terminate discriminator training for early stopping')
         parser.add_argument('--adv_lambda', type=float, default=0.8, help='strength of adversarial regularization')
-        parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
-        parser.add_argument('--adv_gated',  action='store_true', default=False, 
-                            help='gated discriminator for augmented inputs given target labels')
         parser.add_argument('--adv_hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the adversarial discriminator')
         parser.add_argument('--adv_n_hidden',  type=int, default=2, 
@@ -246,6 +244,25 @@ class BaseOptions(object):
                             help='nonlinear activation function for the discriminator')
         parser.add_argument('--adv_batch_norm',  action='store_true', default=False, 
                             help='apply 1d batch norm to the discriminator')
+
+        # Gated adv
+        parser.add_argument('--adv_gated',  action='store_true', default=False, 
+                            help='gated discriminator for augmented inputs given target labels')
+        # Diverse
+        parser.add_argument('--adv_num_subDiscriminator', type=pos_int, default=1,
+                            help='number of subdiscriminators. 1 is the standard setting.')
+        parser.add_argument('--adv_diverse_lambda', type=float, default=0.0, 
+                            help='strength of difference loss to encourage diverse representations for ensemble adv.')
+        
+        # Decoupling adversarial training
+        parser.add_argument('--adv_decoupling', action='store_true', default=False,
+                            help='decoupling the training and regularization of the adv discriminator and the main task model.')
+
+        # Use uniform soft-labels for the adversarial regularization
+        parser.add_argument('--adv_uniform_label', action='store_true', default=False,
+                            help='Using uniform soft-labels for the adversarial regularization')
+
+
 
     def get_dummy_state(self, *cmdargs, yaml_file=None, **opt_pairs):
         if yaml_file is None:
