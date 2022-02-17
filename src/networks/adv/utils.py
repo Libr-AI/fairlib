@@ -1,8 +1,6 @@
 import torch.nn as nn
-from tqdm import tqdm
 import numpy as np
 import torch
-from torch.nn.modules import Module
 import logging
 from torch.optim import Adam
 import time
