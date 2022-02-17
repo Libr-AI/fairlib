@@ -217,10 +217,27 @@ class BaseOptions(object):
         parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
 
-        # parser.add_argument('--fairness', type=bool, default=True, help='Is the experiments towards Fairness?')
-        # parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
-        # parser.add_argument('--adv_lambda', type=float, default=0.8, help='hyperparameter for adversarial training')
-        # parser.add_argument('--adv_units', type=int, default=256, help='hidden dims for adversarial training')
+        # Arguments for adversarial debiasing
+        parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
+        # The following arguments will only be used if adv_debiasing is set to True
+        parser.add_argument('--adv_lambda', type=float, default=0.8, help='strength of adversarial regularization')
+        parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
+        parser.add_argument('--adv_gated',  action='store_true', default=False, 
+                            help='gated discriminator for augmented inputs given target labels')
+        parser.add_argument('--adv_hidden_size',  type=pos_int, default=300, 
+                            help='number of hidden units for the adversarial discriminator')
+        parser.add_argument('--adv_n_hidden',  type=int, default=2, 
+                            help='number of hidden layers of the discriminator')
+        parser.add_argument('--adv_dropout', type=float, default=0,
+                            help='dropout probability in the discriminator')
+        parser.add_argument('--adv_emb_size', type=pos_int, default=300,
+                            help='input embedding dimension')
+        parser.add_argument('--adv_num_classes', type=pos_int, default=2,
+                            help='number of protected classes')
+        parser.add_argument('--adv_activation_function', type=str, default="ReLu",
+                            help='nonlinear activation function for the discriminator')
+        parser.add_argument('--adv_batch_norm',  action='store_true', default=False, 
+                            help='apply 1d batch norm to the discriminator')
 
     def get_dummy_state(self, *cmdargs, yaml_file=None, **opt_pairs):
         if yaml_file is None:
