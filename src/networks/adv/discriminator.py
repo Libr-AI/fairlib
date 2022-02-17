@@ -82,6 +82,8 @@ def adv_train_epoch(model, discriminators, iterator, args):
             epoch_loss += loss.item()
 
     return epoch_loss / len(iterator)
+#  https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training/blob/b5b4c99ada17b3c19ab2ae8789bb56058cb72643/scripts_deepmoji.py#L90
+
 
 class Discriminator():
     def __init__(self, args):
