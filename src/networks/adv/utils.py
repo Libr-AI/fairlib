@@ -6,6 +6,38 @@ from torch.optim import Adam
 import time
 from pathlib import Path
 
+class GradientReversalFunction(torch.autograd.Function):
+    """
+    From:
+    https://github.com/jvanvugt/pytorch-domain-adaptation/blob/cb65581f20b71ff9883dd2435b2275a1fd4b90df/utils.py#L26
+    Gradient Reversal Layer from:
+    Unsupervised Domain Adaptation by Backpropagation (Ganin & Lempitsky, 2015)
+    Forward pass is the identity function. In the backward pass,
+    the upstream gradients are multiplied by -lambda (i.e. gradient is reversed)
+    """
+
+    @staticmethod
+    def forward(ctx, x, lambda_):
+        ctx.lambda_ = lambda_
+        return x.clone()
+
+    @staticmethod
+    def backward(ctx, grads):
+        lambda_ = ctx.lambda_
+        lambda_ = grads.new_tensor(lambda_)
+        dx = -lambda_ * grads
+        return dx, None
+
+
+class GradientReversal(torch.nn.Module):
+    def __init__(self, lambda_):
+        super(GradientReversal, self).__init__()
+        self.lambda_ = lambda_
+
+    def forward(self, x):
+        return GradientReversalFunction.apply(x, self.lambda_)
+
+
 def print_network(net, verbose=False):
     num_params = 0
     for i, param in enumerate(net.parameters()):
@@ -53,7 +85,7 @@ class BaseDiscriminator(nn.Module):
             self.dropout = None
     
     def init_hidden_layers(self):
-        if self.adv_n_hidden == 0:
+        if self.args.adv_n_hidden == 0:
             return nn.ModuleList()
         else:
             # Hidden layers
@@ -77,7 +109,7 @@ class SubDiscriminator(BaseDiscriminator):
     def __init__(self, args):
         super(SubDiscriminator, self).__init__()
         self.args = args
-        
+        self.grad_rev = GradientReversal(self.args.adv_lambda)
         assert args.adv_n_hidden >= 0, "n_hidden must be nonnegative"
         
         assert self.args.adv_level in ["input", "last_hidden", "output"]
@@ -127,6 +159,7 @@ class SubDiscriminator(BaseDiscriminator):
         self.init_for_training()
 
     def forward(self, input_data, group_label = None):
+        # input_data = self.grad_rev(input_data)
         
         # Main model
         main_output = input_data
@@ -164,6 +197,8 @@ class SubDiscriminator(BaseDiscriminator):
         return output
     
     def hidden(self, input_data, group_label = None):
+        # input_data = self.grad_rev(input_data)
+
         # Main model
         main_output = input_data
         for layer in self.hidden_layers:
