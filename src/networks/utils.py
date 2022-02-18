@@ -41,7 +41,7 @@ def save_checkpoint(
         torch.save(_state, Path(checkpoint_dir) / 'BEST_checkpoint.pth.tar')
 
 # train the main model with adv loss
-def train_epoch(model, iterator, args, epoch, discriminator = None, staring_adv = False):
+def train_epoch(model, iterator, args, epoch):
 
     epoch_loss = 0
     model.train()
@@ -70,7 +70,10 @@ def train_epoch(model, iterator, args, epoch, discriminator = None, staring_adv 
         
         optimizer.zero_grad()
         # main model predictions
-        predictions = model(text)
+        if args.gated:
+            predictions = model(text, p_tags)
+        else:
+            predictions = model(text)
         # main tasks loss
         # add the weighted loss
         if args.BT is not None and args.BT == "Reweighting":
@@ -79,35 +82,22 @@ def train_epoch(model, iterator, args, epoch, discriminator = None, staring_adv 
         else:
             loss = criterion(predictions, tags)
 
-        # if (args.adv and staring_adv):
-        #     # discriminator predictions
-        #     p_tags = p_tags.long()
+        if args.adv_debiasing:
+            # get hidden representations
+            if args.gated:
+                hs = model.hidden(text, p_tags)
+            else:
+                hs = model.hidden(text)
 
-        #     hs = model.hidden(text)
+            adv_losses = args.discriminator.adv_loss(hs, tags, p_tags)
 
-        #     if args.gate_adv:
-        #         adv_predictions = discriminator(hs, tags)
-        #     else:
-        #         adv_predictions = discriminator(hs)
-
-        #     if uniform_adv_loss:
-        #         # uniform labels
-        #         batch_size, num_g_class = adv_predictions.shape
-        #         # init uniform protected attributes
-        #         p_tags = (1/num_g_class) * torch.ones_like(adv_predictions)
-        #         p_tags = p_tags.to(device)
-        #         # calculate the adv loss with the uniform protected labels
-        #         # cross entropy loss for soft labels
-        #         adv_loss = cross_entropy_with_probs(adv_predictions, p_tags)
-        #     else:
-        #         # add the weighted loss
-        #         if args.adv_weighting is not None:
-        #             adv_loss = adv_criterion(adv_predictions, p_tags)
-        #             adv_loss = torch.mean(adv_loss)
-        #         else:
-        #             adv_loss = adv_criterion(adv_predictions, p_tags)
+            for adv_loss in adv_losses:
+                loss = loss + (adv_loss / args.adv_num_subDiscriminator)
             
-        #     loss = loss + adv_loss
+            # Update discriminator if needed
+            if args.adv_update_frequency == "Batch":
+                args.discriminator.train_self()
+
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
@@ -228,9 +218,7 @@ class BaseModel(nn.Module):
                 model = self, 
                 iterator = self.args.opt.train_generator, 
                 args = self.args, 
-                epoch = epoch, 
-                discriminator = None, 
-                staring_adv = False)
+                epoch = epoch)
 
             # One epoch's validation
             (epoch_valid_loss, valid_preds, 
@@ -238,6 +226,10 @@ class BaseModel(nn.Module):
                 model = self, 
                 iterator = self.args.opt.dev_generator, 
                 args = self.args)
+
+            # Update discriminator if needed
+            if self.args.adv_update_frequency == "Epoch":
+                self.args.discriminator.train_self()
 
             # Check if there was an improvement
             is_best = epoch_valid_loss < best_valid_loss
