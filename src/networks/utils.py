@@ -144,7 +144,11 @@ def eval_epoch(model, iterator, args):
             instance_weights = batch[3].float()
             instance_weights = instance_weights.to(device)
 
-        predictions = model(text)
+        # main model predictions
+        if args.gated:
+            predictions = model(text, p_tags)
+        else:
+            predictions = model(text)
         
         # add the weighted loss
         if args.BT is not None and args.BT == "Reweighting":
