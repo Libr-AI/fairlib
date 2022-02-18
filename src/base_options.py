@@ -399,6 +399,10 @@ class BaseOptions(object):
 
             if state.adv_debiasing and state.adv_decoupling:
                 raise NotImplementedError
+            
+            # Init discriminator for adversarial training
+            if state.adv_debiasing:
+                state.opt.discriminator = networks.adv.Discriminator()
 
         return state
 
