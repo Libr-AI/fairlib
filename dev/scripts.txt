@@ -12,3 +12,9 @@ python dev_main.py --project_dir dev/logs --exp_id baseline_BT --n_hidden 2 --dr
 
 # Moji Gated
 python dev_main.py --project_dir dev/logs --exp_id Gated --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --gated
+
+# Moji BT+Gated
+python dev_main.py --project_dir dev/logs --exp_id BT_Gated --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --gated --BT Reweighting --BTObj joint
+
+# Moji Adversarial
+python dev_main.py --project_dir dev/logs --exp_id adv --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --adv_debiasing

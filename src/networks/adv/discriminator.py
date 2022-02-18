@@ -54,10 +54,10 @@ def adv_train_epoch(model, discriminators, iterator, args):
 
             # add the weighted loss
             if args.adv_BT is not None and args.adv_BT == "Reweighting":
-                loss = adv_criterion(adv_predictions, p_tags)
+                loss = adv_criterion(adv_predictions, p_tags.long())
                 loss = torch.mean(loss * adv_instance_weights)
             else:
-                loss = adv_criterion(adv_predictions, p_tags)
+                loss = adv_criterion(adv_predictions, p_tags.long())
 
             # encrouge orthogonality
             if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
@@ -123,10 +123,10 @@ def adv_eval_epoch(model, discriminators, iterator, args):
 
                 # add the weighted loss
                 if args.adv_BT is not None and args.adv_BT == "Reweighting":
-                    loss = adv_criterion(adv_predictions, p_tags)
+                    loss = adv_criterion(adv_predictions, p_tags.long())
                     loss = torch.mean(loss * adv_instance_weights)
                 else:
-                    loss = adv_criterion(adv_predictions, p_tags)
+                    loss = adv_criterion(adv_predictions, p_tags.long())
 
                 # encrouge orthogonality
                 if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
@@ -200,6 +200,8 @@ class Discriminator():
     def train_self(self, model):
         epochs_since_improvement = 0
         best_valid_loss = 1e+5
+        
+        self.eval_scores(model, additional_info = "Adv Evaluation before training")
 
         for epoch in range(self.args.opt.adv_epochs):
             
@@ -210,14 +212,14 @@ class Discriminator():
             # One epoch's training
             epoch_train_loss = adv_train_epoch(
                 model = model, 
-                discriminators = self, 
+                discriminators = self.subdiscriminators, 
                 iterator = self.train_iterator, 
                 args = self.args)
 
             # One epoch's validation
             epoch_valid_loss, valid_results_dic = adv_eval_epoch(
                 model = model, 
-                discriminators = self, 
+                discriminators = self.subdiscriminators, 
                 iterator = self.dev_iterator, 
                 args = self.args)
 
@@ -233,42 +235,51 @@ class Discriminator():
                 discriminator_state_dct = {j : self.subdiscriminators[j].state_dict() for j in range(self.args.adv_num_subDiscriminator)}
                 torch.save(discriminator_state_dct, Path(self.args.model_dir) / "BEST_Discriminator.pth.tar")
 
-            if epoch % self.args.adv_checkpoint_interval == 0:
-
-                (epoch_test_loss, test_results_dic) = adv_eval_epoch(
-                    model = model, 
-                    discriminators = self, 
-                    iterator = self.test_iterator, 
-                    args = self.args)
-
-                logging.info("Evaluation at Adv Epoch %d" % (epoch,))
-                logging.info((
-                    'Validation Loss: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
-                ).format(
-                    valid_results_dic["loss"], 100. * valid_results_dic["accuracy"], 
-                    100. * valid_results_dic["macro_fscore"], 100. * valid_results_dic["micro_fscore"]
-                ))
-                logging.info((
-                    'Test GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
-                ).format(
-                    100. * test_results_dic["loss"], 100. * test_results_dic["accuracy"], 
-                    100. * test_results_dic["macro_fscore"], 100. * test_results_dic["micro_fscore"]
-                ))
+        self.eval_scores(model, additional_info = "Evaluation at Adv Epoch %d" % (epoch,))
 
         # Reload parameters from the the best checkpoint
         best_checkpoint = torch.load(Path(self.args.model_dir) / "BEST_Discriminator.pth.tar", map_location=self.args.device)
         for j in range(self.args.adv_num_subDiscriminator):
             self.subdiscriminators[j].load_state_dict(best_checkpoint[j])
+    
+    def eval_scores(self,model, additional_info = None):
+        # Output at the end
+        # One epoch's validation
+        epoch_valid_loss, valid_results_dic = adv_eval_epoch(
+        model = model, 
+        discriminators = self.subdiscriminators, 
+        iterator = self.dev_iterator, 
+        args = self.args)
+
+        (epoch_test_loss, test_results_dic) = adv_eval_epoch(
+            model = model, 
+            discriminators = self.subdiscriminators, 
+            iterator = self.test_iterator, 
+            args = self.args)
+        
+        if additional_info is not None:
+            logging.info(additional_info)
+
+        logging.info(
+            ('Validation Loss: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t').format(
+                    valid_results_dic["loss"], 100. * valid_results_dic["accuracy"], 
+                    100. * valid_results_dic["macro_fscore"], 100. * valid_results_dic["micro_fscore"]
+                ))
+        logging.info(
+            ('Test Loss: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t').format(
+                    test_results_dic["loss"], 100. * test_results_dic["accuracy"], 
+                    100. * test_results_dic["macro_fscore"], 100. * test_results_dic["micro_fscore"]
+                ))
 
     def adv_loss(self, hs, tags, p_tags):
-        # 
+        p_tags = p_tags.long()
+
         adv_losses = []
         for j in range(self.args.adv_num_subDiscriminator):
             if self.args.adv_gated:
                 _adv_preds = self.subdiscriminators[j](hs, tags)
             else:
                 _adv_preds = self.subdiscriminators[j](hs)
-
 
             if self.args.adv_uniform_label:
                 # uniform labels
@@ -279,6 +290,6 @@ class Discriminator():
                 # calculate the adv loss with the uniform protected labels
                 # cross entropy loss for soft labels
             
-            adv_losses.append(self.adv_loss_criterion(_adv_preds, p_tags))
+            adv_losses.append(self.args.adv_lambda*self.adv_loss_criterion(_adv_preds, p_tags.long()))
 
         return adv_losses
