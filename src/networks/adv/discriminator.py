@@ -15,17 +15,9 @@ def adv_train_epoch(model, discriminators, iterator, args):
     
     for discriminator in discriminators:
         discriminator.train()
-
-    optimizer = model.optimizer
-    criterion = model.criterion
-
-    data_t0 = time.time()
     
     for it, batch in enumerate(iterator):
 
-        data_t = time.time() - data_t0
-        t0 = time.time()
-        
         text = batch[0]
         tags = batch[1].long()
         p_tags = batch[2].float()
@@ -45,7 +37,7 @@ def adv_train_epoch(model, discriminators, iterator, args):
             hs = model.hidden(text).detach()
 
                 # iterate all discriminators
-        for discriminator in zip(discriminators):
+        for discriminator in discriminators:
 
             adv_optimizer = discriminator.optimizer
             adv_criterion = discriminator.criterion
@@ -57,13 +49,12 @@ def adv_train_epoch(model, discriminators, iterator, args):
             else:
                 adv_predictions = discriminator(hs)
 
-
             # add the weighted loss
             if args.adv_BT is not None and args.adv_BT == "Reweighting":
-                loss = criterion(adv_predictions, p_tags)
+                loss = adv_criterion(adv_predictions, p_tags)
                 loss = torch.mean(loss * adv_instance_weights)
             else:
-                loss = criterion(adv_predictions, p_tags)
+                loss = adv_criterion(adv_predictions, p_tags)
 
             # encrouge orthogonality
             if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
@@ -82,8 +73,76 @@ def adv_train_epoch(model, discriminators, iterator, args):
             epoch_loss += loss.item()
 
     return epoch_loss / len(iterator)
-#  https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training/blob/b5b4c99ada17b3c19ab2ae8789bb56058cb72643/scripts_deepmoji.py#L90
 
+# train the discriminator 1 epoch
+def adv_eval_epoch(model, discriminators, iterator, args):
+
+    epoch_loss = 0
+    model.eval()
+    
+    for discriminator in discriminators:
+        discriminator.eval()
+
+    preds = [[] for i in range(args.adv_num_subDiscriminator)]
+    labels = iterator.dataset.y
+    private_labels = iterator.dataset.protected_label
+    
+    with torch.no_grad():
+        for it, batch in enumerate(iterator):
+
+            text = batch[0]
+            tags = batch[1].long()
+            p_tags = batch[2].float()
+
+            if args.adv_BT is not None and args.adv_BT == "Reweighting":
+                adv_instance_weights = batch[3].float()
+                adv_instance_weights = adv_instance_weights.to(args.device)
+
+            text = text.to(args.device)
+            tags = tags.to(args.device)
+            p_tags = p_tags.to(args.device)
+
+            # hidden representations from the model
+            if args.gated:
+                hs = model.hidden(text, p_tags).detach()
+            else:
+                hs = model.hidden(text).detach()
+
+            # iterate all discriminators
+            for index, discriminator in enumerate(discriminators):
+
+                adv_criterion = discriminator.criterion
+
+                if args.adv_gated:
+                    adv_predictions = discriminator(hs, tags.long())
+                else:
+                    adv_predictions = discriminator(hs)
+
+                # add the weighted loss
+                if args.adv_BT is not None and args.adv_BT == "Reweighting":
+                    loss = adv_criterion(adv_predictions, p_tags)
+                    loss = torch.mean(loss * adv_instance_weights)
+                else:
+                    loss = adv_criterion(adv_predictions, p_tags)
+
+                # encrouge orthogonality
+                if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
+                    # Get hidden representation.
+                    adv_hs_current = discriminator.hidden(hs, tags)
+                    for discriminator2 in discriminators:
+                        if discriminator != discriminator2:
+                            adv_hs = discriminator2.hidden(hs, tags)
+                            # Calculate diff_loss
+                            # should not include the current model
+                            difference_loss = args.adv_diverse_lambda * args.diff_loss(adv_hs_current, adv_hs)
+                            loss = loss + difference_loss
+                
+                adv_predictions = adv_predictions.detach().cpu()
+                preds[index] += list(torch.argmax(adv_predictions, axis=1).numpy())
+
+                epoch_loss += loss.item()
+
+    return ((epoch_loss / len(iterator)), preds, labels, private_labels)
 
 class Discriminator():
     def __init__(self, args):
