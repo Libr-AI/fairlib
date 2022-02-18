@@ -11,6 +11,7 @@ from contextlib import contextmanager
 from src import utils
 from src import dataloaders
 from src import networks
+from src.networks import adv
 
 class State(object):
 
@@ -395,6 +396,9 @@ class BaseOptions(object):
             logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
             logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
             logging.info('datasets built!')
+
+            if state.adv_debiasing and state.adv_decoupling:
+                raise NotImplementedError
 
         return state
 
