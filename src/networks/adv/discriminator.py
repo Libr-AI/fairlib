@@ -7,6 +7,9 @@ from pathlib import Path
 from .utils import SubDiscriminator
 from .customized_loss import DiffLoss, cross_entropy_with_probs
 
+from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score
+
 # train the discriminator 1 epoch
 def adv_train_epoch(model, discriminators, iterator, args):
 
@@ -141,8 +144,27 @@ def adv_eval_epoch(model, discriminators, iterator, args):
                 preds[index] += list(torch.argmax(adv_predictions, axis=1).numpy())
 
                 epoch_loss += loss.item()
+    
+    # Calculate the evaluation scores
+    accuracy = []
+    macro_fscore = []
+    micro_fscore = []
 
-    return ((epoch_loss / len(iterator)), preds, labels, private_labels)
+    y_true = np.array(private_labels)
+    for i in range(args.adv_num_subDiscriminator):
+        y_pred = np.array(preds[i])
+        accuracy.append(accuracy_score(y_true, y_pred))
+        macro_fscore.append(f1_score(y_true, y_pred, average="macro"))
+        micro_fscore.append(f1_score(y_true, y_pred, average="micro"))
+
+    results_dic = {
+        "loss" : (epoch_loss / len(iterator)/args.adv_num_subDiscriminator),
+        "accuracy" : np.mean(accuracy),
+        "macro_fscore" : np.mean(macro_fscore),
+        "micro_fscore" : np.mean(micro_fscore)
+    }
+
+    return ((epoch_loss / len(iterator)), results_dic)
 
 class Discriminator():
     def __init__(self, args):
@@ -157,6 +179,106 @@ class Discriminator():
         # Init difference loss for the diverse Adv
         if self.args.adv_num_subDiscriminator>1 and self.args.adv_diverse_lambda>0:
             self.diff_loss = DiffLoss()
+        
+        # Use different datasets if decoupling
+        if self.args.adv_decoupling:
+            assert self.args.train_generator is not None, "A different train generator is required"
 
-        # if self.args.adv_uniform_label:
-        # added to the adv loss function directly
+            self.train_iterator = self.args.opt.adv_train_generator
+            self.dev_iterator = self.args.opt.adv_dev_generator
+            self.test_iterator = self.args.opt.adv_test_generator
+        else:
+            self.train_iterator = self.args.opt.train_generator
+            self.dev_iterator = self.args.opt.dev_generator
+            self.test_iterator = self.args.opt.test_generator
+
+        if self.args.adv_uniform_label:
+            self.adv_loss_criterion = cross_entropy_with_probs
+        else:
+            self.adv_loss_criterion = torch.nn.CrossEntropyLoss()
+    
+    def train_self(self, model):
+        epochs_since_improvement = 0
+        best_valid_loss = 1e+5
+
+        for epoch in range(self.args.opt.adv_epochs):
+            
+            # Early stopping
+            if epochs_since_improvement >= self.args.adv_epochs_since_improvement:
+                break
+            
+            # One epoch's training
+            epoch_train_loss = adv_train_epoch(
+                model = model, 
+                discriminators = self, 
+                iterator = self.train_iterator, 
+                args = self.args)
+
+            # One epoch's validation
+            epoch_valid_loss, valid_results_dic = adv_eval_epoch(
+                model = model, 
+                discriminators = self, 
+                iterator = self.dev_iterator, 
+                args = self.args)
+
+            # Check if there was an improvement
+            is_best = epoch_valid_loss < best_valid_loss
+            best_valid_loss = min(epoch_valid_loss, best_valid_loss)
+
+            if not is_best:
+                epochs_since_improvement += 1
+            else:
+                epochs_since_improvement = 0
+
+                discriminator_state_dct = {j : self.subdiscriminators[j].state_dict() for j in range(self.args.adv_num_subDiscriminator)}
+                torch.save(discriminator_state_dct, Path(self.args.model_dir) / "BEST_Discriminator.pth.tar")
+
+            if epoch % self.args.adv_checkpoint_interval == 0:
+
+                (epoch_test_loss, test_results_dic) = adv_eval_epoch(
+                    model = model, 
+                    discriminators = self, 
+                    iterator = self.test_iterator, 
+                    args = self.args)
+
+                logging.info("Evaluation at Adv Epoch %d" % (epoch,))
+                logging.info((
+                    'Validation Loss: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
+                ).format(
+                    valid_results_dic["loss"], 100. * valid_results_dic["accuracy"], 
+                    100. * valid_results_dic["macro_fscore"], 100. * valid_results_dic["micro_fscore"]
+                ))
+                logging.info((
+                    'Test GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
+                ).format(
+                    100. * test_results_dic["loss"], 100. * test_results_dic["accuracy"], 
+                    100. * test_results_dic["macro_fscore"], 100. * test_results_dic["micro_fscore"]
+                ))
+
+        # Reload parameters from the the best checkpoint
+        best_checkpoint = torch.load(Path(self.args.model_dir) / "BEST_Discriminator.pth.tar", map_location=self.args.device)
+        for j in range(self.args.adv_num_subDiscriminator):
+            self.subdiscriminators[j].load_state_dict(best_checkpoint[j])
+
+    def adv_loss(self, hs, tags, p_tags):
+        # 
+        adv_losses = []
+        for j in range(self.args.adv_num_subDiscriminator):
+            if self.args.adv_gated:
+                _adv_preds = self.subdiscriminators[j](hs, tags)
+            else:
+                _adv_preds = self.subdiscriminators[j](hs)
+
+
+            if self.args.adv_uniform_label:
+                # uniform labels
+                batch_size, num_g_class = _adv_preds.shape
+                # init uniform protected attributes
+                p_tags = (1/num_g_class) * torch.ones_like(_adv_preds)
+                p_tags = p_tags.to(self.args.device)
+                # calculate the adv loss with the uniform protected labels
+                # cross entropy loss for soft labels
+            
+            adv_losses.append(self.adv_loss_criterion(_adv_preds, p_tags))
+
+        return adv_losses

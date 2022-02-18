@@ -220,6 +220,8 @@ class BaseOptions(object):
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
+        parser.add_argument('--adv_checkpoint_interval', type=int, default=1, metavar='N',
+                            help='checkpoint interval (epoch)')
         parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
         parser.add_argument('--adv_batch_size', type=pos_int, default=1024,
                             help='input batch size for discriminator training (default: 1024)')
