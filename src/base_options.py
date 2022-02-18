@@ -218,6 +218,8 @@ class BaseOptions(object):
         parser.add_argument('--gated',  action='store_true', default=False, 
                             help='gated model for augmented inputs given protected labels')
         parser.add_argument('--gated_mapping',  type=str, default=None)
+        parser.add_argument('--adv_num_classes', type=pos_int, default=2,
+                            help='number of protected classes')
 
         
 
@@ -245,8 +247,6 @@ class BaseOptions(object):
                             help='number of hidden layers of the discriminator')
         parser.add_argument('--adv_dropout', type=float, default=0,
                             help='dropout probability in the discriminator')
-        parser.add_argument('--adv_num_classes', type=pos_int, default=2,
-                            help='number of protected classes')
         parser.add_argument('--adv_activation_function', type=str, default="ReLu",
                             help='nonlinear activation function for the discriminator')
         parser.add_argument('--adv_batch_norm',  action='store_true', default=False, 

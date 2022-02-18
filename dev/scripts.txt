@@ -7,4 +7,8 @@ python dev_main.py --project_dir dev/logs --n_hidden 2 --dropout 0 --batch_norm 
 # Moji Baseline
 python dev_main.py --project_dir dev/logs --exp_id baseline --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji 
 
+# Moji BT
 python dev_main.py --project_dir dev/logs --exp_id baseline_BT --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --BT Reweighting --BTObj joint 
+
+# Moji Gated
+python dev_main.py --project_dir dev/logs --exp_id Gated --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --gated

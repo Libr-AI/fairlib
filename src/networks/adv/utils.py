@@ -144,7 +144,7 @@ class SubDiscriminator(BaseDiscriminator):
                 _group_output = input_data
                 for layer in self.augmentation_components[_group_id]:
                     _group_output = layer(_group_output)
-                    specific_output.append(_group_output) # batch_size * adv_units
+                specific_output.append(_group_output) # batch_size * adv_units
             
             # Reshape the out_g to batch*num_classes*adv_units
             specific_output = [i.unsqueeze(dim=1) for i in specific_output] # Each element has the shape: batch_size * 1 * adv_units
@@ -180,7 +180,7 @@ class SubDiscriminator(BaseDiscriminator):
                 _group_output = input_data
                 for layer in self.augmentation_components[_group_id]:
                     _group_output = layer(_group_output)
-                    specific_output.append(_group_output) # batch_size * adv_units
+                specific_output.append(_group_output) # batch_size * adv_units
             
             # Reshape the out_g to batch*num_classes*adv_units
             specific_output = [i.unsqueeze(dim=1) for i in specific_output] # Each element has the shape: batch_size * 1 * adv_units
