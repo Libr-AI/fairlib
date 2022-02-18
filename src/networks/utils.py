@@ -228,7 +228,7 @@ class BaseModel(nn.Module):
                 args = self.args)
 
             # Update discriminator if needed
-            if self.args.adv_update_frequency == "Epoch":
+            if self.args.adv_debiasing and self.args.adv_update_frequency == "Epoch":
                 self.args.discriminator.train_self()
 
             # Check if there was an improvement
