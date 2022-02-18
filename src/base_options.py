@@ -224,7 +224,7 @@ class BaseOptions(object):
         
 
         # Arguments for adversarial debiasing
-        parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
+        parser.add_argument('--adv_debiasing', action='store_true', default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
         parser.add_argument('--adv_update_frequency', type=str, default="Epoch", help='Epoch | Batch')
         parser.add_argument('--adv_checkpoint_interval', type=int, default=1, metavar='N',
@@ -255,6 +255,8 @@ class BaseOptions(object):
         # Gated adv
         parser.add_argument('--adv_gated',  action='store_true', default=False, 
                             help='gated discriminator for augmented inputs given target labels')
+        parser.add_argument('--adv_BT', type=str, default=None, help='instacne reweighting for adv')
+
         parser.add_argument('--adv_gated_mapping',  type=str, default=None)
         # Diverse
         parser.add_argument('--adv_num_subDiscriminator', type=pos_int, default=1,
@@ -402,7 +404,7 @@ class BaseOptions(object):
             
             # Init discriminator for adversarial training
             if state.adv_debiasing:
-                state.opt.discriminator = networks.adv.Discriminator()
+                state.opt.discriminator = networks.adv.Discriminator(state)
 
         return state
 
