@@ -195,8 +195,6 @@ class BaseOptions(object):
                             help='logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL')
 
         # Arguments for the main task model
-        parser.add_argument('--gated',  action='store_true', default=False, 
-                            help='gated model for augmented inputs given protected labels')
         parser.add_argument('--hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the main task classifier')
         parser.add_argument('--n_hidden',  type=int, default=2, 
@@ -216,6 +214,9 @@ class BaseOptions(object):
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
         parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
+        parser.add_argument('--gated',  action='store_true', default=False, 
+                            help='gated model for augmented inputs given protected labels')
+        
 
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
