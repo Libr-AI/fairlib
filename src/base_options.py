@@ -223,6 +223,7 @@ class BaseOptions(object):
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', type=bool, default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
+        parser.add_argument('--adv_update_frequency', type=str, default="Epoch", help='Epoch | Batch')
         parser.add_argument('--adv_checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
