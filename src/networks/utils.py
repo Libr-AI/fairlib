@@ -92,11 +92,11 @@ def train_epoch(model, iterator, args, epoch):
             adv_losses = args.discriminator.adv_loss(hs, tags, p_tags)
 
             for adv_loss in adv_losses:
-                loss = loss + (adv_loss / args.adv_num_subDiscriminator)
-            
+                loss = loss - (adv_loss / args.adv_num_subDiscriminator)
+
             # Update discriminator if needed
             if args.adv_update_frequency == "Batch":
-                args.discriminator.train_self()
+                args.discriminator.train_self(model)
 
         loss.backward()
         optimizer.step()
@@ -233,7 +233,7 @@ class BaseModel(nn.Module):
 
             # Update discriminator if needed
             if self.args.adv_debiasing and self.args.adv_update_frequency == "Epoch":
-                self.args.discriminator.train_self()
+                self.args.discriminator.train_self(self)
 
             # Check if there was an improvement
             is_best = epoch_valid_loss < best_valid_loss
