@@ -216,6 +216,8 @@ class BaseOptions(object):
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
         parser.add_argument('--gated',  action='store_true', default=False, 
                             help='gated model for augmented inputs given protected labels')
+        parser.add_argument('--gated_mapping',  type=str, default=None)
+
         
 
         # Arguments for adversarial debiasing
@@ -251,6 +253,7 @@ class BaseOptions(object):
         # Gated adv
         parser.add_argument('--adv_gated',  action='store_true', default=False, 
                             help='gated discriminator for augmented inputs given target labels')
+        parser.add_argument('--adv_gated_mapping',  type=str, default=None)
         # Diverse
         parser.add_argument('--adv_num_subDiscriminator', type=pos_int, default=1,
                             help='number of subdiscriminators. 1 is the standard setting.')
