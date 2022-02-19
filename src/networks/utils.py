@@ -83,6 +83,10 @@ def train_epoch(model, iterator, args, epoch):
             loss = criterion(predictions, tags)
 
         if args.adv_debiasing:
+            # Update discriminator if needed
+            if args.adv_update_frequency == "Batch":
+                args.discriminator.train_self_batch(model, batch)
+
             # get hidden representations
             if args.gated:
                 hs = model.hidden(text, p_tags)
@@ -93,10 +97,6 @@ def train_epoch(model, iterator, args, epoch):
 
             for adv_loss in adv_losses:
                 loss = loss - (adv_loss / args.adv_num_subDiscriminator)
-
-            # Update discriminator if needed
-            if args.adv_update_frequency == "Batch":
-                args.discriminator.train_self_batch(model, batch)
 
         loss.backward()
         optimizer.step()

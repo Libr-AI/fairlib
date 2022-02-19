@@ -67,6 +67,7 @@ def adv_train_batch(model, discriminators, batch, args):
 
         loss.backward()
         adv_optimizer.step()
+        adv_optimizer.zero_grad()
         batch_loss += loss.item()
     return batch_loss
 
