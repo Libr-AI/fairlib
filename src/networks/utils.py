@@ -96,7 +96,7 @@ def train_epoch(model, iterator, args, epoch):
 
             # Update discriminator if needed
             if args.adv_update_frequency == "Batch":
-                args.discriminator.train_self(model)
+                args.discriminator.train_self_batch(model, batch)
 
         loss.backward()
         optimizer.step()

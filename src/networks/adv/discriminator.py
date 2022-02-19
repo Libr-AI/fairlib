@@ -10,6 +10,66 @@ from .customized_loss import DiffLoss, cross_entropy_with_probs
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 
+# Train the discriminator 1 batch
+def adv_train_batch(model, discriminators, batch, args):
+
+    batch_loss = 0
+
+    text = batch[0]
+    tags = batch[1].long()
+    p_tags = batch[2].float()
+
+    if args.adv_BT is not None and args.adv_BT == "Reweighting":
+        adv_instance_weights = batch[3].float()
+        adv_instance_weights = adv_instance_weights.to(args.device)
+
+    text = text.to(args.device)
+    tags = tags.to(args.device)
+    p_tags = p_tags.to(args.device)
+        
+        # hidden representations from the model
+    if args.gated:
+        hs = model.hidden(text, p_tags).detach()
+    else:
+        hs = model.hidden(text).detach()
+
+    # iterate all discriminators
+    for discriminator in discriminators:
+
+        adv_optimizer = discriminator.optimizer
+        adv_criterion = discriminator.criterion
+
+        adv_optimizer.zero_grad()
+
+        if args.adv_gated:
+            adv_predictions = discriminator(hs, tags.long())
+        else:
+            adv_predictions = discriminator(hs)
+
+        # add the weighted loss
+        if args.adv_BT is not None and args.adv_BT == "Reweighting":
+            loss = adv_criterion(adv_predictions, p_tags.long())
+            loss = torch.mean(loss * adv_instance_weights)
+        else:
+            loss = adv_criterion(adv_predictions, p_tags.long())
+
+        # encrouge orthogonality
+        if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
+            # Get hidden representation.
+            adv_hs_current = discriminator.hidden(hs, tags)
+            for discriminator2 in discriminators:
+                if discriminator != discriminator2:
+                    adv_hs = discriminator2.hidden(hs, tags)
+                    # Calculate diff_loss
+                    # should not include the current model
+                    difference_loss = args.adv_diverse_lambda * args.diff_loss(adv_hs_current, adv_hs)
+                    loss = loss + difference_loss
+
+        loss.backward()
+        adv_optimizer.step()
+        batch_loss += loss.item()
+    return batch_loss
+
 # train the discriminator 1 epoch
 def adv_train_epoch(model, discriminators, iterator, args):
 
@@ -21,59 +81,9 @@ def adv_train_epoch(model, discriminators, iterator, args):
     
     for it, batch in enumerate(iterator):
 
-        text = batch[0]
-        tags = batch[1].long()
-        p_tags = batch[2].float()
+        batch_loss = adv_train_batch(model, discriminators, batch, args)
 
-        if args.adv_BT is not None and args.adv_BT == "Reweighting":
-            adv_instance_weights = batch[3].float()
-            adv_instance_weights = adv_instance_weights.to(args.device)
-
-        text = text.to(args.device)
-        tags = tags.to(args.device)
-        p_tags = p_tags.to(args.device)
-        
-        # hidden representations from the model
-        if args.gated:
-            hs = model.hidden(text, p_tags).detach()
-        else:
-            hs = model.hidden(text).detach()
-
-                # iterate all discriminators
-        for discriminator in discriminators:
-
-            adv_optimizer = discriminator.optimizer
-            adv_criterion = discriminator.criterion
-
-            adv_optimizer.zero_grad()
-
-            if args.adv_gated:
-                adv_predictions = discriminator(hs, tags.long())
-            else:
-                adv_predictions = discriminator(hs)
-
-            # add the weighted loss
-            if args.adv_BT is not None and args.adv_BT == "Reweighting":
-                loss = adv_criterion(adv_predictions, p_tags.long())
-                loss = torch.mean(loss * adv_instance_weights)
-            else:
-                loss = adv_criterion(adv_predictions, p_tags.long())
-
-            # encrouge orthogonality
-            if args.adv_num_subDiscriminator>1 and args.adv_diverse_lambda>0:
-                # Get hidden representation.
-                adv_hs_current = discriminator.hidden(hs, tags)
-                for discriminator2 in discriminators:
-                    if discriminator != discriminator2:
-                        adv_hs = discriminator2.hidden(hs, tags)
-                        # Calculate diff_loss
-                        # should not include the current model
-                        difference_loss = args.adv_diverse_lambda * args.diff_loss(adv_hs_current, adv_hs)
-                        loss = loss + difference_loss
-
-            loss.backward()
-            adv_optimizer.step()
-            epoch_loss += loss.item()
+        epoch_loss += batch_loss
 
     return epoch_loss / len(iterator)
 
@@ -197,6 +207,15 @@ class Discriminator():
         else:
             self.adv_loss_criterion = torch.nn.CrossEntropyLoss()
     
+    
+    def train_self_batch(self, model, batch):
+        adv_train_batch(
+            model = model, 
+            discriminators = self.subdiscriminators, 
+            batch = batch, 
+            args = self.args)
+
+
     def train_self(self, model):
         epochs_since_improvement = 0
         best_valid_loss = 1e+5
