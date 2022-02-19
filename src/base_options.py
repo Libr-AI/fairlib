@@ -226,7 +226,7 @@ class BaseOptions(object):
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', action='store_true', default=False, help='Adv debiasing?')
         # The following arguments will only be used if adv_debiasing is set to True
-        parser.add_argument('--adv_update_frequency', type=str, default="Epoch", help='Epoch | Batch')
+        parser.add_argument('--adv_update_frequency', type=str, default="Batch", help='Epoch | Batch')
         parser.add_argument('--adv_checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
@@ -398,13 +398,17 @@ class BaseOptions(object):
             logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
             logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
             logging.info('datasets built!')
-
-            if state.adv_debiasing and state.adv_decoupling:
-                raise NotImplementedError
             
             # Init discriminator for adversarial training
             if state.adv_debiasing:
+                if state.adv_decoupling:
+                    raise NotImplementedError
+
                 state.opt.discriminator = networks.adv.Discriminator(state)
+                logging.info('Discriminator built!')
+                # adv.utils.print_network(state.opt.discriminator.subdiscriminators[0])
+
+                state.opt.diff_loss = adv.customized_loss.DiffLoss()
 
         return state
 
