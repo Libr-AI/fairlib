@@ -157,8 +157,8 @@ class BaseOptions(object):
         for name, action_cls in action_registry.items():
             action_registry[name] = get_unique_action_cls(action_cls)
 
-        parser.add_argument('--project_dir', type=str, default=None,
-                            help='dataset root')
+        parser.add_argument('--project_dir', type=str, default="dev",
+                            help='protect step root: dev | hypertune | final')
         parser.add_argument('--exp_id', type=str, default="test",
                             help='experiment id')
         parser.add_argument('--encoder_architecture', type=str, default="Fixed",
@@ -169,7 +169,7 @@ class BaseOptions(object):
                             help='input batch size for testing (default: 1024)')
         parser.add_argument('--epochs', type=pos_int, default=100, metavar='N',
                             help='number of total epochs to train (default: 100)')
-        parser.add_argument('--lr', type=pos_float, default=0.01, metavar='LR',
+        parser.add_argument('--lr', type=pos_float, default=0.003, metavar='LR',
                             help='learning rate used to actually learn stuff (default: 0.01)')
         parser.add_argument('--epochs_since_improvement', type=pos_int, default=5,
                             help='terminate training for early stopping')
@@ -185,7 +185,7 @@ class BaseOptions(object):
                             help='dataset root')
         parser.add_argument('--results_dir', type=str, default='./results/',
                             help='results directory')
-        parser.add_argument('--model_dir', type=str, default='./models/',
+        parser.add_argument('--model_dir', type=str, default='models',
                             help='directory storing trained models')
         parser.add_argument('--device_id', type=comp(int, 'ge', -1), default=0, help='device id, -1 is cpu')
         parser.add_argument('--num_workers', type=nonneg_int, default=0,
@@ -200,13 +200,13 @@ class BaseOptions(object):
                             help='number of hidden units for the main task classifier')
         parser.add_argument('--n_hidden',  type=int, default=2, 
                             help='number of hidden layers')
-        parser.add_argument('--dropout', type=float, default=0.5,
+        parser.add_argument('--dropout', type=float, default=0,
                             help='dropout probability')
         parser.add_argument('--emb_size', type=pos_int, default=2304,
                             help='input embedding dimension')
         parser.add_argument('--num_classes', type=pos_int, default=2,
                             help='number of target classes')
-        parser.add_argument('--activation_function', type=str, default="ReLu",
+        parser.add_argument('--activation_function', type=str, default="Tanh",
                             help='nonlinear activation function for the main task model')
         parser.add_argument('--batch_norm',  action='store_true', default=False, 
                             help='apply 1d batch norm to the model')
@@ -236,11 +236,11 @@ class BaseOptions(object):
                             help='input batch size for discriminator testing (default: 1024)')
         parser.add_argument('--adv_epochs', type=pos_int, default=100, metavar='N',
                             help='number of total epochs to train the discriminator (default: 100)')
-        parser.add_argument('--adv_lr', type=pos_float, default=0.01, metavar='LR',
+        parser.add_argument('--adv_lr', type=pos_float, default=0.001, metavar='LR',
                             help='learning rate used to actually learn adversarial stuff (default: 0.01)')
         parser.add_argument('--adv_epochs_since_improvement', type=pos_int, default=5,
                             help='terminate discriminator training for early stopping')
-        parser.add_argument('--adv_lambda', type=float, default=0.8, help='strength of adversarial regularization')
+        parser.add_argument('--adv_lambda', type=float, default=1, help='strength of adversarial regularization')
         parser.add_argument('--adv_hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the adversarial discriminator')
         parser.add_argument('--adv_n_hidden',  type=int, default=2, 
