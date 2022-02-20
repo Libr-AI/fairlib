@@ -229,7 +229,7 @@ class BaseOptions(object):
         parser.add_argument('--adv_update_frequency', type=str, default="Batch", help='Epoch | Batch')
         parser.add_argument('--adv_checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
-        parser.add_argument('--adv_level', type=str, default="last_hidden", help='"input | last_hidden | output')
+        parser.add_argument('--adv_level', type=str, default="last_hidden", help='input | last_hidden | output')
         parser.add_argument('--adv_batch_size', type=pos_int, default=1024,
                             help='input batch size for discriminator training (default: 1024)')
         parser.add_argument('--adv_test_batch_size', type=pos_int, default=1024,
