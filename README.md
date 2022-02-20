@@ -76,8 +76,21 @@ This section explains the principles behind this README file.  If this repositor
 ### Basic operation
 
 ```bash
-python main.py
+python main.py --exp_id EXP_NAME
 ```
+
+| Name                | Default value | Description                                                |
+|---------------------|---------------|------------------------------------------------------------|
+| project_dir         | dev           | protect step root: dev \| hypertune \| final               |
+| exp_id              | test          | experiment id                                              |
+| base_seed           | 1             | base random seed                                           |
+| dataset             | Moji          | dataset: Moji \| Bios_gender \| Bios_economy \| Bios_both  |
+| data_dir            | None          | dataset root, load from the default dir if set to None     |
+| results_dir         | ./results/    | results directory                                          |
+| model_dir           | models        | directory storing trained models                           |
+| num_workers         | 0             | number of data loader workers                              |
+
+The corresponding results such options and output logs will be saved in `results_dir/project_dir/dataset/exp_id`, while the model checkpoints and related predictions will be save in `results_dir/project_dir/dataset/exp_id/model_dir`.
 
 - Train a vanilla model without debiasing
 
@@ -96,7 +109,6 @@ python main.py
 
 | Name                     | Default value | Description                                               |
 |--------------------------|---------------|-----------------------------------------------------------|
-| dataset                  | Moji          | dataset: Moji \| Bios_gender \| Bios_economy \| Bios_both |
 | emb_size                 | 2304          | input embedding dimension                                 |
 | num_classes              | 2             | number of target classes                                  |
 | batch_size               | 1024          | input batch size for training                             |
@@ -105,11 +117,27 @@ python main.py
 | epochs_since_improvement | 5             | terminate training for early stopping                     |
 | device_id                | 0             | device id, -1 is cpu                                      |
 
+- Train a model with adversarial debiasing
 
+```bash
+python main.py --adv_debiasing
+```
+
+- Train a model with balanced training
+
+```bash
+python main.py --BT --BTObj joint
+```
 
 ### Additional options
 
-Some projects need to communicate additional information to users and can benefit from additional sections in the README file.  It's difficult to give specific instructions &ndash; a lot depends on your software, your intended audience, etc.  Use your judgment and ask for feedback from users or colleagues to help figure out what else is worth explaining.
+| Name                | Default value | Description                                                |
+|---------------------|---------------|------------------------------------------------------------|
+| base_seed           | 1             | base random seed                                           |
+| log_interval        | 50            | how many batches to wait before logging training status    |
+| checkpoint_interval | 1             | checkpoint interval (epoch)                                |
+| no_log              | False         | if set, will not log into file                             |
+| log_level           | INFO          | logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL |
 
 
 Known issues and limitations
