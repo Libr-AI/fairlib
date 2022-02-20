@@ -170,7 +170,7 @@ class BaseOptions(object):
         parser.add_argument('--epochs', type=pos_int, default=100, metavar='N',
                             help='number of total epochs to train (default: 100)')
         parser.add_argument('--lr', type=pos_float, default=0.003, metavar='LR',
-                            help='learning rate used to actually learn stuff (default: 0.01)')
+                            help='learning rate used to actually learn stuff (default: 0.003)')
         parser.add_argument('--epochs_since_improvement', type=pos_int, default=5,
                             help='terminate training for early stopping')
         parser.add_argument('--base_seed', type=int, default=1, metavar='S',
