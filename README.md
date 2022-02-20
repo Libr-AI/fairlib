@@ -29,9 +29,9 @@ You can easily develop new algorithms, or readily apply existing algorithms.
 <!-- The [Introduction](#introduction) section &ndash; which you are presently reading &ndash; should provide background for your software project, a brief explanation of what the project is about, and optionally, pointers to resources that can help orient readers.  (Some README recommendations go straight to installation instructions as the first section, but in my opinion, introductions are important for readers who are not familiar with your technical area.)  Ideally, this section should be short. -->
 
 The currently supported datasets include:
-- Moji
+- Moji  
   Binary sentiment classification. Instances are annotated with AAE/SAE labels.
-- Bios
+- Bios  
   Biography classification tasks with 28 profession classes.
   Instances are also annotated with gender and economy labels.
 The currently supported bias mitigation methods include:
@@ -40,12 +40,12 @@ The currently supported bias mitigation methods include:
   - Adversarial Training
   - Decoupled Adversarial Training
   - Deviser Adversarial Training
-  - Adversarial Regularization with Demographic Label 
+  - Adversarial Regularization with Demographic Label  
 
 - Balanced Training
-  - Instance Reweighting and Resampling    
+  - Instance Reweighting and Resampling  
 
-- Incorporating Demographic Factors 
+- Incorporating Demographic Factors  
   - Representation Augmentation
 
 We are planning to add:
