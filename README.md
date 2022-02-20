@@ -17,7 +17,6 @@ Table of contents
   - [Getting help](#getting-help)
   - [Contributing](#contributing)
   - [License](#license)
-  - [Authors and history](#authors-and-history)
   - [Acknowledgments](#acknowledgments)
 
 
@@ -39,16 +38,21 @@ The currently supported datasets include:
 The currently supported bias mitigation methods include:
 
 - Learning Fair Representations
-  - Adversarial Training
+  - Adversarial Training  
+  Li, Yitong, Timothy Baldwin and Trevor Cohn (2018) [Towards Robust and Privacy-preserving Text Representations](https://aclanthology.org/P18-2005/), ACL 2018.
+  - Deviser Adversarial Training  
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Diverse Adversaries for Mitigating Bias in Training](https://aclanthology.org/2021.eacl-main.239/), EACL 2021.
   - Decoupled Adversarial Training
-  - Deviser Adversarial Training
-  - Adversarial Regularization with Demographic Label  
-
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
+  - Adversarial Regularization without Label  
+  Working paper.
 - Balanced Training
   - Instance Reweighting and Resampling  
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
 
 - Incorporating Demographic Factors  
-  - Representation Augmentation
+  - Representation Augmentation  
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
 
 We are planning to add:
 - \[dataset\] Hate Speech Detection
@@ -62,6 +66,9 @@ Start a new virtual environment:
 ```bash
 conda create -n fair_nlp python=3.7 anaconda
 conda activate fair_nlp
+
+# additional python pacakges from requirements.txt
+pip install -r requirements.txt
 ```
 
 <!-- TODO Will we release the Bios dataset with economy labels? -->
@@ -72,8 +79,6 @@ Download the data used for this project:
  
 Usage
 -----
-
-This section explains the principles behind this README file.  If this repository were for actual _software_, this [Usage](#usage) section would explain more about how to run the software, what kind of output or behavior to expect, and so on.
 
 ### Basic operation
 
@@ -145,7 +150,7 @@ python main.py --BT --BTObj joint
 Known issues and limitations
 ----------------------------
 
-none are known at this time
+None are known at this time.
 
 
 Getting help
@@ -167,32 +172,13 @@ We appreciate all contributions. If you are planning to contribute back bug-fixe
 License
 -------
 
-This README file is distributed under the terms of the [Creative Commons 1.0 Universal license (CC0)](https://creativecommons.org/publicdomain/zero/1.0/).  The license applies to this file and other files in the [GitHub repository](http://github.com/mhucka/readmine) hosting this file. This does _not_ mean that you, as a user of this README file in your software project, must also use CC0 license!  You may use any license for your work that you see fit.
-
-
-Authors and history
----------------------------
-
-In this section, list the authors and contributors to your software project.  (The original author of this file is [Mike Hucka](http://www.cds.caltech.edu/~mhucka/).)  Adding additional notes here about the history of the project can make it more interesting and compelling.
-
 
 Acknowledgments
 ---------------
-
-If your work was funded by any organization or institution, acknowledge their support here.  In addition, if your work relies on other software libraries, or was inspired by looking at other work, it is appropriate to acknowledge this intellectual debt too.  For example, in the process of developing this file, I used not only my own ideas and experiences &ndash; I read many (sometimes contradictory) recommendations for README files and examined real READMEs in actual use, and tried to distill the best ideas into the result you see here.  Sources included the following:
-
-* http://tom.preston-werner.com/2010/08/23/readme-driven-development.html
-* https://changelog.com/posts/top-ten-reasons-why-i-wont-use-your-open-source-project
-* https://thoughtbot.com/blog/how-to-write-a-great-readme
-* http://jonathanpeelle.net/making-a-readme-file
-* https://github.com/noffle/art-of-readme
-* https://github.com/noffle/common-readme
-* https://github.com/RichardLitt/standard-readme
-* https://github.com/jehna/readme-best-practices
-* https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
-* https://github.com/matiassingers/awesome-readme
-* https://github.com/cfpb/open-source-project-template
-* https://github.com/davidbgk/open-source-template/
-* https://www.makeareadme.com
-* https://github.com/lappleapple/feedmereadmes
-* https://github.com/badges/shields
+* https://github.com/HanXudong/Decoupling_Adversarial_Training_for_Fair_NLP
+* https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training
+* https://github.com/SsnL/dataset-distillation
+* https://github.com/huggingface/torchMoji
+* https://github.com/mhucka/readmine
+* https://github.com/yanaiela/demog-text-removal
+* https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations
