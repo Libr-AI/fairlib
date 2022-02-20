@@ -33,7 +33,9 @@ The currently supported datasets include:
   Binary sentiment classification. Instances are annotated with AAE/SAE labels.
 - Bios  
   Biography classification tasks with 28 profession classes.
-  Instances are also annotated with gender and economy labels.
+  Instances are also annotated with gender and economy labels.  
+
+
 The currently supported bias mitigation methods include:
 
 - Learning Fair Representations
