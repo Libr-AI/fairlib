@@ -81,17 +81,6 @@ python main.py
 
 - Train a vanilla model without debiasing
 
-| Name                     | Default value | Description                                               |
-|--------------------------|---------------|-----------------------------------------------------------|
-| dataset                  | Moji          | dataset: Moji \| Bios_gender \| Bios_economy \| Bios_both |
-| emb_size                 | 2304          | input embedding dimension                                 |
-| num_classes              | 2             | number of target classes                                  |
-| batch_size               | 1024          | input batch size for training                             |
-| epochs                   | 100           | number of total epochs to train                           |
-| lr                       | 0.003         | learning rate used to actually learn stuff                |
-| epochs_since_improvement | 5             | terminate training for early stopping                     |
-| device_id                | 0             | device id, -1 is cpu                                      |
-
   - Train a mode over Moji with DeepMoji representations.
     ```bash
         python main.py --dataset Moji --emb_size 2304 --num_classes 2
@@ -104,6 +93,19 @@ python main.py
 
         python main.py --dataset Bios_both --emb_size 768 --num_classes 28
     ```
+
+| Name                     | Default value | Description                                               |
+|--------------------------|---------------|-----------------------------------------------------------|
+| dataset                  | Moji          | dataset: Moji \| Bios_gender \| Bios_economy \| Bios_both |
+| emb_size                 | 2304          | input embedding dimension                                 |
+| num_classes              | 2             | number of target classes                                  |
+| batch_size               | 1024          | input batch size for training                             |
+| epochs                   | 100           | number of total epochs to train                           |
+| lr                       | 0.003         | learning rate used to actually learn stuff                |
+| epochs_since_improvement | 5             | terminate training for early stopping                     |
+| device_id                | 0             | device id, -1 is cpu                                      |
+
+
 
 ### Additional options
 
