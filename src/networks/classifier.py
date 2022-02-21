@@ -78,26 +78,7 @@ class MLP(BaseModel):
             if self.args.gated and self.args.n_hidden > 0:
                 assert group_label is not None, "Group labels are needed for augmentaiton"
 
-                specific_output = []
-                # Get group-specific representations
-                # number_classes * batch_size * adv_units
-                for _group_id in range(self.args.adv_num_classes):
-                    _group_output = input_data
-                    for layer in self.augmentation_components[_group_id]:
-                        _group_output = layer(_group_output)
-                    specific_output.append(_group_output) # batch_size * adv_units
-                
-                # Reshape the out_g to batch*num_classes*adv_units
-                specific_output = [i.unsqueeze(dim=1) for i in specific_output] # Each element has the shape: batch_size * 1 * adv_units
-                specific_output = torch.cat(specific_output, dim=1)
-
-                # Mapping the group label to one-hot representation
-                group_label = self.mapping[group_label.long()] # batch_size * num_classes
-                group_label = group_label.unsqueeze(dim=1) # batch_size * 1 * num_classes
-
-                # (batch_size * 1 * num_classes) * (batch*num_classes*adv_units)
-                specific_output = torch.matmul(group_label.to(self.device), specific_output) # (batch_size * 1 * adv_units)
-                specific_output = specific_output.squeeze(dim=1) # (batch_size * adv_units)
+                specific_output = self.augmentation_components(input_data, group_label)
 
                 main_output = main_output + specific_output
             if self.args.adv_level == "last_hidden":
