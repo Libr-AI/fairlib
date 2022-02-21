@@ -3,6 +3,6 @@ pickle
 tqdm
 numpy
 docopt
-
+pandas
 scikit-learn
 torch
