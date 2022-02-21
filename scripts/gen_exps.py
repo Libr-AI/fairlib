@@ -30,7 +30,7 @@ combos = it.product(*(exps[Name] for Name in allNames))
 
 def write_to_batch_files(random_seed=1, repeat=0):
     for id, combo in enumerate(combos):
-        with open("scripts/hypertune_vanilla_{}.sh".format(repeat),"a+") as f:
+        with open("scripts/hypertune/vanilla_{}_{}.sh".format(combo[0], repeat),"a+") as f:
             command = "python main.py --project_dir hypertune --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --learning_rate {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id}"
             # dataset
             _dataset = combo[0]
