@@ -13,6 +13,8 @@ Table of contents
   - [Usage](#usage)
     - [Basic operation](#basic-operation)
     - [Additional options](#additional-options)
+    - [Scripts for Large Scale Experiments](#scripts-for-large-scale-experiments)
+    - [Add New Datasets/Models](#add-new-datasetsmodels)
   - [Known issues and limitations](#known-issues-and-limitations)
   - [Getting help](#getting-help)
   - [Contributing](#contributing)
@@ -226,6 +228,16 @@ python main.py --BT --BTObj joint --gated
 | adv_activation_function | ReLu          | nonlinear activation function for the main task model                    |
 | adv_batch_norm          | False         | apply 1d batch norm to the model                                         |
 
+### Scripts for Large Scale Experiments
+
+Performing experiments such as tuning hyperparameters requires generating lots of different scripts, we provide an example for generating required script automatically.
+
+```bash
+python scripts/gen_exps.py
+```
+
+### Add New Datasets/Models
+Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.
 
 Known issues and limitations
 ----------------------------
