@@ -181,7 +181,7 @@ python main.py --BT --BTObj joint
 | full_label | True          | require full protected label                                 |
 
 - Train a model to incorporate demographic factors
-- 
+
 ```bash
 python main.py --BT --BTObj joint --gated
 ```
