@@ -130,13 +130,70 @@ The corresponding results such options and output logs will be saved in `results
 python main.py --adv_debiasing
 ```
 
+| Name                 | Default value | Description                                            |
+|----------------------|---------------|--------------------------------------------------------|
+| adv_update_frequency | Batch         | Epoch \| Batch                                         |
+| adv_level            | last_hidden   | input \| last_hidden \| output                         |
+| adv_lambda           | 1             | strength of adversarial regularization                 |
+
+- Ensemble adversarial training
+
+```bash
+python main.py --adv_debiasing --adv_num_subDiscriminator 3
+```
+
+| Name                     | Default value | Description                  |
+|--------------------------|---------------|------------------------------|
+| adv_num_subDiscriminator | 1             | number of sub-discriminators. |
+
+- Diverse adversarial training
+
+```bash
+python main.py --adv_debiasing --adv_num_subDiscriminator 3 --adv_diverse_lambda 100
+```
+
+| Name                     | Default value | Description                                                                        |
+|--------------------------|---------------|------------------------------------------------------------------------------------|
+| adv_num_subDiscriminator | 1             | number of subdiscriminators.                                                       |
+| adv_diverse_lambda       | 0             | strength of difference loss to encourage diverse representations for ensemble adv. |
+
+- Towards conditional independence through adversarial training
+
+```bash
+python main.py --adv_debiasing --adv_gated
+```
+
+| Name              | Default value | Description                                                  |
+|-------------------|---------------|--------------------------------------------------------------|
+| adv_gated         | False         | gated discriminator for augmented inputs given target labels |
+| adv_gated_mapping | One-hot       | mapping function from numerical labels to vectors.           |
+
 - Train a model with balanced training
 
 ```bash
 python main.py --BT --BTObj joint
 ```
 
+| Name       | Default value | Description                                                  |
+|------------|---------------|--------------------------------------------------------------|
+| BT         | False         | gated discriminator for augmented inputs given target labels |
+| BTObj      | One-hot       | mapping function from numerical labels to vectors.           |
+| full_label | True          | require full protected label                                 |
+
+- Train a model to incorporate demographic factors
+- 
+```bash
+python main.py --BT --BTObj joint --gated
+```
+
+| Name          | Default value | Description                                                  |
+|---------------|---------------|--------------------------------------------------------------|
+| gated         | False         | gated model for augmented inputs given demographic labels    |
+| gated_mapping | One-hot       | mapping function from numerical labels to vectors.           |
+
 ### Additional options
+
+- Logging
 
 | Name                | Default value | Description                                                |
 |---------------------|---------------|------------------------------------------------------------|
@@ -145,6 +202,29 @@ python main.py --BT --BTObj joint
 | checkpoint_interval | 1             | checkpoint interval (epoch)                                |
 | no_log              | False         | if set, will not log into file                             |
 | log_level           | INFO          | logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL |
+
+- Model architecture
+
+| Name                | Default value | Description                                                              |
+|---------------------|---------------|--------------------------------------------------------------------------|
+| hidden_size         | 300           | number of hidden units of each hidden layer for the main task classifier |
+| n_hidden            | 2             | number of hidden layers                                                  |
+| dropout             | 0             | dropout probability                                                      |
+| emb_size            | 2304          | input embedding dimension, i.e., dimension of sentence vectors           |
+| num_classes         | 2             | number of target classes                                                 |
+| activation_function | Tanh          | nonlinear activation function for the main task model                    |
+| batch_norm          | False         | apply 1d batch norm to the model                                         |
+
+- Discriminator architecture
+
+| Name                    | Default value | Description                                                              |
+|-------------------------|---------------|--------------------------------------------------------------------------|
+| adv_hidden_size         | 300           | number of hidden units of each hidden layer for the main task classifier |
+| adv_n_hidden            | 2             | number of hidden layers                                                  |
+| adv_dropout             | 0             | dropout probability                                                      |
+| adv_num_classes         | 2             | number of target classes                                                 |
+| adv_activation_function | ReLu          | nonlinear activation function for the main task model                    |
+| adv_batch_norm          | False         | apply 1d batch norm to the model                                         |
 
 
 Known issues and limitations
