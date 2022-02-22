@@ -5,7 +5,7 @@ import logging
 import time
 from pathlib import Path
 from .utils import SubDiscriminator
-from .customized_loss import DiffLoss, cross_entropy_with_probs
+from .customized_loss import DiffLoss
 
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
@@ -203,10 +203,7 @@ class Discriminator():
             self.dev_iterator = self.args.opt.dev_generator
             self.test_iterator = self.args.opt.test_generator
 
-        if self.args.adv_uniform_label:
-            self.adv_loss_criterion = cross_entropy_with_probs
-        else:
-            self.adv_loss_criterion = torch.nn.CrossEntropyLoss()
+        self.adv_loss_criterion = torch.nn.CrossEntropyLoss()
     
     
     def train_self_batch(self, model, batch):
@@ -310,6 +307,11 @@ class Discriminator():
                 # calculate the adv loss with the uniform protected labels
                 # cross entropy loss for soft labels
             
-            adv_losses.append(self.args.adv_lambda*self.adv_loss_criterion(_adv_preds, p_tags.long()))
+            if self.args.adv_uniform_label:
+                # Learn to predict uniform labels.
+                adv_losses.append(-1*self.args.adv_lambda*self.adv_loss_criterion(_adv_preds, p_tags))
+            else:
+                # Unlearn to remove protected info.
+                adv_losses.append(self.args.adv_lambda*self.adv_loss_criterion(_adv_preds, p_tags))
 
         return adv_losses

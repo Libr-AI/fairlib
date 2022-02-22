@@ -18,3 +18,7 @@ python dev_main.py --project_dir dev/logs --exp_id BT_Gated --n_hidden 2 --dropo
 
 # Moji Adversarial
 python dev_main.py --project_dir dev/logs --exp_id adv --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --adv_debiasing
+
+# Moji Uniform Soft Labels
+python dev_main.py --project_dir dev/logs --exp_id adv --n_hidden 2 --dropout 0 --results_dir 
+D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --adv_debiasing --adv_uniform_label --adv_lambda 0.4
