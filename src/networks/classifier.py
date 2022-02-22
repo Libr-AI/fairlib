@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 import logging
+import numpy as np
 
 from .utils import BaseModel
 from .augmentation_layer import Augmentation_layer
@@ -113,6 +114,7 @@ class MLP(BaseModel):
 
 class BERTClassifier(BaseModel):
     model_name = 'bert-base-cased'
+    n_freezed_layers = 10
 
     def __init__(self, args):
         super(BERTClassifier, self).__init__()
@@ -120,7 +122,24 @@ class BERTClassifier(BaseModel):
 
         self.bert = BertModel.from_pretrained(self.model_name)
 
+        self.bert_layers = [self.bert.embeddings, 
+                                self.bert.encoder.layer[0],
+                                self.bert.encoder.layer[1],
+                                self.bert.encoder.layer[2],
+                                self.bert.encoder.layer[3],
+                                self.bert.encoder.layer[4],
+                                self.bert.encoder.layer[5],
+                                self.bert.encoder.layer[6],
+                                self.bert.encoder.layer[7],
+                                self.bert.encoder.layer[8],
+                                self.bert.encoder.layer[9],
+                                self.bert.encoder.layer[10],
+                                self.bert.encoder.layer[11],
+                                self.bert.pooler]
+
         self.classifier = MLP(args)
+
+        self.freeze_roberta_layers(self.n_freezed_layers)
 
         self.init_for_training()
 
@@ -134,3 +153,17 @@ class BERTClassifier(BaseModel):
 
         return self.classifier.hidden(bert_output, group_label)
 
+    def freeze_roberta_layers(self, number_of_layers):
+        "number of layers: the first number of layers to be freezed"
+        assert (number_of_layers < 14 and number_of_layers > -14), "beyound the total number of RoBERTa layer groups(14)."
+        for target_layer in self.bert_layers[:number_of_layers]:
+                for param in target_layer.parameters():
+                    param.requires_grad = False
+        for target_layer in self.bert_layers[number_of_layers:]:
+                for param in target_layer.parameters():
+                    param.requires_grad = True
+    
+    def trainable_parameter_counting(self):
+        model_parameters = filter(lambda p: p.requires_grad, self.bert.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        return params
