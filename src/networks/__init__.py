@@ -10,7 +10,7 @@ def get_main_model(args):
 
     if args.encoder_architecture == "Fixed":
         model = MLP(args)
-    elif args.encoder_architecture == "Fixed":
+    elif args.encoder_architecture == "BERT":
         model = BERTClassifier(args)
     else:
         raise "not implemented yet"

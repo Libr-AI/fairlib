@@ -122,13 +122,15 @@ class BERTClassifier(BaseModel):
 
         self.classifier = MLP(args)
 
+        self.init_for_training()
+
     def forward(self, input_data, group_label = None):
-        bert_output = self.bert(input_data)
+        bert_output = self.bert(input_data)[1]
 
         return self.classifier(bert_output, group_label)
     
     def hidden(self, input_data, group_label = None):
-        bert_output = self.bert(input_data)
+        bert_output = self.bert(input_data)[1]
 
         return self.classifier.hidden(bert_output, group_label)
 
