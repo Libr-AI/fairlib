@@ -44,6 +44,7 @@ class DeepMojiDataset(BaseDataset):
 
 class BiosDataset(BaseDataset):
     embedding_type = "bert_avg_SE"
+    text_type = "hard_text"
 
     def load_data(self):
         import pandas as pd
@@ -56,7 +57,13 @@ class BiosDataset(BaseDataset):
             selected_rows = (data["economy_label"] != "Unknown")
             data = data[selected_rows]
 
-        self.X = list(data[self.embedding_type])
+        if self.args.encoder_architecture == "Fixed":
+            self.X = list(data[self.embedding_type])
+        elif self.args.encoder_architecture == "BERT":
+            self.X = self.args.text_encoder.encoder(list(data[self.text_type]))
+        else:
+            raise NotImplementedError
+
         self.y = data["profession_class"].astype(np.float64) #Profession
         if self.args.protected_task == "gender":
             self.protected_label = data["gender_class"].astype(np.int32) # Gender

@@ -3,6 +3,7 @@ import torch
 import logging
 from .loaders import *
 from . import utils
+from .encoder import text2id
 from collections import defaultdict
 
 if sys.platform == "win32":
@@ -30,6 +31,14 @@ def get_dataloaders(args):
     else:
         pass
     
+    if args.encoder_architecture == "Fixed":
+        pass
+    elif args.encoder_architecture == "BERT":
+        # Init the encoder form text to idx.
+        args.text_encoder = text2id(args)
+    else:
+        raise NotImplementedError
+
     train_data = task_dataloader(args=args, split="train")
     dev_data = task_dataloader(args=args, split="dev")
     test_data = task_dataloader(args=args, split="test")
