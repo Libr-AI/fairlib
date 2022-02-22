@@ -42,3 +42,36 @@ class BERTClassifier(BaseModel):
         # Make predictions
         return self.classifier.hidden(bert_output, group_label)
 ```
+
+## Register Model
+the model architecture is indicated by `--encoder_architecture`, so we will need to handle different values of this argument. 
+Specifically, we need to modify the `get_main_model` function in `src\networks\__init__.py` to support new models.
+
+```python
+def get_main_model(args):
+    # Add the new model name here.
+    assert args.encoder_architecture in ["Fixed", "BERT", "DeepMoji", "NEW_MODEL_NAME"], "Not implemented"
+
+    if args.encoder_architecture == "Fixed":
+        model = MLP(args)
+    elif args.encoder_architecture == "BERT":
+        model = BERTClassifier(args)
+    # Init the model 
+    elif args.encoder_architecture == "NEW_MODEL_NAME":
+        model = MODEL(args)
+    else:
+        raise "not implemented yet"
+```
+
+## Register the Dataloader
+Since different models have their own mapping from tokens to numerical ids. We need to handle this in the dataloader.
+
+Firstly, we need to init the tokenizer in `src\dataloaders\encoder.py`, for example,
+```python
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
+```
+
+Next, we need to modify the corresponding dataloader to return the idx of input texts. Please take a look at the Bios loader in `src\dataloaders\loaders.py` for detailed examples.
+
+Noticing that, to avoid encoding text to idx repeatedly, we could pre-calculate the mapped idx for the desired model, and load from file to save time.
