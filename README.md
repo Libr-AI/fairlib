@@ -107,13 +107,22 @@ The corresponding results such options and output logs will be saved in `results
     ```bash
         python main.py --dataset Moji --emb_size 2304 --num_classes 2
     ```
-  - Train a model over Bios with BERT-base representations.
+  - Train a model over Bios with fixed BERT-base representations.
     ```bash
         python main.py --dataset Bios_gender --emb_size 768 --num_classes 28
 
         python main.py --dataset Bios_economy --emb_size 768 --num_classes 28
 
         python main.py --dataset Bios_both --emb_size 768 --num_classes 28
+    ```
+
+  - Train a model over Bios with trainable BERT-base representations.
+    ```bash
+        python main.py --dataset Bios_gender --emb_size 768 --num_classes 28 --encoder_architecture BERT --batch_size 16
+
+        python main.py --dataset Bios_economy --emb_size 768 --num_classes 28 --encoder_architecture BERT --batch_size 16
+
+        python main.py --dataset Bios_both --emb_size 768 --num_classes 28 --encoder_architecture BERT --batch_size 16
     ```
 
 | Name                     | Default value | Description                                               |
