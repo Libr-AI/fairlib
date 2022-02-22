@@ -1,7 +1,7 @@
 import sys
 import torch
 import logging
-from .classifier import MLP
+from .classifier import MLP, BERTClassifier
 from . import utils
 from collections import defaultdict
 
@@ -10,6 +10,8 @@ def get_main_model(args):
 
     if args.encoder_architecture == "Fixed":
         model = MLP(args)
+    elif args.encoder_architecture == "Fixed":
+        model = BERTClassifier(args)
     else:
         raise "not implemented yet"
     
