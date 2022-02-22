@@ -5,6 +5,7 @@ import logging
 from .utils import BaseModel
 from .augmentation_layer import Augmentation_layer
 
+from transformers import BertModel
 
 class MLP(BaseModel):
     def __init__(self, args):
@@ -108,3 +109,26 @@ class MLP(BaseModel):
                 if self.AF is not None:
                     hidden_layers.append(self.AF)
             return hidden_layers
+
+
+class BERTClassifier(BaseModel):
+    model_name = 'bert-base-cased'
+
+    def __init__(self, args):
+        super(BERTClassifier, self).__init__()
+        self.args = args
+
+        self.bert = BertModel.from_pretrained(self.model_name)
+
+        self.classifier = MLP(args)
+
+    def forward(self, input_data, group_label = None):
+        bert_output = self.bert(input_data)
+
+        return self.classifier(bert_output, group_label)
+    
+    def hidden(self, input_data, group_label = None):
+        bert_output = self.bert(input_data)
+
+        return self.classifier.hidden(bert_output, group_label)
+
