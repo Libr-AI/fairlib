@@ -27,8 +27,6 @@ Introduction
 
 You can easily develop new algorithms, or readily apply existing algorithms.
 
-<!-- The [Introduction](#introduction) section &ndash; which you are presently reading &ndash; should provide background for your software project, a brief explanation of what the project is about, and optionally, pointers to resources that can help orient readers.  (Some README recommendations go straight to installation instructions as the first section, but in my opinion, introductions are important for readers who are not familiar with your technical area.)  Ideally, this section should be short. -->
-
 The currently supported datasets include:
 - Moji  
   Binary sentiment classification. Instances are annotated with AAE/SAE labels.
