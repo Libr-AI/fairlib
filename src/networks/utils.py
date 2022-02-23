@@ -23,7 +23,7 @@ def save_checkpoint(
     _state = {
         'epoch': epoch,
         'epochs_since_improvement': epochs_since_improvement,
-        'model': model.state_dict(),
+        # 'model': model.state_dict(),
         'loss': loss,
         'dev_predictions': dev_predictions,
         'test_predictions': test_predictions,
@@ -35,6 +35,7 @@ def save_checkpoint(
     torch.save(_state, Path(checkpoint_dir) / filename)
     # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
     if is_best:
+        _state["model"]=model.state_dict()
         torch.save(_state, Path(checkpoint_dir) / 'BEST_checkpoint.pth.tar')
 
 # train the main model with adv loss
