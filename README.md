@@ -185,8 +185,8 @@ python main.py --BT --BTObj joint
 
 | Name       | Default value | Description                                                  |
 |------------|---------------|--------------------------------------------------------------|
-| BT         | False         | gated discriminator for augmented inputs given target labels |
-| BTObj      | One-hot       | mapping function from numerical labels to vectors.           |
+| BT         | False         | Reweighting or Resampling                                    |
+| BTObj      | One-hot       | joint \| y \| g \| stratified_y \| stratified_g              |
 | full_label | True          | require full protected label                                 |
 
 - Train a model to incorporate demographic factors
