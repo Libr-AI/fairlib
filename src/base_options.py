@@ -211,17 +211,17 @@ class BaseOptions(object):
         parser.add_argument('--batch_norm',  action='store_true', default=False, 
                             help='apply 1d batch norm to the model')
 
-        # Arguments for fair training
+        # Arguments for balanced training
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
         parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
+        # Arguments for balanced training
         parser.add_argument('--gated',  action='store_true', default=False, 
                             help='gated model for augmented inputs given protected labels')
         parser.add_argument('--gated_mapping',  type=str, default=None)
+        
         parser.add_argument('--adv_num_classes', type=pos_int, default=2,
                             help='number of protected classes')
-
-        
 
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', action='store_true', default=False, help='Adv debiasing?')
