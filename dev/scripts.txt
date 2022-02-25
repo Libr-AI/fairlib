@@ -22,3 +22,12 @@ python dev_main.py --project_dir dev/logs --exp_id adv --n_hidden 2 --dropout 0 
 # Moji Uniform Soft Labels
 python dev_main.py --project_dir dev/logs --exp_id adv_uniform --n_hidden 2 --dropout 0 --results_dir 
 D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Moji --adv_debiasing --adv_uniform_label --adv_lambda 0.4
+
+# Bios vanilla
+python dev_main.py --project_dir dev/logs --exp_id vanilla --n_hidden 2 --dropout 2 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Bios_gender --emb_size 768 --num_classes 28
+
+# Bios adv
+python dev_main.py --project_dir dev/logs --exp_id adv --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Bios_gender --emb_size 768 --num_classes 28 --adv_debiasing
+
+# Bios adv uniform label
+python dev_main.py --project_dir dev/logs --exp_id adv_uniform --n_hidden 2 --dropout 0 --results_dir D:\Project\Fair_NLP_Classification\ --model_dir models --lr 0.003 --dataset Bios_gender --emb_size 768 --num_classes 28 --adv_debiasing --adv_uniform_label
