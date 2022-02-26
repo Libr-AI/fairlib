@@ -22,12 +22,14 @@ else:
     )
 
 def get_dataloaders(args):
-    assert args.dataset in ["Moji", "Bios_gender", "Bios_economy", "Bios_both"], "Not implemented"
+    assert args.dataset in ["test", "Moji", "Bios_gender", "Bios_economy", "Bios_both"], "Not implemented"
     if args.dataset == "Moji":
         task_dataloader = DeepMojiDataset
     elif args.dataset in ["Bios_gender", "Bios_economy", "Bios_both"]:
         task_dataloader = BiosDataset
         args.protected_task = args.dataset.split("_")[1]
+    elif args.dataset == "test":
+        task_dataloader = TestDataset
     else:
         pass
     
