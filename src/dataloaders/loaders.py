@@ -40,7 +40,9 @@ class TestDataset(BaseDataset):
             if self.split == "train":
                 _data_dir = "D:\\Project\\Fair_NLP_Classification\\data\\moji_text"
                 data_df = pd.read_pickle('{}/{}_df.pkl'.format(_data_dir, file))
-                data = data_df["encoding"].to_list()[:class_n]
+                mapped_data_df = pd.read_pickle('{}/mapped_{}_df.pkl'.format(_data_dir, file))
+                data = data_df["encoding"].to_list()[:class_n]+mapped_data_df["encoding"].to_list()[:class_n]
+
             else:
                 data = np.load('{}/{}.npy'.format(self.data_dir, file))
                 data = list(data[:class_n])
