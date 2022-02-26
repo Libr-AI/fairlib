@@ -275,13 +275,13 @@ class BaseModel(nn.Module):
                 
                 logging.info("Evaluation at Epoch %d" % (epoch,))
                 logging.info((
-                    'Validation GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
+                    'Validation GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}'
                 ).format(
                     100. * valid_scores["rms_TPR"], 100. * valid_scores["accuracy"], 
                     100. * valid_scores["macro_fscore"], 100. * valid_scores["micro_fscore"]
                 ))
                 logging.info((
-                    'Test GAP: {:2.2f} \tAcc: {:2.2f} \tMacroF1: {:2.2f} \tMicroF1: {:2.2f} \t'
+                    'Test GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}'
                 ).format(
                     100. * test_scores["rms_TPR"], 100. * test_scores["accuracy"], 
                     100. * test_scores["macro_fscore"], 100. * test_scores["micro_fscore"]
