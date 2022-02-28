@@ -109,7 +109,7 @@ class BiLSTMPOSTagger(nn.Module):
         # self.fc = MLP(args)
 
         self.dropout = nn.Dropout(dropout)
-        
+
     def forward(self, text):
 
         #text = [sent len, batch size]
