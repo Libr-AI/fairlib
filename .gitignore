@@ -5,3 +5,5 @@ dev/logs/
 results/dev
 data/*
 !*/.gitkeep
+!*/README.md
+!data/src/
