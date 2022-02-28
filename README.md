@@ -74,7 +74,7 @@ pip install -r requirements.txt
 <!-- TODO Will we release the Bios dataset with economy labels? -->
 Download the data used for this project:
 ```bash
-./download_data.sh
+./prepare_data.sh
 ```
  
 Usage
