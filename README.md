@@ -270,7 +270,7 @@ We appreciate all contributions. If you are planning to contribute back bug-fixe
 
 License
 -------
-
+This project is distributed under the terms of the [APACHE LICENSE, VERSION 2.0](https://www.apache.org/licenses/LICENSE-2.0).  The license applies to all files in the [GitHub repository](http://github.com/HanXudong/Fair_NLP_Classification) hosting this file.
 
 Acknowledgments
 ---------------
