@@ -216,8 +216,8 @@ class BaseDataset(torch.utils.data.Dataset):
                 stratified_g:   balancing the y for each g, p(y|g)
             """
 
-            if self.args.BT == "Reweighting":
-                self.adv_instance_weights = get_weights(self.args.BTObj, self.y, self.protected_label)
+            if self.args.adv_BT == "Reweighting":
+                self.adv_instance_weights = get_weights(self.args.adv_BTObj, self.y, self.protected_label)
             else:
                 pass
         return None
