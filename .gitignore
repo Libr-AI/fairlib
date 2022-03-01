@@ -4,7 +4,10 @@
 dev/logs/
 results/*
 data/*
+scripts/*
 !*/.gitkeep
 !*/README.md
 !data/src/
 !results/final/
+!scripts/hypertune
+!scripts/gen_exps.py
