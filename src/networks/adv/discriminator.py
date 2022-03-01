@@ -20,7 +20,7 @@ def adv_train_batch(model, discriminators, batch, args):
     p_tags = batch[2].float()
 
     if args.adv_BT is not None and args.adv_BT == "Reweighting":
-        adv_instance_weights = batch[3].float()
+        adv_instance_weights = batch[4].float()
         adv_instance_weights = adv_instance_weights.to(args.device)
 
     text = text.to(args.device)
