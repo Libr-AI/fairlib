@@ -256,6 +256,7 @@ class BaseOptions(object):
         parser.add_argument('--adv_gated',  action='store_true', default=False, 
                             help='gated discriminator for augmented inputs given target labels')
         parser.add_argument('--adv_BT', type=str, default=None, help='instacne reweighting for adv')
+        parser.add_argument('--adv_BTObj', type=str, default=None, help='instacne reweighting for adv')
 
         parser.add_argument('--adv_gated_mapping',  type=str, default=None)
         # Diverse

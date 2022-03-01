@@ -15,6 +15,117 @@ def full_label_data(df, tasks):
         selected_rows = selected_rows & df[task].notnull().to_numpy()
     return selected_rows
 
+def get_weights(BTObj, y, protected_label):
+    # init a dict for storing the index of each group.
+
+    n_total = len(y)
+    if BTObj in ["joint", "stratified_y", "stratified_g"]:
+        weighting_counter = Counter([(i,j) for i,j in zip(y, protected_label)])
+    elif BTObj == "y":
+        weighting_counter = Counter(y)
+    elif BTObj == "g":
+        weighting_counter = Counter(protected_label)
+    else:
+        pass
+
+    if BTObj in ["joint", "y", "g"]:
+        n_perfect_balanced = n_total / len(weighting_counter.keys())
+        for k in weighting_counter.keys():
+            weighting_counter[k] = n_perfect_balanced / weighting_counter[k]
+    elif BTObj == "stratified_y":
+        for k in weighting_counter.keys():
+            _y, _g = k
+            groups_with_same_y = [_k for _k in weighting_counter.keys() if _k[0] == _y]
+            num_y = sum([weighting_counter[_k] for _k in groups_with_same_y])
+            weighting_counter[k] = num_y / len(groups_with_same_y) / weighting_counter[k]
+    elif BTObj == "stratified_g":
+        for k in weighting_counter.keys():
+            _y, _g = k
+            groups_with_same_g = [_k for _k in weighting_counter.keys() if _k[1] == _g]
+            num_g = sum([weighting_counter[_k] for _k in groups_with_same_g])
+            weighting_counter[k] = num_g / len(groups_with_same_g) / weighting_counter[k]
+    else:
+        pass
+
+    # add weights
+    instance_weights = []
+    for _y, _g in zip(y, protected_label):
+        if BTObj in ["joint", "stratified_y", "stratified_g"]:
+            instance_weights.append(weighting_counter[(_y, _g)])
+        elif BTObj == "y":
+            instance_weights.append(weighting_counter[_y])
+        elif BTObj == "g":
+            instance_weights.append(weighting_counter[_g])
+        else:
+            pass
+    instance_weights = np.array(instance_weights)
+
+    return instance_weights
+
+def get_sampled_indices(BTObj, y, protected_label):
+    # init a dict for storing the index of each group.
+
+    group_idx = {}
+    if BTObj in ["joint", "stratified_y", "stratified_g"]:
+        group_labels = [(i,j) for i,j in zip(y, protected_label)]
+    elif BTObj == "y":
+        group_labels = y
+    elif BTObj == "g":
+        group_labels = protected_label
+    else:
+        pass
+
+    for idx, group_label in enumerate(group_labels):
+        group_idx[group_label] = group_idx.get(group_label, []) + [idx]
+
+    selected_index = []
+
+    if BTObj in ["joint", "y", "g"]:
+        selected = min([len(i) for i in group_idx.values()])
+        for index in group_idx.values():
+            _index = index
+            shuffle(_index)
+            selected_index = selected_index + _index[:selected]
+
+    elif BTObj == "stratified_y":
+        # empirical distribution of y
+        weighting_counter = Counter(y)
+
+        # a list of (weights, actual length)
+        condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_y] for (_y, _g) in group_idx.keys()])
+
+        distinct_y_label = set(y)
+        distinct_g_label = set(protected_label)
+
+        # iterate each main task class
+        for y in distinct_y_label:
+            selected = int(condidate_selected * weighting_counter[y])
+            for g in distinct_g_label:
+                _index = group_idx[(y,g)]
+                shuffle(_index)
+                selected_index = selected_index + _index[:selected]
+
+    elif BTObj == "stratified_g":
+        # empirical distribution of g
+        weighting_counter = Counter(protected_label)
+        # a list of (weights, actual length)
+        # Noticing that if stratified_g, the order within the key has been changed.
+        condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_g] for (_y, _g) in group_idx.keys()])
+
+        distinct_y_label = set(y)
+        distinct_g_label = set(protected_label)
+
+        # iterate each main task class
+        # for y in distinct_y_label:
+        for g in distinct_g_label:
+            selected = int(condidate_selected * weighting_counter[g])
+            # for g in distinct_g_label:
+            for y in distinct_y_label:
+                _index = group_idx[(y,g)]
+                shuffle(_index)
+                selected_index = selected_index + _index[:selected]
+
+    return selected_index
 
 class BaseDataset(torch.utils.data.Dataset):
     def __init__(self, args, split):
@@ -25,6 +136,7 @@ class BaseDataset(torch.utils.data.Dataset):
         self.y = []
         self.protected_label = []
         self.instance_weights = []
+        self.adv_instance_weights = []
 
         self.load_data()
         
@@ -36,6 +148,8 @@ class BaseDataset(torch.utils.data.Dataset):
 
         self.balanced_training()
 
+        self.adv_balanced_training()
+
         print("Loaded data shapes: {}, {}, {}".format(self.X.shape, self.y.shape, self.protected_label.shape))
 
     def __len__(self):
@@ -44,7 +158,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         'Generates one sample of data'
-        return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index]
+        return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index]
     
     def load_data(self):
         pass
@@ -67,116 +181,11 @@ class BaseDataset(torch.utils.data.Dataset):
             """
 
             if self.args.BT == "Reweighting":
-                # init a dict for storing the index of each group.
-
-                n_total = len(self.y)
-                if self.args.BTObj in ["joint", "stratified_y", "stratified_g"]:
-                    weighting_counter = Counter([(i,j) for i,j in zip(self.y, self.protected_label)])
-                elif self.args.BTObj == "y":
-                    weighting_counter = Counter(self.y)
-                elif self.args.BTObj == "g":
-                    weighting_counter = Counter(self.protected_label)
-                else:
-                    pass
-
-                if self.args.BTObj in ["joint", "y", "g"]:
-                    n_perfect_balanced = n_total / len(weighting_counter.keys())
-                    for k in weighting_counter.keys():
-                        weighting_counter[k] = n_perfect_balanced / weighting_counter[k]
-                elif self.args.BTObj == "stratified_y":
-                    for k in weighting_counter.keys():
-                        _y, _g = k
-                        groups_with_same_y = [_k for _k in weighting_counter.keys() if _k[0] == _y]
-                        num_y = sum([weighting_counter[_k] for _k in groups_with_same_y])
-                        weighting_counter[k] = num_y / len(groups_with_same_y) / weighting_counter[k]
-                elif self.args.BTObj == "stratified_g":
-                    for k in weighting_counter.keys():
-                        _y, _g = k
-                        groups_with_same_g = [_k for _k in weighting_counter.keys() if _k[1] == _g]
-                        num_g = sum([weighting_counter[_k] for _k in groups_with_same_g])
-                        weighting_counter[k] = num_g / len(groups_with_same_g) / weighting_counter[k]
-                else:
-                    pass
-
-                # add weights
-                self.instance_weights = []
-                for _y, _g in zip(self.y, self.protected_label):
-                    if self.args.BTObj in ["joint", "stratified_y", "stratified_g"]:
-                        self.instance_weights.append(weighting_counter[(_y, _g)])
-                    elif self.args.BTObj == "y":
-                        self.instance_weights.append(weighting_counter[_y])
-                    elif self.args.BTObj == "g":
-                        self.instance_weights.append(weighting_counter[_g])
-                    else:
-                        pass
-
-                self.instance_weights = np.array(self.instance_weights)
+                self.instance_weights = get_weights(self.args.BTObj, self.y, self.protected_label)
 
             elif self.args.BT == "Resampling":
-                
-                # init a dict for storing the index of each group.
 
-                group_idx = {}
-                if self.args.BTObj in ["joint", "stratified_y", "stratified_g"]:
-                    group_labels = [(i,j) for i,j in zip(self.y, self.protected_label)]
-                elif self.args.BTObj == "y":
-                    group_labels = self.y
-                elif self.args.BTObj == "g":
-                    group_labels = self.protected_label
-                else:
-                    pass
-
-                for idx, group_label in enumerate(group_labels):
-                    group_idx[group_label] = group_idx.get(group_label, []) + [idx]
-
-                selected_index = []
-
-                if self.args.BTObj in ["joint", "y", "g"]:
-                    selected = min([len(i) for i in group_idx.values()])
-
-                    for index in group_idx.values():
-                        _index = index
-                        shuffle(_index)
-                        selected_index = selected_index + _index[:selected]
-
-                elif self.args.BTObj == "stratified_y":
-                    # empirical distribution of y
-                    weighting_counter = Counter(self.y)
-
-                    # a list of (weights, actual length)
-                    condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_y] for (_y, _g) in group_idx.keys()])
-
-                    distinct_y_label = set(self.y)
-                    distinct_g_label = set(self.protected_label)
-                    
-                    # iterate each main task class
-                    for y in distinct_y_label:
-                        selected = int(condidate_selected * weighting_counter[y])
-                        for g in distinct_g_label:
-                            _index = group_idx[(y,g)]
-                            shuffle(_index)
-                            selected_index = selected_index + _index[:selected]
-
-                elif self.args.BTObj == "stratified_g":
-                    # empirical distribution of g
-                    weighting_counter = Counter(self.protected_label)
-
-                    # a list of (weights, actual length)
-                    # Noticing that if stratified_g, the order within the key has been changed.
-                    condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_g] for (_y, _g) in group_idx.keys()])
-
-                    distinct_y_label = set(self.y)
-                    distinct_g_label = set(self.protected_label)
-                    
-                    # iterate each main task class
-                    # for y in distinct_y_label:
-                    for g in distinct_g_label:
-                        selected = int(condidate_selected * weighting_counter[g])
-                        # for g in distinct_g_label:
-                        for y in distinct_y_label:
-                            _index = group_idx[(y,g)]
-                            shuffle(_index)
-                            selected_index = selected_index + _index[:selected]
+                selected_index = get_sampled_indices(self.args.BTObj, self.y, self.protected_label)
 
                 X = [self.X[index] for index in selected_index]
                 self.X = np.array(X)
@@ -186,6 +195,29 @@ class BaseDataset(torch.utils.data.Dataset):
                 self.protected_label = np.array(gender_label)
                 self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
 
+            else:
+                pass
+        return None
+
+    def adv_balanced_training(self):
+        if self.args.adv_BT is None:
+            # Without balanced training
+            self.adv_instance_weights = np.array([1 for _ in range(len(self.protected_label))])
+        else:
+            assert self.args.adv_BT in ["Reweighting"], "not implemented"
+
+            assert self.args.adv_BTObj in ["joint", "y", "g", "stratified_y", "stratified_g"], "not implemented"
+            """
+            reweighting each training instance 
+                joint:          y,g combination, p(g,y)
+                y:              main task label y only, p(y)
+                g:              protected label g only, p(g)
+                stratified_y:   balancing the g for each y, p(g|y)
+                stratified_g:   balancing the y for each g, p(y|g)
+            """
+
+            if self.args.BT == "Reweighting":
+                self.adv_instance_weights = get_weights(self.args.BTObj, self.y, self.protected_label)
             else:
                 pass
         return None
