@@ -2,8 +2,9 @@
 *.pyc
 .vscode/settings.json
 dev/logs/
-results/dev
+results/*
 data/*
 !*/.gitkeep
 !*/README.md
 !data/src/
+!results/final/
