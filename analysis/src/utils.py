@@ -63,6 +63,18 @@ def DTO(fairness_metric, performacne_metric, utopia_fairness = None, utopia_perf
 
 # find folders for each run
 def get_dir(results_dir, project_dir, checkpoint_dir, checkpoint_name, model_id):
+    """retrive logs for experiments
+
+    Args:
+        results_dir (str): dir to the saved experimental results
+        project_dir (str): experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.
+        checkpoint_dir (str): dir to checkpoints, `models` by default.
+        checkpoint_name (str):  checkpoint_epoch{num_epoch}.ptr.gz
+        model_id (_type_): read all experiment start with the same model_id. E.g., "Adv" when tuning hyperparameters for standard adversarial
+
+    Returns:
+        _type_: _description_
+    """
     results_dir = Path(results_dir)
     project_dir = Path(project_dir)
     checkpoint_dir = Path(checkpoint_dir)
@@ -155,17 +167,18 @@ def model_selection(
     """perform model selection over different runs wrt different hyperparameters
 
     Args:
-        results_dir (_type_): _description_
-        project_dir (_type_): _description_
-        checkpoint_dir (_type_): _description_
-        checkpoint_name (_type_): _description_
-        model_id (_type_): _description_
-        GAP_metric_name (_type_): _description_
-        Performance_metric_name (_type_): _description_
-        selection_criterion (_type_): _description_
+        results_dir (str): dir to the saved experimental results
+        project_dir (str): experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.
+        checkpoint_dir (str): dir to checkpoints, `models` by default.
+        checkpoint_name (str):  checkpoint_epoch{num_epoch}.ptr.gz
+        model_id (str): read all experiment start with the same model_id. E.g., "Adv" when tuning hyperparameters for standard adversarial
+        GAP_metric_name (str): fairness metric in the log
+        Performance_metric_name (str): performance metric name in the log
+        selection_criterion (str): {GAP_metric_name | Performance_metric_name | "DTO"}
+        index_column_names (list): tuned hyperparameters, ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'] by default.
 
     Returns:
-        _type_: _description_
+        _type_: loaded results as a dataframe for different runs
     """
     exps = get_dir(
         results_dir=results_dir, 
@@ -196,6 +209,14 @@ def model_selection(
     return pd.DataFrame(exp_results)
 
 def create_plots(input_df):
+    """create plots and return the selected model
+
+    Args:
+        input_df (pd.DataFrame): results dataframe
+
+    Returns:
+        _type_: selected model
+    """
     # Moji_adv_df
     _df = input_df.set_index(['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'])
 
