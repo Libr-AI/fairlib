@@ -15,6 +15,7 @@ Table of contents
     - [Additional options](#additional-options)
     - [Scripts for Large Scale Experiments](#scripts-for-large-scale-experiments)
     - [Add New Datasets/Models](#add-new-datasetsmodels)
+  - [Model Selection and Fairness Evaluation](#model-selection-and-fairness-evaluation)
   - [Known issues and limitations](#known-issues-and-limitations)
   - [Getting help](#getting-help)
   - [Contributing](#contributing)
@@ -245,6 +246,12 @@ python scripts/gen_exps.py
 
 ### Add New Datasets/Models
 Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.
+
+Model Selection and Fairness Evaluation
+----------------------------
+We provide implementation of DTO and DTO based model selection for different models. 
+
+Please see `analysis\sample_model_selection.ipynb` for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
 
 Known issues and limitations
 ----------------------------
