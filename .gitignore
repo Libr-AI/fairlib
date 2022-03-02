@@ -9,6 +9,5 @@ scripts/*
 !*/README.md
 !data/src/
 !results/final/
-!results/hypertune/
 !scripts/hypertune
 !scripts/gen_exps.py
