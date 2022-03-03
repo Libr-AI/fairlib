@@ -58,7 +58,7 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
 
     for id, combo in enumerate(combos):        
         with open(file_path+"{}_{}.slurm".format(job_name, combo[0]),"a+") as f:
-            command = "python main.py --project_dir hypertune2 --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT}"
+            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT}"
             # dataset
             _dataset = combo[0]
             _emb_size = 2304 if _dataset == "Moji" else 768
@@ -75,6 +75,8 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
             _random_seed = combo[10]
             _adv_gated = " --adv_gated" if combo[11] else ""
             _adv_BT = " --adv_BT Reweighting --adv_BTObj {}".format(combo[13]) if combo[12] else ""
+            _project_dir = combo[14] ## hypertune2
+
             _exp_id = "{_job_name}_{_adv_lambda}_{_adv_num_subDiscriminator}_{_adv_diverse_lambda}_{_random_seed}".format(
                 _job_name = job_name,
                 _adv_lambda=_adv_lambda, 
@@ -100,6 +102,7 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
                 _adv_diverse_lambda=_adv_diverse_lambda,
                 _adv_gated=_adv_gated,
                 _adv_BT=_adv_BT,
+                _project_dir=_project_dir
                     )
             f.write(command+"\nsleep 2\n")
 
@@ -121,6 +124,7 @@ if __name__ == '__main__':
     exps["adv_gated"]={False}
     exps["adv_BT"]={False}
     exps["adv_BTObj"]={"joint"}
+    exps["project_dir"]={"hypertune"}
     allNames=exps.keys()
 
     # # Adv
@@ -132,21 +136,28 @@ if __name__ == '__main__':
     #     exps["adv_diverse_lambda"]={_adv_diverse_lambda}
     #     write_to_batch_files(job_name="hypertune_DAdv_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
+    # # DAdv tune diverse_lambda given fixed lambda
+    # exps["adv_num_subDiscriminator"]={3}
+    # exps["adv_lambda"]={3.1622776601683795}
+    # exps["adv_diverse_lambda"]=set(log_grid(-1,5,60))
+    # write_to_batch_files(job_name="hypertune_DAdv_tunedLambda", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+
+    # # Gated Adv
+    # exps["adv_num_subDiscriminator"]={1}
+    # exps["adv_lambda"]=set(log_grid(-3,3,60))
+    # exps["adv_diverse_lambda"]={0}
+    # exps["adv_gated"]={True}
+    # write_to_batch_files(job_name="hypertune_GatedAdv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+
+    # # Gated Adv with instance reweighting
+    # exps["adv_BT"]={True}
+    # exps["adv_BTObj"]={"joint"}
+    # write_to_batch_files(job_name="hypertune_BTGatedAdv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+
     # DAdv tune diverse_lambda given fixed lambda
     exps["adv_num_subDiscriminator"]={3}
-    exps["adv_lambda"]={3.1622776601683795}
-    exps["adv_diverse_lambda"]=set(log_grid(-1,5,60))
-    write_to_batch_files(job_name="hypertune_DAdv_tunedLambda", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
-
-    # Gated Adv
-    exps["adv_num_subDiscriminator"]={1}
-    exps["adv_lambda"]=set(log_grid(-3,3,60))
-    exps["adv_diverse_lambda"]={0}
+    exps["project_dir"]={"hypertune3"}
     exps["adv_gated"]={True}
-    write_to_batch_files(job_name="hypertune_GatedAdv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
-
-    # Gated Adv with instance reweighting
-    exps["adv_BT"]={True}
-    exps["adv_BTObj"]={"joint"}
-    write_to_batch_files(job_name="hypertune_BTGatedAdv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
-
+    for i, _adv_diverse_lambda in enumerate(log_grid(-2,4,6)):
+        exps["adv_diverse_lambda"]={_adv_diverse_lambda}
+        write_to_batch_files(job_name="hypertune_GDAdv_{}".format(i), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
