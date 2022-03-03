@@ -208,6 +208,25 @@ def model_selection(
         exp_results.append(_exp_results)
     return pd.DataFrame(exp_results)
 
+def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names):
+    # Get scores
+    epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
+    selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
+    selected_epoch_scores = epoch_scores.iloc[selected_epoch_id]
+
+    _exp_opt = exp["opt"]
+
+    # Get hyperparameters for this epoch
+    _exp_results = {}
+    for hyperparam_key in index_column_names:
+        _exp_results[hyperparam_key] = _exp_opt[hyperparam_key]
+
+    # Merge opt with scores
+    for key in selected_epoch_scores.keys():
+        _exp_results[key] = selected_epoch_scores[key]
+
+    return _exp_results
+
 def create_plots(
     input_df, 
     key_index = 0, 
