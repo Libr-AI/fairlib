@@ -208,7 +208,13 @@ def model_selection(
         exp_results.append(_exp_results)
     return pd.DataFrame(exp_results)
 
-def create_plots(input_df):
+def create_plots(
+    input_df, 
+    key_index = 0, 
+    index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
+    GAP_metric_name = "rms_TPR",
+    Performance_metric_name = "accuracy",
+    ):
     """create plots and return the selected model
 
     Args:
@@ -218,19 +224,25 @@ def create_plots(input_df):
         _type_: selected model
     """
     # Moji_adv_df
-    _df = input_df.set_index(['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'])
+    _df = input_df.set_index(index_column_names)
 
     __df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
     __df
 
-    _log_lambda = [round(math.log10(i[0]), 2) for i in __df["index"]]
+    _log_lambda = [round(math.log10(i[key_index]), 2) for i in __df["index"]]
     __df["log_lambda"] = _log_lambda
 
-    _final_DTO = DTO(fairness_metric=list(__df[("test_rms_TPR", "mean")]), performacne_metric=list(__df[("test_accuracy", "mean")]))
+    _final_DTO = DTO(
+        fairness_metric=list(__df[("test_{}".format(GAP_metric_name), "mean")]), 
+        performacne_metric=list(__df[("test_{}".format(Performance_metric_name), "mean")])
+        )
     __df["final_DTO"] = _final_DTO
 
     sns.relplot(data=__df, x="log_lambda", y="final_DTO")
 
-    sns.relplot(data=__df, x=("test_accuracy", "mean"), y=("test_rms_TPR", "mean"))
+    sns.relplot(
+        data=__df, 
+        x=("test_{}".format(Performance_metric_name), "mean"), 
+        y=("test_{}".format(GAP_metric_name), "mean"))
 
     return __df[__df["final_DTO"] == min(_final_DTO)]
