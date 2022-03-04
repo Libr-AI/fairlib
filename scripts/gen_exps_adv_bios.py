@@ -59,11 +59,12 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
 
     for id, combo in enumerate(combos):        
         with open(file_path+"{}_{}.slurm".format(job_name, combo[0]),"a+") as f:
-            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT}"
+            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT} --adv_num_classes {_adv_num_classes}"
             # dataset
             _dataset = combo[0]
             _emb_size = 2304 if _dataset == "Moji" else 768
             _num_classes = 2 if _dataset == "Moji" else 28
+            _adv_num_classes = 4 if _dataset == "Bios_both" else 2
             _batch_size = combo[1]
             _learning_rate = combo[2]
             _hidden_size = combo[3]
@@ -103,7 +104,8 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
                 _adv_diverse_lambda=_adv_diverse_lambda,
                 _adv_gated=_adv_gated,
                 _adv_BT=_adv_BT,
-                _project_dir=_project_dir
+                _project_dir=_project_dir,
+                _adv_num_classes = _adv_num_classes,
                     )
             f.write(command+"\nsleep 2\n")
 
