@@ -22,7 +22,7 @@ slurm_head = """#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=48:00:00
+#SBATCH --time=96:00:00
 #SBATCH --mem=64G
 #SBATCH --job-name={_job_name}
 
@@ -57,9 +57,10 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
         with open(file_path+"{}_{}.slurm".format(_dataset, job_name),"w") as f:
             f.write(slurm_head.format(_job_name = job_name))
 
-    for id, combo in enumerate(combos):        
-        with open(file_path+"{}_{}.slurm".format(job_name, combo[0]),"a+") as f:
-            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT} --adv_num_classes {_adv_num_classes}"
+    for id, combo in enumerate(combos): 
+        _dataset = combo[0]       
+        with open(file_path+"{}_{}.slurm".format(_dataset, job_name),"a+") as f:
+            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT} --adv_num_classes {_adv_num_classes} --epochs 20"
             # dataset
             _dataset = combo[0]
             _emb_size = 2304 if _dataset == "Moji" else 768
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     exps["n_hidden"]={2}
     exps["dropout"]={0}
     exps["batch_norm"]={False}
-    exps["adv_lambda"]=set(log_grid(-3,3,60))
+    exps["adv_lambda"]=set(log_grid(-2,2,40))
     exps["adv_num_subDiscriminator"]={1}
     # exps["adv_diverse_lambda"]=set(log_grid(-4,-2,6))
     exps["adv_diverse_lambda"]={0}
@@ -128,7 +129,7 @@ if __name__ == '__main__':
     exps["adv_gated"]={False}
     exps["adv_BT"]={False}
     exps["adv_BTObj"]={"joint"}
-    exps["project_dir"]={"hypertune"}
+    exps["project_dir"]={"hypertune4"}
     allNames=exps.keys()
 
     # # Adv
@@ -141,21 +142,15 @@ if __name__ == '__main__':
     # Gated Adv with instance reweighting
     exps["adv_BT"]={True}
     exps["adv_BTObj"]={"stratified_g"}
-    write_to_batch_files(job_name="BTGatedAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    write_to_batch_files(job_name="BTGAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
-    # # DAdv
-    # exps["adv_num_subDiscriminator"]={3}
-    # for _adv_diverse_lambda in log_grid(-2,2,4):
-    #     exps["adv_diverse_lambda"]={_adv_diverse_lambda}
-    #     write_to_batch_files(job_name="hypertune_DAdv_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    # DAdv
+    exps["adv_num_subDiscriminator"]={3}
+    for _adv_diverse_lambda in log_grid(-2,2,4):
+        exps["adv_diverse_lambda"]={_adv_diverse_lambda}
+        write_to_batch_files(job_name="DAdv_hypertune_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
-    # # DAdv tune diverse_lambda given fixed lambda
-    # exps["adv_num_subDiscriminator"]={3}
-    # exps["adv_lambda"]={3.1622776601683795}
-    # exps["adv_diverse_lambda"]=set(log_grid(-1,5,60))
-    # write_to_batch_files(job_name="hypertune_DAdv_tunedLambda", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
-
-    # # DAdv tune diverse_lambda given fixed lambda
+    # # GDAdv
     # exps["adv_num_subDiscriminator"]={3}
     # exps["project_dir"]={"hypertune3"}
     # exps["adv_gated"]={True}
