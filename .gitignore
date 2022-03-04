@@ -12,3 +12,4 @@ scripts/*
 !scripts/hypertune
 !scripts/gen_exps.py
 !scripts/gen_exps_adv_moji.py
+!scripts/gen_exps_bios.py
