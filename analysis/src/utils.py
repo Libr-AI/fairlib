@@ -265,3 +265,73 @@ def create_plots(
         y=("test_{}".format(GAP_metric_name), "mean"))
 
     return __df[__df["final_DTO"] == min(_final_DTO)]
+
+# Faster than is_pareto_efficient_simple, but less readable.
+def is_pareto_efficient(costs, return_mask = True):
+    """
+    Find the pareto-efficient points
+    :param costs: An (n_points, n_costs) array
+    :param return_mask: True to return a mask
+    :return: An array of indices of pareto-efficient points.
+        If return_mask is True, this will be an (n_points, ) boolean array
+        Otherwise it will be a (n_efficient_points, ) integer array of indices.
+    """
+    is_efficient = np.arange(costs.shape[0])
+    n_points = costs.shape[0]
+    next_point_index = 0  # Next index in the is_efficient array to search for
+    while next_point_index<len(costs):
+        nondominated_point_mask = np.any(costs<costs[next_point_index], axis=1)
+        nondominated_point_mask[next_point_index] = True
+        is_efficient = is_efficient[nondominated_point_mask]  # Remove dominated points
+        costs = costs[nondominated_point_mask]
+        next_point_index = np.sum(nondominated_point_mask[:next_point_index])+1
+    if return_mask:
+        is_efficient_mask = np.zeros(n_points, dtype = bool)
+        is_efficient_mask[is_efficient] = True
+        return is_efficient_mask
+    else:
+        return is_efficient
+
+def model_comparasion(
+    results_dict,
+    index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
+    GAP_metric_name = "rms_TPR",
+    Performance_metric_name = "accuracy",
+    pareto = True,
+    pareto_selection = "dev",
+    default_plot = True
+    ):
+
+    df_list = []
+    for key in results_dict.keys():
+        # Moji_adv_df
+        _df = results_dict[key].set_index(index_column_names)
+
+        _df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
+
+        _df.columns = [' '.join(col).strip() for col in _df.columns.values]
+
+        if pareto:
+            _pareto_flag = is_pareto_efficient(
+                -1*_df[["{}_{} mean".format(pareto_selection, GAP_metric_name), "{}_{} mean".format(pareto_selection, Performance_metric_name)]].to_numpy()
+                )
+            _pareto_df = _df[_pareto_flag][["test_{} mean".format(GAP_metric_name), "test_{} mean".format(Performance_metric_name)]]
+        else:
+            _pareto_df = _df[["test_{} mean".format(GAP_metric_name), "test_{} mean".format(Performance_metric_name)]]
+
+        _pareto_df["Models"] = [key]*len(_pareto_df)
+        
+        df_list.append(_pareto_df)
+    final_df = pd.concat(df_list)
+    final_df.reset_index(inplace=True)
+    
+    if default_plot:
+        sns.relplot(
+            data=final_df,
+            x="test_{} mean".format(Performance_metric_name),
+            y="test_{} mean".format(GAP_metric_name),
+            hue="Models",
+            kind="line",
+        )
+
+    return final_df
