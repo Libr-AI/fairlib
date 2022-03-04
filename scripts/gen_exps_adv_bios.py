@@ -1,6 +1,7 @@
 import itertools as it
 import numpy as np
 from pip import main
+import secrets
 
 def loguniform(low=0, high=1, size=None):
     return np.power(10, np.random.uniform(low, high, size))
@@ -95,7 +96,7 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
                 _n_hidden=_n_hidden,
                 _dropout=_dropout,
                 _batch_norm=_batch_norm,
-                _random_seed=_random_seed,
+                _random_seed=(_random_seed+secrets.randbelow(int(1e7))),
                 _exp_id=_exp_id,
                 _adv_lambda=_adv_lambda,
                 _adv_num_subDiscriminator=_adv_num_subDiscriminator,
@@ -121,7 +122,7 @@ if __name__ == '__main__':
     exps["adv_num_subDiscriminator"]={1}
     # exps["adv_diverse_lambda"]=set(log_grid(-4,-2,6))
     exps["adv_diverse_lambda"]={0}
-    exps["random_seed"]={2013, 2017, 2020, 2022, 2024}
+    exps["random_seed"]=set([i for i in range(5)])
     exps["adv_gated"]={False}
     exps["adv_BT"]={False}
     exps["adv_BTObj"]={"joint"}
