@@ -23,10 +23,10 @@ def confusion_matrix_based_scores(cnf):
     """
     Implementation from https://stackoverflow.com/a/43331484
     """
-    FP = cnf.sum(axis=0) - np.diag(cnf) 
-    FN = cnf.sum(axis=1) - np.diag(cnf) 
-    TP = np.diag(cnf) 
-    TN = cnf.sum() - (FP + FN + TP)
+    FP = cnf.sum(axis=0) - np.diag(cnf) + 1e-5
+    FN = cnf.sum(axis=1) - np.diag(cnf) + 1e-5
+    TP = np.diag(cnf) + 1e-5
+    TN = cnf.sum() - (FP + FN + TP) + 1e-5
 
     # Sensitivity, hit rate, recall, or true positive rate
     TPR = TP/(TP+FN)
