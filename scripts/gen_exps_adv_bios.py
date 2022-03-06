@@ -129,26 +129,33 @@ if __name__ == '__main__':
     exps["adv_gated"]={False}
     exps["adv_BT"]={False}
     exps["adv_BTObj"]={"joint"}
-    exps["project_dir"]={"hypertune4"}
+    exps["project_dir"]={"hypertune5"}
     allNames=exps.keys()
 
-    # # Adv
-    write_to_batch_files(job_name="Adv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    # # # Adv
+    # write_to_batch_files(job_name="Adv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
-    # Gated Adv
-    exps["adv_gated"]={True}
-    write_to_batch_files(job_name="GAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    # # Gated Adv
+    # exps["adv_gated"]={True}
+    # write_to_batch_files(job_name="GAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
-    # Gated Adv with instance reweighting
-    exps["adv_BT"]={True}
-    exps["adv_BTObj"]={"stratified_g"}
-    write_to_batch_files(job_name="BTGAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    # # Gated Adv with instance reweighting
+    # exps["adv_BT"]={True}
+    # exps["adv_BTObj"]={"stratified_g"}
+    # write_to_batch_files(job_name="BTGAdv_hypertune", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
-    # DAdv
+    # # DAdv 
     exps["adv_num_subDiscriminator"]={3}
     for _adv_diverse_lambda in log_grid(-2,2,4):
         exps["adv_diverse_lambda"]={_adv_diverse_lambda}
-        write_to_batch_files(job_name="DAdv_hypertune_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+        write_to_batch_files(job_name="_R_DAdv_hypertune_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+
+    # GDAdv
+    exps["adv_gated"]={True}
+    exps["adv_num_subDiscriminator"]={3}
+    for _adv_diverse_lambda in log_grid(-2,2,4):
+        exps["adv_diverse_lambda"]={_adv_diverse_lambda}
+        write_to_batch_files(job_name="GDAdv_hypertune_{}".format(_adv_diverse_lambda), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
     # # GDAdv
     # exps["adv_num_subDiscriminator"]={3}
