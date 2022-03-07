@@ -49,11 +49,9 @@ def train_epoch(model, iterator, args, epoch):
     criterion = model.criterion
 
     data_t0 = time.time()
+    data_t, t = 0, 0
     
     for it, batch in enumerate(iterator):
-
-        data_t = time.time() - data_t0
-        t0 = time.time()
         
         text = batch[0].squeeze()
         tags = batch[1].long().squeeze()
@@ -66,6 +64,9 @@ def train_epoch(model, iterator, args, epoch):
         text = text.to(args.device)
         tags = tags.to(args.device)
         p_tags = p_tags.to(args.device)
+
+        data_t += (time.time() - data_t0)
+        t0 = time.time()
         
         optimizer.zero_grad()
         # main model predictions
@@ -100,7 +101,7 @@ def train_epoch(model, iterator, args, epoch):
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
-        t = time.time() - t0
+        t += (time.time() - t0)
         data_t0 = time.time()
 
         if it % args.log_interval == 0:
@@ -110,6 +111,7 @@ def train_epoch(model, iterator, args, epoch):
                     epoch, it * args.batch_size, len(iterator.dataset),
                     100. * it / len(iterator), loss, data_t, t,
                 ))
+            data_t, t = 0, 0
         
     return epoch_loss / len(iterator)
 
