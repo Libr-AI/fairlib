@@ -23,10 +23,10 @@ def confusion_matrix_based_scores(cnf):
     """
     Implementation from https://stackoverflow.com/a/43331484
     """
-    FP = cnf.sum(axis=0) - np.diag(cnf) 
-    FN = cnf.sum(axis=1) - np.diag(cnf) 
-    TP = np.diag(cnf) 
-    TN = cnf.sum() - (FP + FN + TP)
+    FP = cnf.sum(axis=0) - np.diag(cnf) + 1e-5
+    FN = cnf.sum(axis=1) - np.diag(cnf) + 1e-5
+    TP = np.diag(cnf) + 1e-5
+    TN = cnf.sum() - (FP + FN + TP) + 1e-5
 
     # Sensitivity, hit rate, recall, or true positive rate
     TPR = TP/(TP+FN)
@@ -67,9 +67,9 @@ def power_mean(series, p):
         return np.power(total, 1 / p)
 
 def gap_eval_scores(y_pred, y_true, protected_attribute):
-    preds = np.array(preds)
-    labels = np.array(labels)
-    p_labels = np.array(p_labels)
+    y_pred = np.array(y_pred)
+    y_true = np.array(y_true)
+    protected_attribute = np.array(protected_attribute)
 
     all_scores = {}
     # Overall evaluation
@@ -94,9 +94,9 @@ def gap_eval_scores(y_pred, y_true, protected_attribute):
     # RMS of each class
     rms_tpr_gaps = np.sqrt(np.mean(tpr_gaps**2))
 
-    accuracy = accuracy_score(labels, preds)
-    macro_fscore = f1_score(labels, preds, average="macro")
-    micro_fscore = f1_score(labels, preds, average="micro")
+    accuracy = accuracy_score(y_true, y_pred)
+    macro_fscore = f1_score(y_true, y_pred, average="macro")
+    micro_fscore = f1_score(y_true, y_pred, average="micro")
     
     # return rms_tpr_gaps, (all_scores, group_TPR)
     return {
