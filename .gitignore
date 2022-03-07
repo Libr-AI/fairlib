@@ -2,6 +2,7 @@
 *.pyc
 .vscode/settings.json
 dev/logs/
+dev/results/
 results/*
 data/*
 scripts/*
