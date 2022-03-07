@@ -4,7 +4,8 @@ import logging
 from torch.optim import Adam
 import time
 from pathlib import Path
-from .evaluator import gap_eval_scores
+# from .evaluator import gap_eval_scores
+from ..evaluators.evaluator import gap_eval_scores
 
 def print_network(net, verbose=False):
     num_params = 0
