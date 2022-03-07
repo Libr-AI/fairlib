@@ -55,9 +55,9 @@ def train_epoch(model, iterator, args, epoch):
         data_t = time.time() - data_t0
         t0 = time.time()
         
-        text = batch[0]
-        tags = batch[1].long()
-        p_tags = batch[2].float()
+        text = batch[0].squeeze()
+        tags = batch[1].long().squeeze()
+        p_tags = batch[2].float().squeeze()
 
         if args.BT is not None and args.BT == "Reweighting":
             instance_weights = batch[3].float()
