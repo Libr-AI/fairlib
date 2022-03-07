@@ -50,7 +50,7 @@ The currently supported bias mitigation methods include:
 - Balanced Training
   - Instance Reweighting and Resampling  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
-  - FairBatch: resampling dynamically during training
+  - FairBatch: resampling dynamically during training  
   Yuji Roh, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
 
 - Incorporating Demographic Factors  
@@ -192,10 +192,10 @@ python main.py --BT --BTObj joint
 | BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g              |
 | full_label | True          | require full protected label                                 |
 
-- Train a model with dynamic balanced training
+- Train a model with FairBach balanced training
 
 ```bash
-python main.py --DyBT --DyBTObj stratified_y 
+python main.py --DyBT FairBach --DyBTObj stratified_y 
 ```
 
 | Name       | Default value | Description                                                  |
