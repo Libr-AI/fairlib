@@ -319,3 +319,5 @@ Acknowledgments
 * https://github.com/mhucka/readmine
 * https://github.com/yanaiela/demog-text-removal
 * https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations
+* https://github.com/yuji-roh/fairbatch
+* https://github.com/shauli-ravfogel/nullspace_projection
