@@ -47,11 +47,13 @@ The currently supported bias mitigation methods include:
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
   - Adversarial Regularization without Label  
   Working paper.
+  - INLP  
+    Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
 - Balanced Training
   - Instance Reweighting and Resampling  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
   - FairBatch: resampling dynamically during training  
-  Yuji Roh, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
+  Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
 
 - Incorporating Demographic Factors  
   - Representation Augmentation  
@@ -179,6 +181,20 @@ python main.py --adv_debiasing --adv_gated
 |-------------------|---------------|--------------------------------------------------------------|
 | adv_gated         | False         | gated discriminator for augmented inputs given target labels |
 | adv_gated_mapping | One-hot       | mapping function from numerical labels to vectors.           |
+
+- INLP
+
+```bash
+python main.py --INLP
+```
+
+| Name                            | Default value | Description                                                 |
+|---------------------------------|---------------|-------------------------------------------------------------|
+| INLP_discriminator_reweighting  | None          | if train the linear discriminator with reweighting          |
+| INLP_by_class                   | False         | estimate the nullspace by_class                             |
+| INLP_n                          | 300           | the maximum number of null-space projection iteration       |
+| INLP_min_acc                    | 0.0           | ignore the iteration if the acc is lower than the threshold |
+
 
 - Train a model with balanced training
 
