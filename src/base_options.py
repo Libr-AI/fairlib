@@ -1,5 +1,6 @@
 import argparse
 import os
+from turtle import pos
 import torch
 import yaml
 import time
@@ -278,6 +279,18 @@ class BaseOptions(object):
         # Use uniform soft-labels for the adversarial regularization
         parser.add_argument('--adv_uniform_label', action='store_true', default=False,
                             help='Using uniform soft-labels for the adversarial regularization')
+
+        # INLP
+        parser.add_argument('--INLP', action='store_true', default=False,
+                            help='Perform INLP')
+        parser.add_argument("--INLP_discriminator_reweighting", type=str, default=None, 
+                            help='if train the linear discriminator with reweighting')
+        parser.add_argument("--INLP_by_class", action='store_true', default=False,
+                            help="estimate the nullspace by_class")
+        parser.add_argument("--INLP_n", type=pos_int, default=300,
+                            help="the maximum number of null-space projection iteration")
+        parser.add_argument("--INLP_min_acc", type=float, default=0.0,
+                            help="ignore the iteration if the acc is lower than the threshold")
 
 
 

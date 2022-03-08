@@ -2,7 +2,7 @@
 from typing import Dict
 import numpy as np
 import scipy
-from src.networks.INLP import classifier
+from . import classifier
 from typing import List
 from tqdm import tqdm
 import random
