@@ -45,6 +45,8 @@ The currently supported bias mitigation methods include:
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Diverse Adversaries for Mitigating Bias in Training](https://aclanthology.org/2021.eacl-main.239/), EACL 2021.
   - Decoupled Adversarial Training  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
+  - Towards Equal Opportunity Fairness through Adversarial Learning  
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), 
   - Adversarial Regularization without Label  
   Working paper.
   - INLP  
