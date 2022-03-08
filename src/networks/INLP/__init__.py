@@ -69,7 +69,7 @@ def extract_hidden_representations(model, split, args):
         
         hidden.append(hidden_state.detach().cpu().numpy())
     
-    train_hidden = np.concatenate(train_hidden, 0)
+    hidden = np.concatenate(hidden, 0)
 
     hidden = np.array(hidden)
     labels = np.array(labels)

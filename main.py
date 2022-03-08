@@ -11,4 +11,11 @@ if __name__ == '__main__':
     logging.info('Model Initialized!')
 
     model.train_self()
+    logging.info('Model Trained!')
+
+    if state.INLP:
+        logging.info('Run INLP')
+        from src.networks.INLP import get_INLP_trade_offs
+        get_INLP_trade_offs(model, state)
+
     logging.info('Finished!')
