@@ -46,23 +46,22 @@ The currently supported bias mitigation methods include:
   - Decoupled Adversarial Training  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
   - Towards Equal Opportunity Fairness through Adversarial Learning  
-  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), 
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), arXiv Pre-print.
   - Adversarial Regularization without Label  
   Working paper.
   - INLP  
     Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
 - Balanced Training
   - Instance Reweighting and Resampling  
-  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
   - FairBatch: resampling dynamically during training  
   Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
 
 - Incorporating Demographic Factors  
   - Representation Augmentation  
-  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), Arxiv.
+  Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
 
 We are planning to add:
-- \[dataset\] Hate Speech Detection
 - \[algorithm\] Contrastive Learning for Fair Representation
 - \[algorithm\] Minimizing Group Difference for Equal Opportunity Fairness
 
