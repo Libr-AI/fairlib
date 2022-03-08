@@ -141,6 +141,9 @@ class BaseDyBT(Sampler):
             elif args.DyBTObj == "stratified_g":
                 for tmp_yz in self.yz_tuple:
                     self.lb_dict[tmp_yz] = self.z_len[tmp_yz[1]]/self.N * (1.0/len(self.y_item))
+            
+            else:
+                raise NotImplementedError
 
     def epoch_loss(self):
         device = self.args.device

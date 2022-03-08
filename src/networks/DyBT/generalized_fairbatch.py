@@ -118,14 +118,14 @@ class Generalized_FairBatch(BaseDyBT):
                 
                 for tmp_z in self.z_item:
                     if epoch_loss_yz[(tmp_y, tmp_z)] > epoch_loss_y[tmp_y]:
-                        larger_loss_group.append(tem_z)
+                        larger_loss_group.append(tmp_z)
                     elif epoch_loss_yz[(tmp_y, tmp_z)] < epoch_loss_y[tmp_y]:
-                        smaller_loss_group.append(tem_z)
+                        smaller_loss_group.append(tmp_z)
 
                 for llg in larger_loss_group:
-                    self.lb_dict[(tem_y, llg)] += self.alpha / len(larger_loss_group)
+                    self.lb_dict[(tmp_y, llg)] += self.alpha / len(larger_loss_group)
                 for slg in smaller_loss_group:
-                    self.lb_dict[(tem_y, slg)] -= self.alpha / len(smaller_loss_group)
+                    self.lb_dict[(tmp_y, slg)] -= self.alpha / len(smaller_loss_group)
 
                 # Normalize probabilities
                 y_lbs = [self.lb_dict[(tmp_y, _z)] for _z in self.z_item]
@@ -143,9 +143,9 @@ class Generalized_FairBatch(BaseDyBT):
                 
                 for tmp_y in self.y_item:
                     if epoch_loss_yz[(tmp_y, tmp_z)] > epoch_loss_z[tmp_z]:
-                        larger_loss_group.append(tem_y)
+                        larger_loss_group.append(tmp_y)
                     elif epoch_loss_yz[(tmp_y, tmp_z)] < epoch_loss_z[tmp_z]:
-                        smaller_loss_group.append(tem_y)
+                        smaller_loss_group.append(tmp_y)
 
                 for llg in larger_loss_group:
                     self.lb_dict[(llg, tmp_z)] += self.alpha / len(larger_loss_group)
