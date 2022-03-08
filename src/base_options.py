@@ -227,6 +227,7 @@ class BaseOptions(object):
         parser.add_argument('--DyBT', type=str, default=None, help='FairBatch | GroupDifference')
         parser.add_argument('--DyBTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
         parser.add_argument('--DyBTalpha', type=float, default=0.1, help='a positive number for dynamic adjustment.')
+        parser.add_argument('--DyBTinit', type=str, default="original", help='original | balanced')
 
         # Arguments for adversarial debiasing
         parser.add_argument('--adv_debiasing', action='store_true', default=False, help='Adv debiasing?')
