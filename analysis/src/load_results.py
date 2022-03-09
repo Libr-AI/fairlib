@@ -16,7 +16,8 @@ def model_selection_parallel(
     Performance_metric_name,
     selection_criterion,
     index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
-    n_jobs=20
+    n_jobs=20,
+    save_path = None,
     ):
     """perform model selection over different runs wrt different hyperparameters
 
@@ -35,6 +36,12 @@ def model_selection_parallel(
     Returns:
         pd.DataFrame: loaded results
     """
+    if save_path is not None:
+        try:
+            return pd.read_pickle(save_path)
+        except:
+            pass
+
     exps = get_dir(
         results_dir=results_dir, 
         project_dir=project_dir, 
@@ -53,4 +60,10 @@ def model_selection_parallel(
         exp_results = Parallel(n_jobs=n_jobs, verbose=5)(delayed(retrive_exp_results) 
                                             (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
                                             for exp in exps)
-    return pd.DataFrame(exp_results)
+    
+    result_df = pd.DataFrame(exp_results).set_index(index_column_names)
+    
+    if save_path is not None:
+        result_df.to_pickle(save_path)
+
+    return result_df

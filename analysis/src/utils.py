@@ -152,62 +152,6 @@ def get_model_scores(exp, GAP_metric, Performance_metric):
 
     return epoch_scores
 
-
-def model_selection(
-    results_dir,
-    project_dir,
-    checkpoint_dir,
-    checkpoint_name,
-    model_id,
-    GAP_metric_name,
-    Performance_metric_name,
-    selection_criterion,
-    index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda']
-    ):
-    """perform model selection over different runs wrt different hyperparameters
-
-    Args:
-        results_dir (str): dir to the saved experimental results
-        project_dir (str): experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.
-        checkpoint_dir (str): dir to checkpoints, `models` by default.
-        checkpoint_name (str):  checkpoint_epoch{num_epoch}.ptr.gz
-        model_id (str): read all experiment start with the same model_id. E.g., "Adv" when tuning hyperparameters for standard adversarial
-        GAP_metric_name (str): fairness metric in the log
-        Performance_metric_name (str): performance metric name in the log
-        selection_criterion (str): {GAP_metric_name | Performance_metric_name | "DTO"}
-        index_column_names (list): tuned hyperparameters, ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'] by default.
-
-    Returns:
-        _type_: loaded results as a dataframe for different runs
-    """
-    exps = get_dir(
-        results_dir=results_dir, 
-        project_dir=project_dir, 
-        checkpoint_dir=checkpoint_dir, 
-        checkpoint_name=checkpoint_name, 
-        model_id=model_id)
-
-    exp_results = []
-    for exp in tqdm(exps):
-        # Get scores
-        epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
-        selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
-        selected_epoch_scores = epoch_scores.iloc[selected_epoch_id]
-
-        _exp_opt = exp["opt"]
-
-        # Get hyperparameters for this epoch
-        _exp_results = {}
-        for hyperparam_key in index_column_names:
-            _exp_results[hyperparam_key] = _exp_opt[hyperparam_key]
-
-        # Merge opt with scores
-        for key in selected_epoch_scores.keys():
-            _exp_results[key] = selected_epoch_scores[key]
-
-        exp_results.append(_exp_results)
-    return pd.DataFrame(exp_results)
-
 def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names):
     # Get scores
     epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
@@ -230,7 +174,7 @@ def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_c
 def create_plots(
     input_df, 
     key_index = 0, 
-    index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
+    # index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
     GAP_metric_name = "rms_TPR",
     Performance_metric_name = "accuracy",
     ):
@@ -243,21 +187,25 @@ def create_plots(
         _type_: selected model
     """
     # Moji_adv_df
-    _df = input_df.set_index(index_column_names)
+    # _df = input_df.set_index(index_column_names)
+    _df = input_df
 
     __df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
     __df
 
-    _log_lambda = [round(math.log10(i[key_index]), 2) for i in __df["index"]]
-    __df["log_lambda"] = _log_lambda
-
     _final_DTO = DTO(
-        fairness_metric=list(__df[("test_{}".format(GAP_metric_name), "mean")]), 
-        performacne_metric=list(__df[("test_{}".format(Performance_metric_name), "mean")])
-        )
+            fairness_metric=list(__df[("test_{}".format(GAP_metric_name), "mean")]), 
+            performacne_metric=list(__df[("test_{}".format(Performance_metric_name), "mean")])
+            )
     __df["final_DTO"] = _final_DTO
 
-    sns.relplot(data=__df, x="log_lambda", y="final_DTO")
+    try:
+        _log_lambda = [round(math.log10(i[key_index]), 2) for i in __df["index"]]
+        __df["log_lambda"] = _log_lambda
+
+        sns.relplot(data=__df, x="log_lambda", y="final_DTO")
+    except:
+        pass
 
     sns.relplot(
         data=__df, 
@@ -305,7 +253,8 @@ def model_comparasion(
     df_list = []
     for key in results_dict.keys():
         # Moji_adv_df
-        _df = results_dict[key].set_index(index_column_names)
+        # _df = results_dict[key].set_index(index_column_names)
+        _df = results_dict[key]
 
         _df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
 
