@@ -16,10 +16,12 @@ from ...evaluators.evaluator import gap_eval_scores
 import logging
 
 
-def save_INLP_checkpoint(epoch, dev_evaluations, test_evaluations, checkpoint_dir):
+def save_INLP_checkpoint(epoch, dev_predictions, test_predictions, dev_evaluations, test_evaluations, checkpoint_dir):
 
     _state = {
         'epoch': epoch,
+        'dev_predictions': dev_predictions,
+        'test_predictions': test_predictions,
         'dev_evaluations': dev_evaluations,
         'test_evaluations': test_evaluations
         }
@@ -140,6 +142,8 @@ def get_INLP_trade_offs(model, args):
         
         save_INLP_checkpoint(
             epoch=iteration, 
+            dev_predictions=dev_y_pred, 
+            test_predictions=test_y_pred,
             dev_evaluations=dev_scores, 
             test_evaluations=test_scores, 
             checkpoint_dir=args.model_dir
