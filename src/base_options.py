@@ -1,6 +1,5 @@
 import argparse
 import os
-from turtle import pos
 import torch
 import yaml
 import time
