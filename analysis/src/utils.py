@@ -152,24 +152,34 @@ def get_model_scores(exp, GAP_metric, Performance_metric):
 
     return epoch_scores
 
-def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names, return_all=False):
+def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names):
     # Get scores
     epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
-    if not return_all:
-        if selection_criterion == "DTO":
-            selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
-        else:
-            selected_epoch_id = np.argmax(epoch_scores["dev_{}".format(selection_criterion)])
-        selected_epoch_scores = epoch_scores.iloc[[selected_epoch_id]].copy()
-        
-        _exp_results = selected_epoch_scores
-    else:
-        _exp_results = epoch_scores
-    
+    _exp_results = epoch_scores
+
     _exp_opt = exp["opt"]
     # Get hyperparameters for this epoch
     for hyperparam_key in index_column_names:
         _exp_results[hyperparam_key] = [_exp_opt[hyperparam_key]]*len(_exp_results)
+
+    return _exp_results
+
+def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names):
+    # Get scores
+    epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
+    selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
+    selected_epoch_scores = epoch_scores.iloc[selected_epoch_id]
+
+    _exp_opt = exp["opt"]
+
+    # Get hyperparameters for this epoch
+    _exp_results = {}
+    for hyperparam_key in index_column_names:
+        _exp_results[hyperparam_key] = _exp_opt[hyperparam_key]
+
+    # Merge opt with scores
+    for key in selected_epoch_scores.keys():
+        _exp_results[key] = selected_epoch_scores[key]
 
     return _exp_results
 

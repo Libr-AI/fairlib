@@ -1,6 +1,6 @@
 from tqdm import tqdm
 import numpy as np
-from .utils import get_dir, retrive_exp_results
+from .utils import get_dir, retrive_exp_results, retrive_all_exp_results
 import pandas as pd
 from joblib import Parallel, delayed
 import warnings
@@ -42,9 +42,6 @@ def model_selection_parallel(
             return pd.read_pickle(save_path)
         except:
             pass
-    
-    if return_all:
-        n_jobs=0
 
     exps = get_dir(
         results_dir=results_dir, 
@@ -54,18 +51,26 @@ def model_selection_parallel(
         model_id=model_id)
 
     exp_results = []
-    if n_jobs == 0:
-        for exp in tqdm(exps):
-            # Get scores
-            _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names, return_all)
 
+    if return_all:
+        for exp in tqdm(exps):
+            _exp_results = retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names)
             exp_results.append(_exp_results)
+
+        result_df = pd.concat(exp_results).set_index(index_column_names+["epoch"])
     else:
-        exp_results = Parallel(n_jobs=n_jobs, verbose=5)(delayed(retrive_exp_results) 
-                                            (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
-                                            for exp in exps)
-    
-    result_df = pd.concat(exp_results).set_index(index_column_names+["epoch"])
+        if n_jobs == 0:
+            for exp in tqdm(exps):
+                # Get scores
+                _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
+
+                exp_results.append(_exp_results)
+        else:
+            exp_results = Parallel(n_jobs=n_jobs, verbose=5)(delayed(retrive_exp_results) 
+                                                (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
+                                                for exp in exps)
+
+        result_df = pd.DataFrame(exp_results).set_index(index_column_names+["epoch"])
     
     if save_path is not None:
         result_df.to_pickle(save_path)
