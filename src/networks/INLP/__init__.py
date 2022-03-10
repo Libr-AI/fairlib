@@ -120,8 +120,8 @@ def get_INLP_trade_offs(model, args):
                                             multi_class = 'multinomial', 
                                             fit_intercept = True,
                                             verbose = 0, 
-                                            max_iter = 100,
-                                            # n_jobs = 16, 
+                                            max_iter = 10,
+                                            n_jobs = 24, 
                                             random_state = 1)
 
         classifier.fit(debiased_x_train, train_labels)
