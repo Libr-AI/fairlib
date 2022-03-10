@@ -258,7 +258,7 @@ def model_comparasion(
     GAP_metric_name = "rms_TPR",
     Performance_metric_name = "accuracy",
     pareto = True,
-    pareto_selection = "dev",
+    pareto_selection = "test",
     default_plot = True
     ):
 
