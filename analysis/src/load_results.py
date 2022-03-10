@@ -70,7 +70,7 @@ def model_selection_parallel(
                                                 (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
                                                 for exp in exps)
 
-        result_df = pd.DataFrame(exp_results).set_index(index_column_names+["epoch"])
+        result_df = pd.DataFrame(exp_results).set_index(index_column_names)
     
     if save_path is not None:
         result_df.to_pickle(save_path)

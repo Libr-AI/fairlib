@@ -167,7 +167,10 @@ def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_c
 def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names):
     # Get scores
     epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
-    selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
+    if selection_criterion == "DTO":
+        selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
+    else:
+        selected_epoch_id = np.argmax(epoch_scores["dev_{}".format(selection_criterion)])
     selected_epoch_scores = epoch_scores.iloc[selected_epoch_id]
 
     _exp_opt = exp["opt"]
