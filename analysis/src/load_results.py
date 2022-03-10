@@ -18,6 +18,7 @@ def model_selection_parallel(
     index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
     n_jobs=20,
     save_path = None,
+    return_all = False,
     ):
     """perform model selection over different runs wrt different hyperparameters
 
@@ -41,6 +42,9 @@ def model_selection_parallel(
             return pd.read_pickle(save_path)
         except:
             pass
+    
+    if return_all:
+        n_jobs=0
 
     exps = get_dir(
         results_dir=results_dir, 
@@ -53,7 +57,7 @@ def model_selection_parallel(
     if n_jobs == 0:
         for exp in tqdm(exps):
             # Get scores
-            _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
+            _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names, return_all)
 
             exp_results.append(_exp_results)
     else:
@@ -61,7 +65,7 @@ def model_selection_parallel(
                                             (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
                                             for exp in exps)
     
-    result_df = pd.DataFrame(exp_results).set_index(index_column_names)
+    result_df = pd.concat(exp_results).set_index(index_column_names+["epoch"])
     
     if save_path is not None:
         result_df.to_pickle(save_path)
