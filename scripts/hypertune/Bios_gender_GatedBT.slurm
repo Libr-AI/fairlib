@@ -28,203 +28,203 @@ module load pytorch/1.7.1-python-3.8.6
 
 cd /data/cephfs/punim1421/Fair_NLP_Classification
 
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5647290 --exp_id GatedBT_Reweighting_stratified_g__0 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3723310 --exp_id GatedBT_Resampling_y_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5859077 --exp_id GatedBT_Reweighting_stratified_g_--gated_0 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1292307 --exp_id GatedBT_Resampling_y_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5205929 --exp_id GatedBT_Reweighting_stratified_y__0 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2934554 --exp_id GatedBT_Resampling_joint_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 723454 --exp_id GatedBT_Reweighting_stratified_y_--gated_0 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3041179 --exp_id GatedBT_Resampling_joint_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6301883 --exp_id GatedBT_Reweighting_y__0 --epochs_since_improvement 10 --BT Reweighting --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7919162 --exp_id GatedBT_Resampling_stratified_y_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5119479 --exp_id GatedBT_Reweighting_y_--gated_0 --epochs_since_improvement 10 --BT Reweighting --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9911336 --exp_id GatedBT_Resampling_stratified_y_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1808338 --exp_id GatedBT_Reweighting_g__0 --epochs_since_improvement 10 --BT Reweighting --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4794288 --exp_id GatedBT_Resampling_stratified_g_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7668727 --exp_id GatedBT_Reweighting_g_--gated_0 --epochs_since_improvement 10 --BT Reweighting --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5225805 --exp_id GatedBT_Resampling_stratified_g_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9713055 --exp_id GatedBT_Reweighting_joint__0 --epochs_since_improvement 10 --BT Reweighting --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1116097 --exp_id GatedBT_Resampling_g_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 527285 --exp_id GatedBT_Reweighting_joint_--gated_0 --epochs_since_improvement 10 --BT Reweighting --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7685086 --exp_id GatedBT_Resampling_g_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 655209 --exp_id GatedBT_Resampling_stratified_g__0 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9439410 --exp_id GatedBT_Reweighting_y_False_0 --epochs_since_improvement 10  --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3448184 --exp_id GatedBT_Resampling_stratified_g_--gated_0 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1213764 --exp_id GatedBT_Reweighting_y_True_0 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8333898 --exp_id GatedBT_Resampling_stratified_y__0 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3469064 --exp_id GatedBT_Reweighting_joint_False_0 --epochs_since_improvement 10  --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9042620 --exp_id GatedBT_Resampling_stratified_y_--gated_0 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3103118 --exp_id GatedBT_Reweighting_joint_True_0 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2425505 --exp_id GatedBT_Resampling_y__0 --epochs_since_improvement 10 --BT Resampling --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1577152 --exp_id GatedBT_Reweighting_stratified_y_False_0 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1259268 --exp_id GatedBT_Resampling_y_--gated_0 --epochs_since_improvement 10 --BT Resampling --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7652475 --exp_id GatedBT_Reweighting_stratified_y_True_0 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2854895 --exp_id GatedBT_Resampling_g__0 --epochs_since_improvement 10 --BT Resampling --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2777799 --exp_id GatedBT_Reweighting_stratified_g_False_0 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4014940 --exp_id GatedBT_Resampling_g_--gated_0 --epochs_since_improvement 10 --BT Resampling --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2931562 --exp_id GatedBT_Reweighting_stratified_g_True_0 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4686410 --exp_id GatedBT_Resampling_joint__0 --epochs_since_improvement 10 --BT Resampling --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5086105 --exp_id GatedBT_Reweighting_g_False_0 --epochs_since_improvement 10  --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4767650 --exp_id GatedBT_Resampling_joint_--gated_0 --epochs_since_improvement 10 --BT Resampling --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 248672 --exp_id GatedBT_Reweighting_g_True_0 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7096301 --exp_id GatedBT_Reweighting_stratified_g__1 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6475305 --exp_id GatedBT_Resampling_y_False_1 --epochs_since_improvement 10  --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4142237 --exp_id GatedBT_Reweighting_stratified_g_--gated_1 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2059365 --exp_id GatedBT_Resampling_y_True_1 --epochs_since_improvement 10  --gated --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9080954 --exp_id GatedBT_Reweighting_stratified_y__1 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5255678 --exp_id GatedBT_Resampling_joint_False_1 --epochs_since_improvement 10  --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2388614 --exp_id GatedBT_Reweighting_stratified_y_--gated_1 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2762419 --exp_id GatedBT_Resampling_joint_True_1 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8708479 --exp_id GatedBT_Reweighting_y__1 --epochs_since_improvement 10 --BT Reweighting --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7138215 --exp_id GatedBT_Resampling_stratified_y_False_1 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6011380 --exp_id GatedBT_Reweighting_y_--gated_1 --epochs_since_improvement 10 --BT Reweighting --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7592218 --exp_id GatedBT_Resampling_stratified_y_True_1 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4503490 --exp_id GatedBT_Reweighting_g__1 --epochs_since_improvement 10 --BT Reweighting --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1315619 --exp_id GatedBT_Resampling_stratified_g_False_1 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4709356 --exp_id GatedBT_Reweighting_g_--gated_1 --epochs_since_improvement 10 --BT Reweighting --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4323181 --exp_id GatedBT_Resampling_stratified_g_True_1 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4145101 --exp_id GatedBT_Reweighting_joint__1 --epochs_since_improvement 10 --BT Reweighting --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 433022 --exp_id GatedBT_Resampling_g_False_1 --epochs_since_improvement 10  --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 474682 --exp_id GatedBT_Reweighting_joint_--gated_1 --epochs_since_improvement 10 --BT Reweighting --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2913984 --exp_id GatedBT_Resampling_g_True_1 --epochs_since_improvement 10  --gated --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7628086 --exp_id GatedBT_Resampling_stratified_g__1 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4997582 --exp_id GatedBT_Reweighting_y_False_1 --epochs_since_improvement 10  --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4101256 --exp_id GatedBT_Resampling_stratified_g_--gated_1 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 417174 --exp_id GatedBT_Reweighting_y_True_1 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2960449 --exp_id GatedBT_Resampling_stratified_y__1 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5311488 --exp_id GatedBT_Reweighting_joint_False_1 --epochs_since_improvement 10  --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6341489 --exp_id GatedBT_Resampling_stratified_y_--gated_1 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7115233 --exp_id GatedBT_Reweighting_joint_True_1 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1783928 --exp_id GatedBT_Resampling_y__1 --epochs_since_improvement 10 --BT Resampling --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6582898 --exp_id GatedBT_Reweighting_stratified_y_False_1 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9690416 --exp_id GatedBT_Resampling_y_--gated_1 --epochs_since_improvement 10 --BT Resampling --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1464329 --exp_id GatedBT_Reweighting_stratified_y_True_1 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4933329 --exp_id GatedBT_Resampling_g__1 --epochs_since_improvement 10 --BT Resampling --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8655991 --exp_id GatedBT_Reweighting_stratified_g_False_1 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4092160 --exp_id GatedBT_Resampling_g_--gated_1 --epochs_since_improvement 10 --BT Resampling --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8764949 --exp_id GatedBT_Reweighting_stratified_g_True_1 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4993247 --exp_id GatedBT_Resampling_joint__1 --epochs_since_improvement 10 --BT Resampling --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7726890 --exp_id GatedBT_Reweighting_g_False_1 --epochs_since_improvement 10  --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1319834 --exp_id GatedBT_Resampling_joint_--gated_1 --epochs_since_improvement 10 --BT Resampling --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7673786 --exp_id GatedBT_Reweighting_g_True_1 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9379733 --exp_id GatedBT_Reweighting_stratified_g__2 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4535732 --exp_id GatedBT_Resampling_y_False_2 --epochs_since_improvement 10  --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3567928 --exp_id GatedBT_Reweighting_stratified_g_--gated_2 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4038065 --exp_id GatedBT_Resampling_y_True_2 --epochs_since_improvement 10  --gated --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2386817 --exp_id GatedBT_Reweighting_stratified_y__2 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9556127 --exp_id GatedBT_Resampling_joint_False_2 --epochs_since_improvement 10  --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6767801 --exp_id GatedBT_Reweighting_stratified_y_--gated_2 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 339862 --exp_id GatedBT_Resampling_joint_True_2 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5056529 --exp_id GatedBT_Reweighting_y__2 --epochs_since_improvement 10 --BT Reweighting --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9911045 --exp_id GatedBT_Resampling_stratified_y_False_2 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6980559 --exp_id GatedBT_Reweighting_y_--gated_2 --epochs_since_improvement 10 --BT Reweighting --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2732648 --exp_id GatedBT_Resampling_stratified_y_True_2 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9031773 --exp_id GatedBT_Reweighting_g__2 --epochs_since_improvement 10 --BT Reweighting --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9750166 --exp_id GatedBT_Resampling_stratified_g_False_2 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2970076 --exp_id GatedBT_Reweighting_g_--gated_2 --epochs_since_improvement 10 --BT Reweighting --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5830350 --exp_id GatedBT_Resampling_stratified_g_True_2 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1906293 --exp_id GatedBT_Reweighting_joint__2 --epochs_since_improvement 10 --BT Reweighting --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 473911 --exp_id GatedBT_Resampling_g_False_2 --epochs_since_improvement 10  --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7959111 --exp_id GatedBT_Reweighting_joint_--gated_2 --epochs_since_improvement 10 --BT Reweighting --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6141308 --exp_id GatedBT_Resampling_g_True_2 --epochs_since_improvement 10  --gated --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1804217 --exp_id GatedBT_Resampling_stratified_g__2 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1514442 --exp_id GatedBT_Reweighting_y_False_2 --epochs_since_improvement 10  --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9163771 --exp_id GatedBT_Resampling_stratified_g_--gated_2 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3452677 --exp_id GatedBT_Reweighting_y_True_2 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2820813 --exp_id GatedBT_Resampling_stratified_y__2 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4425989 --exp_id GatedBT_Reweighting_joint_False_2 --epochs_since_improvement 10  --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 892181 --exp_id GatedBT_Resampling_stratified_y_--gated_2 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7946757 --exp_id GatedBT_Reweighting_joint_True_2 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7895833 --exp_id GatedBT_Resampling_y__2 --epochs_since_improvement 10 --BT Resampling --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7754387 --exp_id GatedBT_Reweighting_stratified_y_False_2 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9178902 --exp_id GatedBT_Resampling_y_--gated_2 --epochs_since_improvement 10 --BT Resampling --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8560136 --exp_id GatedBT_Reweighting_stratified_y_True_2 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6370936 --exp_id GatedBT_Resampling_g__2 --epochs_since_improvement 10 --BT Resampling --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8636818 --exp_id GatedBT_Reweighting_stratified_g_False_2 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7901830 --exp_id GatedBT_Resampling_g_--gated_2 --epochs_since_improvement 10 --BT Resampling --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7400361 --exp_id GatedBT_Reweighting_stratified_g_True_2 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4085114 --exp_id GatedBT_Resampling_joint__2 --epochs_since_improvement 10 --BT Resampling --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5870065 --exp_id GatedBT_Reweighting_g_False_2 --epochs_since_improvement 10  --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 794145 --exp_id GatedBT_Resampling_joint_--gated_2 --epochs_since_improvement 10 --BT Resampling --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2492395 --exp_id GatedBT_Reweighting_g_True_2 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3075188 --exp_id GatedBT_Reweighting_stratified_g__3 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2475956 --exp_id GatedBT_Resampling_y_False_3 --epochs_since_improvement 10  --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9266599 --exp_id GatedBT_Reweighting_stratified_g_--gated_3 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4379875 --exp_id GatedBT_Resampling_y_True_3 --epochs_since_improvement 10  --gated --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8356160 --exp_id GatedBT_Reweighting_stratified_y__3 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6724091 --exp_id GatedBT_Resampling_joint_False_3 --epochs_since_improvement 10  --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2259976 --exp_id GatedBT_Reweighting_stratified_y_--gated_3 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2593615 --exp_id GatedBT_Resampling_joint_True_3 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3150289 --exp_id GatedBT_Reweighting_y__3 --epochs_since_improvement 10 --BT Reweighting --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 519395 --exp_id GatedBT_Resampling_stratified_y_False_3 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8714135 --exp_id GatedBT_Reweighting_y_--gated_3 --epochs_since_improvement 10 --BT Reweighting --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2717343 --exp_id GatedBT_Resampling_stratified_y_True_3 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7522602 --exp_id GatedBT_Reweighting_g__3 --epochs_since_improvement 10 --BT Reweighting --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3812588 --exp_id GatedBT_Resampling_stratified_g_False_3 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4403555 --exp_id GatedBT_Reweighting_g_--gated_3 --epochs_since_improvement 10 --BT Reweighting --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8635200 --exp_id GatedBT_Resampling_stratified_g_True_3 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6787737 --exp_id GatedBT_Reweighting_joint__3 --epochs_since_improvement 10 --BT Reweighting --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3002163 --exp_id GatedBT_Resampling_g_False_3 --epochs_since_improvement 10  --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4537621 --exp_id GatedBT_Reweighting_joint_--gated_3 --epochs_since_improvement 10 --BT Reweighting --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2831613 --exp_id GatedBT_Resampling_g_True_3 --epochs_since_improvement 10  --gated --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9615985 --exp_id GatedBT_Resampling_stratified_g__3 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8359181 --exp_id GatedBT_Reweighting_y_False_3 --epochs_since_improvement 10  --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2260798 --exp_id GatedBT_Resampling_stratified_g_--gated_3 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1267585 --exp_id GatedBT_Reweighting_y_True_3 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3465181 --exp_id GatedBT_Resampling_stratified_y__3 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1212271 --exp_id GatedBT_Reweighting_joint_False_3 --epochs_since_improvement 10  --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9087181 --exp_id GatedBT_Resampling_stratified_y_--gated_3 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7694386 --exp_id GatedBT_Reweighting_joint_True_3 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8818847 --exp_id GatedBT_Resampling_y__3 --epochs_since_improvement 10 --BT Resampling --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7103700 --exp_id GatedBT_Reweighting_stratified_y_False_3 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3347233 --exp_id GatedBT_Resampling_y_--gated_3 --epochs_since_improvement 10 --BT Resampling --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5800773 --exp_id GatedBT_Reweighting_stratified_y_True_3 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4104821 --exp_id GatedBT_Resampling_g__3 --epochs_since_improvement 10 --BT Resampling --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8406960 --exp_id GatedBT_Reweighting_stratified_g_False_3 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2015775 --exp_id GatedBT_Resampling_g_--gated_3 --epochs_since_improvement 10 --BT Resampling --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4208717 --exp_id GatedBT_Reweighting_stratified_g_True_3 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 342086 --exp_id GatedBT_Resampling_joint__3 --epochs_since_improvement 10 --BT Resampling --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3335139 --exp_id GatedBT_Reweighting_g_False_3 --epochs_since_improvement 10  --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4527218 --exp_id GatedBT_Resampling_joint_--gated_3 --epochs_since_improvement 10 --BT Resampling --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9146950 --exp_id GatedBT_Reweighting_g_True_3 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1475875 --exp_id GatedBT_Reweighting_stratified_g__4 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3764919 --exp_id GatedBT_Resampling_y_False_4 --epochs_since_improvement 10  --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 6186804 --exp_id GatedBT_Reweighting_stratified_g_--gated_4 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 92460 --exp_id GatedBT_Resampling_y_True_4 --epochs_since_improvement 10  --gated --BT Resampling --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5521870 --exp_id GatedBT_Reweighting_stratified_y__4 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4576246 --exp_id GatedBT_Resampling_joint_False_4 --epochs_since_improvement 10  --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4875157 --exp_id GatedBT_Reweighting_stratified_y_--gated_4 --epochs_since_improvement 10 --BT Reweighting --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8680253 --exp_id GatedBT_Resampling_joint_True_4 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 1236930 --exp_id GatedBT_Reweighting_y__4 --epochs_since_improvement 10 --BT Reweighting --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8294077 --exp_id GatedBT_Resampling_stratified_y_False_4 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4842237 --exp_id GatedBT_Reweighting_y_--gated_4 --epochs_since_improvement 10 --BT Reweighting --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9088590 --exp_id GatedBT_Resampling_stratified_y_True_4 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8338750 --exp_id GatedBT_Reweighting_g__4 --epochs_since_improvement 10 --BT Reweighting --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4961740 --exp_id GatedBT_Resampling_stratified_g_False_4 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3037742 --exp_id GatedBT_Reweighting_g_--gated_4 --epochs_since_improvement 10 --BT Reweighting --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2232330 --exp_id GatedBT_Resampling_stratified_g_True_4 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8185661 --exp_id GatedBT_Reweighting_joint__4 --epochs_since_improvement 10 --BT Reweighting --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9551743 --exp_id GatedBT_Resampling_g_False_4 --epochs_since_improvement 10  --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3117687 --exp_id GatedBT_Reweighting_joint_--gated_4 --epochs_since_improvement 10 --BT Reweighting --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4904101 --exp_id GatedBT_Resampling_g_True_4 --epochs_since_improvement 10  --gated --BT Resampling --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3493074 --exp_id GatedBT_Resampling_stratified_g__4 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 811367 --exp_id GatedBT_Reweighting_y_False_4 --epochs_since_improvement 10  --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8666404 --exp_id GatedBT_Resampling_stratified_g_--gated_4 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2049340 --exp_id GatedBT_Reweighting_y_True_4 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3958514 --exp_id GatedBT_Resampling_stratified_y__4 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4196450 --exp_id GatedBT_Reweighting_joint_False_4 --epochs_since_improvement 10  --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 299930 --exp_id GatedBT_Resampling_stratified_y_--gated_4 --epochs_since_improvement 10 --BT Resampling --BTObj stratified_y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5411556 --exp_id GatedBT_Reweighting_joint_True_4 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2701827 --exp_id GatedBT_Resampling_y__4 --epochs_since_improvement 10 --BT Resampling --BTObj y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7474644 --exp_id GatedBT_Reweighting_stratified_y_False_4 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2224681 --exp_id GatedBT_Resampling_y_--gated_4 --epochs_since_improvement 10 --BT Resampling --BTObj y--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8661357 --exp_id GatedBT_Reweighting_stratified_y_True_4 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_y
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 5246384 --exp_id GatedBT_Resampling_g__4 --epochs_since_improvement 10 --BT Resampling --BTObj g
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 833610 --exp_id GatedBT_Reweighting_stratified_g_False_4 --epochs_since_improvement 10  --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 8630732 --exp_id GatedBT_Resampling_g_--gated_4 --epochs_since_improvement 10 --BT Resampling --BTObj g--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9567645 --exp_id GatedBT_Reweighting_stratified_g_True_4 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj stratified_g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3467614 --exp_id GatedBT_Resampling_joint__4 --epochs_since_improvement 10 --BT Resampling --BTObj joint
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9060904 --exp_id GatedBT_Reweighting_g_False_4 --epochs_since_improvement 10  --BT Reweighting --BTObj g
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 2017138 --exp_id GatedBT_Resampling_joint_--gated_4 --epochs_since_improvement 10 --BT Resampling --BTObj joint--gated
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 4784756 --exp_id GatedBT_Reweighting_g_True_4 --epochs_since_improvement 10  --gated --BT Reweighting --BTObj g
 sleep 2
