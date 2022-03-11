@@ -101,7 +101,7 @@ def get_sampled_indices(BTObj, y, protected_label):
         for y in distinct_y_label:
             selected = int(condidate_selected * weighting_counter[y])
             for g in distinct_g_label:
-                _index = group_idx[(y,g)]
+                _index = group_idx.get((y,g), [])
                 shuffle(_index)
                 selected_index = selected_index + _index[:selected]
 
@@ -121,7 +121,7 @@ def get_sampled_indices(BTObj, y, protected_label):
             selected = int(condidate_selected * weighting_counter[g])
             # for g in distinct_g_label:
             for y in distinct_y_label:
-                _index = group_idx[(y,g)]
+                _index = group_idx.get((y,g), [])
                 shuffle(_index)
                 selected_index = selected_index + _index[:selected]
 
