@@ -36,7 +36,7 @@ python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_
 sleep 2
 python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 3041179 --exp_id GatedBT_Resampling_joint_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj joint
 sleep 2
-python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7919162 --exp_id GatedBT_Resampling_stratified_y_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
+python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 128 --lr 0.001 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 7919162 --exp_id GatedBT_Resampling_stratified_y_False_0 --epochs_since_improvement 10  --BT Resampling --BTObj stratified_y
 sleep 2
 python main.py --project_dir GatedBT --dataset Bios_gender --emb_size 768 --num_classes 28 --batch_size 1024 --lr 0.003 --hidden_size 300 --n_hidden 2 --dropout 0 --base_seed 9911336 --exp_id GatedBT_Resampling_stratified_y_True_0 --epochs_since_improvement 10  --gated --BT Resampling --BTObj stratified_y
 sleep 2
