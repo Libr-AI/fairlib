@@ -41,7 +41,7 @@ The currently supported bias mitigation methods include:
 - Learning Fair Representations
   - Adversarial Training  
   Li, Yitong, Timothy Baldwin and Trevor Cohn (2018) [Towards Robust and Privacy-preserving Text Representations](https://aclanthology.org/P18-2005/), ACL 2018.
-  - Deviser Adversarial Training  
+  - Diverse Adversarial Training  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Diverse Adversaries for Mitigating Bias in Training](https://aclanthology.org/2021.eacl-main.239/), EACL 2021.
   - Decoupled Adversarial Training  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
