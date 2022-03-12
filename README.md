@@ -206,7 +206,7 @@ python main.py --BT --BTObj joint
 | Name       | Default value | Description                                                  |
 |------------|---------------|--------------------------------------------------------------|
 | BT         | False         | Reweighting or Resampling                                    |
-| BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g              |
+| BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 | full_label | True          | require full protected label                                 |
 
 - Train a model with FairBach balanced training
