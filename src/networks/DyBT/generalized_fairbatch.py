@@ -23,31 +23,31 @@ class Generalized_FairBatch(BaseDyBT):
         """
         epoch_loss = self.epoch_loss()
 
-        epoch_loss_yz = {}
+        epoch_loss_yg = {}
         epoch_loss_y = {}
-        epoch_loss_z = {}
+        epoch_loss_g = {}
         
         epoch_loss_mean  = float(torch.sum(epoch_loss)) / self.N
 
-        for tmp_yz in self.yz_tuple:
-            epoch_loss_yz[tmp_yz] = float(torch.sum(epoch_loss[self.yz_index[tmp_yz]])) / self.yz_len[tmp_yz]
+        for tmp_yg in self.yg_tuple:
+            epoch_loss_yg[tmp_yg] = float(torch.sum(epoch_loss[self.yg_index[tmp_yg]])) / self.yg_len[tmp_yg]
 
         for tmp_y in self.y_item:
             epoch_loss_y[tmp_y] = float(torch.sum(epoch_loss[self.y_index[tmp_y]])) / self.y_len[tmp_y]
 
-        for tmp_z in self.z_item:
-            epoch_loss_z[tmp_z] = float(torch.sum(epoch_loss[self.z_index[tmp_z]])) / self.z_len[tmp_z]
+        for tmp_g in self.g_item:
+            epoch_loss_g[tmp_g] = float(torch.sum(epoch_loss[self.g_index[tmp_g]])) / self.g_len[tmp_g]
 
         if self.fairness_type == "joint":
             larger_loss_group = []
             smaller_loss_group = []
 
             # Determin the singe of alpha, increase if a group has a larger loss. 
-            for tmp_yz in self.yz_tuple:
-                if epoch_loss_yz[tmp_yz] > epoch_loss_mean:
-                    larger_loss_group.append(tmp_yz)
-                elif epoch_loss_yz[tmp_yz] < epoch_loss_mean:
-                    smaller_loss_group.append(tmp_yz)
+            for tmp_yg in self.yg_tuple:
+                if epoch_loss_yg[tmp_yg] > epoch_loss_mean:
+                    larger_loss_group.append(tmp_yg)
+                elif epoch_loss_yg[tmp_yg] < epoch_loss_mean:
+                    smaller_loss_group.append(tmp_yg)
             
             for llg in larger_loss_group:
                 self.lb_dict[llg] += self.alpha / len(larger_loss_group)
@@ -55,11 +55,11 @@ class Generalized_FairBatch(BaseDyBT):
                 self.lb_dict[slg] -= self.alpha / len(smaller_loss_group)
 
             # Normalize to probability, i.e., between 0 and 1, and sum to 1
-            all_lbs = [self.lb_dict[tmp_yz] for tmp_yz in self.yz_tuple]
+            all_lbs = [self.lb_dict[tmp_yg] for tmp_yg in self.yg_tuple]
             min_lb_adjustment = -1 * min([min(all_lbs), 0])
-            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yz_tuple)
-            for tmp_yz in self.yz_tuple:
-                self.lb_dict[tmp_yz] = (self.lb_dict[tmp_yz]+min_lb_adjustment)/sum_lbs
+            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yg_tuple)
+            for tmp_yg in self.yg_tuple:
+                self.lb_dict[tmp_yg] = (self.lb_dict[tmp_yg]+min_lb_adjustment)/sum_lbs
 
         elif self.fairness_type == "y":
 
@@ -73,42 +73,42 @@ class Generalized_FairBatch(BaseDyBT):
                     smaller_loss_group.append(tem_y)
             
             for llg in larger_loss_group:
-                for tem_z in self.z_item:
-                    self.lb_dict[(llg, tem_z)] += self.alpha / len(larger_loss_group) * (self.yz_len[(llg, tem_z)]/self.y_len[llg])
+                for tem_g in self.g_item:
+                    self.lb_dict[(llg, tem_g)] += self.alpha / len(larger_loss_group) * (self.yg_len[(llg, tem_g)]/self.y_len[llg])
             for slg in smaller_loss_group:
-                for tem_z in self.z_item:
-                    self.lb_dict[(slg, tem_z)] -= self.alpha / len(smaller_loss_group) * (self.yz_len[(slg, tem_z)]/self.y_len[slg])
+                for tem_g in self.g_item:
+                    self.lb_dict[(slg, tem_g)] -= self.alpha / len(smaller_loss_group) * (self.yg_len[(slg, tem_g)]/self.y_len[slg])
 
             # Normalize to probability, i.e., between 0 and 1, and sum to 1
-            all_lbs = [self.lb_dict[tmp_yz] for tmp_yz in self.yz_tuple]
+            all_lbs = [self.lb_dict[tmp_yg] for tmp_yg in self.yg_tuple]
             min_lb_adjustment = -1 * min([min(all_lbs), 0])
-            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yz_tuple)
-            for tmp_yz in self.yz_tuple:
-                self.lb_dict[tmp_yz] = (self.lb_dict[tmp_yz]+min_lb_adjustment)/sum_lbs
+            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yg_tuple)
+            for tmp_yg in self.yg_tuple:
+                self.lb_dict[tmp_yg] = (self.lb_dict[tmp_yg]+min_lb_adjustment)/sum_lbs
 
         elif self.fairness_type == "g":
             larger_loss_group = []
             smaller_loss_group = []
 
-            for tem_z in self.z_item:
-                if epoch_loss_z[tem_z] > epoch_loss_mean:
-                    larger_loss_group.append(tem_z)
-                elif epoch_loss_z[tem_z] < epoch_loss_mean:
-                    smaller_loss_group.append(tem_z)
+            for tem_g in self.g_item:
+                if epoch_loss_g[tem_g] > epoch_loss_mean:
+                    larger_loss_group.append(tem_g)
+                elif epoch_loss_g[tem_g] < epoch_loss_mean:
+                    smaller_loss_group.append(tem_g)
             
             for llg in larger_loss_group:
                 for tem_y in self.y_item:
-                    self.lb_dict[(tem_y, llg)] += self.alpha / len(larger_loss_group) * (self.yz_len[(tem_y, llg)]/self.z_len[llg])
+                    self.lb_dict[(tem_y, llg)] += self.alpha / len(larger_loss_group) * (self.yg_len[(tem_y, llg)]/self.g_len[llg])
             for slg in smaller_loss_group:
                 for tem_y in self.y_item:
-                    self.lb_dict[(tem_y, slg)] -= self.alpha / len(smaller_loss_group) * (self.yz_len[(tem_y, slg)]/self.z_len[slg])
+                    self.lb_dict[(tem_y, slg)] -= self.alpha / len(smaller_loss_group) * (self.yg_len[(tem_y, slg)]/self.g_len[slg])
 
             # Normalize to probability, i.e., between 0 and 1, and sum to 1
-            all_lbs = [self.lb_dict[tmp_yz] for tmp_yz in self.yz_tuple]
+            all_lbs = [self.lb_dict[tmp_yg] for tmp_yg in self.yg_tuple]
             min_lb_adjustment = -1 * min([min(all_lbs), 0])
-            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yz_tuple)
-            for tmp_yz in self.yz_tuple:
-                self.lb_dict[tmp_yz] = (self.lb_dict[tmp_yz]+min_lb_adjustment)/sum_lbs
+            sum_lbs = sum(all_lbs) + min_lb_adjustment * len(self.yg_tuple)
+            for tmp_yg in self.yg_tuple:
+                self.lb_dict[tmp_yg] = (self.lb_dict[tmp_yg]+min_lb_adjustment)/sum_lbs
             
         elif self.fairness_type == "stratified_y":
             for tmp_y in self.y_item:
@@ -116,11 +116,11 @@ class Generalized_FairBatch(BaseDyBT):
                 larger_loss_group = []
                 smaller_loss_group = []
                 
-                for tmp_z in self.z_item:
-                    if epoch_loss_yz[(tmp_y, tmp_z)] > epoch_loss_y[tmp_y]:
-                        larger_loss_group.append(tmp_z)
-                    elif epoch_loss_yz[(tmp_y, tmp_z)] < epoch_loss_y[tmp_y]:
-                        smaller_loss_group.append(tmp_z)
+                for tmp_g in self.g_item:
+                    if epoch_loss_yg[(tmp_y, tmp_g)] > epoch_loss_y[tmp_y]:
+                        larger_loss_group.append(tmp_g)
+                    elif epoch_loss_yg[(tmp_y, tmp_g)] < epoch_loss_y[tmp_y]:
+                        smaller_loss_group.append(tmp_g)
 
                 for llg in larger_loss_group:
                     self.lb_dict[(tmp_y, llg)] += self.alpha / len(larger_loss_group)
@@ -128,33 +128,33 @@ class Generalized_FairBatch(BaseDyBT):
                     self.lb_dict[(tmp_y, slg)] -= self.alpha / len(smaller_loss_group)
 
                 # Normalize probabilities
-                y_lbs = [self.lb_dict[(tmp_y, _z)] for _z in self.z_item]
+                y_lbs = [self.lb_dict[(tmp_y, _g)] for _g in self.g_item]
                 min_lb_adjustment = -1 * min([min(y_lbs), 0])
-                sum_lbs = (sum(y_lbs) + min_lb_adjustment * len(self.z_item) ) / (self.y_len[tmp_y]/self.N)
-                for tmp_z in self.z_item:
-                    self.lb_dict[(tmp_y, tmp_z)] = (self.lb_dict[(tmp_y, tmp_z)]+min_lb_adjustment) / sum_lbs
+                sum_lbs = (sum(y_lbs) + min_lb_adjustment * len(self.g_item) ) / (self.y_len[tmp_y]/self.N)
+                for tmp_g in self.g_item:
+                    self.lb_dict[(tmp_y, tmp_g)] = (self.lb_dict[(tmp_y, tmp_g)]+min_lb_adjustment) / sum_lbs
 
 
         elif self.fairness_type == "stratified_g":
-            for tmp_z in self.z_item:
+            for tmp_g in self.g_item:
                 
                 larger_loss_group = []
                 smaller_loss_group = []
                 
                 for tmp_y in self.y_item:
-                    if epoch_loss_yz[(tmp_y, tmp_z)] > epoch_loss_z[tmp_z]:
+                    if epoch_loss_yg[(tmp_y, tmp_g)] > epoch_loss_g[tmp_g]:
                         larger_loss_group.append(tmp_y)
-                    elif epoch_loss_yz[(tmp_y, tmp_z)] < epoch_loss_z[tmp_z]:
+                    elif epoch_loss_yg[(tmp_y, tmp_g)] < epoch_loss_g[tmp_g]:
                         smaller_loss_group.append(tmp_y)
 
                 for llg in larger_loss_group:
-                    self.lb_dict[(llg, tmp_z)] += self.alpha / len(larger_loss_group)
+                    self.lb_dict[(llg, tmp_g)] += self.alpha / len(larger_loss_group)
                 for slg in smaller_loss_group:
-                    self.lb_dict[(slg, tmp_z)] -= self.alpha / len(smaller_loss_group)
+                    self.lb_dict[(slg, tmp_g)] -= self.alpha / len(smaller_loss_group)
 
                 # Normalize probabilities
-                z_lbs = [self.lb_dict[(_y, tmp_z)] for _y in self.y_item]
-                min_lb_adjustment = -1 * min([min(z_lbs), 0])
-                sum_lbs = (sum(z_lbs) + min_lb_adjustment * len(self.y_item) ) / (self.z_len[tmp_z]/self.N)
+                g_lbs = [self.lb_dict[(_y, tmp_g)] for _y in self.y_item]
+                min_lb_adjustment = -1 * min([min(g_lbs), 0])
+                sum_lbs = (sum(g_lbs) + min_lb_adjustment * len(self.y_item) ) / (self.g_len[tmp_g]/self.N)
                 for tmp_y in self.y_item:
-                    self.lb_dict[(tmp_y, tmp_z)] = (self.lb_dict[(tmp_y, tmp_z)]+min_lb_adjustment) / sum_lbs
+                    self.lb_dict[(tmp_y, tmp_g)] = (self.lb_dict[(tmp_y, tmp_g)]+min_lb_adjustment) / sum_lbs
