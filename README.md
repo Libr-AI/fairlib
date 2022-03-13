@@ -200,6 +200,21 @@ python main.py --INLP
 | INLP_min_acc                    | 0.0           | ignore the iteration if the acc is lower than the threshold |
 
 
+- Fair Contrastive Learning
+
+```bash
+python main.py --FCL
+```
+
+| Name                    | Default value | Description                                                     |
+|-------------------------|---------------|-----------------------------------------------------------------|
+| fcl_lambda_y            | 0.1           | strength of the supervised contrastive loss                     |
+| fcl_lambda_g            | 0.1           | strength of the fair supervised contrastive loss                |
+| fcl_temperature_y       | 0.01          | temperature for the fcl wrt main task learning                  |
+| fcl_temperature_g       | 0.01          | temperature for the fcl wrt protected attribute unlearning      |
+| fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
+| fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
+
 - Train a model with balanced training
 
 ```bash
