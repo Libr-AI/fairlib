@@ -207,6 +207,8 @@ class BaseOptions(object):
                             help='input embedding dimension')
         parser.add_argument('--num_classes', type=pos_int, default=2,
                             help='number of target classes')
+        parser.add_argument('--num_groups', type=pos_int, default=2,
+                            help='number of protected classes')
         parser.add_argument('--activation_function', type=str, default="Tanh",
                             help='nonlinear activation function for the main task model')
         parser.add_argument('--batch_norm',  action='store_true', default=False, 
@@ -220,9 +222,6 @@ class BaseOptions(object):
         parser.add_argument('--gated',  action='store_true', default=False, 
                             help='gated model for augmented inputs given protected labels')
         parser.add_argument('--gated_mapping',  type=str, default=None)
-        
-        parser.add_argument('--adv_num_classes', type=pos_int, default=2,
-                            help='number of protected classes')
 
         # Arguments for dynamic balanced training
         parser.add_argument('--DyBT', type=str, default=None, help='FairBatch | GroupDifference | GeneralizedFB')

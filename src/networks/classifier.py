@@ -34,14 +34,14 @@ class MLP(BaseModel):
                 # Init the mapping for the augmentation layer
                 if self.args.gated_mapping is None:
                     # For each class init a discriminator component
-                    self.mapping = torch.eye(self.args.adv_num_classes, requires_grad=False)
+                    self.mapping = torch.eye(self.args.num_groups, requires_grad=False)
                 else:
                     # self.mapping = torch.from_numpy(mapping, requires_grad=False)
                     raise NotImplementedError
 
                 self.augmentation_components = Augmentation_layer(
                     mapping=self.mapping,
-                    num_component=self.args.adv_num_classes,
+                    num_component=self.args.num_groups,
                     device=self.args.device,
                     sample_component=self.hidden_layers
                 )

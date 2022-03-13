@@ -136,6 +136,7 @@ The corresponding results such options and output logs will be saved in `results
 |--------------------------|---------------|-----------------------------------------------------------|
 | emb_size                 | 2304          | input embedding dimension                                 |
 | num_classes              | 2             | number of target classes                                  |
+| num_groups               | 2             | number of protected groups                                |
 | batch_size               | 1024          | input batch size for training                             |
 | epochs                   | 100           | number of total epochs to train                           |
 | lr                       | 0.003         | learning rate used to actually learn stuff                |
@@ -281,7 +282,6 @@ python main.py --BT --BTObj joint --gated
 | adv_hidden_size         | 300           | number of hidden units of each hidden layer for the main task classifier |
 | adv_n_hidden            | 2             | number of hidden layers                                                  |
 | adv_dropout             | 0             | dropout probability                                                      |
-| adv_num_classes         | 2             | number of target classes                                                 |
 | adv_activation_function | ReLu          | nonlinear activation function for the main task model                    |
 | adv_batch_norm          | False         | apply 1d batch norm to the model                                         |
 

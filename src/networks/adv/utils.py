@@ -127,10 +127,10 @@ class SubDiscriminator(BaseDiscriminator):
             pass
 
         if args.adv_n_hidden == 0:
-            self.output_layer = nn.Linear(self.input_dim, args.adv_num_classes)
+            self.output_layer = nn.Linear(self.input_dim, args.num_groups)
 
         else:
-            self.output_layer = nn.Linear(args.adv_hidden_size, args.adv_num_classes)
+            self.output_layer = nn.Linear(args.adv_hidden_size, args.num_groups)
         
         # Init batch norm, dropout, and activation function
         self.init_hyperparameters()
