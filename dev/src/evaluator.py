@@ -112,6 +112,6 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     }
 
     for _metric in metrics:
-        eval_scores["{}_GAP".format(_metric)] = RMS_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
+        eval_scores["{}_RMS_GAP".format(_metric)] = RMS_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
 
     return eval_scores
