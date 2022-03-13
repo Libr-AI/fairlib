@@ -9,7 +9,7 @@ Table of contents
 - [Fair_NLP_Classification](#fair_nlp_classification)
   - [Table of contents](#table-of-contents)
   - [Introduction](#introduction)
-  - [Installation](#installation)
+  - [Prerequisites](#prerequisites)
   - [Usage](#usage)
     - [Basic operation](#basic-operation)
     - [Additional options](#additional-options)
@@ -51,6 +51,9 @@ The currently supported bias mitigation methods include:
   Working paper.
   - INLP  
     Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
+  - Contrastive Learning for Fair Representation
+    Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Contrastive Learning for Fair Representations](https://arxiv.org/abs/2109.10645), CoRR abs/2109.10645.
+
 - Balanced Training
   - Instance Reweighting and Resampling  
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
@@ -62,10 +65,10 @@ The currently supported bias mitigation methods include:
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
 
 We are planning to add:
-- \[algorithm\] Contrastive Learning for Fair Representation
+- \[algorithm\] 
 - \[algorithm\] Minimizing Group Difference for Equal Opportunity Fairness
 
-Installation
+Prerequisites
 ------------
 
 Start a new virtual environment:

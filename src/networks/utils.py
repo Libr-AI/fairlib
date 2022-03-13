@@ -98,6 +98,17 @@ def train_epoch(model, iterator, args, epoch):
             for adv_loss in adv_losses:
                 loss = loss - (adv_loss / args.adv_num_subDiscriminator)
 
+        if args.FCL:
+            # get hidden representations
+            if args.gated:
+                hs = model.hidden(text, p_tags)
+            else:
+                hs = model.hidden(text)
+
+            # update the loss with Fair Supervised Contrastive Loss
+            fscl_loss = args.FairSCL(hs, tags, p_tags)
+            loss = loss + fscl_loss
+
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()

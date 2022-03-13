@@ -12,6 +12,7 @@ from src import utils
 from src import dataloaders
 from src import networks
 from src.networks import adv
+from src.networks import FairCL
 
 class State(object):
 
@@ -291,6 +292,22 @@ class BaseOptions(object):
         parser.add_argument("--INLP_min_acc", type=float, default=0.0,
                             help="ignore the iteration if the acc is lower than the threshold")
 
+        # Fair Supervised Contrastive Learning
+        parser.add_argument("--FCL",action='store_true', default=False,
+                            help='Perform Fair Supervised Contrastive Learning')
+        parser.add_argument("--fcl_temperature_y", type=float, default=0.01,
+                            help="temperature for the fcl wrt main task learning")
+        parser.add_argument("--fcl_temperature_g", type=float, default=0.01,
+                            help="temperature for the fcl wrt protected attribute unlearning")
+        parser.add_argument("--fcl_base_temperature_y", type=float, default=0.01,
+                            help="base temperature for the fcl wrt main task learning")
+        parser.add_argument("--fcl_base_temperature_g", type=float, default=0.01,
+                            help="base temperature for the fcl wrt protected attribute unlearning")
+        parser.add_argument("--fcl_lambda_y", type=float, default=0.1,
+                            help="strength of the supervised contrastive loss")
+        parser.add_argument("--fcl_lambda_g", type=float, default=0.1,
+                            help="strength of the fair supervised contrastive loss")
+
 
 
     def get_dummy_state(self, *cmdargs, yaml_file=None, **opt_pairs):
@@ -428,6 +445,10 @@ class BaseOptions(object):
                 # adv.utils.print_network(state.opt.discriminator.subdiscriminators[0])
 
                 state.opt.diff_loss = adv.customized_loss.DiffLoss()
+
+            # Init the fair supervised contrastive loss
+            if state.FCL:
+                state.opt.FairSCL = FairCL.Fair_Contrastive_Loss(state)
 
         return state
 
