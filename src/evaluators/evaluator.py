@@ -46,6 +46,9 @@ def confusion_matrix_based_scores(cnf):
     # Overall accuracy
     ACC = (TP+TN)/(TP+FP+FN+TN)
 
+    # Positive Prediction Rates
+    PPR = (TP+FP)/(TP+FP+FN+TN)
+
     return {
         "TPR":TPR,
         "TNR":TNR,
@@ -54,7 +57,8 @@ def confusion_matrix_based_scores(cnf):
         "FPR":FPR,
         "FNR":FNR,
         "FDR":FDR,
-        "ACC":ACC
+        "ACC":ACC,
+        "PPR":PPR,
     }
 
 def power_mean(series, p):
@@ -66,42 +70,48 @@ def power_mean(series, p):
         total = np.mean(np.power(series, p))
         return np.power(total, 1 / p)
 
-def gap_eval_scores(y_pred, y_true, protected_attribute):
+
+def RMS_GAP(distinct_groups, all_scores, metric="TPR"):
+    group_scores = []
+    for gid in distinct_groups:
+        # Save the TPR direct to the list 
+        group_scores.append(all_scores[gid][metric]) 
+
+    Scores = np.stack(group_scores, axis = 1)
+    # Calculate GAP
+    score_gaps = Scores - all_scores["overall"][metric].reshape(-1,1)
+    # Sum over gaps of all protected groups within each class
+    score_gaps = np.sum(abs(score_gaps),axis=1)
+    # RMS of each class
+    score_gaps = np.sqrt(np.mean(score_gaps**2))
+
+    return score_gaps
+
+def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","PPR"]):
     y_pred = np.array(y_pred)
     y_true = np.array(y_true)
     protected_attribute = np.array(protected_attribute)
 
     all_scores = {}
     # Overall evaluation
-    distinct_labels = [i for i in range(len(set( y_true)))]
+    distinct_labels = [i for i in range(len(set(y_true)))]
     overall_confusion_matrix = confusion_matrix(y_true=y_true, y_pred=y_pred, labels=distinct_labels)
     all_scores["overall"] = confusion_matrix_based_scores(overall_confusion_matrix)
 
-    # Evaluation results for each group
-    group_TPR = [None for i in range(len(set(protected_attribute)))]
-    for gid in set(protected_attribute):
+    # Group scores
+    distinct_groups = [i for i in range(len(set(protected_attribute)))]
+    for gid in distinct_groups:
         group_identifier = (protected_attribute ==gid)
         group_confusion_matrix = confusion_matrix(y_true=y_true[group_identifier], y_pred=y_pred[group_identifier], labels=distinct_labels)
         all_scores[gid] = confusion_matrix_based_scores(group_confusion_matrix)
-        # Save the TPR direct to the list 
-        group_TPR[gid] = all_scores[gid]["TPR"]
-    
-    TPRs = np.stack(group_TPR, axis = 1)
-    # Calculate GAP
-    tpr_gaps = TPRs - all_scores["overall"]["TPR"].reshape(-1,1)
-    # Sum over gaps of all protected groups within each class
-    tpr_gaps = np.sum(abs(tpr_gaps),axis=1)
-    # RMS of each class
-    rms_tpr_gaps = np.sqrt(np.mean(tpr_gaps**2))
 
-    accuracy = accuracy_score(y_true, y_pred)
-    macro_fscore = f1_score(y_true, y_pred, average="macro")
-    micro_fscore = f1_score(y_true, y_pred, average="micro")
-    
-    # return rms_tpr_gaps, (all_scores, group_TPR)
-    return {
-        "rms_TPR" : rms_tpr_gaps,
-        "accuracy" : accuracy,
-        "macro_fscore" : macro_fscore,
-        "micro_fscore" : micro_fscore,
+    eval_scores = {
+        "accuracy" : accuracy_score(y_true, y_pred),
+        "macro_fscore" : f1_score(y_true, y_pred, average="macro"),
+        "micro_fscore" : f1_score(y_true, y_pred, average="micro"),
     }
+
+    for _metric in metrics:
+        eval_scores["{}_GAP".format(_metric)] = RMS_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
+
+    return eval_scores
