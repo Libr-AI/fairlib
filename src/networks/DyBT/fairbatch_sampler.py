@@ -294,7 +294,7 @@ class FairBatch(Sampler):
             # Get the indices for each batch
             sort_index_all = {}
             for _tmp_yg in self.yg_tuple:
-                sort_index_all[_tmp_yg] = self.select_batch_replacement(each_size[(_tmp_yg)], self.yg_index[(_tmp_yg)], self.batch_num, self.replacement)
+                sort_index_all[_tmp_yg] = self.select_batch_replacement(each_size[_tmp_yg], self.yg_index[_tmp_yg], self.batch_num, self.replacement)
 
             for t in range(self.batch_num):
                 key_in_fairbatch = []

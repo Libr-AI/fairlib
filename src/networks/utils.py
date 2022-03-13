@@ -108,6 +108,9 @@ def train_epoch(model, iterator, args, epoch):
             # update the loss with Fair Supervised Contrastive Loss
             fscl_loss = args.FairSCL(hs, tags, p_tags)
             loss = loss + fscl_loss
+        
+        if (args.DyBT is not None) and (args.DyBT == "GroupDifference"):
+            loss = loss + args.group_difference_loss(predictions, tags, p_tags)
 
         loss.backward()
         optimizer.step()
@@ -221,12 +224,13 @@ class BaseModel(nn.Module):
     
     def train_self(self):
         
-        # Reinit the train loader for DyBT
-        if self.args.DyBT is not None:
+        # Reinit the train loader for FairBatch
+        if (self.args.DyBT is not None) and (self.args.DyBT in ["FairBatch", "GeneralizedFB"]):
             from .DyBT import init_sampler
             DyBT_sampler = init_sampler(self, self.args)
             # Replace the tran iterator with fairbatch version
             self.args.opt.train_generator = torch.utils.data.DataLoader(self.args.opt.train_generator.dataset, sampler=DyBT_sampler, num_workers=0)
+            logging.info("Reinitialized DyBT sampler for dataloader")
 
         epochs_since_improvement = 0
         best_valid_loss = 1e+5

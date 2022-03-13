@@ -13,6 +13,7 @@ from src import dataloaders
 from src import networks
 from src.networks import adv
 from src.networks import FairCL
+from src.networks.DyBT import Group_Difference_Loss
 
 class State(object):
 
@@ -225,7 +226,7 @@ class BaseOptions(object):
 
         # Arguments for dynamic balanced training
         parser.add_argument('--DyBT', type=str, default=None, help='FairBatch | GroupDifference | GeneralizedFB')
-        parser.add_argument('--DyBTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
+        parser.add_argument('--DyBTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g | EO')
         parser.add_argument('--DyBTalpha', type=float, default=0.1, help='a positive number for dynamic adjustment.')
         parser.add_argument('--DyBTinit', type=str, default="original", help='original | balanced')
 
@@ -448,6 +449,10 @@ class BaseOptions(object):
             # Init the fair supervised contrastive loss
             if state.FCL:
                 state.opt.FairSCL = FairCL.Fair_Contrastive_Loss(state)
+            
+            # Init the group difference loss
+            if (state.DyBT is not None) and (state.DyBT == "GroupDifference"):
+                state.opt.group_difference_loss = Group_Difference_Loss(state)
 
         return state
 

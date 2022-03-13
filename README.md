@@ -51,7 +51,7 @@ The currently supported bias mitigation methods include:
   Working paper.
   - INLP  
     Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
-  - Contrastive Learning for Fair Representation
+  - Contrastive Learning for Fair Representation  
     Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Contrastive Learning for Fair Representations](https://arxiv.org/abs/2109.10645), CoRR abs/2109.10645.
 
 - Balanced Training
@@ -59,6 +59,8 @@ The currently supported bias mitigation methods include:
   Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
   - FairBatch: resampling dynamically during training  
   Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
+  - Minimizing Group Difference for Equal Opportunity Fairness  
+  Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Connecting Loss Difference with Equal Opportunity for Fair Models ](), CoRR.
 
 - Incorporating Demographic Factors  
   - Representation Augmentation  
@@ -66,7 +68,6 @@ The currently supported bias mitigation methods include:
 
 We are planning to add:
 - \[algorithm\] 
-- \[algorithm\] Minimizing Group Difference for Equal Opportunity Fairness
 
 Prerequisites
 ------------
@@ -228,7 +229,7 @@ python main.py --BT --BTObj joint
 | BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 | full_label | True          | require full protected label                                 |
 
-- Train a model with FairBach balanced training
+- Train a model with Dynamic balanced training
 
 ```bash
 python main.py --DyBT FairBach --DyBTObj stratified_y 
@@ -237,8 +238,17 @@ python main.py --DyBT FairBach --DyBTObj stratified_y
 | Name       | Default value | Description                                                  |
 |------------|---------------|--------------------------------------------------------------|
 | DyBT       | False         | FairBach \| GroupDifference \| Others                        |
-| DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g              |
+| DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
+
+For `Connecting Loss Difference with Equal Opportunity for Fair Models`, the **Diff** and **Mean** are: 
+```bash
+# L_diff as described in Section 3.2
+python main.py --DyBT GroupDifference --DyBTObj EO
+
+# L_mean as described in Section 3.3 
+python main.py --DyBT GroupDifference --DyBTObj joint
+```
 
 - Train a model to incorporate demographic factors
 
