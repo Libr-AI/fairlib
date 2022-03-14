@@ -300,15 +300,7 @@ class BaseModel(nn.Module):
                     checkpoint_dir = self.args.model_dir)
                 
                 logging.info("Evaluation at Epoch %d" % (epoch,))
-                logging.info((
-                    'Validation GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}'
-                ).format(
-                    100. * valid_scores["rms_TPR"], 100. * valid_scores["accuracy"], 
-                    100. * valid_scores["macro_fscore"], 100. * valid_scores["micro_fscore"]
-                ))
-                logging.info((
-                    'Test GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}'
-                ).format(
-                    100. * test_scores["rms_TPR"], 100. * test_scores["accuracy"], 
-                    100. * test_scores["macro_fscore"], 100. * test_scores["micro_fscore"]
-                ))
+                validation_results = ["{}: {:2.2f}\t".format(k, 100.*valid_scores[k]) for k in valid_scores.keys()]
+                logging.info(('Validation {}').format("".join(validation_results)))
+                Test_results = ["{}: {:2.2f}\t".format(k, 100.*test_scores[k]) for k in test_scores.keys()]
+                logging.info(('Test {}').format("".join(Test_results)))
