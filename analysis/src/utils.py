@@ -101,6 +101,7 @@ def get_dir(results_dir, project_dir, checkpoint_dir, checkpoint_name, model_id)
                 exps.append(
                     {
                         "opt":_opt,
+                        "opt_dir":str(os.path.join(root, dir, 'opt.yaml')),
                         "dir":_checkpoints_dirs,
                     }
                 )
@@ -127,7 +128,7 @@ def get_model_scores(exp, GAP_metric, Performance_metric):
         # Track the epoch id
         epoch_id.append(epoch_result["epoch"])
 
-        # Get evaluation scores
+        # Get fairness evaluation scores, 1-GAP, the larger the better
         epoch_scores_dev["fairness"].append(1-epoch_result["dev_evaluations"][GAP_metric])
         epoch_scores_test["fairness"].append(1-epoch_result["test_evaluations"][GAP_metric])
 
@@ -141,11 +142,11 @@ def get_model_scores(exp, GAP_metric, Performance_metric):
     epoch_scores = pd.DataFrame(
         {
             "epoch":epoch_id,
-            "dev_{}".format(GAP_metric):epoch_scores_dev["fairness"],
-            "dev_{}".format(Performance_metric):epoch_scores_dev["performance"],
+            "dev_fairness":epoch_scores_dev["fairness"],
+            "dev_performance":epoch_scores_dev["performance"],
             "dev_DTO":dev_DTO,
-            "test_{}".format(GAP_metric):epoch_scores_test["fairness"],
-            "test_{}".format(Performance_metric):epoch_scores_test["performance"],
+            "test_fairness":epoch_scores_test["fairness"],
+            "test_performance":epoch_scores_test["performance"],
             "test_DTO":test_DTO,
         }
     )
@@ -161,6 +162,8 @@ def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_c
     # Get hyperparameters for this epoch
     for hyperparam_key in index_column_names:
         _exp_results[hyperparam_key] = [_exp_opt[hyperparam_key]]*len(_exp_results)
+    
+    _exp_results["opt_dir"] = [exp["opt_dir"]]*len(_exp_results)
 
     return _exp_results
 
@@ -183,15 +186,17 @@ def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_c
     # Merge opt with scores
     for key in selected_epoch_scores.keys():
         _exp_results[key] = selected_epoch_scores[key]
+    
+    _exp_results["opt_dir"] = exp["opt_dir"]
+    _exp_results["epoch"] = selected_epoch_id
 
     return _exp_results
 
 def create_plots(
     input_df, 
     key_index = 0, 
-    # index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
-    GAP_metric_name = "rms_TPR",
-    Performance_metric_name = "accuracy",
+    GAP_metric_name = "fairness",
+    Performance_metric_name = "performance",
     ):
     """create plots and return the selected model
 
@@ -257,9 +262,8 @@ def is_pareto_efficient(costs, return_mask = True):
 
 def model_comparasion(
     results_dict,
-    index_column_names = ['adv_lambda', 'adv_num_subDiscriminator', 'adv_diverse_lambda'],
-    GAP_metric_name = "rms_TPR",
-    Performance_metric_name = "accuracy",
+    GAP_metric_name = "fairness",
+    Performance_metric_name = "performance",
     pareto = True,
     pareto_selection = "test",
     default_plot = True

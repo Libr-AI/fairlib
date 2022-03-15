@@ -39,8 +39,8 @@ def retrive_results(
 def final_results_df(
     results_dict,
     model_order = None,
-    Fairness_metric_name = "rms_TPR",
-    Performance_metric_name = "accuracy",
+    Fairness_metric_name = "fairness",
+    Performance_metric_name = "performance",
     pareto = True,
     pareto_selection = "test",
     selection_criterion = "DTO",
@@ -71,7 +71,19 @@ def final_results_df(
         _df = results_dict[key]
 
         # Calculate Mean and Variance for each run
-        _df = _df.groupby(_df.index).agg(["mean", "std"]).reset_index()
+        agg_dict = {
+            "dev_performance":["mean", "std"],
+            "dev_fairness":["mean", "std"],
+            "test_performance":["mean", "std"],
+            "test_fairness":["mean", "std"],
+            "epoch":list,
+            "opt_dir":list,
+            }
+        try:
+            _df = _df.groupby(_df.index).agg(agg_dict).reset_index()
+        except:
+            print(key)
+            break
 
         _df.columns = [' '.join(col).strip() for col in _df.columns.values]
 
