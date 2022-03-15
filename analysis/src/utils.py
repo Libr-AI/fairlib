@@ -12,6 +12,20 @@ from tqdm import tqdm
 import math
 import seaborn as sns
 
+def mkdirs(paths):
+    if isinstance(paths, list) and not isinstance(paths, str):
+        for path in paths:
+            mkdir(path)
+    else:
+        mkdir(paths)
+
+
+def mkdir(path):
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+        except FileExistsError:
+            pass
 
 def power_mean(series, p):
     if p>50:
