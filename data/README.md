@@ -42,7 +42,7 @@
                     f.write(' '.join(ids) + '\n')
     ```
 
-3. Encode texts with [torchMoji](https://github.com/huggingface/torchMoji)
+3. Encode texts with [torchMoji](https://github.com/huggingface/torchMoji). We provide an example for extract text representations at [src/Moji](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/data/src/Moji/encode_text.ipynb).
 
 
 # Bios
