@@ -7,6 +7,7 @@ from src.base_options import options
 from src import networks
 
 if __name__ == '__main__':
+    # state = options.get_state(conf_file=r"D:\Project\Fair_NLP_Classification\results\vanilla\Bios_gender\0\opt.yaml")
     state = options.get_state()
 
     logging.info('train dataset size:\t{}'.format(len(state.opt.train_generator.dataset)))
