@@ -15,6 +15,7 @@ Table of contents
     - [Additional options](#additional-options)
     - [Scripts for Large Scale Experiments](#scripts-for-large-scale-experiments)
     - [Add New Datasets/Models](#add-new-datasetsmodels)
+    - [Reproducibility](#reproducibility)
   - [Model Selection and Fairness Evaluation](#model-selection-and-fairness-evaluation)
   - [Known issues and limitations](#known-issues-and-limitations)
   - [Getting help](#getting-help)
@@ -326,6 +327,11 @@ python scripts/gen_exps.py
 
 ### Add New Datasets/Models
 Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.
+
+### Reproducibility
+```bash
+python main.py --conf_file PATH_TO_EXP/opt.yaml
+```
 
 Model Selection and Fairness Evaluation
 ----------------------------
