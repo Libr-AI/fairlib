@@ -46,3 +46,22 @@
 
 
 # Bios
+
+## Download processed data without economy labels
+    Please use the script provided at [download_data.sh](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/download_data.sh)
+
+## From scratch
+
+1. Download the dataset as described in [Bias in Bios: A Case Study of Semantic Representation Bias in a High-Stakes Setting
+](https://arxiv.org/abs/1901.09451)
+
+    See https://github.com/microsoft/biosbias for instructions for downloading and processing all bio records as a single file.
+
+2. Create splits and get BERT encoding.
+   We follow [Ravfogel et al.](https://github.com/shauli-ravfogel/nullspace_projection) in creating data splits and extracting BERT encoding.
+   Please see [create_dataset_biasbios.py](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/src/data/create_dataset_biasbios.py) and  [encode_bert_states.py](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/src/data/encode_bert_states.py).
+   
+   We provide an [example](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/data/src/Bios/create_bios_datasets.ipynb) for dataset splits.
+
+3. Augmented economy labels.
+   TODO
