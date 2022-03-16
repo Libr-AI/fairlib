@@ -61,9 +61,7 @@ The currently supported bias mitigation methods include:
   - Decoupled Adversarial Training  
     Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
   - Towards Equal Opportunity Fairness through Adversarial Learning  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), CoRR.
-  <!-- - Adversarial Regularization without Label  
-  Working paper. -->
+    Han, Xudong, Timothy Baldwin and Trevor Cohn (2022) [Towards Equal Opportunity Fairness through Adversarial Learning](https://arxiv.org/abs/2203.06317), CoRR abs/2203.06317.
   - INLP  
       Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
   - Contrastive Learning for Fair Representation  
@@ -79,7 +77,7 @@ The currently supported bias mitigation methods include:
   - FairBatch: resampling dynamically during training  
     Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
   - Minimizing Group Difference for Equal Opportunity Fairness  
-    Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Connecting Loss Difference with Equal Opportunity for Fair Models ](), CoRR.
+    Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2022) [Connecting Loss Difference with Equal Opportunity for Fair Models ]().
 
 - Incorporating Demographic Factors  
   - Representation Augmentation  
