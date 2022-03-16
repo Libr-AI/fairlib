@@ -353,7 +353,7 @@ class BaseOptions(object):
             opt.update(yaml_opt)
         else:
             if opt["conf_file"] is not None:
-                with open(self.opt.conf_file, 'r') as f:
+                with open(opt["conf_file"], 'r') as f:
                     yaml_opt = yaml.full_load(f)
                 opt.update(yaml_opt)
         
