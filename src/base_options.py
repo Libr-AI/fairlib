@@ -196,6 +196,8 @@ class BaseOptions(object):
                             help='if set, will not log into file')
         parser.add_argument('--log_level', type=str, default='INFO',
                             help='logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL')
+        parser.add_argument('--conf_file', type=str, default=None,
+                            help='path to the YAML file for reproduce an an experiment')
 
         # Arguments for the main task model
         parser.add_argument('--hidden_size',  type=pos_int, default=300, 
@@ -317,7 +319,7 @@ class BaseOptions(object):
             opt = self.parser.parse_args(args=list(cmdargs), namespace=argparse.Namespace())
         else:
             with open(yaml_file, 'r') as f:
-                opt = yaml.load(f)
+                opt = yaml.full_load(f)
         state = State(opt)
         valid_keys = set(state.merge().keys())
         for k in opt_pairs:
@@ -326,13 +328,36 @@ class BaseOptions(object):
         state.extras.update(opt_pairs)
         return self.set_state(state, dummy=True)
 
-    def get_state(self):
+    def get_state(self, conf_file=None):
+        """get state from yaml and args
+
+        Args:
+            conf_file (_type_, optional): yaml file path. Defaults to None.
+            args_first (bool, optional): priority of args, replace yaml with args if true. Defaults to True.
+
+        Returns:
+            agrs.NameSapce: aruguments for training
+        """
+
         if hasattr(self, 'state'):
             return self.state
 
         logging.getLogger().setLevel(logging.DEBUG)
-        self.opt, unknowns = self.parser.parse_known_args(namespace=State.UniqueNamespace())
+        opt, unknowns = self.parser.parse_known_args(namespace=State.UniqueNamespace())
         assert len(unknowns) == 0, 'Unexpected args: {}'.format(unknowns)
+        opt = vars(opt)
+        
+        if conf_file is not None:
+            with open(conf_file, 'r') as f:
+                yaml_opt = yaml.full_load(f)
+            opt.update(yaml_opt)
+        else:
+            if self.opt.conf_file is not None:
+                with open(self.opt.conf_file, 'r') as f:
+                    yaml_opt = yaml.full_load(f)
+                opt.update(yaml_opt)
+        
+        self.opt = argparse.Namespace(**opt)
         self.state = State(self.opt)
         return self.set_state(self.state)
 

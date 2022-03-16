@@ -5,11 +5,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from .utils import DTO
-from .utils import is_pareto_efficient
+import shutil
+from .utils import is_pareto_efficient, mkdirs
 
 import numpy as np
-
-
 
 def retrive_results(
     dataset,
@@ -39,14 +38,17 @@ def retrive_results(
 def final_results_df(
     results_dict,
     model_order = None,
-    Fairness_metric_name = "rms_TPR",
-    Performance_metric_name = "accuracy",
+    Fairness_metric_name = "fairness",
+    Performance_metric_name = "performance",
     pareto = True,
     pareto_selection = "test",
     selection_criterion = "DTO",
     return_dev = True,
     Fairness_threshold = 0.0,
     Performance_threshold = 0.0,
+    return_conf = False,
+    save_conf_dir = None,
+    num_trail = None,
     ):
     """Process the results to a single dataset from creating tables and plots.
 
@@ -61,6 +63,8 @@ def final_results_df(
         return_dev (bool, optional): whether or not to return dev results in the df. Defaults to True.
         Fairness_threshold (float, optional): filtering rows with a minimal fairness as the threshold. Defaults to 0.0.
         Performance_threshold (float, optional): filtering rows with a minimal performance as the threshold. Defaults to 0.0.
+        return_conf (bool, optional): return the selected epoch and corresponding YAML configure files if True. Defaults to False.
+        save_conf_dir (str, optional): save selected epoch and configure files to the dir. Defaults to None.
 
     Returns:
         pandas.DataFrame: selected results of different models for report
@@ -71,9 +75,24 @@ def final_results_df(
         _df = results_dict[key]
 
         # Calculate Mean and Variance for each run
-        _df = _df.groupby(_df.index).agg(["mean", "std"]).reset_index()
+        agg_dict = {
+            "dev_performance":["mean", "std"],
+            "dev_fairness":["mean", "std"],
+            "test_performance":["mean", "std"],
+            "test_fairness":["mean", "std"],
+            "epoch":list,
+            "opt_dir":list,
+            }
+        try:
+            _df = _df.groupby(_df.index).agg(agg_dict).reset_index()
+        except:
+            print(key)
+            break
 
         _df.columns = [' '.join(col).strip() for col in _df.columns.values]
+
+        if num_trail is not None:
+            _df = _df.sample(n=min(int(num_trail), len(_df)), random_state=1)
 
         # Select Pareto Frontiers
         if pareto:
@@ -92,7 +111,11 @@ def final_results_df(
             _pareto_df = _tmp_df
         
         # Rename and reorder the columns
-        _pareto_df = _pareto_df[["{}_{} {}".format(phase, metric, value) for phase in ["test", "dev"] for metric in [Performance_metric_name, Fairness_metric_name] for value in ["mean", "std"]]].copy()
+        selected_columns = ["{}_{} {}".format(phase, metric, value) for phase in ["test", "dev"] for metric in [Performance_metric_name, Fairness_metric_name] for value in ["mean", "std"]]
+        selected_columns.append("epoch list")
+        selected_columns.append("opt_dir list")
+
+        _pareto_df = _pareto_df[selected_columns].copy()
         _pareto_df["Models"] = [key]*len(_pareto_df)
 
         _final_DTO = DTO(
@@ -123,6 +146,15 @@ def final_results_df(
             )
         final_df["DTO"] = _over_DTO
 
-        final_df = final_df[["Models"]+list(final_df.keys())[1:(9 if return_dev else 5)]+["DTO"]].copy()
+        if save_conf_dir is not None:
+            for (_model, _epoch_list, opt_list) in final_df[["Models", "epoch list", "opt_dir list"]].values:
+                model_dir = Path(save_conf_dir)/_model
+                mkdirs(model_dir)
+                for _run, (_epoch, _opt) in enumerate(zip(_epoch_list, opt_list)):
+                    shutil.copy2(_opt, model_dir / 'Run_{}_Selected_Epoch_{}.yaml'.format(_run, _epoch))
+
+        evaluation_cols = list(final_df.keys())[1:(9 if return_dev else 5)]
+        reproducibility_cols = ["epoch list", "opt_dir list"] if return_conf else []
+        final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols].copy()
 
     return final_df

@@ -15,6 +15,7 @@ Table of contents
     - [Additional options](#additional-options)
     - [Scripts for Large Scale Experiments](#scripts-for-large-scale-experiments)
     - [Add New Datasets/Models](#add-new-datasetsmodels)
+    - [Reproducibility](#reproducibility)
   - [Model Selection and Fairness Evaluation](#model-selection-and-fairness-evaluation)
   - [Known issues and limitations](#known-issues-and-limitations)
   - [Getting help](#getting-help)
@@ -29,11 +30,18 @@ Introduction
 You can easily develop new algorithms, or readily apply existing algorithms.
 
 The currently supported datasets include:
-- Moji  
+- Moji
+  
   Binary sentiment classification. Instances are annotated with AAE/SAE labels.
-- Bios  
+
+  [Demographic Dialectal Variation in Social Media: A Case Study of African-American English](https://aclanthology.org/D16-1120/)
+
+- Bios
+  
   Biography classification tasks with 28 profession classes.
   Instances are also annotated with gender and economy labels.  
+
+  [Bias in Bios: A Case Study of Semantic Representation Bias in a High-Stakes Setting](https://dl.acm.org/doi/10.1145/3287560.3287572)
 
 
 The currently supported bias mitigation methods include:
@@ -53,7 +61,7 @@ The currently supported bias mitigation methods include:
   - Decoupled Adversarial Training  
     Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
   - Towards Equal Opportunity Fairness through Adversarial Learning  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), arXiv Pre-print.
+    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Towards Equal Opportunity Fairness through Adversarial Learning](), CoRR.
   <!-- - Adversarial Regularization without Label  
   Working paper. -->
   - INLP  
@@ -93,11 +101,14 @@ pip install -r requirements.txt
 ```
 
 <!-- TODO Will we release the Bios dataset with economy labels? -->
-Download the data used for this project:
+Download the preprocessed Moji data for this project:
 ```bash
 ./prepare_data.sh
 ```
- 
+
+For other datasets, please refer to [data/README.md](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/data/README.md)
+
+
 Usage
 -----
 
@@ -317,6 +328,11 @@ python scripts/gen_exps.py
 ### Add New Datasets/Models
 Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.
 
+### Reproducibility
+```bash
+python main.py --conf_file PATH_TO_EXP/opt.yaml
+```
+
 Model Selection and Fairness Evaluation
 ----------------------------
 We provide implementation of DTO and DTO based model selection for different models. 
@@ -360,3 +376,5 @@ Acknowledgments
 * https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations
 * https://github.com/yuji-roh/fairbatch
 * https://github.com/shauli-ravfogel/nullspace_projection
+* https://github.com/AiliAili/contrastive_learning_fair_representations
+* https://github.com/AiliAili/Difference_Mean_Fair_Models
