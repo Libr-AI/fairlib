@@ -93,7 +93,7 @@ Prerequisites
 
 Start a new virtual environment:
 ```bash
-conda create -n fair_nlp python=3.7 anaconda
+conda create -n fair_nlp python=3.7
 conda activate fair_nlp
 
 # additional python pacakges from requirements.txt
