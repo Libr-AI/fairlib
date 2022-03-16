@@ -31,7 +31,12 @@ def retrive_results(
                 pre_len = len(dataset)+len(str(log_dir))+2
                 file_path = os.path.join(root, file)
                 mehtod = str(os.path.join(root, file))[pre_len:-7]
-                results[mehtod] = pd.read_pickle(file_path)
+                try:
+                    results[mehtod] = pd.read_pickle(file_path)
+                except:
+                    import pickle5
+                    with open(file_path, "rb") as fh:
+                        results[mehtod] = pickle5.load(fh)
     return results
 
 
