@@ -240,7 +240,7 @@ python main.py --FCL
 - Train a model with balanced training
 
 ```bash
-python main.py --BT --BTObj joint
+python main.py --BT Reweighting --BTObj joint
 ```
 
 | Name       | Default value | Description                                                  |
