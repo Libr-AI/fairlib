@@ -111,6 +111,28 @@ class MLP(BaseModel):
                     hidden_layers.append(self.AF)
             return hidden_layers
 
+    def get_cls_parameter(self):
+        parameters = []
+        if self.args.adv_level == "output":
+            return parameters
+        else:
+            parameters.append(
+                {"params":self.output_layer.parameters(),}
+            )
+            if self.args.adv_level == "last_hidden":
+                return parameters
+            elif self.args.adv_level == "input":
+                parameters.append(
+                    {"params":self.hidden_layers.parameters(),}
+                )
+                # Augmentation
+                if self.args.gated and self.args.n_hidden > 0:
+                    parameters.append(
+                        {"params":self.augmentation_components.parameters(),}
+                    )
+                return parameters
+            else:
+                raise "not implemented yet"
 
 class BERTClassifier(BaseModel):
     model_name = 'bert-base-cased'

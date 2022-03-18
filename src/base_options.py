@@ -216,6 +216,8 @@ class BaseOptions(object):
                             help='nonlinear activation function for the main task model')
         parser.add_argument('--batch_norm',  action='store_true', default=False, 
                             help='apply 1d batch norm to the model')
+        parser.add_argument('--classification_head_update_frequency',  type=pos_int, default=1,
+                            help='the update frequency of the main model classification head (every N batches)')
 
         # Arguments for balanced training
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')

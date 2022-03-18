@@ -113,6 +113,11 @@ def train_epoch(model, iterator, args, epoch):
             loss = loss + args.group_difference_loss(predictions, tags, p_tags)
 
         loss.backward()
+
+        # Zero gradients of the cls head 
+        if it % args.classification_head_update_frequency != 0:
+            model.zero_cls_grad()
+
         optimizer.step()
         epoch_loss += loss.item()
         t += (time.time() - t0)
@@ -191,6 +196,8 @@ class BaseModel(nn.Module):
         self.device = self.args.device
         self.to(self.device)
 
+        self.cls_parameter = self.get_cls_parameter()
+
         self.learning_rate = self.args.lr
         self.optimizer = Adam(filter(lambda p: p.requires_grad, self.parameters()), lr=self.learning_rate)
 
@@ -221,6 +228,16 @@ class BaseModel(nn.Module):
             self.dropout = nn.Dropout(p=self.args.dropout)
         else:
             self.dropout = None
+    
+    def zero_cls_grad(self):
+        """Clears the gradients of cls layers
+
+        """
+        for group in self.cls_parameter:
+            for p in group['params']:
+                if p.grad is not None:
+                    p.grad.detach_()
+                    p.grad.zero_()
     
     def train_self(self):
         
