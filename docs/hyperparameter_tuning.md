@@ -117,7 +117,15 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 - **Intro:** 
 
 - **Hyperparameters:**
+    ```bash
+    python main.py --DyBT FairBach --DyBTObj stratified_y 
+    ```
 
+    | Name       | Default value | Description                                                  |
+    |------------|---------------|--------------------------------------------------------------|
+    | DyBT       | False         | FairBach \| GroupDifference \| Others                        |
+    | DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
+    | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
 - **Previous Work:**
 
 - **Tuned:**
@@ -131,6 +139,15 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 
 - **Hyperparameters:**
 
+    ```bash
+    python main.py --BT --BTObj joint
+    ```
+
+    | Name       | Default value | Description                                                  |
+    |------------|---------------|--------------------------------------------------------------|
+    | BT         | False         | Reweighting or Resampling                                    |
+    | BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
+
 - **Previous Work:**
 
 - **Tuned:**
@@ -141,7 +158,19 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 
 - **Intro:** 
 
-- **Hyperparameters:**
+- **Hyperparameters:**  
+    ```bash
+    # L_diff as described in Section 3.2
+    python main.py --DyBT GroupDifference --DyBTObj EO
+
+    # L_mean as described in Section 3.3 
+    python main.py --DyBT GroupDifference --DyBTObj joint
+    ```
+
+    | Name       | Default value | Description                                                  |
+    |------------|---------------|--------------------------------------------------------------|
+    | DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
+    | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
 
 - **Previous Work:**
 
@@ -155,6 +184,18 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 - **Intro:** 
 
 - **Hyperparameters:**
+    ```bash
+    python main.py --FCL
+    ```
+
+    | Name                    | Default value | Description                                                     |
+    |-------------------------|---------------|-----------------------------------------------------------------|
+    | fcl_lambda_y            | 0.1           | strength of the supervised contrastive loss                     |
+    | fcl_lambda_g            | 0.1           | strength of the fair supervised contrastive loss                |
+    | fcl_temperature_y       | 0.01          | temperature for the fcl wrt main task learning                  |
+    | fcl_temperature_g       | 0.01          | temperature for the fcl wrt protected attribute unlearning      |
+    | fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
+    | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
 
 - **Previous Work:**
 
