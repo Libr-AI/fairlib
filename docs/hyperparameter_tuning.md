@@ -1,4 +1,4 @@
-# Modifications and Hyperparameter Tuning
+# Hyperparameter Tuning
 
 Here we provide details about our way of tuning hyperparameters for each model.
 
@@ -97,16 +97,21 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 - **Tuned:**  
     - INLP_by_class: [True, False]
     - INLP_n: [0 - 300], as 300 is the dim of fixed representations.
-    - INLP_discriminator_reweighting: 
-        This is not discussed in the INLP paper, but shown to be important for by_class settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training.
-    - INLP_min_acc:
+    - INLP_discriminator_reweighting: [True, False]  
+        This is **not** discussed in the INLP paper, but shown to be important for by_class settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training. Specifically, the balanced mode uses the values of protected label to automatically adjust weights inversely proportional to protected group frequencies in the input data. Considering a by_class example in Moji dataset, for the Positive class, 80% instances are labeled as AAE, and thus a trained discriminator without RW will be biased to AAE. The null-space derived form such a biased discriminator is also a biased estimation of the actual null-space. Given this, INLP_discriminator_reweighting is an important when protected labels are imbalanced distributed.
+    - INLP_min_acc: [0, 0.5]  
+        This is **not** discussed in the INLP paper `INLP_min_acc` is a threshold for the discriminator accuracy over the dev set. In the Moji dataset, we used a balanced dev set, thus if a discriminator achieves an accuracy that is smaller than 0.5, we could argue that it is not able to represent the correct null-space, and thus we skip the null-space projection at this iteration, and jump directly to training another discriminator. By setting a large `INLP_min_acc` value, we could improve the robustness to the uncertainty in discriminator training. Moreover, `INLP_min_acc` could be used to handle the problem caused by imbalanced training in `by_class` without `INLP_discriminator_reweighting`, as it will ignore those biased model that can not achieve a reasonable accuracy over the balanced dev set.
 - **Not Tuned:**
+    - Discriminator related hyperparameters. There are lots of hyperparameters associated with discriminator training. For example, Logistic Regression verse Linear SVM. Moreover, penalty, tolerance for stopping criteria, optimizer, etc. [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf) didn't discussed these choices in their paper, and we found that the results are quite robust to these hyperparameters in our previous experiments. Thus, we use default setting of the Logistic Regression model in Sci-kit Learn Lib.
 
 - **Results**
     <p align="center">
         <img src="./../analysis/plots/INLP_hypertune.png" width="800"/>
     </p>
 
+    - `by_class`: It is clear that setting `by_class=True` can improve trade-offs.
+    - `INLP_discriminator_reweighting`: consistent with our discussion, `INLP_discriminator_reweighting` is essential for the `by_class` setting, which leads to a better results. But for the overall setting (`by_class=False`), `INLP_discriminator_reweighting` dose not lead to significant differences as the the protected label is balanced at the overall level in Moji dataset.
+    - `INLP_min_acc`: By setting `INLP_min_acc=0.5`, we can solve the problem caused by imbalanced training to a certain extent. As shown in the right figure, the gap between different colors are reduced, implying that balanced training will not be necessary for by_class given a proper `INLP_min_acc`.
 ## FairBatch
 
 - **Intro:** 
