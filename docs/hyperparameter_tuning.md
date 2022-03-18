@@ -101,10 +101,10 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
         This is **not** discussed in the INLP paper, but shown to be important for by_class settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training. Specifically, the balanced mode uses the values of protected label to automatically adjust weights inversely proportional to protected group frequencies in the input data. Considering a by_class example in Moji dataset, for the Positive class, 80% instances are labeled as AAE, and thus a trained discriminator without RW will be biased to AAE. The null-space derived form such a biased discriminator is also a biased estimation of the actual null-space. Given this, INLP_discriminator_reweighting is an important when protected labels are imbalanced distributed.
     - INLP_min_acc: [0, 0.5]  
         This is **not** discussed in the INLP paper `INLP_min_acc` is a threshold for the discriminator accuracy over the dev set. In the Moji dataset, we used a balanced dev set, thus if a discriminator achieves an accuracy that is smaller than 0.5, we could argue that it is not able to represent the correct null-space, and thus we skip the null-space projection at this iteration, and jump directly to training another discriminator. By setting a large `INLP_min_acc` value, we could improve the robustness to the uncertainty in discriminator training. Moreover, `INLP_min_acc` could be used to handle the problem caused by imbalanced training in `by_class` without `INLP_discriminator_reweighting`, as it will ignore those biased model that can not achieve a reasonable accuracy over the balanced dev set.
-- **Not Tuned:**
+- **Not Tuned:**  
     - Discriminator related hyperparameters. There are lots of hyperparameters associated with discriminator training. For example, Logistic Regression verse Linear SVM. Moreover, penalty, tolerance for stopping criteria, optimizer, etc. [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf) didn't discussed these choices in their paper, and we found that the results are quite robust to these hyperparameters in our previous experiments. Thus, we use default setting of the Logistic Regression model in Sci-kit Learn Lib.
 
-- **Results**
+- **Results**  
     <p align="center">
         <img src="./../analysis/plots/INLP_hypertune.png" width="800"/>
     </p>
@@ -114,33 +114,36 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     - `INLP_min_acc`: By setting `INLP_min_acc=0.5`, we can solve the problem caused by imbalanced training to a certain extent. As shown in the right figure, the gap between different colors are reduced, implying that balanced training will not be necessary for by_class given a proper `INLP_min_acc`.
 ## FairBatch
 
-- **Intro:** 
+- **Intro:**   
+  This method aims at minimizing CE loss gap though resampling. Specifically, it dynamically adjust the resampling probability of each group according to their losses, i.e., increasing the probability of groups with larger CE loss and decreasing the probability otherwise. 
 
-- **Hyperparameters:**
+- **Hyperparameters:**  
     ```bash
     python main.py --DyBT FairBach --DyBTObj stratified_y 
     ```
 
     | Name       | Default value | Description                                                  |
     |------------|---------------|--------------------------------------------------------------|
-    | DyBT       | False         | FairBach \| GroupDifference \| Others                        |
-    | DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
     | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
-- **Previous Work:**
+- **Previous Work:**  
+    - DyBTalpha: adjustment rate of resampling probabilities.
+- **Tuned:**  
+    - DyBTalpha: log-uniformly between 10^-2 ~ 10^0, 20 trails.
 
-- **Tuned:**
-
-- **Not Tuned:**
-
-
+- **Not Tuned:**  
+    None
+- **Results**  
+    <p align="center">
+        <img src="./../analysis/plots/INLP_hypertune.png" width="800"/>
+    </p>
 ## Balanced Training
 
-- **Intro:** 
-
-- **Hyperparameters:**
+- **Intro:**   
+    Balance the training through resampling and instance reweighting.
+- **Hyperparameters:**  
 
     ```bash
-    python main.py --BT --BTObj joint
+    python main.py --BT Reweighting --BTObj joint
     ```
 
     | Name       | Default value | Description                                                  |
@@ -148,17 +151,21 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | BT         | False         | Reweighting or Resampling                                    |
     | BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 
-- **Previous Work:**
+- **Previous Work:**  
+    We follow [Han et al.](https://arxiv.org/abs/2109.08253) in comparing joint balance, balance demographic, condition balance, and EO balance.
 
-- **Tuned:**
-
-- **Not Tuned:**
+- **Tuned:**  
+    - BT: [Reweighting, Resampling]
+    - BTObj:  [joint (JB), g (BD), stratified_y (CB), EO]
+- **Not Tuned:**  
+    - Model architecture. BT models share the same hyperparameters as the naive trained model. Tuning such hyperparameters, for example batch size and learning rate, may lead to better results for BT models.
 
 ## Group Difference
 
-- **Intro:** 
+- **Intro:**   
+    [Shen et al. (2022)]() propose to minimize CE loss gap across different groups during training.
 
-- **Hyperparameters:**  
+- **Hyperparameters:**    
     ```bash
     # L_diff as described in Section 3.2
     python main.py --DyBT GroupDifference --DyBTObj EO
@@ -172,18 +179,32 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
     | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
 
-- **Previous Work:**
+- **Previous Work:**  
+    Following [Shen et al. (2022)](), we tune the strength of CE difference penalty.
+- **Tuned:**   
+    - DyBTObj: [joint, EO]
+    - DyBTalpha: 40 trails for each setting
+      - Moji-joint: log-uniformly grid search between 10^-3 ~ 10^1
+      - Moji-EO: log-uniformly grid search between 10^-3 ~ 10^1
+      - Bios-joint: log-uniformly grid search between 10^-3 ~ 10^-1
+      - Bios-EO: log-uniformly grid search between 10^-3 ~ 10^-1
+- **Not Tuned:**  
+    None
 
-- **Tuned:**
-
-- **Not Tuned:**
-
-
-## FairSCL
+- **Results**  
+    - Diff
+        <p align="center">
+            <img src="./../analysis/plots/GDEO_hypertune.png" width="800"/>
+        </p>
+    - Mean
+       <p align="center">
+            <img src="./../analysis/plots/GDMean_hypertune.png" width="800"/>
+        </p>
+## FairSCL  
 
 - **Intro:** 
 
-- **Hyperparameters:**
+- **Hyperparameters:**  
     ```bash
     python main.py --FCL
     ```
@@ -197,9 +218,13 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
     | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
 
-- **Previous Work:**
-
-- **Tuned:**
-
-- **Not Tuned:**
-
+- **Previous Work:**  
+    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the weight for `fcl_lambda_y` and `fcl_lambda_g` leads to the best results, so we use the same strategy for tuning fcl_lambda_y and fcl_lambda_g.
+- **Tuned:**  
+    - same valued fcl_lambda_y & fcl_lambda_g: log-uniformly between 10^-3 ~ 10^1, 40 trails.
+- **Not Tuned:**  
+    - temperature values
+- **Results**  
+    <p align="center">
+        <img src="./../analysis/plots/FSCL_hypertune.png" width="800"/>
+    </p>
