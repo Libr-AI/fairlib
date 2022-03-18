@@ -7,6 +7,9 @@ Here we provide details about our way of tuning hyperparameters for each model.
 - **Intro:**  
     Adversarial training employ an additional discriminator component, which shares the same encoder with the main model and is trained to identify protected attribute. In addition to make correct predictions, the main model is also trained to unlearn the discriminator.
 - **Hyperparameters:**
+    ```bash
+    python main.py --adv_debiasing
+    ```
 
     | Name                    | Default value | Description                                                              |
     |-------------------------|---------------|--------------------------------------------------------------------------|
@@ -44,33 +47,46 @@ Here we provide details about our way of tuning hyperparameters for each model.
     </p>
 
 ### DAdv
-- **Intro:** 
-DAdv is a variant of Adv, which employs multiple adversaries and encourages each adversaries to learn a different aspect of protected 
+- **Intro:**   
+DAdv is a variant of Adv, which employs multiple adversaries and encourages each adversaries to identify protect attributes from different aspects.
 
-- **Hyperparameters:**
+- **Hyperparameters:**  
+    ```bash
+    python main.py --adv_debiasing --adv_num_subDiscriminator 3 --adv_diverse_lambda 10
+    ```
 
-- **Previous Work:**
+    | Name                     | Default value | Description                                                                        |
+    |--------------------------|---------------|------------------------------------------------------------------------------------|
+    | adv_num_subDiscriminator | 1             | number of subdiscriminators.                                                       |
+    | adv_diverse_lambda       | 0             | strength of difference loss to encourage diverse representations for ensemble adv. |
 
-- **Tuned:**
+- **Previous Work:**  
+  - **adv_num_subDiscriminator**  
+    This controls the number of adversaries that are employed, and setting it to 1 essentially lead to a Adv. [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) show that DAdv is quite robust to the number of sub-discriminators over the Moji dataset, and using 3 sub-discriminator is as good as using 5 or 8 sub-discriminators with properly tuned diverse lambda.
+  - **adv_diverse_lambda**  
+    Diverse lambda is the strength of difference loss, which encourages the diversity among sub-discriminators. By setting this to 0, DAdv degrade to a Ensemble Adv. [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) show that `adv_diverse_lambda` can be safely tuned separately with all other hyperparameters fixed. In addition, [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) also show that a overly large diverse lambda can decrease the performance and fairness.
+    
+- **Tuned:**  
+  - `adv_diverse_lambda`: although `adv_diverse_lambda` can be tune separately, to get a trade-off plot for this method, we tune it jointly with lambda, where the range of `adv_diverse_lambda` is [0.01, 0.1, 1, 10, 100], and batch update. 
 
 - **Not Tuned:**
-### Augmented Adv & DAdv
-- **Intro:** 
-
-- **Hyperparameters:**
-
-- **Previous Work:**
-
-- **Tuned:**
-
-- **Not Tuned:**
+  - `adv_num_subDiscriminator`: We follow [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) in using 3 sub-discriminators.
 
 ## INLP
 
-- **Intro:** 
-
+- **Intro:**   
+    As the name of INLP, it iteratively project fixed text representations to a null-space of protected attributes. It can be treated as a variant of Adv, where the encoder is fixed, and the discriminator unlearning is achieved by null-space projection rather than BP to the encoder. This limits the discriminator to be a generalized linear model, as the null-space can only be derived from the parameter of a single-layer model.
 - **Hyperparameters:**
+    ```bash
+    python main.py --INLP
+    ```
 
+    | Name                            | Default value | Description                                                 |
+    |---------------------------------|---------------|-------------------------------------------------------------|
+    | INLP_discriminator_reweighting  | None          | if train the linear discriminator with reweighting          |
+    | INLP_by_class                   | False         | estimate the nullspace by_class                             |
+    | INLP_n                          | 300           | the maximum number of null-space projection iteration       |
+    | INLP_min_acc                    | 0.0           | ignore the iteration if the acc is lower than the threshold |
 - **Previous Work:**
 
 - **Tuned:**
