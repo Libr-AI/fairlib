@@ -134,7 +134,7 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     None
 - **Results**  
     <p align="center">
-        <img src="./../analysis/plots/INLP_hypertune.png" width="800"/>
+        <img src="./../analysis/plots/FairBatch_hypertune.png" width="400"/>
     </p>
 ## Balanced Training
 
@@ -194,11 +194,11 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 - **Results**  
     - Diff
         <p align="center">
-            <img src="./../analysis/plots/GDEO_hypertune.png" width="800"/>
+            <img src="./../analysis/plots/GDEO_hypertune.png" width="400"/>
         </p>
     - Mean
        <p align="center">
-            <img src="./../analysis/plots/GDMean_hypertune.png" width="800"/>
+            <img src="./../analysis/plots/GDMean_hypertune.png" width="400"/>
         </p>
 ## FairSCL  
 
@@ -226,5 +226,5 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     - temperature values
 - **Results**  
     <p align="center">
-        <img src="./../analysis/plots/FSCL_hypertune.png" width="800"/>
+        <img src="./../analysis/plots/FSCL_hypertune.png" width="400"/>
     </p>
