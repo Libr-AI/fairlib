@@ -317,3 +317,17 @@ def model_comparasion(
         )
 
     return final_df
+
+def tradeoff_plot(df, hp_name, figure_name=None):
+    df = df.reset_index()
+    tradeoff_df = pd.DataFrame({
+        "log_10 "+hp_name:[math.log10(i) for i in list(df[hp_name])]*2,
+        "Value":list(df["test_fairness"])+list(df["test_performance"]),
+        "Metric":["Fairness"]*len(df)+["Performance"]*len(df),
+    })
+
+    
+    ax = sns.lineplot(data=tradeoff_df, y="Value", x="log_10 "+hp_name, style="Metric", hue="Metric")
+    if figure_name is not None:
+        fig = ax.get_figure()
+        fig.savefig(Path(r"D:\Project\Fair_NLP_Classification\analysis\plots") / figure_name, dpi=960, bbox_inches="tight") 
