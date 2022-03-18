@@ -1,6 +1,8 @@
 import itertools as it
 import numpy as np
 from pip import main
+import secrets
+
 
 def loguniform(low=0, high=1, size=None):
     return np.power(10, np.random.uniform(low, high, size))
@@ -21,7 +23,7 @@ slurm_head = """#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=48:00:00
+#SBATCH --time=96:00:00
 #SBATCH --mem=64G
 #SBATCH --job-name={_job_name}
 
@@ -53,12 +55,12 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
     combos = it.product(*(exps[Name] for Name in allNames))
 
     for _dataset in exps["dataset"]:
-        with open(file_path+"{}_{}.slurm".format(job_name, _dataset),"w") as f:
+        with open(file_path+"{}_{}.slurm".format(_dataset, job_name),"w") as f:
             f.write(slurm_head.format(_job_name = job_name))
 
     for id, combo in enumerate(combos):        
-        with open(file_path+"{}_{}.slurm".format(job_name, combo[0]),"a+") as f:
-            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT}"
+        with open(file_path+"{}_{}.slurm".format(combo[0], job_name),"a+") as f:
+            command = "python main.py --project_dir {_project_dir} --dataset {_dataset} --emb_size {_emb_size} --num_classes {_num_classes} --batch_size {_batch_size} --lr {_learning_rate} --hidden_size {_hidden_size} --n_hidden {_n_hidden} --dropout {_dropout}{_batch_norm} --base_seed {_random_seed} --exp_id {_exp_id} --adv_debiasing --adv_lambda {_adv_lambda} --adv_num_subDiscriminator {_adv_num_subDiscriminator} --adv_diverse_lambda {_adv_diverse_lambda} --epochs_since_improvement 10{_adv_gated}{_adv_BT} --classification_head_update_frequency {_classification_head_update_frequency}"
             # dataset
             _dataset = combo[0]
             _emb_size = 2304 if _dataset == "Moji" else 768
@@ -76,12 +78,12 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
             _adv_gated = " --adv_gated" if combo[11] else ""
             _adv_BT = " --adv_BT Reweighting --adv_BTObj {}".format(combo[13]) if combo[12] else ""
             _project_dir = combo[14] ## hypertune2
+            _classification_head_update_frequency = combo[15]
 
-            _exp_id = "{_job_name}_{_adv_lambda}_{_adv_num_subDiscriminator}_{_adv_diverse_lambda}_{_random_seed}".format(
+            _exp_id = "{_job_name}_{_adv_lambda}_{_classification_head_update_frequency}_{_random_seed}".format(
                 _job_name = job_name,
                 _adv_lambda=_adv_lambda, 
-                _adv_num_subDiscriminator=_adv_num_subDiscriminator, 
-                _adv_diverse_lambda=_adv_diverse_lambda,
+                _classification_head_update_frequency=_classification_head_update_frequency, 
                 _random_seed=_random_seed
                 )
             
@@ -95,14 +97,15 @@ def write_to_batch_files(job_name, exps, allNames, file_path="scripts/dev/"):
                 _n_hidden=_n_hidden,
                 _dropout=_dropout,
                 _batch_norm=_batch_norm,
-                _random_seed=_random_seed,
+                _random_seed=(_random_seed+secrets.randbelow(int(1e7))),
                 _exp_id=_exp_id,
                 _adv_lambda=_adv_lambda,
                 _adv_num_subDiscriminator=_adv_num_subDiscriminator,
                 _adv_diverse_lambda=_adv_diverse_lambda,
                 _adv_gated=_adv_gated,
                 _adv_BT=_adv_BT,
-                _project_dir=_project_dir
+                _project_dir=_project_dir,
+                _classification_head_update_frequency = _classification_head_update_frequency,
                     )
             f.write(command+"\nsleep 2\n")
 
@@ -118,14 +121,19 @@ if __name__ == '__main__':
     exps["batch_norm"]={False}
     exps["adv_lambda"]=set(log_grid(-3,3,60))
     exps["adv_num_subDiscriminator"]={1}
-    # exps["adv_diverse_lambda"]=set(log_grid(-4,-2,6))
     exps["adv_diverse_lambda"]={0}
     exps["random_seed"]={2013, 2017, 2020, 2022, 2024}
     exps["adv_gated"]={False}
     exps["adv_BT"]={False}
     exps["adv_BTObj"]={"joint"}
     exps["project_dir"]={"hypertune"}
+    exps["classification_head_update_frequency"]={1}
     allNames=exps.keys()
+
+    # Delay-updated Adv
+    for _classification_head_update_frequency in [2,4,10,100]:
+        exps["classification_head_update_frequency"]={_classification_head_update_frequency}
+        write_to_batch_files(job_name="DelayedCLS_Adv_{}".format(_classification_head_update_frequency), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
     # # Adv
     # write_to_batch_files(job_name="hypertune_Adv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
@@ -155,9 +163,9 @@ if __name__ == '__main__':
     # write_to_batch_files(job_name="hypertune_BTGatedAdv", exps=exps, allNames=allNames, file_path="scripts/hypertune/")
 
     # DAdv tune diverse_lambda given fixed lambda
-    exps["adv_num_subDiscriminator"]={3}
-    exps["project_dir"]={"hypertune3"}
-    exps["adv_gated"]={True}
-    for i, _adv_diverse_lambda in enumerate(log_grid(-2,4,6)):
-        exps["adv_diverse_lambda"]={_adv_diverse_lambda}
-        write_to_batch_files(job_name="hypertune_GDAdv_{}".format(i), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
+    # exps["adv_num_subDiscriminator"]={3}
+    # exps["project_dir"]={"hypertune3"}
+    # exps["adv_gated"]={True}
+    # for i, _adv_diverse_lambda in enumerate(log_grid(-2,4,6)):
+    #     exps["adv_diverse_lambda"]={_adv_diverse_lambda}
+    #     write_to_batch_files(job_name="hypertune_GDAdv_{}".format(i), exps=exps, allNames=allNames, file_path="scripts/hypertune/")
