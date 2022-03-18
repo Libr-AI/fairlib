@@ -87,12 +87,25 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | INLP_by_class                   | False         | estimate the nullspace by_class                             |
     | INLP_n                          | 300           | the maximum number of null-space projection iteration       |
     | INLP_min_acc                    | 0.0           | ignore the iteration if the acc is lower than the threshold |
-- **Previous Work:**
+- **Previous Work:**  
+    [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf) only introduce `INLP_by_class` and `INLP_n` in their paper. 
+    - **INLP_by_class**  
+        For the by_class, in each iteration, INLP train a classifier to predict the protected attribute not on the entire training set, but only on the training examples belonging to a single (randomly chosen) main-task class (e.g. profession). They use by_class as default setting for experiments over Moji and Bios. 
+    - **INLP_n**  
+        INLP_n for INLP is similar to lambda for Adv. A single null-space projection is not enough for removing protected attributes, so they iteratively train a linear discriminator and do the null-space projection `INLP_n` times. In theory, each null-space projection decrease the 1 rank of fixed representations, and in practice, this hyperparameter controls the trade-off. Following [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf), we retrain a linear model for each iteration with the projected representations for the main task, and use the corresponding results for the trade-off plot. This is also the reason why we cannot report statistics of INLP given a certain trade-off hyperparameter value, as same iterations of different random seeds can lead significant differences, making such statistics meaningless.
 
-- **Tuned:**
-
+- **Tuned:**  
+    - INLP_by_class: [True, False]
+    - INLP_n: [0 - 300], as 300 is the dim of fixed representations.
+    - INLP_discriminator_reweighting: 
+        This is not discussed in the INLP paper, but shown to be important for by_class settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training.
+    - INLP_min_acc:
 - **Not Tuned:**
 
+- **Results**
+    <p align="center">
+        <img src="./../analysis/plots/INLP_hypertune.png" width="800"/>
+    </p>
 
 ## FairBatch
 
