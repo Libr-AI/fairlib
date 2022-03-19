@@ -1,6 +1,7 @@
 
 *.pyc
 .vscode/settings.json
+_*
 dev/logs/
 dev/results/
 results/*
