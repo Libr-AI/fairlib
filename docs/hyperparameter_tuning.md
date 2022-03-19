@@ -220,7 +220,7 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
 
 - **Previous Work:**  
-    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the weight for `fcl_lambda_y` and `fcl_lambda_g` leads to best results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
+    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the weight for `fcl_lambda_y` and `fcl_lambda_g` leads to better results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
 - **Tuned:**  
     - same valued `fcl_lambda_y` and `fcl_lambda_g`: log-uniformly between 10^-3 ~ 10^1, 40 trials.
 - **Not Tuned:**  
