@@ -113,6 +113,36 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
     - `INLP_discriminator_reweighting`: consistent with our discussion, `INLP_discriminator_reweighting` is essential for the `by_class` setting, which leads to better results. But for the overall setting (`by_class=False`), `INLP_discriminator_reweighting` dose not lead to significant differences as the the protected label is balanced at the overall level in Moji dataset.
     - `INLP_min_acc`: By setting `INLP_min_acc=0.5`, we can solve the problem caused by imbalanced training to a certain extent. As shown in the right figure, the gap between different colors are reduced, implying that balanced training will not be necessary for by_class given a proper `INLP_min_acc`.
 
+## FairSCL  
+
+- **Intro:** 
+
+- **Hyperparameters:**  
+    ```bash
+    python main.py --FCL
+    ```
+
+    | Name                    | Default value | Description                                                     |
+    |-------------------------|---------------|-----------------------------------------------------------------|
+    | fcl_lambda_y            | 0.1           | strength of the supervised contrastive loss                     |
+    | fcl_lambda_g            | 0.1           | strength of the fair supervised contrastive loss                |
+    | fcl_temperature_y       | 0.01          | temperature for the fcl wrt main task learning                  |
+    | fcl_temperature_g       | 0.01          | temperature for the fcl wrt protected attribute unlearning      |
+    | fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
+    | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
+
+- **Previous Work:**  
+    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the same weight for `fcl_lambda_y` and `fcl_lambda_g` leads to better results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
+- **Tuned:**  
+    - same valued `fcl_lambda_y` and `fcl_lambda_g`: log-uniformly between 10^-3 ~ 10^1, 40 trials.
+- **Not Tuned:**  
+    - temperature values
+- **Results**  
+    <p align="center">
+        <img src="./../analysis/plots/FSCL_hypertune.png" width="400"/>
+    </p>
+
+
 ## FairBatch
 
 - **Intro:**   
@@ -201,31 +231,3 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
        <p align="center">
             <img src="./../analysis/plots/GDMean_hypertune.png" width="400"/>
         </p>
-## FairSCL  
-
-- **Intro:** 
-
-- **Hyperparameters:**  
-    ```bash
-    python main.py --FCL
-    ```
-
-    | Name                    | Default value | Description                                                     |
-    |-------------------------|---------------|-----------------------------------------------------------------|
-    | fcl_lambda_y            | 0.1           | strength of the supervised contrastive loss                     |
-    | fcl_lambda_g            | 0.1           | strength of the fair supervised contrastive loss                |
-    | fcl_temperature_y       | 0.01          | temperature for the fcl wrt main task learning                  |
-    | fcl_temperature_g       | 0.01          | temperature for the fcl wrt protected attribute unlearning      |
-    | fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
-    | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
-
-- **Previous Work:**  
-    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the same weight for `fcl_lambda_y` and `fcl_lambda_g` leads to better results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
-- **Tuned:**  
-    - same valued `fcl_lambda_y` and `fcl_lambda_g`: log-uniformly between 10^-3 ~ 10^1, 40 trials.
-- **Not Tuned:**  
-    - temperature values
-- **Results**  
-    <p align="center">
-        <img src="./../analysis/plots/FSCL_hypertune.png" width="400"/>
-    </p>
