@@ -5,7 +5,7 @@ Here we also provide detailed strategies of how we tune hyperparameters for each
 ## Adversarial Training
 ### Adv
 - **Intro:**  
-    Adversarial training employs an additional discriminator component, which shares the same encoder with the main model and is trained to identify the protected attributes. In addition to make correct predictions, the main model is also trained to unlearn the signal from the discriminator.
+    Adversarial training employs an additional discriminator component, which shares the same encoder with the main model and is trained to identify the protected attributes. In addition to making correct predictions, the main model is also trained to unlearn the signal from the discriminator.
 - **Hyperparameters:**
     ```bash
     python main.py --adv_debiasing
@@ -26,7 +26,7 @@ Here we also provide detailed strategies of how we tune hyperparameters for each
     - **Discriminator architecture**  
         [Elazar and Goldberg (2018)](https://arxiv.org/pdf/1808.06640.pdf) explore different capacities of adversarial components by increasing the `adv_hidden_size`, and they show that there is no significant difference. Moreover, [Stacey et al. (2020)](https://aclanthology.org/2020.emnlp-main.665.pdf) investigate the influence of varying `adv_n_hidden` and `adv_activation_function` and show that even a linear adversary (i.e. a single layer MLP with a linear activation function) leads to similar results of using a more complex adversary.
     - **Adv level**  
-        The most common choice of `adv_level` is the last hidden layer (`--adv_level last_hidden`), for example, a LSTM model followed by a output layer, where we take the output of LSTM as the input to the adversary. [Wang et al. (2019)](https://arxiv.org/pdf/1811.08489.pdf) also consider adding adversaries at different levels, for example at the input level, which leads to a mask for the inputs (`--adv_level input`), and at the intermediate level of the encoder. However, their experiments show that models using the last hidden layer (final convolutional layer of ResNet-50) consistently outperform other methods. [Wadsworth et al. (2018)](https://arxiv.org/abs/1807.00199) also train a different variant which takes logits as input and even argue that inputs from hidden layers are not necessary, and we implement this type of method as `--adv_level output`.
+        The most common choice of `adv_level` is the last hidden layer (`--adv_level last_hidden`), for example, a LSTM model followed by an output layer, where we take the output of LSTM as the input to the adversary. [Wang et al. (2019)](https://arxiv.org/pdf/1811.08489.pdf) also consider adding adversaries at different levels, for example at the input level, which leads to a mask for the inputs (`--adv_level input`), and at the intermediate level of the encoder. However, their experiments show that models using the last hidden layer (final convolutional layer of ResNet-50) consistently outperform other methods. [Wadsworth et al. (2018)](https://arxiv.org/abs/1807.00199) also train a different variant which takes logits as input and even argue that inputs from hidden layers are not necessary, and we implement this type of method as `--adv_level output`.
     - **Update frequency**  
         There are mainly two types of adversarial training strategies: (1) GAN-style, which iteratively train the discriminator to identify protected attributes and train the main model to make predictions while unlearn the discriminator (`--adv_update_frequency Epoch`); and (2) using Gradient Reversal Layer during backpropagation, which formulates the adversarial training as a multi-task learning that trains the main model and adversarial component jointly (`--adv_update_frequency Batch`).
     - **Lambda**  
@@ -48,7 +48,7 @@ Here we also provide detailed strategies of how we tune hyperparameters for each
 
 ### DAdv
 - **Intro:**   
-DAdv is a variant of Adv, which employs multiple adversaries and encourages each adversaries to identify protect attributes from different aspects.
+DAdv is a variant of Adv, which employs multiple subdiscriminators and encourages each subdiscriminator to identify protect attributes from different aspects.
 
 - **Hyperparameters:**  
     ```bash
@@ -64,10 +64,10 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
   - **adv_num_subDiscriminator**  
     This controls the number of adversaries that are employed, and setting it to 1 essentially lead to a Adv. [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) show that DAdv is quite robust to the number of sub-discriminators over the Moji dataset, and using 3 sub-discriminators is as good as using 5 or 8 sub-discriminators with properly tuned diverse lambda.
   - **adv_diverse_lambda**  
-    Diverse lambda is the strength of difference loss, which encourages the diversity among sub-discriminators. By setting this to 0, DAdv degrade to an Ensemble Adv. [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) show that `adv_diverse_lambda` can be safely tuned separately with all other hyperparameters fixed. In addition, [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) also show that a overly large diverse lambda can decrease the performance and fairness.
+    Diverse lambda is the strength of difference loss, which encourages the diversity among sub-discriminators. By setting this to 0, DAdv degrades to an Ensemble Adv (3 subdiscriminators without any constraints). [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) show that `adv_diverse_lambda` can be safely tuned separately with all other hyperparameters fixed. In addition, [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) also show that a overly large diverse lambda can decrease the performance and fairness.
     
 - **Tuned:**  
-  - `adv_diverse_lambda`: although `adv_diverse_lambda` can be tuned separately, to get a trade-off plot for this method, we tune it jointly with lambda, where the range of `adv_diverse_lambda` is [0.01, 0.1, 1, 10, 100], and batch updating.
+  - `adv_diverse_lambda`: although `adv_diverse_lambda` can be tuned separately, to get a trade-off plot for this method, we tune it jointly with lambda, where the range of `adv_diverse_lambda` is [0.01, 0.1, 1, 10, 100], adopting batch updating.
 
 - **Not Tuned:**
   - `adv_num_subDiscriminator`: We follow [Han et al. (2021)](https://arxiv.org/pdf/2101.10001.pdf) in using 3 sub-discriminators.
@@ -92,13 +92,13 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     - **INLP_by_class**  
         For the `by_class`, in each iteration, INLP train a classifier to predict the protected attribute not on the entire training set, but only on the training examples belonging to a single (randomly chosen) main-task class (e.g. profession). They use `by_class` as default setting for experiments over Moji and Bios. 
     - **INLP_n**  
-        INLP_n for INLP is similar to lambda for Adv. A single null-space projection is not enough for removing protected attributes, so they iteratively train a linear discriminator and do the null-space projection `INLP_n` times. In theory, each null-space projection decreases the 1st rank of fixed representations, and in practice, this hyperparameter controls the trade-off. Following [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf), we retrain a linear model for each iteration with the projected representations for the main task, and use the corresponding results for the trade-off plot. This is also the reason why we cannot report statistics of INLP given a certain trade-off hyperparameter value, as same iterations of different random seeds can lead significant differences, making such statistics meaningless.
+        INLP_n for INLP is similar to lambda for Adv. A single null-space projection is not enough for removing protected attributes, so they iteratively train a linear discriminator and do the null-space projection `INLP_n` times. In theory, each null-space projection decreases the 1st rank of fixed representations, and in practice, this hyperparameter controls the trade-off. Following [Shauli et al. (2020)](https://aclanthology.org/2020.acl-main.647.pdf), we retrain a linear model for each iteration with the projected representations for the main task, and use the corresponding results for the trade-off plot. This is also the reason why we cannot report statistics of INLP given a certain trade-off hyperparameter value, as same iterations of different random seeds can lead to quite different results, making such statistics meaningless.
 
 - **Tuned:**  
     - INLP_by_class: [True, False]
     - INLP_n: [0 - 300], as 300 is the dim of fixed representations.
     - INLP_discriminator_reweighting: [True, False]  
-        This is **not** discussed in the original INLP paper but shown to be important for `by_class` settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training. Specifically, the balanced model uses the values of protected label to automatically adjust weights inversely proportional to protected group frequencies in the input data. Considering a `by_class` example in Moji dataset, for the Positive class, 80% instances are labeled as AAE, and thus a trained discriminator without RW will be biased to AAE. The null-space derived form such a biased discriminator is also a biased estimation of the actual null-space. Given this, INLP_discriminator_reweighting is an important when protected labels are imbalanced distributed.
+        This is **not** discussed in the original INLP paper but shown to be important for `by_class` settings. `INLP_discriminator_reweighting` indicates whether or not to use instance reweighting during the linear discriminator training. Specifically, the balanced model uses the values of protected label to automatically adjust weights inversely proportional to protected group frequencies in the input data. Considering a `by_class` example in Moji dataset, for the Positive class, 80% instances are labeled as AAE, and thus a trained discriminator without RW will be biased to AAE. The null-space derived form such a biased discriminator is also a biased estimation of the actual null-space. Given this, INLP_discriminator_reweighting is an important hyperparameter when protected labels are imbalanced distributed.
     - INLP_min_acc: [0, 0.5]  
         This is **not** discussed in the INLP paper. `INLP_min_acc` is a threshold for the discriminator accuracy over the dev set. In the Moji dataset, we used a balanced dev set, thus if a discriminator achieves an accuracy that is smaller than 0.5, we could argue that it is not able to represent the correct null-space, and thus we skip the null-space projection at this iteration, and jump directly to training another discriminator. By setting a large `INLP_min_acc` value, we could improve the robustness against uncertainty in discriminator training. Moreover, `INLP_min_acc` could be used to handle the problem caused by imbalanced training in `by_class` without `INLP_discriminator_reweighting`, as it will ignore those biased model that can not achieve a reasonable accuracy over the balanced dev set.
 - **Not Tuned:**  
@@ -110,7 +110,7 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     </p>
 
     - `by_class`: It is clear that setting `by_class=True` can improve trade-offs.
-    - `INLP_discriminator_reweighting`: consistent with our discussion, `INLP_discriminator_reweighting` is essential for the `by_class` setting, which leads to a better results. But for the overall setting (`by_class=False`), `INLP_discriminator_reweighting` dose not lead to significant differences as the the protected label is balanced at the overall level in Moji dataset.
+    - `INLP_discriminator_reweighting`: consistent with our discussion, `INLP_discriminator_reweighting` is essential for the `by_class` setting, which leads to better results. But for the overall setting (`by_class=False`), `INLP_discriminator_reweighting` dose not lead to significant differences as the the protected label is balanced at the overall level in Moji dataset.
     - `INLP_min_acc`: By setting `INLP_min_acc=0.5`, we can solve the problem caused by imbalanced training to a certain extent. As shown in the right figure, the gap between different colors are reduced, implying that balanced training will not be necessary for by_class given a proper `INLP_min_acc`.
 
 ## FairBatch
@@ -164,7 +164,7 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
 ## Group Difference
 
 - **Intro:**   
-    [Shen et al. (2022)]() propose to minimize CE loss gap across different groups during training.
+    [Shen et al. (2022)]() propose to minimize CE loss gap across different groups conditioned on main task labels during training.
 
 - **Hyperparameters:**    
     ```bash
@@ -220,7 +220,7 @@ DAdv is a variant of Adv, which employs multiple adversaries and encourages each
     | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
 
 - **Previous Work:**  
-    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the weight for `fcl_lambda_y` and `fcl_lambda_g` leads to better results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
+    [Shen et al. (2021)](https://arxiv.org/abs/2109.10645) show that using the same weight for `fcl_lambda_y` and `fcl_lambda_g` leads to better results, so we use the same strategy for tuning `fcl_lambda_y` and `fcl_lambda_g`.
 - **Tuned:**  
     - same valued `fcl_lambda_y` and `fcl_lambda_g`: log-uniformly between 10^-3 ~ 10^1, 40 trials.
 - **Not Tuned:**  
