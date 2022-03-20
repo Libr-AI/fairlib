@@ -142,8 +142,28 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
         <img src="./../analysis/plots/FSCL_hypertune.png" width="400"/>
     </p>
 
+## Balanced Learning
 
-## FairBatch
+Different objectives have been established in previous work, we now briefly described 5 types when considering balanced learning with respect to target classes and demographic attributes:
+  1. Balanced Target Classes: this has been wildly used in long-tail learning literatures, which encourages the trained model to be equally good to both head and tail classes. We denote this objective as `y` in our implementation.
+  2. Balanced Demographics: this objective encourages the model to perform equally good to different demographic groups, which is closely related to the Demographic Parity criterion. We denote this objective as `g` in our implementation.
+  3. Conditional Balance of Demographics: as suggested by Equalized Odds and its relaxation, Equal Opportunity, the model is expected to be fair to different groups conditioned on target classes. As such, we denote this objective as `stratified_y`, meaning that demographics are stratified balanced according to y distributions.
+  4. Conditional Balance of Classes: similar to `stratified_y`, we have also implemented `stratified_g`, and this will only be used for discriminator training. For example, when training INLP discriminators under the `by_class` setting, the balanced training of discriminator requires demographics to be balanced within each target class.
+  5. Joint Balance: demographics and classes are jointly balanced, which is equivalent to using the combination of `y` and  `stratified_y`  or the combination of  `g` and `stratified_g` at the same time. This objective can be treated as handling class imbalance and fairness, which is denoted as `joint`.
+
+In order to achieve those objectives, we have implemented 4 types of methods:
+  
+  |                         | Static                           | Dynamic            |
+  |-------------------------|----------------------------------|--------------------|
+  |**Processing Data**      |   Down-sampling; Re-sampling     | FairBatch          |
+  |**Manipulating Loss**    |   Instance Reweighting           | Group Difference   |
+
+1. Static-data-processing: this types of methods creates a balanced datasets from the original training set, such that proportions of different subsets are the same.
+2. Static-loss-manipulating: weights of different subsets of instances are derived from the empirical distribution in the training set. 
+3. Dynamic-data-processing: the subset proportions within each mini-batch are dynamically adjusted during training.
+4. Dynamic-loss-manipulating: the weights of different subsets of instances are dynamically adjusted during training.
+
+### FairBatch
 
 - **Intro:**   
   This method aims at minimizing CE loss gap though resampling. Specifically, it dynamically adjusts the resampling probability of each group according to their losses, i.e., increasing the probability of groups with larger CE loss and decreasing the probability otherwise. 
@@ -167,7 +187,8 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
     <p align="center">
         <img src="./../analysis/plots/FairBatch_hypertune.png" width="400"/>
     </p>
-## Balanced Training
+
+### Balanced Training
 
 - **Intro:**   
     Balance the training through resampling and instance reweighting.
@@ -191,7 +212,7 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
 - **Not Tuned:**  
     - Model architecture. BT models share the same hyperparameters as the naive trained model. Tuning such hyperparameters, for example batch size and learning rate, may lead to better results for BT models.
 
-## Group Difference
+### Group Difference
 
 - **Intro:**   
     [Shen et al. (2022)]() propose two methods to minimize the CE loss gap across different groups during training: (1) the `Diff` method focuses on the differences across demographic groups within each class, and (2) the `Mean` method additionally minimizes the gap between different classes, such that gaps are jointly minimized with respect to demographic groups and target classes.
