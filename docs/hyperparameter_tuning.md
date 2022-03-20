@@ -132,7 +132,7 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
     - DyBTalpha: log-uniformly between 10^-2 ~ 10^0, 20 trials.
 
 - **Not Tuned:**  
-    None
+    Besides Equal Opportunity, the original FairBatch paper also proposes objectives for Equalized Odds and Demographic Parity. However, their implementations are formulations that are very specific to binary classification with binary groups. In order to support multi-class target labels and demographic attributes, we have made modifications. As a result, our re-implementation of FairBatch with `--DyBTObj stratified_y ` is the same as the Equalized Odds formulation in the original paper, which considers both TPR and FPR in the binary situation, which is consistent with our RMS TPR GAP evaluation metric.
 - **Results**  
     <p align="center">
         <img src="./../analysis/plots/FairBatch_hypertune.png" width="400"/>
@@ -164,7 +164,7 @@ DAdv is a variant of Adv, which employs multiple subdiscriminators and encourage
 ## Group Difference
 
 - **Intro:**   
-    [Shen et al. (2022)]() propose to minimize CE loss gap across different groups conditioned on main task labels during training.
+    [Shen et al. (2022)]() propose two methods to minimize the CE loss gap across different groups during training: (1) the `Diff` method focuses on the differences across demographic groups within each class, and (2) the `Mean` method additionally minimizes the gap between different classes, such that gaps are jointly minimized with respect to demographic groups and target classes.
 
 - **Hyperparameters:**    
     ```bash
