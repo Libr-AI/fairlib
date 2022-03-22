@@ -2,7 +2,7 @@
 
 ## Step 1. Implement the dataset class
 
-A custom dataset class must implement the `load_data` function. Take a look at this sample implementation; the split is stored in a directory `self.data_dir`, which is determined by the `args.data_dir` and `split`. `args.data_dir` is either loaded from the arguments `--data_dir` or from the default value, which will be introduced into details layer. While `split` has three possible string values, `{"train", "dev", "test"}`, indicating the split that will be loaded.
+A custom dataset class must implement the `load_data` function. Take a look at this sample implementation; the split is stored in a directory `self.data_dir`, which is determined by the `args.data_dir` and `split`. `args.data_dir` is either loaded from the arguments `--data_dir` or from the default value, which will be introduced into details later. While `split` has three possible string values, `{"train", "dev", "test"}`, indicating the split that will be loaded.
 
 Then the `load_data` function must assign the value of `self.X` as inputs, `self.y` as target labels, and `self.protected_label` as the information for debiasing, such as gender, age, and race.
 
