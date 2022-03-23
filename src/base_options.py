@@ -299,6 +299,7 @@ class BaseOptions(object):
         # Fair Supervised Contrastive Learning
         parser.add_argument("--FCL",action='store_true', default=False,
                             help='Perform Fair Supervised Contrastive Learning')
+        parser.add_argument('--FCLObj', type=str, default="g", help='g | EO')
         parser.add_argument("--fcl_temperature_y", type=float, default=0.01,
                             help="temperature for the fcl wrt main task learning")
         parser.add_argument("--fcl_temperature_g", type=float, default=0.01,
