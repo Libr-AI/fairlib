@@ -93,9 +93,11 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     protected_attribute = np.array(protected_attribute)
 
     all_scores = {}
+    confusion_matrices = {}
     # Overall evaluation
     distinct_labels = [i for i in range(len(set(y_true)))]
     overall_confusion_matrix = confusion_matrix(y_true=y_true, y_pred=y_pred, labels=distinct_labels)
+    confusion_matrices["overall"] = overall_confusion_matrix
     all_scores["overall"] = confusion_matrix_based_scores(overall_confusion_matrix)
 
     # Group scores
@@ -103,6 +105,7 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     for gid in distinct_groups:
         group_identifier = (protected_attribute ==gid)
         group_confusion_matrix = confusion_matrix(y_true=y_true[group_identifier], y_pred=y_pred[group_identifier], labels=distinct_labels)
+        confusion_matrices[gid] = group_confusion_matrix
         all_scores[gid] = confusion_matrix_based_scores(group_confusion_matrix)
 
     eval_scores = {
@@ -114,4 +117,4 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     for _metric in metrics:
         eval_scores["{}_GAP".format(_metric)] = RMS_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
 
-    return eval_scores
+    return eval_scores, confusion_matrices

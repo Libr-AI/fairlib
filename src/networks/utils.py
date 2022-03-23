@@ -19,6 +19,7 @@ def print_network(net, verbose=False):
 def save_checkpoint(
     epoch, epochs_since_improvement, model, loss, 
     dev_predictions, test_predictions, dev_evaluations, 
+    valid_confusion_matrices, test_confusion_matrices,
     test_evaluations, is_best, checkpoint_dir):
 
     _state = {
@@ -26,8 +27,10 @@ def save_checkpoint(
         'epochs_since_improvement': epochs_since_improvement,
         # 'model': model.state_dict(),
         'loss': loss,
-        'dev_predictions': dev_predictions,
-        'test_predictions': test_predictions,
+        # 'dev_predictions': dev_predictions,
+        # 'test_predictions': test_predictions,
+        "valid_confusion_matrices" : valid_confusion_matrices,
+        "test_confusion_matrices" : test_confusion_matrices,
         'dev_evaluations': dev_evaluations,
         'test_evaluations': test_evaluations
         }
@@ -287,7 +290,7 @@ class BaseModel(nn.Module):
                 epochs_since_improvement = 0
 
             if epoch % self.args.checkpoint_interval == 0:
-                valid_scores = gap_eval_scores(
+                valid_scores, valid_confusion_matrices = gap_eval_scores(
                     y_pred=valid_preds,
                     y_true=valid_labels, 
                     protected_attribute=valid_private_labels)
@@ -298,7 +301,7 @@ class BaseModel(nn.Module):
                     iterator = self.args.opt.test_generator, 
                     args = self.args)
                 
-                test_scores = gap_eval_scores(
+                test_scores, test_confusion_matrices = gap_eval_scores(
                     y_pred=test_preds,
                     y_true=test_labels, 
                     protected_attribute=test_private_labels)
@@ -313,6 +316,8 @@ class BaseModel(nn.Module):
                     test_predictions = test_preds,
                     dev_evaluations = valid_scores, 
                     test_evaluations = test_scores,
+                    valid_confusion_matrices = valid_confusion_matrices,
+                    test_confusion_matrices = test_confusion_matrices,
                     is_best = is_best,
                     checkpoint_dir = self.args.model_dir)
                 
