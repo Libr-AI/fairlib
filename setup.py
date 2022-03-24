@@ -54,7 +54,7 @@ if __name__ == '__main__':
         # scripts=["faircls-train"],
         classifiers=[
             "Programming Language :: Python :: 3",
-            "License :: OSI Approved :: MIT License",
+            "License :: OSI Approved :: Apache Software License",
             "Topic :: Scientific/Engineering :: Artificial Intelligence",
             "Natural Language :: English",
         ],
