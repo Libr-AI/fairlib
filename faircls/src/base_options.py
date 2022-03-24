@@ -472,7 +472,8 @@ class BaseOptions(object):
                     logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
                     logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
                     logging.info('datasets built!')
-            except:
+            except Exception as e:
+                print(e)
                 logging.info('dataloaders need to be initialized!')
             
             # Init discriminator for adversarial training
