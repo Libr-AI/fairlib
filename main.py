@@ -1,6 +1,6 @@
 import logging
-from src.base_options import options
-from src import networks
+from back_src.base_options import options
+from back_src import networks
 
 if __name__ == '__main__':
     state = options.get_state()
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     if state.INLP:
         logging.info('Run INLP')
-        from src.networks.INLP import get_INLP_trade_offs
+        from back_src.networks.INLP import get_INLP_trade_offs
         get_INLP_trade_offs(model, state)
 
     logging.info('Finished!')
