@@ -199,6 +199,9 @@ class BaseOptions(object):
         parser.add_argument('--conf_file', type=str, default=None,
                             help='path to the YAML file for reproduce an an experiment')
 
+        # Handle iPython arguments
+        parser.add_argument('--f', type=str, default=None, help='path to the YAML file for reproduce an an experiment')
+
         # Arguments for the main task model
         parser.add_argument('--hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the main task classifier')
@@ -347,7 +350,9 @@ class BaseOptions(object):
 
         logging.getLogger().setLevel(logging.DEBUG)
         opt, unknowns = self.parser.parse_known_args(namespace=State.UniqueNamespace())
-        assert len(unknowns) == 0, 'Unexpected args: {}'.format(unknowns)
+        # assert len(unknowns) == 0, 'Unexpected args: {}'.format(unknowns)
+        if len(unknowns) != 0:
+            logging.info('Unexpected args: {}'.format(unknowns))
         opt = vars(opt)
         
         if conf_file is not None:
