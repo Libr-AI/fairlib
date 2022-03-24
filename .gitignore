@@ -10,6 +10,8 @@ data/*
 !data/src/
 !results/final/
 
+__pycache__/
+
 # Distribution / packaging
 .Python
 build/
