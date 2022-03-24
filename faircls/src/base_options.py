@@ -331,12 +331,12 @@ class BaseOptions(object):
         state.extras.update(opt_pairs)
         return self.set_state(state, dummy=True)
 
-    def get_state(self, conf_file=None):
+    def get_state(self, args:dict={}, conf_file=None):
         """get state from yaml and args
 
         Args:
+            args (dict, optional): arguments. Defaults to {}.
             conf_file (_type_, optional): yaml file path. Defaults to None.
-            args_first (bool, optional): priority of args, replace yaml with args if true. Defaults to True.
 
         Returns:
             agrs.NameSapce: aruguments for training
@@ -359,6 +359,8 @@ class BaseOptions(object):
                 with open(opt["conf_file"], 'r') as f:
                     yaml_opt = yaml.full_load(f)
                 opt.update(yaml_opt)
+        
+        opt.update(args)
         
         self.opt = argparse.Namespace(**opt)
         self.state = State(self.opt)
