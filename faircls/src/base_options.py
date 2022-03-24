@@ -334,7 +334,7 @@ class BaseOptions(object):
         state.extras.update(opt_pairs)
         return self.set_state(state, dummy=True)
 
-    def get_state(self, args:dict={}, conf_file=None):
+    def get_state(self, args:dict={}, conf_file=None, silence=False):
         """get state from yaml and args
 
         Args:
@@ -369,9 +369,9 @@ class BaseOptions(object):
         
         self.opt = argparse.Namespace(**opt)
         self.state = State(self.opt)
-        return self.set_state(self.state)
+        return self.set_state(self.state, silence=silence)
 
-    def set_state(self, state, dummy=False):
+    def set_state(self, state, dummy=False, silence=False):
 
         base_dir = state.get_base_directory()
 
@@ -408,7 +408,8 @@ class BaseOptions(object):
             
         # Write yaml
         yaml_str = yaml.dump(state.merge(public_only=True), default_flow_style=False, indent=4)
-        logging.info("Options:\n\t" + yaml_str.replace("\n", "\n\t"))
+        if not silence:
+            logging.info("Options:\n\t" + yaml_str.replace("\n", "\n\t"))
 
         if state.get_output_flag():
             yaml_name = os.path.join(base_dir, 'opt.yaml')
@@ -459,16 +460,20 @@ class BaseOptions(object):
             # Init the dataloaders
             if state.data_dir is None:
                 state.data_dir = dataloaders.default_dataset_roots[state.dataset]
-            train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)
+            try:
+                train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)
 
-            state.opt.train_generator = train_iterator
-            state.opt.dev_generator = dev_iterator
-            state.opt.test_generator = test_iterator
+                state.opt.train_generator = train_iterator
+                state.opt.dev_generator = dev_iterator
+                state.opt.test_generator = test_iterator
 
-            logging.info('train dataset size:\t{}'.format(len(train_iterator.dataset)))
-            logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
-            logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
-            logging.info('datasets built!')
+                if not silence:
+                    logging.info('train dataset size:\t{}'.format(len(train_iterator.dataset)))
+                    logging.info('validation dataset size: \t{}'.format(len(dev_iterator.dataset)))
+                    logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
+                    logging.info('datasets built!')
+            except:
+                logging.info('dataloaders need to be initialized!')
             
             # Init discriminator for adversarial training
             if state.adv_debiasing:
