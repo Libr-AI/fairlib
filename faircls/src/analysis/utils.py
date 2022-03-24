@@ -330,4 +330,4 @@ def tradeoff_plot(df, hp_name, figure_name=None):
     ax = sns.lineplot(data=tradeoff_df, y="Value", x="log_10 "+hp_name, style="Metric", hue="Metric")
     if figure_name is not None:
         fig = ax.get_figure()
-        fig.savefig(Path(r"D:\Project\Fair_NLP_Classification\analysis\plots") / figure_name, dpi=960, bbox_inches="tight") 
+        fig.savefig(figure_name, dpi=960, bbox_inches="tight") 
