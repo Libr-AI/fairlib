@@ -8,12 +8,12 @@ import random
 import logging
 from contextlib import contextmanager
 
-from src import utils
-from src import dataloaders
-from src import networks
-from src.networks import adv
-from src.networks import FairCL
-from src.networks.DyBT import Group_Difference_Loss
+from . import utils
+from . import dataloaders
+from . import networks
+from .networks import adv
+from .networks import FairCL
+from .networks.DyBT import Group_Difference_Loss
 
 class State(object):
 
