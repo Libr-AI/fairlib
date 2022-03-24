@@ -199,6 +199,9 @@ class BaseOptions(object):
         parser.add_argument('--conf_file', type=str, default=None,
                             help='path to the YAML file for reproduce an an experiment')
 
+        # Handle iPython arguments
+        parser.add_argument('--f', type=str, default=None, help='path to the YAML file for reproduce an an experiment')
+
         # Arguments for the main task model
         parser.add_argument('--hidden_size',  type=pos_int, default=300, 
                             help='number of hidden units for the main task classifier')
@@ -331,7 +334,7 @@ class BaseOptions(object):
         state.extras.update(opt_pairs)
         return self.set_state(state, dummy=True)
 
-    def get_state(self, conf_file=None):
+    def get_state(self, args:dict={},conf_file=None):
         """get state from yaml and args
 
         Args:
@@ -347,7 +350,9 @@ class BaseOptions(object):
 
         logging.getLogger().setLevel(logging.DEBUG)
         opt, unknowns = self.parser.parse_known_args(namespace=State.UniqueNamespace())
-        assert len(unknowns) == 0, 'Unexpected args: {}'.format(unknowns)
+        # assert len(unknowns) == 0, 'Unexpected args: {}'.format(unknowns)
+        if len(unknowns) != 0:
+            logging.info('Unexpected args: {}'.format(unknowns))
         opt = vars(opt)
         
         if conf_file is not None:
@@ -359,6 +364,7 @@ class BaseOptions(object):
                 with open(opt["conf_file"], 'r') as f:
                     yaml_opt = yaml.full_load(f)
                 opt.update(yaml_opt)
+        opt.update(args)
         
         self.opt = argparse.Namespace(**opt)
         self.state = State(self.opt)
