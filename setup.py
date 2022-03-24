@@ -16,17 +16,17 @@ try:
         reqs = list(f.read().splitlines())
 except:
     reqs = [
-        "tqdm==4.62.3",
-        "numpy==1.21.3",
-        "docopt==0.6.2",
-        "pandas==1.3.4",
-        "scikit-learn==1.0",
-        "torch==1.10.0",
-        "PyYAML==6.0",
-        "seaborn==0.11.2",
-        "matplotlib==3.5.0",
-        "pickle5==0.0.12",
-        "transformers==4.11.3",
+        "tqdm",
+        "numpy",
+        "docopt",
+        "pandas",
+        "scikit-learn",
+        "torch",
+        "PyYAML",
+        "seaborn",
+        "matplotlib",
+        "pickle5",
+        "transformers",
     ]
 
 
@@ -43,8 +43,8 @@ if __name__ == '__main__':
         long_description_content_type='text/markdown',
         url='https://github.com/HanXudong/Fair_NLP_Classification',
         python_requires='>=3.7',
-        package_dir={"": "faircls"},
-        packages=find_packages(where="faircls"),
+        # package_dir={"": ""},
+        packages=find_packages(),
         install_requires=reqs,
         include_package_data=True,
         package_data={'': ['*.txt', '*.md', '*.opt']},

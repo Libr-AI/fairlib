@@ -1,0 +1,56 @@
+Metadata-Version: 2.1
+Name: faircls
+Version: 0.0.1
+Summary: Unified framework for bias detection and mitigation in classification.
+Home-page: https://github.com/HanXudong/Fair_NLP_Classification
+Author: Xudong Han
+Author-email: xudongh1@student.unimelb.edu.au
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Natural Language :: English
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+--------
+
+None are known at this time.
+
+
+Getting help
+------------
+
+If you have any problem with our code or have some suggestions, including the future feature, feel free to contact 
+
+- Xudong Han (xudongh1@student.unimelb.edu.au)
+
+or describe it in Issues.
+
+
+Contributing
+------------
+
+We appreciate all contributions. If you are planning to contribute back bug-fixes, please do so without any further discussion. If you plan to contribute new features, utility functions or extensions, please first open an issue and discuss the feature with us.
+
+
+License
+-------
+This project is distributed under the terms of the [APACHE LICENSE, VERSION 2.0](https://www.apache.org/licenses/LICENSE-2.0).  The license applies to all files in the [GitHub repository](http://github.com/HanXudong/Fair_NLP_Classification) hosting this file.
+
+Acknowledgments
+---------------
+* https://github.com/HanXudong/Decoupling_Adversarial_Training_for_Fair_NLP
+* https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training
+* https://github.com/SsnL/dataset-distillation
+* https://github.com/huggingface/torchMoji
+* https://github.com/mhucka/readmine
+* https://github.com/yanaiela/demog-text-removal
+* https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations
+* https://github.com/yuji-roh/fairbatch
+* https://github.com/shauli-ravfogel/nullspace_projection
+* https://github.com/AiliAili/contrastive_learning_fair_representations
+* https://github.com/AiliAili/Difference_Mean_Fair_Models
+
