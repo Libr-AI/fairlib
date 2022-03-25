@@ -3,6 +3,7 @@
 .vscode/settings.json
 dev/logs/
 dev/results/
+dev/
 results/*
 data/*
 !*/.gitkeep
