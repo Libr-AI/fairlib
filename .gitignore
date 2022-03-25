@@ -4,6 +4,7 @@
 dev/logs/
 dev/results/
 dev/
+tmp/
 results/*
 data/*
 !*/.gitkeep
