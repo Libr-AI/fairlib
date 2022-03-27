@@ -100,10 +100,11 @@ def final_results_df(
             _df = _df.sample(n=min(int(num_trail), len(_df)), random_state=1)
 
         # Select Pareto Frontiers
-        if pareto:
-            _pareto_flag = is_pareto_efficient(
+        _pareto_flag = is_pareto_efficient(
                 -1*_df[["{}_{} mean".format(pareto_selection, Fairness_metric_name), "{}_{} mean".format(pareto_selection, Performance_metric_name)]].to_numpy()
                 )
+        _df["is_pareto"] = _pareto_flag
+        if pareto:
             _pareto_df = _df[_pareto_flag].copy()
         else:
             _pareto_df = _df.copy()
