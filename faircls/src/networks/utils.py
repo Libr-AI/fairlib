@@ -199,8 +199,6 @@ class BaseModel(nn.Module):
         self.device = self.args.device
         self.to(self.device)
 
-        self.cls_parameter = self.get_cls_parameter()
-
         self.learning_rate = self.args.lr
         self.optimizer = Adam(filter(lambda p: p.requires_grad, self.parameters()), lr=self.learning_rate)
 
