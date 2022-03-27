@@ -4,8 +4,6 @@ from pathlib import Path
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib.widgets import CheckButtons
-from matplotlib.widgets import Slider, Button, RangeSlider
 from .utils import DTO
 import shutil
 from .utils import is_pareto_efficient, mkdirs
@@ -169,6 +167,9 @@ def final_results_df(
     return final_df
 
 def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
+    from matplotlib.widgets import CheckButtons
+    from matplotlib.widgets import Slider, Button, RangeSlider
+
     plot_df["Fairness"] = plot_df["test_fairness mean"]
     plot_df["Performance"] = plot_df["test_performance mean"]
 
