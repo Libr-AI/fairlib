@@ -120,6 +120,7 @@ def final_results_df(
         selected_columns = ["{}_{} {}".format(phase, metric, value) for phase in ["test", "dev"] for metric in [Performance_metric_name, Fairness_metric_name] for value in ["mean", "std"]]
         selected_columns.append("epoch list")
         selected_columns.append("opt_dir list")
+        selected_columns.append("is_pareto")
 
         _pareto_df = _pareto_df[selected_columns].copy()
         _pareto_df["Models"] = [key]*len(_pareto_df)
@@ -161,6 +162,6 @@ def final_results_df(
 
         evaluation_cols = list(final_df.keys())[1:(9 if return_dev else 5)]
         reproducibility_cols = ["epoch list", "opt_dir list"] if return_conf else []
-        final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols].copy()
+        final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols+["is_pareto"]].copy()
 
     return final_df
