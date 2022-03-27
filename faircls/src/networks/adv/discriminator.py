@@ -190,18 +190,6 @@ class Discriminator():
         # Init difference loss for the diverse Adv
         if self.args.adv_num_subDiscriminator>1 and self.args.adv_diverse_lambda>0:
             self.diff_loss = DiffLoss()
-        
-        # Use different datasets if decoupling
-        if self.args.adv_decoupling:
-            assert self.args.train_generator is not None, "A different train generator is required"
-
-            self.train_iterator = self.args.opt.adv_train_generator
-            self.dev_iterator = self.args.opt.adv_dev_generator
-            self.test_iterator = self.args.opt.adv_test_generator
-        else:
-            self.train_iterator = self.args.opt.train_generator
-            self.dev_iterator = self.args.opt.dev_generator
-            self.test_iterator = self.args.opt.test_generator
 
         self.adv_loss_criterion = torch.nn.CrossEntropyLoss()
     
@@ -215,6 +203,18 @@ class Discriminator():
 
 
     def train_self(self, model):
+        # Use different datasets if decoupling
+        if self.args.adv_decoupling:
+            assert self.args.train_generator is not None, "A different train generator is required"
+
+            self.train_iterator = self.args.opt.adv_train_generator
+            self.dev_iterator = self.args.opt.adv_dev_generator
+            self.test_iterator = self.args.opt.adv_test_generator
+        else:
+            self.train_iterator = self.args.opt.train_generator
+            self.dev_iterator = self.args.opt.dev_generator
+            self.test_iterator = self.args.opt.test_generator
+
         epochs_since_improvement = 0
         best_valid_loss = 1e+5
         
