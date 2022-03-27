@@ -242,7 +242,15 @@ class BaseModel(nn.Module):
                     p.grad.detach_()
                     p.grad.zero_()
     
-    def train_self(self):
+    def train_self(self, **opt_pairs):
+
+        # Overwrite the arguments
+        dataloader_opt_keys = ["train_generator", "dev_generator", "test_generator"]
+        _generators = {k:opt_pairs.get(k, None) for k in dataloader_opt_keys}
+
+        self.args.opt.train_generator = _generators["train_generator"] if _generators["train_generator"] is not None else self.args.opt.train_generator
+        self.args.opt.dev_generator = _generators["dev_generator"] if _generators["dev_generator"] is not None else self.args.opt.dev_generator
+        self.args.opt.test_generator = _generators["test_generator"] if _generators["test_generator"] is not None else self.args.opt.test_generator
         
         # Reinit the train loader for FairBatch
         if (self.args.DyBT is not None) and (self.args.DyBT in ["FairBatch", "GeneralizedFB"]):
