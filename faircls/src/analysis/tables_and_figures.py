@@ -4,6 +4,8 @@ from pathlib import Path
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.widgets import CheckButtons
+from matplotlib.widgets import Slider, Button, RangeSlider
 from .utils import DTO
 import shutil
 from .utils import is_pareto_efficient, mkdirs
@@ -165,3 +167,119 @@ def final_results_df(
         final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols+["is_pareto"]].copy()
 
     return final_df
+
+def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
+    plot_df["Fairness"] = plot_df["test_fairness mean"]
+    plot_df["Performance"] = plot_df["test_performance mean"]
+
+    fig, ax = plt.subplots(2, 3, figsize=figsize, dpi = dpi, gridspec_kw={'width_ratios': [1, 0.2, 2.5], 'height_ratios': [1, 0.075]})
+
+    with sns.axes_style("white"):
+        plot_ax = sns.lineplot(
+            data=plot_df,
+            x="Performance",
+            y="Fairness",
+            hue="Models",
+            markers=True,
+            style="Models",
+            ax = ax[0, 2]
+        )
+
+    plot_ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+    init_performance_max = max(plot_df["Performance"])
+    init_fairness_max = max(plot_df["Fairness"])
+
+    init_performance_min = min(plot_df["Performance"])
+    init_fairness_min = min(plot_df["Fairness"])
+
+    ax[0, 2].set_xlim(
+        1.1*init_performance_min-0.1*init_performance_max, 
+        1.1*init_performance_max-0.1*init_performance_min)
+
+    ax[0, 2].set_ylim(
+        1.1*init_fairness_min-0.1*init_fairness_max, 
+        1.1*init_fairness_max-0.1*init_fairness_min)
+
+
+    # Selection box for displaying different models
+    lines = list(plot_ax.lines)
+    num_models = int(len(lines)/2)
+
+    # Make checkbuttons with all plotted lines with correct visibility
+    labels = [str(line.get_label()) for line in lines[num_models:]]
+    visibility = [line.get_visible() for line in lines[num_models:]]
+    # check = CheckButtons(rax, labels, visibility)
+    check = CheckButtons(ax[0, 0], labels, visibility)
+
+    def func(label):
+        index = labels.index(label)
+        lines[index].set_visible(not lines[index].get_visible())
+        plt.draw()
+
+    check.on_clicked(func)
+
+    # Vary the lines
+    performance_limit_line = ax[0, 2].axvline(init_performance_max, ls="--", color='r') # vertical
+    fairness_limit_line = ax[0, 2].axhline(init_fairness_max, ls="--", color='r') # horizontal
+
+    fairness_slider = RangeSlider(
+        ax=ax[0, 1],
+        label="Fairness",
+        valmin=0,
+        valmax=1,
+        valinit=(1.1*init_fairness_min-0.1*init_fairness_max, init_fairness_max),
+        orientation="vertical"
+    )
+
+    performacne_slider = RangeSlider(
+        ax=ax[1, 2],
+        label="Performance",
+        valmin=0,
+        valmax=1,
+        valinit=(1.1*init_performance_min-0.1*init_performance_max, init_performance_max),
+    )
+
+    def performance_update(val):
+        performance_limit_line.set_xdata(val[1])
+
+        ax[0, 2].set_xlim(
+            1.1*val[0]-0.1*val[1], 
+            1.1*val[1]-0.1*val[0])
+
+        fig.canvas.draw_idle()
+
+    def fairness_update(val):
+        fairness_limit_line.set_ydata(val[1])
+
+        ax[0, 2].set_ylim(
+            1.1*val[0]-0.1*val[1], 
+            1.1*val[1]-0.1*val[0])
+
+        fig.canvas.draw_idle()
+
+    performacne_slider.on_changed(performance_update)
+    fairness_slider.on_changed(fairness_update)
+
+    # Reset fairness and performacne line
+    tradeoff_reset_button = Button(ax[1,1], 'RES', hovercolor='0.975')
+
+    def reset(event):
+        performacne_slider.reset()
+        fairness_slider.reset()
+
+        ax[0, 2].set_xlim(
+            1.1*init_performance_min-0.1*init_performance_max, 
+            1.1*init_performance_max-0.1*init_performance_min)
+
+        ax[0, 2].set_ylim(
+            1.1*init_fairness_min-0.1*init_fairness_max, 
+            1.1*init_fairness_max-0.1*init_fairness_min)
+
+    tradeoff_reset_button.on_clicked(reset)
+
+    ax[1,0].axis('off')
+
+    plt.tight_layout()
+    # plt.subplots_adjust(right=0.75)  
+    plt.show()
