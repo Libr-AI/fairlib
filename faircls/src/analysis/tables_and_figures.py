@@ -166,9 +166,11 @@ def final_results_df(
 
     return final_df
 
-def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
+def interactive_plot(plot_df, figsize=(12, 7), dpi = 100, selection="DTO"):
     from matplotlib.widgets import CheckButtons
     from matplotlib.widgets import Slider, Button, RangeSlider
+
+    assert selection in ["constrained", "DTO"], NotImplementedError
 
     plot_df["Fairness"] = plot_df["test_fairness mean"]
     plot_df["Performance"] = plot_df["test_performance mean"]
@@ -221,8 +223,12 @@ def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
     check.on_clicked(func)
 
     # Vary the lines
-    performance_limit_line = ax[0, 2].axvline(init_performance_max, ls="--", color='r') # vertical
-    fairness_limit_line = ax[0, 2].axhline(init_fairness_max, ls="--", color='r') # horizontal
+    if selection == "constrained":
+        performance_limit_line = ax[0, 2].axvline(init_performance_max, ls="--", color='r') # vertical
+        fairness_limit_line = ax[0, 2].axhline(init_fairness_max, ls="--", color='r') # horizontal
+    elif selection == "DTO":
+        performance_limit_line = ax[0, 2].axvline(init_performance_max, ls="--", color='g') # vertical
+        fairness_limit_line = ax[0, 2].axhline(init_fairness_max, ls="--", color='g') # horizontal
 
     fairness_slider = RangeSlider(
         ax=ax[0, 1],
@@ -263,19 +269,122 @@ def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
     fairness_slider.on_changed(fairness_update)
 
     # Reset fairness and performacne line
-    tradeoff_reset_button = Button(ax[1,1], 'RES', hovercolor='0.975')
+    if selection == "constrained":
+        tradeoff_reset_button = Button(ax[1,1], 'RES', hovercolor='0.975')
+    elif selection == "DTO":
+        tradeoff_reset_button = Button(ax[1,1], 'DTO', hovercolor='0.975')
+        utopia_point = ax[0, 2].plot(
+            performacne_slider.val[1], 
+            fairness_slider.val[1], 
+            "go")[0]
 
-    def reset(event):
-        performacne_slider.reset()
-        fairness_slider.reset()
+        utopia_label = ax[0, 2].text(
+            performacne_slider.val[1], 
+            fairness_slider.val[1], 
+            "Utopia", c="k", horizontalalignment='left',
+            verticalalignment='bottom', fontsize=12)
 
-        ax[0, 2].set_xlim(
-            1.1*init_performance_min-0.1*init_performance_max, 
-            1.1*init_performance_max-0.1*init_performance_min)
+        utopia_point.set_visible(False)
+        utopia_label.set_visible(False)
 
-        ax[0, 2].set_ylim(
-            1.1*init_fairness_min-0.1*init_fairness_max, 
-            1.1*init_fairness_max-0.1*init_fairness_min)
+    if selection == "constrained":
+        def reset(event):
+            performacne_slider.reset()
+            fairness_slider.reset()
+
+            ax[0, 2].set_xlim(
+                1.1*init_performance_min-0.1*init_performance_max, 
+                1.1*init_performance_max-0.1*init_performance_min)
+
+            ax[0, 2].set_ylim(
+                1.1*init_fairness_min-0.1*init_fairness_max, 
+                1.1*init_fairness_max-0.1*init_fairness_min)
+    elif selection == "DTO":
+        # Handle the click event
+        global DTO_lines
+        DTO_lines = []
+        global DTO_line_labels
+        DTO_line_labels = []
+
+        def DTO_onclick(event):
+            if event.inaxes not in [ax[0, 2]]:
+                return
+            _xdata, _ydata = event.xdata, event.ydata
+            # Draw a line between 
+            _line = ax[0, 2].plot(
+                [_xdata, performacne_slider.val[1]], 
+                [_ydata, fairness_slider.val[1]], 'g:')
+            DTO_lines.append(_line[0])
+
+            # Calculate and display DTO
+            _DTO = DTO(
+                fairness_metric = [_ydata], 
+                performacne_metric = [_xdata], 
+                utopia_fairness = fairness_slider.val[1], 
+                utopia_performance = performacne_slider.val[1])
+            _DTO_label = ax[0, 2].text(
+            _xdata, _ydata, 
+            "{:.4f}".format(_DTO[0]), c="k", fontsize=9, 
+            # horizontalalignment='left', verticalalignment='bottom',
+            )
+            DTO_line_labels.append(_DTO_label)
+
+        global DTO_pick_cid
+        DTO_pick_cid = fig.canvas.mpl_connect('button_press_event', DTO_onclick)
+        fig.canvas.mpl_disconnect(DTO_pick_cid)
+
+
+        def reset(event):
+            global DTO_pick_cid
+            global DTO_lines
+            global DTO_line_labels
+
+            if tradeoff_reset_button.label.get_text() == "DTO":
+                # Change the button label
+                tradeoff_reset_button.label.set_text("RES")
+                # Update the location of Utopoia point
+                utopia_point.set_xdata(performacne_slider.val[1])
+                utopia_label.set_x(performacne_slider.val[1])
+                utopia_point.set_ydata(fairness_slider.val[1])
+                utopia_label.set_y(fairness_slider.val[1])
+                # Display the Utopia point
+                utopia_point.set_visible(True)
+                utopia_label.set_visible(True)
+                # Connect the pick event handler
+                DTO_pick_cid = fig.canvas.mpl_connect('button_press_event', DTO_onclick)
+
+            else:
+                # Change the button label
+                tradeoff_reset_button.label.set_text("DTO")
+
+                performacne_slider.reset()
+                fairness_slider.reset()
+
+                ax[0, 2].set_xlim(
+                    1.1*init_performance_min-0.1*init_performance_max, 
+                    1.1*init_performance_max-0.1*init_performance_min)
+
+                ax[0, 2].set_ylim(
+                    1.1*init_fairness_min-0.1*init_fairness_max, 
+                    1.1*init_fairness_max-0.1*init_fairness_min)
+                
+                # Remove utopia point
+                utopia_point.set_visible(False)
+                utopia_label.set_visible(False)
+
+                # Disconnet the pick event handler
+                fig.canvas.mpl_disconnect(DTO_pick_cid)
+                # Remove Lines
+                for line in DTO_lines:
+                    # line.set_visible(False)
+                    line.remove()
+                DTO_lines = []
+                # Remove labels
+                for label in DTO_line_labels:
+                    label.remove()
+                DTO_line_labels = []
+            
+            fig.canvas.draw_idle()
 
     tradeoff_reset_button.on_clicked(reset)
 
@@ -301,6 +410,8 @@ def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
             plt.draw()
     
     method_selectAll_button.on_clicked(select_all_methods)
+
+
 
     plt.tight_layout()
     # plt.subplots_adjust(right=0.75)  
