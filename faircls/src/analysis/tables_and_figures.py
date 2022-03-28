@@ -279,7 +279,28 @@ def interactive_plot(plot_df, figsize=(12, 7), dpi = 100):
 
     tradeoff_reset_button.on_clicked(reset)
 
-    ax[1,0].axis('off')
+    # ax[1,0].axis('off')
+    method_selectAll_button = Button(ax[1,0], 'Unselect', hovercolor='0.975')
+    def select_all_methods(event):
+        if method_selectAll_button.label.get_text() == "Select All":
+            method_selectAll_button.label.set_text("Unselect")
+
+            for index in range(num_models):
+                if not lines[index].get_visible():
+                    # lines[index].set_visible(True)
+                    check.set_active(index)
+            plt.draw()
+
+        else:
+            method_selectAll_button.label.set_text("Select All")
+
+            for index in range(num_models):
+                if lines[index].get_visible():
+                    # lines[index].set_visible(False)
+                    check.set_active(index)
+            plt.draw()
+    
+    method_selectAll_button.on_clicked(select_all_methods)
 
     plt.tight_layout()
     # plt.subplots_adjust(right=0.75)  
