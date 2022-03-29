@@ -9,7 +9,7 @@ Table of contents
 - [Fair_NLP_Classification](#fair_nlp_classification)
   - [Table of contents](#table-of-contents)
   - [Introduction](#introduction)
-  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
   - [Usage](#usage)
     - [Basic operation](#basic-operation)
     - [Additional options](#additional-options)
@@ -86,19 +86,38 @@ The currently supported bias mitigation methods include:
 We are planning to add:
 - \[algorithm\] 
 
-Prerequisites
+Installation
 ------------
 
-Start a new virtual environment:
+ParlAI currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
+Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/requirements.txt). 
+We *strongly* recommend using a [venv](https://docs.python.org/3/library/venv.html) or [conda](https://www.anaconda.com/) environment for installation.
+
+**Standard Installation**
+
+If you do not need further modifications, you can install it with:
+
 ```bash
+# Start a new virtual environment:
 conda create -n fair_nlp python=3.7
 conda activate fair_nlp
 
-# additional python pacakges from requirements.txt
-pip install -r requirements.txt
+pip install faircls
 ```
 
-<!-- TODO Will we release the Bios dataset with economy labels? -->
+**Development Installation**
+
+Many users will want to modify some parts of ParlAI. To set up a development
+environment, run the following commands to clone the repository and install
+ParlAI:
+
+```bash
+git clone https://github.com/HanXudong/Fair_NLP_Classification.git ~/FairCLS
+cd ~/FairCLS; python setup.py develop
+```
+
+**Datasets**  
+
 Download the preprocessed Moji data for this project:
 ```bash
 ./prepare_data.sh
