@@ -22,6 +22,7 @@ from collections import defaultdict
 def confusion_matrix_based_scores(cnf):
     """
     Implementation from https://stackoverflow.com/a/43331484
+    See https://en.wikipedia.org/wiki/Confusion_matrix for different scores
     """
     FP = cnf.sum(axis=0) - np.diag(cnf) + 1e-5
     FN = cnf.sum(axis=1) - np.diag(cnf) + 1e-5
