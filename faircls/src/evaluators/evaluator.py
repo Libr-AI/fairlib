@@ -61,17 +61,17 @@ def confusion_matrix_based_scores(cnf):
         "PPR":PPR,
     }
 
-def power_mean(series, p):
+def power_mean(series, p, axis=0):
     if p>50:
         return max(series)
-    elif p<50:
+    elif p<-50:
         return min(series)
     else:
-        total = np.mean(np.power(series, p))
+        total = np.mean(np.power(series, p), axis=axis)
         return np.power(total, 1 / p)
 
 
-def RMS_GAP(distinct_groups, all_scores, metric="TPR"):
+def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power = None, class_agg_power=2):
     group_scores = []
     for gid in distinct_groups:
         # Save the TPR direct to the list 
@@ -81,9 +81,12 @@ def RMS_GAP(distinct_groups, all_scores, metric="TPR"):
     # Calculate GAP
     score_gaps = Scores - all_scores["overall"][metric].reshape(-1,1)
     # Sum over gaps of all protected groups within each class
-    score_gaps = np.sum(abs(score_gaps),axis=1)
-    # RMS of each class
-    score_gaps = np.sqrt(np.mean(score_gaps**2))
+    if group_agg_power is None:
+        score_gaps = np.sum(abs(score_gaps),axis=1)
+    else:
+        score_gaps =power_mean(score_gaps,p=group_agg_power,axis=1)
+    # Aggregate gaps of each class, RMS by default
+    score_gaps = power_mean(score_gaps, class_agg_power)
 
     return score_gaps
 
@@ -115,6 +118,6 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     }
 
     for _metric in metrics:
-        eval_scores["{}_GAP".format(_metric)] = RMS_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
+        eval_scores["{}_GAP".format(_metric)] = Aggregation_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)
 
     return eval_scores, confusion_matrices
