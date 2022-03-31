@@ -43,6 +43,9 @@ The currently supported datasets include:
 
   [Bias in Bios: A Case Study of Semantic Representation Bias in a High-Stakes Setting](https://dl.acm.org/doi/10.1145/3287560.3287572)
 
+- COMPAS
+
+- Colored MNIST
 
 The currently supported bias mitigation methods include:
 
@@ -83,8 +86,8 @@ The currently supported bias mitigation methods include:
   - Representation Augmentation  
     Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
 
-We are planning to add:
-- \[algorithm\] 
+<!-- We are planning to add:
+- \[algorithm\]  -->
 
 Installation
 ------------
