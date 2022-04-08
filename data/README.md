@@ -1,4 +1,9 @@
-# Moji
+## Moji
+
+### Download processed data without economy labels
+    Please use the script provided at [download_data.sh](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/download_data.sh)
+
+### From scratch
 1. Download the data from Su Lin Blodgett [dataset](https://sites.google.com/site/sulinblodgett/), described in "Demographic dialectal variation in social media: A case study of african-american english." 
 
     ```bash
@@ -45,12 +50,12 @@
 3. Encode texts with [torchMoji](https://github.com/huggingface/torchMoji). We provide an example for extract text representations at [src/Moji](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/data/src/Moji/encode_text.ipynb).
 
 
-# Bios
+## Bios
 
-## Download processed data without economy labels
+### Download processed data without economy labels
     Please use the script provided at [download_data.sh](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/download_data.sh)
 
-## From scratch
+### From scratch
 
 1. Download the dataset as described in [Bias in Bios: A Case Study of Semantic Representation Bias in a High-Stakes Setting
 ](https://arxiv.org/abs/1901.09451)
