@@ -1,13 +1,16 @@
-<!-- https://github.com/mhucka/readmine -->
-# Fair_NLP_Classification
+# Fairlib
 
-This is a PyTorch implementation collection of our recent work for bias mitigation in NLP classification.
+[Fairlib](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
+
+The Fairlib package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md), and functions for analysis.
+
+For those who want to start with Fairlib now, you can try our [Colab Tutorial](#TBA), which provides a gentle introduction to the concepts and capabilities. 
+[The tutorials and other notebooks](https://github.com/HanXudong/fairlib/tree/main/tutorial) offer a deeper introduction. The complete API is also available.
 
 ## Table of contents
 
-
-- [Fair_NLP_Classification](#fair_nlp_classification)
-  - [Table of contents](#table-of-contents)
+- [Fairlib](#fairlib)
+  <!-- - [Table of contents](#table-of-contents) -->
   - [Introduction](#introduction)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -24,74 +27,10 @@ This is a PyTorch implementation collection of our recent work for bias mitigati
   - [Acknowledgments](#acknowledgments)
 
 
-## Introduction
-
-You can easily develop new algorithms, or readily apply existing algorithms.
-
-The currently supported datasets include:
-- Moji
-  
-  Binary sentiment classification. Instances are annotated with AAE/SAE labels.
-
-  [Demographic Dialectal Variation in Social Media: A Case Study of African-American English](https://aclanthology.org/D16-1120/)
-
-- Bios
-  
-  Biography classification tasks with 28 profession classes.
-  Instances are also annotated with gender and economy labels.  
-
-  [Bias in Bios: A Case Study of Semantic Representation Bias in a High-Stakes Setting](https://dl.acm.org/doi/10.1145/3287560.3287572)
-
-- COMPAS
-
-- Colored MNIST
-
-The currently supported bias mitigation methods include:
-
-- Learning Fair Representations
-  - Adversarial Training  
-    Li, Yitong, Timothy Baldwin and Trevor Cohn (2018) [Towards Robust and Privacy-preserving Text Representations](https://aclanthology.org/P18-2005/), ACL 2018.  
-
-    Elazar, Yanai and Yoav Goldberg (2018) [Adversarial Removal of Demographic Attributes from Text Data](https://aclanthology.org/D18-1002/), EMNLP 2018.
-
-    Wang, Tianlu, Jieyu Zhao, Mark Yatskar, Kai-Wei Chang and Vicente Ordóñez (2019) [Balanced Datasets Are Not Enough: Estimating and Mitigating Gender Bias in Deep Image Representations](https://arxiv.org/abs/1811.08489), ICCV 2019.  
-
-    Zhao, Han and Geoff Gordon (2019) [Inherent Tradeoffs in Learning Fair Representations](https://papers.nips.cc/paper/2019/hash/b4189d9de0fb2b9cce090bd1a15e3420-Abstract.html), NeurIPS 2019.
-
-  - Diverse Adversarial Training  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Diverse Adversaries for Mitigating Bias in Training](https://aclanthology.org/2021.eacl-main.239/), EACL 2021.
-  - Decoupled Adversarial Training  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
-  - Towards Equal Opportunity Fairness through Adversarial Learning  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2022) [Towards Equal Opportunity Fairness through Adversarial Learning](https://arxiv.org/abs/2203.06317), CoRR abs/2203.06317.
-  - INLP  
-      Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
-  - Contrastive Learning for Fair Representation  
-      Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Contrastive Learning for Fair Representations](https://arxiv.org/abs/2109.10645), CoRR abs/2109.10645.
-
-- Balanced Training
-  - Instance Reweighting and Resampling  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.  
-
-    Lahoti, Preethi, Alex Beutel, Jilin Chen, Kang Lee, Flavien Prost, Nithum Thain, Xuezhi Wang and Ed Chi (2020) [Fairness without Demographics through Adversarially Reweighted Learning](https://papers.nips.cc/paper/2020/hash/07fc15c9d169ee48573edd749d25945d-Abstract.html), NeurIPS 2020.  
-
-    Wang, Tianlu, Jieyu Zhao, Mark Yatskar, Kai-Wei Chang and Vicente Ordóñez (2019) [Balanced Datasets Are Not Enough: Estimating and Mitigating Gender Bias in Deep Image Representations](https://arxiv.org/abs/1811.08489), ICCV 2019.  
-  - FairBatch: resampling dynamically during training  
-    Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
-  - Minimizing Group Difference for Equal Opportunity Fairness  
-    Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2022) [Connecting Loss Difference with Equal Opportunity for Fair Models ]().
-
-- Incorporating Demographic Factors  
-  - Representation Augmentation  
-    Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
-
-<!-- We are planning to add:
-- \[algorithm\]  -->
-
 ## Installation
 
-ParlAI currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
-Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/requirements.txt). 
+Fairlib currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
+Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/fairlib/blob/main/requirements.txt). 
 We *strongly* recommend using a [venv](https://docs.python.org/3/library/venv.html) or [conda](https://www.anaconda.com/) environment for installation.
 
 **Standard Installation**
@@ -100,8 +39,8 @@ If you do not need further modifications, you can install it with:
 
 ```bash
 # Start a new virtual environment:
-conda create -n fair_nlp python=3.7
-conda activate fair_nlp
+conda create -n fairlib python=3.7
+conda activate fairlib
 
 pip install faircls
 ```
@@ -113,8 +52,8 @@ environment, run the following commands to clone the repository and install
 ParlAI:
 
 ```bash
-git clone https://github.com/HanXudong/Fair_NLP_Classification.git ~/FairCLS
-cd ~/FairCLS; python setup.py develop
+git clone https://github.com/HanXudong/fairlib.git ~/fairlib
+cd ~/fairlib; python setup.py develop
 ```
 
 **Datasets**  
@@ -124,7 +63,7 @@ Download the preprocessed Moji data for this project:
 ./prepare_data.sh
 ```
 
-For other datasets, please refer to [data/README.md](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/data/README.md)
+For other datasets, please refer to [data/README.md](https://github.com/HanXudong/fairlib/blob/main/data/README.md)
 
 
 Usage
@@ -378,7 +317,7 @@ We appreciate all contributions. If you are planning to contribute back bug-fixe
 
 ## License
 
-This project is distributed under the terms of the [APACHE LICENSE, VERSION 2.0](https://www.apache.org/licenses/LICENSE-2.0).  The license applies to all files in the [GitHub repository](http://github.com/HanXudong/Fair_NLP_Classification) hosting this file.
+This project is distributed under the terms of the [APACHE LICENSE, VERSION 2.0](https://www.apache.org/licenses/LICENSE-2.0).  The license applies to all files in the [GitHub repository](http://github.com/HanXudong/fairlib) hosting this file.
 
 ## Acknowledgments
 
