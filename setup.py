@@ -34,24 +34,20 @@ except:
 
 if __name__ == '__main__':
     setup(
-        name='faircls',
+        name='fairlib',
         version="0.0.1",
         author="Xudong Han",
         author_email="xudongh1@student.unimelb.edu.au",
         description='Unified framework for bias detection and mitigation in classification.',
         long_description=readme,
         long_description_content_type='text/markdown',
-        url='https://github.com/HanXudong/Fair_NLP_Classification',
+        url='https://github.com/HanXudong/fairlib',
         python_requires='>=3.7',
         # package_dir={"": ""},
         packages=find_packages(),
         install_requires=reqs,
         include_package_data=True,
         package_data={'': ['*.txt', '*.md', '*.opt']},
-        # entry_points={
-        #     "console_scripts": ["faircls=faircls.command_line:main"],
-        # },
-        # scripts=["faircls-train"],
         classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: Apache Software License",
