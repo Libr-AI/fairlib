@@ -55,7 +55,28 @@ Please refer to [data/README.md](https://github.com/HanXudong/fairlib/blob/main/
 
 ## Usage
 
-The full description of Fairlib usages can be found in [docs/usage](https://github.com/HanXudong/fairlib/blob/main/docs/usage.md).
+The full description of Fairlib usages can be found in [docs/usage](https://github.com/HanXudong/fairlib/blob/main/docs/usage.md). Here are the most basic examples.
+
+- Fairlib can be run from the command line:
+  ```bash
+  python fairlib --exp_id EXP_NAME
+  ```
+
+- Fairlib can be imported as a package
+  ```python
+  from fairlib.base_options import options
+  from src import networks
+
+  config_file = 'opt.yaml'
+  # Get options
+  state = options.get_state(conf_file=config_file)
+
+  # Init the model
+  model = networks.get_main_model(state)
+
+  # Training with debiasing
+  model.train_self()
+  ```
 
 ## Model Selection and Fairness Evaluation
 
