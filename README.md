@@ -82,7 +82,10 @@ The full description of Fairlib usages can be found in [docs/usage](https://gith
 
 We provide implementation of DTO and DTO based model selection for different models. 
 
-Please see `analysis\sample_model_selection.ipynb` for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
+Please see [this tutorial](https://github.com/HanXudong/fairlib/blob/main/tutorial/demo.ipynb) for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
+Moreover, [interactive plots](https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb) are also supported, which can be used for analysis.
+
+Moreover, interactive plots will be 
 
 ## Known issues and limitations
 
