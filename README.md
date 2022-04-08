@@ -3,8 +3,8 @@
 
 This is a PyTorch implementation collection of our recent work for bias mitigation in NLP classification.
 
-Table of contents
------------------
+## Table of contents
+
 
 - [Fair_NLP_Classification](#fair_nlp_classification)
   - [Table of contents](#table-of-contents)
@@ -24,8 +24,7 @@ Table of contents
   - [Acknowledgments](#acknowledgments)
 
 
-Introduction
-------------
+## Introduction
 
 You can easily develop new algorithms, or readily apply existing algorithms.
 
@@ -89,8 +88,7 @@ The currently supported bias mitigation methods include:
 <!-- We are planning to add:
 - \[algorithm\]  -->
 
-Installation
-------------
+## Installation
 
 ParlAI currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
 Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/Fair_NLP_Classification/blob/main/requirements.txt). 
@@ -353,20 +351,18 @@ Our implementation is friendly for adding new datasets and model architectures, 
 python main.py --conf_file PATH_TO_EXP/opt.yaml
 ```
 
-Model Selection and Fairness Evaluation
-----------------------------
+## Model Selection and Fairness Evaluation
+
 We provide implementation of DTO and DTO based model selection for different models. 
 
 Please see `analysis\sample_model_selection.ipynb` for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
 
-Known issues and limitations
-----------------------------
+## Known issues and limitations
 
 None are known at this time.
 
 
-Getting help
-------------
+## Getting help
 
 If you have any problem with our code or have some suggestions, including the future feature, feel free to contact 
 
@@ -375,18 +371,17 @@ If you have any problem with our code or have some suggestions, including the fu
 or describe it in Issues.
 
 
-Contributing
-------------
+## Contributing
 
 We appreciate all contributions. If you are planning to contribute back bug-fixes, please do so without any further discussion. If you plan to contribute new features, utility functions or extensions, please first open an issue and discuss the feature with us.
 
 
-License
--------
+## License
+
 This project is distributed under the terms of the [APACHE LICENSE, VERSION 2.0](https://www.apache.org/licenses/LICENSE-2.0).  The license applies to all files in the [GitHub repository](http://github.com/HanXudong/Fair_NLP_Classification) hosting this file.
 
-Acknowledgments
----------------
+## Acknowledgments
+
 * https://github.com/HanXudong/Decoupling_Adversarial_Training_for_Fair_NLP
 * https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training
 * https://github.com/SsnL/dataset-distillation
