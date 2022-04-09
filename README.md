@@ -85,8 +85,6 @@ We provide implementation of DTO and DTO based model selection for different mod
 Please see [this tutorial](https://github.com/HanXudong/fairlib/blob/main/tutorial/demo.ipynb) for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
 Moreover, [interactive plots](https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb) are also supported, which can be used for analysis.
 
-Moreover, interactive plots will be 
-
 ## Known issues and limitations
 
 None are known at this time.
