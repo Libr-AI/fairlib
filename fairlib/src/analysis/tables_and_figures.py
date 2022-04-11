@@ -60,8 +60,8 @@ def final_results_df(
     Args:
         results_dict (dict): retrived results dictionary, which is typically the returned dict from function `retrive_results`
         model_order (list, optional): a list of models that will be considered in the final df. Defaults to None.
-        Fairness_metric_name (str, optional): the metric name for fairness evaluation. Defaults to "rms_TPR".
-        Performance_metric_name (str, optional): the metric name for performance evaluation. Defaults to "accuracy".
+        Fairness_metric_name (str, optional): the metric name for fairness evaluation. Defaults to "fairness".
+        Performance_metric_name (str, optional): the metric name for performance evaluation. Defaults to "performance".
         pareto (bool, optional): whether or not to return only the Pareto frontiers. Defaults to True.
         pareto_selection (str, optional): which split is used to select the frontiers. Defaults to "test".
         selection_criterion (str, optional): model selection criteria, one of {performance, fairness, both (DTO)} . Defaults to "DTO".

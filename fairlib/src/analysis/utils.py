@@ -331,3 +331,81 @@ def tradeoff_plot(df, hp_name, figure_name=None):
     if figure_name is not None:
         fig = ax.get_figure()
         fig.savefig(figure_name, dpi=960, bbox_inches="tight") 
+
+def auc_performance_fairness_tradeoff(
+    pareto_df,
+    random_performance = None, 
+    pareto_selection = "test",
+    fairness_metric_name = "fairness",
+    performance_metric_name = "performance",
+    interpolation = "linear",
+    performance_threshold = None,
+    ):
+    """calculate the area under the performance--fairness trade-off curve.
+
+    Args:
+        pareto_df (_type_): A data frame of pareto frontiers
+        random_performance (str, optional): the lowest performance, which leads to the 1 fairness. Defaults to None.
+        pareto_selection (str, optional): which split is used to select the frontiers. Defaults to "test".
+        fairness_metric_name (str, optional):. the metric name for fairness evaluation. Defaults to "fairness".
+        performance_metric_name (str, optional): the metric name for performance evaluation. Defaults to "performance".
+        interpolation (str, optional): interpolation method for the threshold fairness. Defaults to "linear".
+        performance_threshold (_type_, optional): the performance threshold for the method. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
+    fairness_col_name = "{}_{} mean".format(pareto_selection, fairness_metric_name)
+    performance_col_name = "{}_{} mean".format(pareto_selection, performance_metric_name)
+
+    # Filter the df with only performance and fairness scores
+    results_df = pareto_df[[fairness_col_name, performance_col_name]]
+
+    # Add the worst performed model
+    if random_performance is not None:
+        results_df = results_df.append({
+            fairness_col_name: 1,
+            performance_col_name: random_performance,
+            }, ignore_index=True)
+
+    sorted_results_df = results_df.sort_values(by=[fairness_col_name])
+
+    if performance_threshold is not None:
+        if performance_threshold > sorted_results_df.values[0][1]:
+            return 0, None
+        if performance_threshold < sorted_results_df.values[-1][1]:
+            performance_threshold = sorted_results_df.values[-1][1]
+
+        # Find the closest performed points to the threshold
+        closest_worser_performed_point =  sorted_results_df[sorted_results_df[performance_col_name]<=performance_threshold].values[0]
+        closest_better_performed_point =  sorted_results_df[sorted_results_df[performance_col_name]>=performance_threshold].values[-1]
+
+        # Interpolation
+        assert interpolation in ["linear", "constant"]
+        if interpolation == "constant":
+            if (performance_threshold-closest_worser_performed_point[1]) <= (closest_better_performed_point[1]-performance_threshold):
+                interpolation_fairness = closest_worser_performed_point[0]
+            else:
+                interpolation_fairness = closest_better_performed_point[0]
+        elif interpolation == "linear":
+            _ya, _xa = closest_worser_performed_point[0], closest_worser_performed_point[1]
+            _yb, _xb = closest_better_performed_point[0], closest_better_performed_point[1]
+            interpolation_fairness = _ya+(_yb-_ya)*((performance_threshold-_xa)/(_xb-_xa))
+
+        interpolated_point = {
+                fairness_col_name: interpolation_fairness,
+                performance_col_name: performance_threshold,
+            }
+        print(interpolated_point)
+        
+        sorted_results_df = sorted_results_df[sorted_results_df[performance_col_name]>=performance_threshold]
+        sorted_results_df = sorted_results_df.append(
+            interpolated_point, ignore_index=True,
+        )
+
+    filtered_curve = sorted_results_df.sort_values(by=[performance_col_name])
+    auc_filtered_curve = np.trapz(
+        filtered_curve[fairness_col_name], 
+        x=filtered_curve[performance_col_name], )
+
+    return auc_filtered_curve, filtered_curve
