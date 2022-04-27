@@ -24,15 +24,15 @@ The corresponding results such options and output logs will be saved in `results
 
   - Train a mode over Moji with DeepMoji representations.
     ```bash
-        python fairlib --dataset Moji --emb_size 2304 --num_classes 2
+        python fairlib --dataset Moji --emb_size 2304 --num_classes 2 --num_groups 2 --data_dir Path_to_data
     ```
   - Train a model over Bios with fixed BERT-base representations.
     ```bash
-        python fairlib --dataset Bios_gender --emb_size 768 --num_classes 28
+        python fairlib --dataset Bios_gender --emb_size 768 --num_classes 28 --num_groups 2 --data_dir Path_to_data
 
-        python fairlib --dataset Bios_economy --emb_size 768 --num_classes 28
+        python fairlib --dataset Bios_economy --emb_size 768 --num_classes 28 --num_groups 2 --data_dir Path_to_data
 
-        python fairlib --dataset Bios_both --emb_size 768 --num_classes 28
+        python fairlib --dataset Bios_both --emb_size 768 --num_classes 28 --num_groups 4 --data_dir Path_to_data
     ```
 
   - Train a model over Bios with trainable BERT-base representations.
