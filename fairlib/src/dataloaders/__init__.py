@@ -8,17 +8,17 @@ from collections import defaultdict
 
 if sys.platform == "win32":
     default_dataset_roots = dict(
-        Moji= r'D:\\Project\\User_gender_removal\\data\\deepmoji\\split2\\',
-        Bios_gender= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
-        Bios_economy= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
-        Bios_both= r'D:\Project\Minding_Imbalance_in_Discriminator_Training\data\bios',
+        Moji= r'.\data\deepmoji',
+        Bios_gender= r'.\data\bios',
+        Bios_economy= r'.\data\bios',
+        Bios_both= r'.\data\bios',
     )
 else:
     default_dataset_roots = dict(
-        Moji='/data/cephfs/punim1421/Dataset/deepmoji/split2/',
-        Bios_gender='/data/cephfs/punim1421/Dataset/bios_gender_economy',
-        Bios_economy='/data/cephfs/punim1421/Dataset/bios_gender_economy',
-        Bios_both='/data/cephfs/punim1421/Dataset/bios_gender_economy',
+        Moji='./data/deepmoji',
+        Bios_gender='./data/bios_gender_economy',
+        Bios_economy='./data/bios_gender_economy',
+        Bios_both='./data/bios_gender_economy',
     )
 
 def get_dataloaders(args):
