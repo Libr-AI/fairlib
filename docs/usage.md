@@ -143,12 +143,12 @@ python fairlib --BT Reweighting --BTObj joint
 - Train a model with Dynamic balanced training
 
 ```bash
-python fairlib --DyBT FairBach --DyBTObj stratified_y 
+python fairlib --DyBT FairBatch --DyBTObj stratified_y 
 ```
 
 | Name       | Default value | Description                                                  |
 |------------|---------------|--------------------------------------------------------------|
-| DyBT       | False         | FairBach \| GroupDifference \| Others                        |
+| DyBT       | False         | FairBatch \| GroupDifference \| Others                       |
 | DyBTObj    | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 | DyBTalpha  | 0.1           | a positive number for dynamic adjustment.                    |
 

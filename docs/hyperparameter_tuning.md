@@ -171,7 +171,7 @@ In order to achieve those objectives, we have implemented 4 types of methods:
 
 - **Hyperparameters:**  
     ```bash
-    python main.py --DyBT FairBach --DyBTObj stratified_y 
+    python main.py --DyBT FairBatch --DyBTObj stratified_y 
     ```
 
     | Name       | Default value | Description                                                  |
