@@ -1,3 +1,6 @@
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 try:
     from .src.base_options import BaseOptions
     from .src import analysis
