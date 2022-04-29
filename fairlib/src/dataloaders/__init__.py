@@ -49,7 +49,7 @@ def get_dataloaders(args):
 
 
     # DataLoader Parameters
-    tran_dataloader_params = {
+    train_dataloader_params = {
             'batch_size': args.batch_size,
             'shuffle': True,
             'num_workers': args.num_workers}
@@ -60,7 +60,7 @@ def get_dataloaders(args):
             'num_workers': args.num_workers}
 
     # init dataloader
-    training_generator = torch.utils.data.DataLoader(train_data, **tran_dataloader_params)
+    training_generator = torch.utils.data.DataLoader(train_data, **train_dataloader_params)
     validation_generator = torch.utils.data.DataLoader(dev_data, **eval_dataloader_params)
     test_generator = torch.utils.data.DataLoader(test_data, **eval_dataloader_params)
 
