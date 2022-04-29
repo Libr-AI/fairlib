@@ -27,7 +27,7 @@ class SampleDataset(BaseDataset):
 
 For more example, please take a look at `src/dataloader/loaders.py`.
 
-Debiasing methods such as instance reweighting will be automatically applied to the loaded dataset, which is implemented in `src.dataloaders.utilsBaseDataset`.
+Debiasing methods such as instance reweighting will be automatically applied to the loaded dataset, which is implemented in `src.dataloaders.utils.BaseDataset`.
 
 ## Step 2. Register the dataset
 
