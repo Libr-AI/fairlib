@@ -7,6 +7,8 @@ import numpy as np
 import random
 import logging
 from contextlib import contextmanager
+import sys
+import traceback
 
 from . import utils
 from . import dataloaders
@@ -473,7 +475,19 @@ class BaseOptions(object):
                     logging.info('test dataset size: \t{}'.format(len(test_iterator.dataset)))
                     logging.info('datasets built!')
             except Exception as e:
-                print(e)
+                # Get current system exception
+                ex_type, ex_value, ex_traceback = sys.exc_info()
+                # Extract unformatter stack traces as tuples
+                trace_back = traceback.extract_tb(ex_traceback)
+                # Format stacktrace
+                stack_trace = list()
+                for trace in trace_back:
+                    stack_trace.append("File : %s , Line : %d, Func.Name : %s, Message : %s" % (trace[0], trace[1], trace[2], trace[3]))
+                
+                logging.info("Exception type : %s " % ex_type.__name__)
+                logging.info("Exception message : %s" %ex_value)
+                logging.info("Stack trace : %s" %stack_trace)
+                
                 logging.info('dataloaders need to be initialized!')
             
             # Init discriminator for adversarial training
