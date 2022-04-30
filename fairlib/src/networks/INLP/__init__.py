@@ -16,14 +16,18 @@ from ...evaluators.evaluator import gap_eval_scores
 import logging
 
 
-def save_INLP_checkpoint(epoch, dev_predictions, test_predictions, dev_evaluations, test_evaluations, checkpoint_dir):
+def save_INLP_checkpoint(
+    epoch, dev_predictions, test_predictions, dev_evaluations, test_evaluations, 
+    checkpoint_dir,dev_confusion_matrices, test_confusion_matrices):
 
     _state = {
         'epoch': epoch,
-        'dev_predictions': dev_predictions,
-        'test_predictions': test_predictions,
+        # 'dev_predictions': dev_predictions,
+        # 'test_predictions': test_predictions,
         'dev_evaluations': dev_evaluations,
-        'test_evaluations': test_evaluations
+        'test_evaluations': test_evaluations,
+        "valid_confusion_matrices" : dev_confusion_matrices,
+        "test_confusion_matrices" : test_confusion_matrices,
         }
 
     filename = 'INLP_checkpoint_' + "iteration{}".format(epoch) + '.pth.tar'
@@ -130,12 +134,12 @@ def get_INLP_trade_offs(model, args):
         dev_y_pred = classifier.predict(debiased_x_dev)
         test_y_pred= classifier.predict(debiased_x_test)
 
-        dev_scores = gap_eval_scores(
+        dev_scores, dev_confusion_matrices = gap_eval_scores(
             y_pred=dev_y_pred,
             y_true=dev_labels, 
             protected_attribute=dev_private_labels)
 
-        test_scores = gap_eval_scores(
+        test_scores, test_confusion_matrices = gap_eval_scores(
             y_pred=test_y_pred,
             y_true=test_labels, 
             protected_attribute=test_private_labels)
@@ -146,17 +150,15 @@ def get_INLP_trade_offs(model, args):
             test_predictions=test_y_pred,
             dev_evaluations=dev_scores, 
             test_evaluations=test_scores, 
+            dev_confusion_matrices = dev_confusion_matrices, 
+            test_confusion_matrices = test_confusion_matrices,
             checkpoint_dir=args.model_dir
             )
 
         logging.info("Evaluation at Epoch %d" % (iteration,))
-        logging.info(('Validation GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}').format(
-                        100. * dev_scores["rms_TPR"], 100. * dev_scores["accuracy"], 
-                        100. * dev_scores["macro_fscore"], 100. * dev_scores["micro_fscore"]
-                    ))
-        logging.info(('Test GAP: {:2.2f}\tAcc: {:2.2f}\tMacroF1: {:2.2f}\tMicroF1: {:2.2f}').format(
-                        100. * test_scores["rms_TPR"], 100. * test_scores["accuracy"], 
-                        100. * test_scores["macro_fscore"], 100. * test_scores["micro_fscore"]
-                    ))
+        validation_results = ["{}: {:2.2f}\t".format(k, 100.*dev_scores[k]) for k in dev_scores.keys()]
+        logging.info(('Validation {}').format("".join(validation_results)))
+        Test_results = ["{}: {:2.2f}\t".format(k, 100.*test_scores[k]) for k in test_scores.keys()]
+        logging.info(('Test {}').format("".join(Test_results)))
 
     return None
