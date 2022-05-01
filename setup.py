@@ -35,10 +35,10 @@ except:
 if __name__ == '__main__':
     setup(
         name='fairlib',
-        version="0.0.2",
+        version="0.0.3",
         author="Xudong Han",
         author_email="xudongh1@student.unimelb.edu.au",
-        description='Unified framework for bias detection and mitigation in classification.',
+        description='Unified framework for assessing and improving classification fairness.',
         long_description=readme,
         long_description_content_type='text/markdown',
         url='https://github.com/HanXudong/fairlib',
