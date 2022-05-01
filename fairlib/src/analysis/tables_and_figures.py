@@ -70,6 +70,7 @@ def final_results_df(
         Performance_threshold (float, optional): filtering rows with a minimal performance as the threshold. Defaults to 0.0.
         return_conf (bool, optional): return the selected epoch and corresponding YAML configure files if True. Defaults to False.
         save_conf_dir (str, optional): save selected epoch and configure files to the dir. Defaults to None.
+        num_trail (int, optional): downsampling the number of searches of each method to $num_trail if not None. Defaults to None.
 
     Returns:
         pandas.DataFrame: selected results of different models for report
