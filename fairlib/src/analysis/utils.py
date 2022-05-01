@@ -355,7 +355,7 @@ def auc_performance_fairness_tradeoff(
         performance_threshold (_type_, optional): the performance threshold for the method. Defaults to None.
 
     Returns:
-        _type_: _description_
+        _type_: (AUC score, AUC DataFrame)
     """
     fairness_col_name = "{}_{} mean".format(pareto_selection, fairness_metric_name)
     performance_col_name = "{}_{} mean".format(pareto_selection, performance_metric_name)
@@ -398,7 +398,6 @@ def auc_performance_fairness_tradeoff(
                 fairness_col_name: interpolation_fairness,
                 performance_col_name: performance_threshold,
             }
-        print(interpolated_point)
         
         sorted_results_df = sorted_results_df[sorted_results_df[performance_col_name]>=performance_threshold]
         sorted_results_df = sorted_results_df.append(
