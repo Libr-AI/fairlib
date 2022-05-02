@@ -4,43 +4,7 @@ import logging
 from torch.optim import Adam
 import time
 from pathlib import Path
-# from .evaluator import gap_eval_scores
-from ..evaluators.evaluator import gap_eval_scores
-
-def print_network(net, verbose=False):
-    num_params = 0
-    for i, param in enumerate(net.parameters()):
-        num_params += param.numel()
-    if verbose:
-        logging.info(net)
-    logging.info('Total number of parameters: %d\n' % num_params)
-
-
-def save_checkpoint(
-    epoch, epochs_since_improvement, model, loss, 
-    dev_predictions, test_predictions, dev_evaluations, 
-    valid_confusion_matrices, test_confusion_matrices,
-    test_evaluations, is_best, checkpoint_dir):
-
-    _state = {
-        'epoch': epoch,
-        'epochs_since_improvement': epochs_since_improvement,
-        # 'model': model.state_dict(),
-        'loss': loss,
-        # 'dev_predictions': dev_predictions,
-        # 'test_predictions': test_predictions,
-        "valid_confusion_matrices" : valid_confusion_matrices,
-        "test_confusion_matrices" : test_confusion_matrices,
-        'dev_evaluations': dev_evaluations,
-        'test_evaluations': test_evaluations
-        }
-
-    filename = 'checkpoint_' + "epoch{}".format(epoch) + '.pth.tar'
-    torch.save(_state, Path(checkpoint_dir) / filename)
-    # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
-    if is_best:
-        _state["model"]=model.state_dict()
-        torch.save(_state, Path(checkpoint_dir) / 'BEST_checkpoint.pth.tar')
+from ..evaluators import print_network, present_evaluation_scores
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
@@ -134,6 +98,26 @@ def train_epoch(model, iterator, args, epoch):
                     100. * it / len(iterator), loss, data_t, t,
                 ))
             data_t, t = 0, 0
+
+            if (it != 0) and args.save_batch_results:
+                (epoch_test_loss, test_preds, test_labels, test_private_labels) = eval_epoch(
+                    model = model, 
+                    iterator = args.opt.test_generator, 
+                    args = args)
+                
+                (epoch_valid_loss, valid_preds, valid_labels, valid_private_labels) = eval_epoch(
+                    model = model, 
+                    iterator = args.opt.dev_generator, 
+                    args = args)
+
+                present_evaluation_scores(
+                    valid_preds, valid_labels, valid_private_labels,
+                    test_preds, test_labels, test_private_labels,
+                    epoch=epoch+(it / len(iterator)), epochs_since_improvement=None, model=model, epoch_valid_loss=None,
+                    is_best=False, 
+                    )
+                
+                model.train()
         
     return epoch_loss / len(iterator)
 
@@ -296,39 +280,17 @@ class BaseModel(nn.Module):
                 epochs_since_improvement = 0
 
             if epoch % self.args.checkpoint_interval == 0:
-                valid_scores, valid_confusion_matrices = gap_eval_scores(
-                    y_pred=valid_preds,
-                    y_true=valid_labels, 
-                    protected_attribute=valid_private_labels)
+                logging.info("Evaluation at Epoch %d" % (epoch,))
 
                 (epoch_test_loss, test_preds, 
                 test_labels, test_private_labels) = eval_epoch(
                     model = self, 
                     iterator = self.args.opt.test_generator, 
                     args = self.args)
-                
-                test_scores, test_confusion_matrices = gap_eval_scores(
-                    y_pred=test_preds,
-                    y_true=test_labels, 
-                    protected_attribute=test_private_labels)
 
-                # Save checkpoint
-                save_checkpoint(
-                    epoch = epoch, 
-                    epochs_since_improvement = epochs_since_improvement, 
-                    model = self, 
-                    loss = epoch_valid_loss, 
-                    dev_predictions = valid_preds, 
-                    test_predictions = test_preds,
-                    dev_evaluations = valid_scores, 
-                    test_evaluations = test_scores,
-                    valid_confusion_matrices = valid_confusion_matrices,
-                    test_confusion_matrices = test_confusion_matrices,
-                    is_best = is_best,
-                    checkpoint_dir = self.args.model_dir)
-                
-                logging.info("Evaluation at Epoch %d" % (epoch,))
-                validation_results = ["{}: {:2.2f}\t".format(k, 100.*valid_scores[k]) for k in valid_scores.keys()]
-                logging.info(('Validation {}').format("".join(validation_results)))
-                Test_results = ["{}: {:2.2f}\t".format(k, 100.*test_scores[k]) for k in test_scores.keys()]
-                logging.info(('Test {}').format("".join(Test_results)))
+                present_evaluation_scores(
+                    valid_preds, valid_labels, valid_private_labels,
+                    test_preds, test_labels, test_private_labels,
+                    epoch, epochs_since_improvement, self, epoch_valid_loss,
+                    is_best, 
+                    )

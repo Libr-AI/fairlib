@@ -181,6 +181,8 @@ class BaseOptions(object):
                             help='base random seed (default: 1)')
         parser.add_argument('--log_interval', type=int, default=50, metavar='N',
                             help='how many batches to wait before logging training status')
+        parser.add_argument('--save_batch_results', action='store_true', default=False, 
+                            help='if saving batch evaluation results')
         parser.add_argument('--checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--dataset', type=str, default='Moji',
