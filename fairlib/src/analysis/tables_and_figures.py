@@ -30,7 +30,10 @@ def retrive_results(
             if file.startswith(dataset):
                 pre_len = len(dataset)+len(str(log_dir))+2
                 file_path = os.path.join(root, file)
-                mehtod = str(os.path.join(root, file))[pre_len:-7]
+                if file.endswith("_df.pkl"):
+                    mehtod = str(os.path.join(root, file))[pre_len:-7]
+                else:
+                    mehtod = str(os.path.join(root, file))[pre_len:-4]
                 try:
                     results[mehtod] = pd.read_pickle(file_path)
                 except:
