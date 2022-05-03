@@ -12,7 +12,7 @@ import torch
 from pathlib import Path
 import numpy as np
 
-from ...evaluators.evaluator import gap_eval_scores
+from ...evaluators import present_evaluation_scores
 import logging
 
 
@@ -134,31 +134,16 @@ def get_INLP_trade_offs(model, args):
         dev_y_pred = classifier.predict(debiased_x_dev)
         test_y_pred= classifier.predict(debiased_x_test)
 
-        dev_scores, dev_confusion_matrices = gap_eval_scores(
-            y_pred=dev_y_pred,
-            y_true=dev_labels, 
-            protected_attribute=dev_private_labels)
-
-        test_scores, test_confusion_matrices = gap_eval_scores(
-            y_pred=test_y_pred,
-            y_true=test_labels, 
-            protected_attribute=test_private_labels)
-        
-        save_INLP_checkpoint(
-            epoch=iteration, 
-            dev_predictions=dev_y_pred, 
-            test_predictions=test_y_pred,
-            dev_evaluations=dev_scores, 
-            test_evaluations=test_scores, 
-            dev_confusion_matrices = dev_confusion_matrices, 
-            test_confusion_matrices = test_confusion_matrices,
-            checkpoint_dir=args.model_dir
-            )
-
         logging.info("Evaluation at Epoch %d" % (iteration,))
-        validation_results = ["{}: {:2.2f}\t".format(k, 100.*dev_scores[k]) for k in dev_scores.keys()]
-        logging.info(('Validation {}').format("".join(validation_results)))
-        Test_results = ["{}: {:2.2f}\t".format(k, 100.*test_scores[k]) for k in test_scores.keys()]
-        logging.info(('Test {}').format("".join(Test_results)))
+
+        present_evaluation_scores(
+            valid_preds = dev_y_pred, valid_labels = dev_labels, 
+            valid_private_labels = dev_private_labels,
+            test_preds = test_y_pred, test_labels = test_labels, 
+            test_private_labels = test_private_labels,
+            epoch = iteration, epochs_since_improvement = None, 
+            model = model, epoch_valid_loss = None,
+            is_best = False, prefix = "INLP_checkpoint",
+            )
 
     return None
