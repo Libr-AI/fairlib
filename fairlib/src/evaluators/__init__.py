@@ -5,7 +5,7 @@ def present_evaluation_scores(
     valid_preds, valid_labels, valid_private_labels,
     test_preds, test_labels, test_private_labels,
     epoch, epochs_since_improvement, model, epoch_valid_loss,
-    is_best, 
+    is_best, prefix = "checkpoint",
     ):
     valid_scores, valid_confusion_matrices = gap_eval_scores(
         y_pred=valid_preds,
@@ -30,7 +30,8 @@ def present_evaluation_scores(
         valid_confusion_matrices = valid_confusion_matrices,
         test_confusion_matrices = test_confusion_matrices,
         is_best = is_best,
-        checkpoint_dir = model.args.model_dir)
+        checkpoint_dir = model.args.model_dir,
+        prefix = prefix,)
 
     validation_results = ["{}: {:2.2f}\t".format(k, 100.*valid_scores[k]) for k in valid_scores.keys()]
     logging.info(('Validation {}').format("".join(validation_results)))

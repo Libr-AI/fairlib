@@ -16,7 +16,8 @@ def print_network(net, verbose=False):
 def save_checkpoint(
     epoch, epochs_since_improvement, model, loss, dev_evaluations,
     valid_confusion_matrices, test_confusion_matrices,
-    test_evaluations, is_best, checkpoint_dir, dev_predictions=None, test_predictions=None):
+    test_evaluations, is_best, checkpoint_dir, prefix = "checkpoint",
+    dev_predictions=None, test_predictions=None):
 
     _state = {
         'epoch': epoch,
@@ -36,7 +37,7 @@ def save_checkpoint(
     if test_predictions is not None:
         _state["test_predictions"] = test_predictions
 
-    filename = 'checkpoint_' + "epoch{:.2f}".format(epoch) + '.pth.tar'
+    filename = "{}_epoch{:.2f}".format(prefix, epoch) + '.pth.tar'
     torch.save(_state, Path(checkpoint_dir) / filename)
     # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
     if is_best:
