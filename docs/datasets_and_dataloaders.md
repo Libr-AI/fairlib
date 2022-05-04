@@ -7,7 +7,7 @@ A custom dataset class must implement the `load_data` function. Take a look at t
 Then the `load_data` function must assign the value of `self.X` as inputs, `self.y` as target labels, and `self.protected_label` as the information for debiasing, such as gender, age, and race.
 
 ```python
-from src.dataloaders.utils import BaseDataset
+from fairlib.dataloaders.utils import BaseDataset
 from pathlib import Path
 
 class SampleDataset(BaseDataset):
@@ -25,22 +25,18 @@ class SampleDataset(BaseDataset):
 
 ```
 
-For more example, please take a look at `src/dataloader/loaders.py`.
+For more example, please take a look at `fairlib/src/dataloader/loaders.py`.
 
-Debiasing methods such as instance reweighting will be automatically applied to the loaded dataset, which is implemented in `src.dataloaders.utils.BaseDataset`.
+Debiasing methods such as instance reweighting will be automatically applied to the loaded dataset, which is implemented in `fairlib.src.dataloaders.utils.BaseDataset`.
 
 ## Step 2. Register the dataset
 
 - `default_dataset_roots`
 
-To avoid identifying the data root every time, we could predefine the default root the our dataset. we just need to add the path to the dictionary `default_dataset_roots` in `src\dataloaders\__init__.py`. Take a look at the following example.
+To avoid identifying the data root every time, we could predefine the default root the our dataset. we just need to add the path to the dictionary `default_dataset_roots` in `fairlib/src/dataloaders/__init__.py`. Take a look at the following example.
 ```python
     default_dataset_roots = dict(
-        Moji='/data/cephfs/punim1421/Dataset/deepmoji/split2/',
-        Bios_gender='./data/cephfs/punim1421/Dataset/bios_gender_economy',
-        Bios_economy='./data/cephfs/punim1421/Dataset/bios_gender_economy',
-        Bios_both='./data/cephfs/punim1421/Dataset/bios_gender_economy',
-
+        Moji='/data/deepmoji/split2/',
         # New dataset
         New_dataset='./data/path_to_dataset',
     )
