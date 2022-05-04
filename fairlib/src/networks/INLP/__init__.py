@@ -15,24 +15,6 @@ import numpy as np
 from ...evaluators import present_evaluation_scores
 import logging
 
-
-def save_INLP_checkpoint(
-    epoch, dev_predictions, test_predictions, dev_evaluations, test_evaluations, 
-    checkpoint_dir,dev_confusion_matrices, test_confusion_matrices):
-
-    _state = {
-        'epoch': epoch,
-        # 'dev_predictions': dev_predictions,
-        # 'test_predictions': test_predictions,
-        'dev_evaluations': dev_evaluations,
-        'test_evaluations': test_evaluations,
-        "valid_confusion_matrices" : dev_confusion_matrices,
-        "test_confusion_matrices" : test_confusion_matrices,
-        }
-
-    filename = 'INLP_checkpoint_' + "iteration{}".format(epoch) + '.pth.tar'
-    torch.save(_state, Path(checkpoint_dir) / filename)
-
 def load_trained_model(model, checkpoint_dir, device):
     checkpoint_PATH = Path(checkpoint_dir) / 'BEST_checkpoint.pth.tar'
     model.load_state_dict(torch.load(checkpoint_PATH)["model"])
