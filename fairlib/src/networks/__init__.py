@@ -3,6 +3,10 @@ import torch
 import logging
 from .classifier import MLP, BERTClassifier
 from . import utils
+from . import INLP
+from . import FairCL
+from . import DyBT
+from . import adv
 from collections import defaultdict
 
 def get_main_model(args):
