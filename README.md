@@ -1,15 +1,15 @@
-# Fairlib
+# *fairlib*
 
-[Fairlib](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
+[*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
 
-The Fairlib package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md), and functions for analysis.
+The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md), and functions for analysis.
 
-For those who want to start with Fairlib now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
+For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
 [The tutorials and other notebooks](https://github.com/HanXudong/fairlib/tree/main/tutorial) offer a deeper introduction. The complete API is also available.
 
 ## Table of contents
 
-- [Fairlib](#fairlib)
+- [*fairlib*](#fairlib)
   - [Table of contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -23,7 +23,7 @@ For those who want to start with Fairlib now, you can try our [Colab Tutorial](h
 
 ## Installation
 
-Fairlib currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
+*fairlib* currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
 Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/fairlib/blob/main/requirements.txt). 
 We *strongly* recommend using a [venv](https://docs.python.org/3/library/venv.html) or [conda](https://www.anaconda.com/) environment for installation.
 
@@ -42,7 +42,7 @@ pip install faircls
 **Development Installation**
 
 To set up a development environment, run the following commands to clone the repository and install
-Fairlib:
+*fairlib*:
 
 ```bash
 git clone https://github.com/HanXudong/fairlib.git ~/fairlib
@@ -55,14 +55,14 @@ Please refer to [data/README.md](https://github.com/HanXudong/fairlib/blob/main/
 
 ## Usage
 
-The full description of Fairlib usages can be found in [docs/usage](https://github.com/HanXudong/fairlib/blob/main/docs/usage.md). Here are the most basic examples.
+The full description of *fairlib* usages can be found in [docs/usage](https://github.com/HanXudong/fairlib/blob/main/docs/usage.md). Here are the most basic examples.
 
-- Fairlib can be run from the command line:
+- *fairlib* can be run from the command line:
   ```bash
   python fairlib --exp_id EXP_NAME
   ```
 
-- Fairlib can be imported as a package
+- *fairlib* can be imported as a package
   ```python
   from fairlib.base_options import options
   from src import networks
