@@ -19,6 +19,7 @@ def model_selection_parallel(
     n_jobs=20,
     save_path = None,
     return_all = False,
+    keep_original_metrics=False,
     ):
     """perform model selection over different runs wrt different hyperparameters
 
@@ -54,7 +55,7 @@ def model_selection_parallel(
 
     if return_all:
         for exp in tqdm(exps):
-            _exp_results = retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names)
+            _exp_results = retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names, keep_original_metrics)
             exp_results.append(_exp_results)
 
         # result_df = pd.concat(exp_results)
@@ -67,12 +68,12 @@ def model_selection_parallel(
         if n_jobs == 0:
             for exp in tqdm(exps):
                 # Get scores
-                _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
+                _exp_results = retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names,keep_original_metrics)
 
                 exp_results.append(_exp_results)
         else:
             exp_results = Parallel(n_jobs=n_jobs, verbose=5)(delayed(retrive_exp_results) 
-                                                (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names)
+                                                (exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names,keep_original_metrics)
                                                 for exp in exps)
 
         result_df = pd.DataFrame(exp_results).set_index(index_column_names)

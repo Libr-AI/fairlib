@@ -57,6 +57,7 @@ def final_results_df(
     return_conf = False,
     save_conf_dir = None,
     num_trail = None,
+    additional_metrics = [],
     ):
     """Process the results to a single dataset from creating tables and plots.
 
@@ -74,6 +75,7 @@ def final_results_df(
         return_conf (bool, optional): return the selected epoch and corresponding YAML configure files if True. Defaults to False.
         save_conf_dir (str, optional): save selected epoch and configure files to the dir. Defaults to None.
         num_trail (int, optional): downsampling the number of searches of each method to $num_trail if not None. Defaults to None.
+        additional_metrics (list, optional): report additional evaluation metrics for the selected epoch. Defaults to [].
 
     Returns:
         pandas.DataFrame: selected results of different models for report
@@ -92,6 +94,10 @@ def final_results_df(
             "epoch":list,
             "opt_dir":list,
             }
+        # Add aggregation to the specified metrics
+        for _additional_metric in additional_metrics:
+            agg_dict[_additional_metric] = ["mean", "std"]
+
         try:
             _df = _df.groupby(_df.index).agg(agg_dict).reset_index()
         except:
@@ -125,6 +131,9 @@ def final_results_df(
         selected_columns.append("epoch list")
         selected_columns.append("opt_dir list")
         selected_columns.append("is_pareto")
+        # Consider the selected models
+        additional_metric_columns = ["{} {}".format(metric, value) for metric in additional_metrics for value in ["mean", "std"]]
+        selected_columns = selected_columns + additional_metric_columns
 
         _pareto_df = _pareto_df[selected_columns].copy()
         _pareto_df["Models"] = [key]*len(_pareto_df)
@@ -166,7 +175,7 @@ def final_results_df(
 
         evaluation_cols = list(final_df.keys())[1:(9 if return_dev else 5)]
         reproducibility_cols = ["epoch list", "opt_dir list"] if return_conf else []
-        final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols+["is_pareto"]].copy()
+        final_df = final_df[["Models"]+evaluation_cols+["DTO"]+reproducibility_cols+["is_pareto"]+additional_metric_columns].copy()
 
     return final_df
 

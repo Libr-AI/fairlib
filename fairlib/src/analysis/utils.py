@@ -123,13 +123,13 @@ def get_dir(results_dir, project_dir, checkpoint_dir, checkpoint_name, model_id)
                 )
     return exps
 
-def get_model_scores(exp, GAP_metric, Performance_metric):
+def get_model_scores(exp, GAP_metric, Performance_metric, keep_original_metrics = False):
     """given the log path for a exp, read log and return the dev&test performacne, fairness, and DTO
 
     Args:
-        exp (_type_): get_dir output, includeing the options and path to checkpoints
-        GAP_metric (_type_): the target GAP metric name
-        Performance_metric (_type_): the target performance metric name, e.g., F1, Acc.
+        exp (str): get_dir output, includeing the options and path to checkpoints
+        GAP_metric (str): the target GAP metric name
+        Performance_metric (str): the target performance metric name, e.g., F1, Acc.
 
     Returns:
         pd.DataFrame: a pandas df including dev and test scores for each epoch
@@ -151,27 +151,41 @@ def get_model_scores(exp, GAP_metric, Performance_metric):
         epoch_scores_dev["performance"].append(epoch_result["dev_evaluations"][Performance_metric])
         epoch_scores_test["performance"].append(epoch_result["test_evaluations"][Performance_metric])
 
-        # Calculate the DTO for dev and test 
+        if keep_original_metrics:
+            for _dev_keys in epoch_result["dev_evaluations"].keys():
+                epoch_scores_dev[_dev_keys] = (epoch_scores_dev.get(_dev_keys,[]) + [epoch_result["dev_evaluations"][_dev_keys]])
+            
+            for _test_keys in epoch_result["test_evaluations"].keys():
+                epoch_scores_test[_test_keys] = (epoch_scores_test.get(_test_keys,[]) + [epoch_result["test_evaluations"][_test_keys]])
+
+    # Calculate the DTO for dev and test 
     dev_DTO = DTO(fairness_metric=epoch_scores_dev["fairness"], performacne_metric=epoch_scores_dev["performance"])
     test_DTO = DTO(fairness_metric=epoch_scores_test["fairness"], performacne_metric=epoch_scores_test["performance"])
-
-    epoch_scores = pd.DataFrame(
-        {
+    
+    epoch_results_dict = {
             "epoch":epoch_id,
-            "dev_fairness":epoch_scores_dev["fairness"],
-            "dev_performance":epoch_scores_dev["performance"],
             "dev_DTO":dev_DTO,
-            "test_fairness":epoch_scores_test["fairness"],
-            "test_performance":epoch_scores_test["performance"],
+            # "test_fairness":epoch_scores_test["fairness"],
+            # "test_performance":epoch_scores_test["performance"],
             "test_DTO":test_DTO,
         }
-    )
+
+    for _dev_metric_keys in epoch_scores_dev.keys():
+        epoch_results_dict["dev_{}".format(_dev_metric_keys)] = epoch_scores_dev[_dev_metric_keys]
+    for _test_metric_keys in epoch_scores_test.keys():
+        epoch_results_dict["test_{}".format(_test_metric_keys)] = epoch_scores_test[_test_metric_keys]
+
+    epoch_scores = pd.DataFrame(epoch_results_dict)
 
     return epoch_scores
 
-def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names):
+def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names, keep_original_metrics):
     # Get scores
-    epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
+    epoch_scores = get_model_scores(
+        exp=exp, GAP_metric=GAP_metric_name, 
+        Performance_metric=Performance_metric_name,
+        keep_original_metrics = keep_original_metrics,
+        )
     _exp_results = epoch_scores
 
     _exp_opt = exp["opt"]
@@ -183,9 +197,29 @@ def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_c
 
     return _exp_results
 
-def retrive_exp_results(exp,GAP_metric_name, Performance_metric_name,selection_criterion,index_column_names):
+def retrive_exp_results(
+    exp,GAP_metric_name, Performance_metric_name,
+    selection_criterion,index_column_names, keep_original_metrics = False):
+    """Retrive experimental results of a epoch from the saved checkpoint.
+
+    Args:
+        exp (_type_): _description_
+        GAP_metric_name (_type_): _description_
+        Performance_metric_name (_type_): _description_
+        selection_criterion (_type_): _description_
+        index_column_names (_type_): _description_
+        keep_original_metrics (bool, optional): besides selected performance and fairness, show original metrics. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
+
     # Get scores
-    epoch_scores = get_model_scores(exp=exp, GAP_metric=GAP_metric_name, Performance_metric=Performance_metric_name)
+    epoch_scores = get_model_scores(
+        exp=exp, GAP_metric=GAP_metric_name, 
+        Performance_metric=Performance_metric_name,
+        keep_original_metrics=keep_original_metrics,
+        )
     if selection_criterion == "DTO":
         selected_epoch_id = np.argmin(epoch_scores["dev_{}".format(selection_criterion)])
     else:
