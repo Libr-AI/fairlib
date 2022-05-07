@@ -46,7 +46,7 @@ def l2norm(matrix_1, matrix_2):
         matrix_2 (n*d np array): same as matrix_1
 
     Returns:
-        _type_: _description_
+        float: the row-wise Euclidean distance 
     """
     return np.power(np.sum(np.power(matrix_1-matrix_2, 2), axis=1), 0.5)
 
