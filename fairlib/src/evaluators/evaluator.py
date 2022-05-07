@@ -64,9 +64,9 @@ def confusion_matrix_based_scores(cnf):
 
 def power_mean(series, p, axis=0):
     if p>50:
-        return max(series)
+        return np.max(series, axis=axis)
     elif p<-50:
-        return min(series)
+        return np.min(series, axis=axis)
     else:
         total = np.mean(np.power(series, p), axis=axis)
         return np.power(total, 1 / p)
@@ -77,9 +77,9 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
     for gid in distinct_groups:
         # Save the TPR direct to the list 
         group_scores.append(all_scores[gid][metric]) 
-
+    # n_class * n_groups
     Scores = np.stack(group_scores, axis = 1)
-    # Calculate GAP
+    # Calculate GAP (n_class * n_groups) - (n_class * 1)
     score_gaps = Scores - all_scores["overall"][metric].reshape(-1,1)
     # Sum over gaps of all protected groups within each class
     if group_agg_power is None:
