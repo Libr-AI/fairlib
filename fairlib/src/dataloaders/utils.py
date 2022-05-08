@@ -188,7 +188,7 @@ class BaseDataset(torch.utils.data.Dataset):
             # Without balanced training
             self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
         else:
-            assert self.args.BT in ["Reweighting", "Resampling"], "not implemented"
+            assert self.args.BT in ["Reweighting", "Resampling", "Downsampling"], "not implemented"
 
             assert self.args.BTObj in ["joint", "y", "g", "stratified_y", "stratified_g", "EO"], "not implemented"
             """
@@ -196,8 +196,9 @@ class BaseDataset(torch.utils.data.Dataset):
                 joint:          y,g combination, p(g,y)
                 y:              main task label y only, p(y)
                 g:              protected label g only, p(g)
-                stratified_y:   balancing the g for each y, p(g|y)
+                stratified_y:   balancing the g for each y, p(g|y), while keeping the y distribution
                 stratified_g:   balancing the y for each g, p(y|g)
+                EO:             balancing the g for each y, p(g|y)
             """
 
             if self.args.BT == "Reweighting":
@@ -216,7 +217,7 @@ class BaseDataset(torch.utils.data.Dataset):
                 self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
 
             else:
-                pass
+                raise NotImplementedError
         return None
 
     def adv_balanced_training(self):
@@ -239,5 +240,5 @@ class BaseDataset(torch.utils.data.Dataset):
             if self.args.adv_BT == "Reweighting":
                 self.adv_instance_weights = get_weights(self.args.adv_BTObj, self.y, self.protected_label)
             else:
-                pass
+                raise NotImplementedError
         return None

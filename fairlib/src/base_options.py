@@ -228,8 +228,9 @@ class BaseOptions(object):
 
         # Arguments for balanced training
         parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
-        parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g')
+        parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g | EO')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
+
         # Arguments for augmented training
         parser.add_argument('--gated',  action='store_true', default=False, 
                             help='gated model for augmented inputs given protected labels')
