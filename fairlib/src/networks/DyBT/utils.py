@@ -134,7 +134,7 @@ class BaseDyBT(Sampler):
                 for tmp_yg in self.yg_tuple:
                     self.lb_dict[tmp_yg] = (self.yg_len[tmp_yg]/self.g_len[tmp_yg[1]]) * (1.0/len(self.g_item))
 
-            elif args.DyBTObj == "stratified_y":
+            elif args.DyBTObj in ["stratified_y", "EO"]:
                 for tmp_yg in self.yg_tuple:
                     self.lb_dict[tmp_yg] = self.y_len[tmp_yg[0]]/self.N * (1.0/len(self.g_item))
 

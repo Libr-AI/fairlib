@@ -41,7 +41,7 @@ class Group_Difference_Loss(torch.nn.Module):
                     elif tmp_group_loss<overall_loss:
                         gd_loss -= tmp_group_loss 
         
-        elif self.DyBTObj in ["EO"]:
+        elif self.DyBTObj in ["EO", "stratified_y"]:
             for tmp_y in self.y_item:
                 tmp_y_index = y_mask.get(tmp_y, [])
                 tmp_y_loss = self.criterion(predictions[tmp_y_index], tags[tmp_y_index])
@@ -52,6 +52,9 @@ class Group_Difference_Loss(torch.nn.Module):
                         gd_loss += tmp_yg_loss
                     elif tmp_yg_loss < tmp_y_loss:
                         gd_loss -= tmp_yg_loss
+        
+        else:
+            raise NotImplementedError
 
         return gd_loss * self.DyBTalpha
     

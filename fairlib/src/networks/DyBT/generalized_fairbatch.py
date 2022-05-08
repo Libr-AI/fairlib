@@ -110,7 +110,7 @@ class Generalized_FairBatch(BaseDyBT):
             for tmp_yg in self.yg_tuple:
                 self.lb_dict[tmp_yg] = (self.lb_dict[tmp_yg]+min_lb_adjustment)/sum_lbs
             
-        elif self.fairness_type == "stratified_y":
+        elif self.fairness_type in ["stratified_y", "EO"]:
             for tmp_y in self.y_item:
                 
                 larger_loss_group = []

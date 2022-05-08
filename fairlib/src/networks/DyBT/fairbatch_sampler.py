@@ -176,7 +176,7 @@ class FairBatch(Sampler):
         """
         epoch_loss = self.epoch_loss()
 
-        if self.fairness_type == 'stratified_y':
+        if self.fairness_type in ['stratified_y', "EO"]:
 
             yhat_yg = {}
             yhat_y = {}
@@ -285,7 +285,7 @@ class FairBatch(Sampler):
             
             
             # Based on the updated lambdas, determine the size of each class in a batch
-            if self.fairness_type == 'stratified_y':
+            if self.fairness_type in ['stratified_y', "EO"]:
                 
                 for tmp_y in self.y_item:
                     for tmp_g in self.g_item:
