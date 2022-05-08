@@ -8,6 +8,7 @@ import torch.utils.data as data
 
 from collections import Counter
 from random import shuffle
+from random import choices
 
 def full_label_data(df, tasks):
     selected_rows = np.array([True]*len(df))
@@ -68,7 +69,7 @@ def get_weights(BTObj, y, protected_label):
 
     return instance_weights
 
-def get_sampled_indices(BTObj, y, protected_label):
+def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
     # init a dict for storing the index of each group.
 
     group_idx = {}
@@ -87,11 +88,17 @@ def get_sampled_indices(BTObj, y, protected_label):
     selected_index = []
 
     if BTObj in ["joint", "y", "g"]:
-        selected = min([len(i) for i in group_idx.values()])
+        if method == "Downsampling":
+            selected = min([len(i) for i in group_idx.values()])
+        elif method == "Resampling":
+            selected = (len(y) / len(group_idx.keys()))
         for index in group_idx.values():
             _index = index
-            shuffle(_index)
-            selected_index = selected_index + _index[:selected]
+            if method == "Downsampling":
+                shuffle(_index)
+                selected_index = selected_index + _index[:selected]
+            elif method == "Resampling":
+                selected_index = selected_index + choices(_index, k=int(selected))
 
     elif BTObj == "EO":
         # a list of (weights, actual length)
@@ -100,12 +107,18 @@ def get_sampled_indices(BTObj, y, protected_label):
 
         # iterate each main task class
         for y in distinct_y_label:
-            selected = min([len(group_idx.get((y, _g))) for _g in distinct_g_label])
+            if method == "Downsampling":
+                selected = min([len(group_idx.get((y, _g))) for _g in distinct_g_label])
+            elif method == "Resampling":
+                selected = sum([len(group_idx.get((y, _g))) for _g in distinct_g_label]) / len(distinct_g_label)
 
             for g in distinct_g_label:
                 _index = group_idx.get((y,g), [])
-                shuffle(_index)
-                selected_index = selected_index + _index[:selected]
+                if method == "Downsampling":
+                    shuffle(_index)
+                    selected_index = selected_index + _index[:selected]
+                elif method == "Resampling":
+                    selected_index = selected_index + choices(_index, k=int(selected))
 
     elif BTObj == "stratified_y":
         # empirical distribution of y
@@ -119,11 +132,17 @@ def get_sampled_indices(BTObj, y, protected_label):
 
         # iterate each main task class
         for y in distinct_y_label:
-            selected = int(condidate_selected * weighting_counter[y])
+            if method == "Downsampling":
+                selected = int(condidate_selected * weighting_counter[y])
+            elif method == "Resampling":
+                selected = int(weighting_counter[y] / len(distinct_g_label))
             for g in distinct_g_label:
                 _index = group_idx.get((y,g), [])
-                shuffle(_index)
-                selected_index = selected_index + _index[:selected]
+                if method == "Downsampling":
+                    shuffle(_index)
+                    selected_index = selected_index + _index[:selected]
+                elif method == "Resampling":
+                    selected_index = selected_index + choices(_index, k=int(selected))
 
     elif BTObj == "stratified_g":
         # empirical distribution of g
@@ -138,13 +157,18 @@ def get_sampled_indices(BTObj, y, protected_label):
         # iterate each main task class
         # for y in distinct_y_label:
         for g in distinct_g_label:
-            selected = int(condidate_selected * weighting_counter[g])
+            if method == "Downsampling":
+                selected = int(condidate_selected * weighting_counter[g])
+            elif method == "Resampling":
+                selected = int(weighting_counter[g] / len(distinct_y_label))
             # for g in distinct_g_label:
             for y in distinct_y_label:
                 _index = group_idx.get((y,g), [])
-                shuffle(_index)
-                selected_index = selected_index + _index[:selected]
-
+                if method == "Downsampling":
+                    shuffle(_index)
+                    selected_index = selected_index + _index[:selected]
+                elif method == "Resampling":
+                    selected_index = selected_index + choices(_index, k=int(selected))
     return selected_index
 
 class BaseDataset(torch.utils.data.Dataset):
@@ -204,9 +228,9 @@ class BaseDataset(torch.utils.data.Dataset):
             if self.args.BT == "Reweighting":
                 self.instance_weights = get_weights(self.args.BTObj, self.y, self.protected_label)
 
-            elif self.args.BT == "Resampling":
+            elif self.args.BT in ["Resampling", "Downsampling"]:
 
-                selected_index = get_sampled_indices(self.args.BTObj, self.y, self.protected_label)
+                selected_index = get_sampled_indices(self.args.BTObj, self.y, self.protected_label, method = self.args.BT)
 
                 X = [self.X[index] for index in selected_index]
                 self.X = np.array(X)

@@ -227,7 +227,7 @@ class BaseOptions(object):
                             help='the update frequency of the main model classification head (every N batches)')
 
         # Arguments for balanced training
-        parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling')
+        parser.add_argument('--BT', type=str, default=None, help='Reweighting | Resampling | Downsampling')
         parser.add_argument('--BTObj', type=str, default=None, help='joint | y | g | stratified_y | stratified_g | EO')
         parser.add_argument('--full_label',  action='store_true', default=True, help='require full protected label')
 
