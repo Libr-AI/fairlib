@@ -429,3 +429,58 @@ def interactive_plot(plot_df, figsize=(12, 7), dpi = 100, selection="DTO"):
     plt.tight_layout()
     # plt.subplots_adjust(right=0.75)  
     plt.show()
+
+def make_zoom_plot(
+    plot_df, figure_name=None,
+    xlim=None, ylim=None,
+    figsize=(7.5, 6), dpi = 150,
+    zoom_xlim=None, zoom_ylim=None,
+    zoomed_location = [1.05, 0.05, 0.37, 0.9]
+    ):
+
+    plot_df["Fairness"] = plot_df["test_fairness mean"]
+    plot_df["Accuracy"] = plot_df["test_performance mean"]
+
+    # fig, ax = plt.subplots(1, 2, figsize=figsize, dpi = dpi, gridspec_kw={'width_ratios': [0.8, 0.2]})
+    fig, ax = plt.subplots(figsize=figsize, dpi = dpi)
+
+    with sns.axes_style("white"):
+        sns.lineplot(
+            data=plot_df,
+            x="Accuracy",
+            y="Fairness",
+            hue="Models",
+            markers=True,
+            style="Models",
+            ax=ax
+        )
+    if xlim is not None:
+        ax.set_xlim(xlim)
+    if ylim is not None:
+        ax.set_ylim(ylim)
+
+    sns.move_legend(ax, "lower left")
+
+    axins = ax.inset_axes(zoomed_location)
+    with sns.axes_style("white"):
+        sns.lineplot(
+            data=plot_df,
+            x="Accuracy",
+            y="Fairness",
+            hue="Models",
+            markers=True,
+            style="Models",
+            legend=False,
+            ax=axins
+        )
+
+    axins.xaxis.set_visible(False)
+    axins.yaxis.set_visible(False)
+    
+    axins.set_xlim(zoom_xlim)
+    axins.set_ylim(zoom_ylim)
+    
+    ax.indicate_inset_zoom(axins, edgecolor="black")
+    
+    if figure_name is not None:
+        fig.savefig(figure_name, dpi=960, bbox_inches="tight") 
