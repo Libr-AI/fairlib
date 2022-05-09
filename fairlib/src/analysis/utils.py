@@ -370,26 +370,28 @@ def tradeoff_plot(df, hp_name, figure_name=None):
 
 def auc_performance_fairness_tradeoff(
     pareto_df,
-    random_performance = None, 
+    random_performance = 0, 
     pareto_selection = "test",
     fairness_metric_name = "fairness",
     performance_metric_name = "performance",
     interpolation = "linear",
     performance_threshold = None,
+    normalization = False,
     ):
     """calculate the area under the performance--fairness trade-off curve.
 
     Args:
-        pareto_df (_type_): A data frame of pareto frontiers
-        random_performance (str, optional): the lowest performance, which leads to the 1 fairness. Defaults to None.
+        pareto_df (DataFrame): A data frame of pareto frontiers
+        random_performance (float, optional): the lowest performance, which leads to the 1 fairness. Defaults to 0.
         pareto_selection (str, optional): which split is used to select the frontiers. Defaults to "test".
         fairness_metric_name (str, optional):. the metric name for fairness evaluation. Defaults to "fairness".
         performance_metric_name (str, optional): the metric name for performance evaluation. Defaults to "performance".
         interpolation (str, optional): interpolation method for the threshold fairness. Defaults to "linear".
-        performance_threshold (_type_, optional): the performance threshold for the method. Defaults to None.
+        performance_threshold (float, optional): the performance threshold for the method. Defaults to None.
+        normalization (bool, optional): if normalize the auc score with the maximum auc that can be achieved. Defaults to False.
 
     Returns:
-        _type_: (AUC score, AUC DataFrame)
+        tuple: (AUC score, AUC DataFrame)
     """
     fairness_col_name = "{}_{} mean".format(pareto_selection, fairness_metric_name)
     performance_col_name = "{}_{} mean".format(pareto_selection, performance_metric_name)
@@ -398,11 +400,10 @@ def auc_performance_fairness_tradeoff(
     results_df = pareto_df[[fairness_col_name, performance_col_name]]
 
     # Add the worst performed model
-    if random_performance is not None:
-        results_df = results_df.append({
-            fairness_col_name: 1,
-            performance_col_name: random_performance,
-            }, ignore_index=True)
+    results_df = results_df.append({
+        fairness_col_name: 1,
+        performance_col_name: random_performance,
+        }, ignore_index=True)
 
     sorted_results_df = results_df.sort_values(by=[fairness_col_name])
 
@@ -438,9 +439,15 @@ def auc_performance_fairness_tradeoff(
             interpolated_point, ignore_index=True,
         )
 
+
     filtered_curve = sorted_results_df.sort_values(by=[performance_col_name])
     auc_filtered_curve = np.trapz(
         filtered_curve[fairness_col_name], 
         x=filtered_curve[performance_col_name], )
+
+    # Calculate the normalization term
+    if normalization:
+        normalization_term = (1-min(filtered_curve[performance_col_name]))
+        auc_filtered_curve = auc_filtered_curve / normalization_term
 
     return auc_filtered_curve, filtered_curve
