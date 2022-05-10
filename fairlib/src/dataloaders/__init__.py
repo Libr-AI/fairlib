@@ -22,6 +22,17 @@ else:
     )
 
 def get_dataloaders(args):
+    """Initialize the torch dataloaders according to arguments.
+
+    Args:
+        args (namespace): arguments
+
+    Raises:
+        NotImplementedError: if correspoding components have not been implemented.
+
+    Returns:
+        tuple: dataloaders for training set, development set, and test set.
+    """
     assert args.dataset in ["Sample", "test", "Moji", "Bios_gender", "Bios_economy", "Bios_both"], "Not implemented"
     if args.dataset == "Moji":
         task_dataloader = DeepMojiDataset
