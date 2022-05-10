@@ -15,6 +15,11 @@ import matplotlib.pyplot as plt
 
 
 def mkdirs(paths):
+    """make a set of new directories
+
+    Args:
+        paths (list): a list of directories
+    """
     if isinstance(paths, list) and not isinstance(paths, str):
         for path in paths:
             mkdir(path)
@@ -23,19 +28,34 @@ def mkdirs(paths):
 
 
 def mkdir(path):
+    """make a new directory
+
+    Args:
+        path (str): path to the directory
+    """
     if not os.path.exists(path):
         try:
             os.makedirs(path)
         except FileExistsError:
             pass
 
-def power_mean(series, p):
+def power_mean(series, p, axis=0):
+    """calculate the generalized mean
+
+    Args:
+        series (np.array): a array of numbers.
+        p (int): power of the generalized mean.
+        axis (int, optional): axis to the aggregation. Defaults to 0.
+
+    Returns:
+        np.array: generalized mean of the inputs
+    """
     if p>50:
-        return max(series)
-    elif p<50:
-        return min(series)
+        return np.max(series, axis=axis)
+    elif p<-50:
+        return np.min(series, axis=axis)
     else:
-        total = np.mean(np.power(series, p))
+        total = np.mean(np.power(series, p), axis=axis)
         return np.power(total, 1 / p)
 
 def l2norm(matrix_1, matrix_2):
@@ -86,10 +106,10 @@ def get_dir(results_dir, project_dir, checkpoint_dir, checkpoint_name, model_id)
         project_dir (str): experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.
         checkpoint_dir (str): dir to checkpoints, `models` by default.
         checkpoint_name (str):  checkpoint_epoch{num_epoch}.ptr.gz
-        model_id (_type_): read all experiment start with the same model_id. E.g., "Adv" when tuning hyperparameters for standard adversarial
+        model_id (str): read all experiment start with the same model_id. E.g., "Adv" when tuning hyperparameters for standard adversarial
 
     Returns:
-        _type_: _description_
+        list: a list of dictionaries, where each dict contains the information for a experiment.
     """
     results_dir = Path(results_dir)
     project_dir = Path(project_dir)
@@ -179,7 +199,19 @@ def get_model_scores(exp, GAP_metric, Performance_metric, keep_original_metrics 
 
     return epoch_scores
 
-def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names, keep_original_metrics):
+def retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names, keep_original_metrics = False):
+    """retrive experimental results according to the input list of experiments.
+
+    Args:
+        exp (list): a list of experiment info.
+        GAP_metric_name (str): gap metric name, such as TPR_GAP.
+        Performance_metric_name (str): performance metric name, such as accuracy.
+        index_column_names (_type_): a list of hyperparameters that will be used to differentiate runs within a single method.
+        keep_original_metrics (bool): whether or not keep all experimental results in the checkpoint. Default to False. 
+
+    Returns:
+        dict: retrived results.
+    """
     # Get scores
     epoch_scores = get_model_scores(
         exp=exp, GAP_metric=GAP_metric_name, 
@@ -211,7 +243,7 @@ def retrive_exp_results(
         keep_original_metrics (bool, optional): besides selected performance and fairness, show original metrics. Defaults to False.
 
     Returns:
-        _type_: _description_
+        dict: retrived results.
     """
 
     # Get scores
@@ -242,57 +274,18 @@ def retrive_exp_results(
 
     return _exp_results
 
-def create_plots(
-    input_df, 
-    key_index = 0, 
-    GAP_metric_name = "fairness",
-    Performance_metric_name = "performance",
-    ):
-    """create plots and return the selected model
+def is_pareto_efficient(costs, return_mask = True):
+    """Find the pareto-efficient points
+
+    If return_mask is True, this will be an (n_points, ) boolean array
+    Otherwise it will be a (n_efficient_points, ) integer array of indices.
 
     Args:
-        input_df (pd.DataFrame): results dataframe
+        costs (np.array): An (n_points, n_costs) array
+        return_mask (bool, optional): True to return a mask. Defaults to True.
 
     Returns:
-        _type_: selected model
-    """
-    # Moji_adv_df
-    # _df = input_df.set_index(index_column_names)
-    _df = input_df
-
-    __df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
-    __df
-
-    _final_DTO = DTO(
-            fairness_metric=list(__df[("test_{}".format(GAP_metric_name), "mean")]), 
-            performacne_metric=list(__df[("test_{}".format(Performance_metric_name), "mean")])
-            )
-    __df["final_DTO"] = _final_DTO
-
-    try:
-        _log_lambda = [round(math.log10(i[key_index]), 2) for i in __df["index"]]
-        __df["log_lambda"] = _log_lambda
-
-        sns.relplot(data=__df, x="log_lambda", y="final_DTO")
-    except:
-        pass
-
-    sns.relplot(
-        data=__df, 
-        x=("test_{}".format(Performance_metric_name), "mean"), 
-        y=("test_{}".format(GAP_metric_name), "mean"))
-
-    return __df[__df["final_DTO"] == min(_final_DTO)]
-
-# Faster than is_pareto_efficient_simple, but less readable.
-def is_pareto_efficient(costs, return_mask = True):
-    """
-    Find the pareto-efficient points
-    :param costs: An (n_points, n_costs) array
-    :param return_mask: True to return a mask
-    :return: An array of indices of pareto-efficient points.
-        If return_mask is True, this will be an (n_points, ) boolean array
-        Otherwise it will be a (n_efficient_points, ) integer array of indices.
+        np.array: An array of indices of pareto-efficient points.
     """
     is_efficient = np.arange(costs.shape[0])
     n_points = costs.shape[0]
@@ -309,64 +302,6 @@ def is_pareto_efficient(costs, return_mask = True):
         return is_efficient_mask
     else:
         return is_efficient
-
-def model_comparasion(
-    results_dict,
-    GAP_metric_name = "fairness",
-    Performance_metric_name = "performance",
-    pareto = True,
-    pareto_selection = "test",
-    default_plot = True
-    ):
-
-    df_list = []
-    for key in results_dict.keys():
-        # Moji_adv_df
-        # _df = results_dict[key].set_index(index_column_names)
-        _df = results_dict[key]
-
-        _df = _df.groupby(_df.index).agg(["mean", "var"]).reset_index()
-
-        _df.columns = [' '.join(col).strip() for col in _df.columns.values]
-
-        if pareto:
-            _pareto_flag = is_pareto_efficient(
-                -1*_df[["{}_{} mean".format(pareto_selection, GAP_metric_name), "{}_{} mean".format(pareto_selection, Performance_metric_name)]].to_numpy()
-                )
-            _pareto_df = _df[_pareto_flag][["test_{} mean".format(GAP_metric_name), "test_{} mean".format(Performance_metric_name)]]
-        else:
-            _pareto_df = _df[["test_{} mean".format(GAP_metric_name), "test_{} mean".format(Performance_metric_name)]]
-
-        _pareto_df["Models"] = [key]*len(_pareto_df)
-        
-        df_list.append(_pareto_df)
-    final_df = pd.concat(df_list)
-    final_df.reset_index(inplace=True)
-    
-    if default_plot:
-        sns.relplot(
-            data=final_df,
-            x="test_{} mean".format(Performance_metric_name),
-            y="test_{} mean".format(GAP_metric_name),
-            hue="Models",
-            kind="line",
-        )
-
-    return final_df
-
-def tradeoff_plot(df, hp_name, figure_name=None):
-    df = df.reset_index()
-    tradeoff_df = pd.DataFrame({
-        "log_10 "+hp_name:[math.log10(i) for i in list(df[hp_name])]*2,
-        "Value":list(df["test_fairness"])+list(df["test_performance"]),
-        "Metric":["Fairness"]*len(df)+["Performance"]*len(df),
-    })
-
-    
-    ax = sns.lineplot(data=tradeoff_df, y="Value", x="log_10 "+hp_name, style="Metric", hue="Metric")
-    if figure_name is not None:
-        fig = ax.get_figure()
-        fig.savefig(figure_name, dpi=960, bbox_inches="tight") 
 
 def auc_performance_fairness_tradeoff(
     pareto_df,
