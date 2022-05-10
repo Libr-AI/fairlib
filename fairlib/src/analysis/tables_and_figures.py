@@ -180,6 +180,14 @@ def final_results_df(
     return final_df
 
 def interactive_plot(plot_df, figsize=(12, 7), dpi = 100, selection="DTO"):
+    """Create interactive plots for DTO and constrained selection.
+
+    Args:
+        plot_df (_type_): a pd.DataFrame including numbers for each method.
+        figsize (tuple, optional): figure size in tuple. Defaults to (12, 7).
+        dpi (int, optional): figure resolution. Defaults to 100.
+        selection (str, optional): constrained | DTO, indicating which model selection approach is used. Defaults to "DTO".
+    """
     from matplotlib.widgets import CheckButtons
     from matplotlib.widgets import Slider, Button, RangeSlider
 
@@ -437,6 +445,19 @@ def make_zoom_plot(
     zoom_xlim=None, zoom_ylim=None,
     zoomed_location = [1.05, 0.05, 0.37, 0.9]
     ):
+    """Make tradeoff plots with zoomed-in area.
+
+    Args:
+        plot_df (pd.DataFrame): a pd.DataFrame including numbers for each method.
+        figure_name (str, optional): save the plot with figure_name. Defaults to None.
+        xlim (tuple, optional): x-axis limit. Defaults to None.
+        ylim (tuple, optional): y-aix limit. Defaults to None.
+        figsize (tuple, optional): figure size. Defaults to (7.5, 6).
+        dpi (int, optional): figure resolution. Defaults to 150.
+        zoom_xlim (tuple, optional): x-axis interval of the zoomed-in area. Defaults to None.
+        zoom_ylim (tuple, optional): y-axis interval of the zoomed-in area. Defaults to None.
+        zoomed_location (list, optional): location of the zoomed-in area, [x, y, length, height]. Defaults to [1.05, 0.05, 0.37, 0.9].
+    """
 
     plot_df["Fairness"] = plot_df["test_fairness mean"]
     plot_df["Accuracy"] = plot_df["test_performance mean"]
