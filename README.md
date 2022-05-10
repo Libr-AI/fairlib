@@ -2,24 +2,10 @@
 
 [*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
 
-The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md), and functions for analysis.
+The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html), and functions for analysis.
 
 For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
-[The tutorials and other notebooks](https://github.com/HanXudong/fairlib/tree/main/tutorial) offer a deeper introduction. The complete API is also available.
-
-## Table of contents
-
-- [*fairlib*](#fairlib)
-  - [Table of contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Model Selection and Fairness Evaluation](#model-selection-and-fairness-evaluation)
-  - [Known issues and limitations](#known-issues-and-limitations)
-  - [Getting help](#getting-help)
-  - [Paper](#paper)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
+[The tutorials and other notebooks](https://github.com/HanXudong/fairlib/tree/main/tutorial) offer a deeper introduction. The [complete API](https://hanxudong.github.io/fairlib/tutorial_usage.html) is also available.
 
 
 ## Installation
@@ -102,7 +88,7 @@ or describe it in Issues.
 
 ## Paper
 
-**fairlib: A Unified Framework for Assessing and Improving Classification Fairness**
+[fairlib: A Unified Framework for Assessing and Improving Classification Fairness](https://arxiv.org/abs/2205.01876)
 
 Cite Us
 ```
