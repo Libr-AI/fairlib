@@ -14,6 +14,9 @@ def variable(t: torch.Tensor, use_cuda=True, **kwargs):
     return Variable(t, **kwargs)
 
 class DiffLoss(torch.nn.Module):
+    """
+    compute the Frobenius norm of two tensors
+    """
     # From: Domain Separation Networks (https://arxiv.org/abs/1608.06019)
     # Konstantinos Bousmalis, George Trigeorgis, Nathan Silberman, Dilip Krishnan, Dumitru Erhan
 

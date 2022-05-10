@@ -12,6 +12,17 @@ from sklearn.metrics import accuracy_score
 
 # Train the discriminator 1 batch
 def adv_train_batch(model, discriminators, batch, args):
+    """train the discriminator one batch
+
+    Args:
+        model (torch.nn.Module): the main task model
+        discriminators (torch.nn.Module): the discriminator
+        batch (tuple): bach data, including inputs, target labels, protected labels, etc.
+        args (namespace): arguments for training
+
+    Returns:
+        float: training loss
+    """
 
     batch_loss = 0
 
@@ -73,6 +84,17 @@ def adv_train_batch(model, discriminators, batch, args):
 
 # train the discriminator 1 epoch
 def adv_train_epoch(model, discriminators, iterator, args):
+    """train the discriminator one epoch
+
+    Args:
+        model (torch.nn.Module): the main task model.
+        discriminators (torch.nn.Module): the discriminator
+        iterator (dataloader): torch data iterator.
+        args (namespace): arguments for training.
+
+    Returns:
+        float: training loss.
+    """
 
     epoch_loss = 0
     model.eval()
@@ -88,8 +110,18 @@ def adv_train_epoch(model, discriminators, iterator, args):
 
     return epoch_loss / len(iterator)
 
-# train the discriminator 1 epoch
 def adv_eval_epoch(model, discriminators, iterator, args):
+    """evaluate the discriminator
+
+    Args:
+        model (torch.nn.Module): the main task model.
+        discriminators (torch.nn.Module): the discriminator
+        iterator (dataloader): torch data iterator.
+        args (namespace): arguments for training.
+
+    Returns:
+        tuple: (evaluation loss, evaluation metrics)
+    """
 
     epoch_loss = 0
     model.eval()
