@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib Cheat Sheet &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Analysis Module" href="reference_api_analysis.html" />
+    <link rel="prev" title="Hyperparameter Tuning" href="reference_component_hyperparameter_tuning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><em>fairlib</em> Cheat Sheet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-operation">Basic operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-options">Additional options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-new-datasets-models">Add New Datasets/Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reproducibility">Reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><em>fairlib</em> Cheat Sheet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_usage.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairlib-cheat-sheet">
+<h1><em>fairlib</em> Cheat Sheet<a class="headerlink" href="#fairlib-cheat-sheet" title="Permalink to this headline"></a></h1>
+<section id="basic-operation">
+<h2>Basic operation<a class="headerlink" href="#basic-operation" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --exp_id EXP_NAME
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>project_dir</p></td>
+<td><p>dev</p></td>
+<td><p>protect step root: dev | hypertune | final</p></td>
+</tr>
+<tr class="row-odd"><td><p>exp_id</p></td>
+<td><p>test</p></td>
+<td><p>experiment id</p></td>
+</tr>
+<tr class="row-even"><td><p>base_seed</p></td>
+<td><p>1</p></td>
+<td><p>base random seed</p></td>
+</tr>
+<tr class="row-odd"><td><p>dataset</p></td>
+<td><p>Moji</p></td>
+<td><p>dataset: Moji | Bios_gender | Bios_economy | Bios_both</p></td>
+</tr>
+<tr class="row-even"><td><p>data_dir</p></td>
+<td><p>None</p></td>
+<td><p>dataset root, load from the default dir if set to None</p></td>
+</tr>
+<tr class="row-odd"><td><p>results_dir</p></td>
+<td><p>./results/</p></td>
+<td><p>results directory</p></td>
+</tr>
+<tr class="row-even"><td><p>model_dir</p></td>
+<td><p>models</p></td>
+<td><p>directory storing trained models</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_workers</p></td>
+<td><p>0</p></td>
+<td><p>number of data loader workers</p></td>
+</tr>
+</tbody>
+</table>
+<p>The corresponding results such options and output logs will be saved in <code class="docutils literal notranslate"><span class="pre">results_dir/project_dir/dataset/exp_id</span></code>, while the model checkpoints and related predictions will be save in <code class="docutils literal notranslate"><span class="pre">results_dir/project_dir/dataset/exp_id/model_dir</span></code>.</p>
+<ul>
+<li><p>Train a vanilla model without debiasing</p>
+<ul>
+<li><p>Train a mode over Moji with DeepMoji representations.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    python fairlib --dataset Moji --emb_size <span class="m">2304</span> --num_classes <span class="m">2</span> --num_groups <span class="m">2</span> --data_dir Path_to_data
+</pre></div>
+</div>
+</li>
+<li><p>Train a model over Bios with fixed BERT-base representations.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    python fairlib --dataset Bios_gender --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --num_groups <span class="m">2</span> --data_dir Path_to_data
+
+    python fairlib --dataset Bios_economy --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --num_groups <span class="m">2</span> --data_dir Path_to_data
+
+    python fairlib --dataset Bios_both --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --num_groups <span class="m">4</span> --data_dir Path_to_data
+</pre></div>
+</div>
+</li>
+<li><p>Train a model over Bios with trainable BERT-base representations.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    python fairlib --dataset Bios_gender --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --encoder_architecture BERT --batch_size <span class="m">16</span>
+
+    python fairlib --dataset Bios_economy --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --encoder_architecture BERT --batch_size <span class="m">16</span>
+
+    python fairlib --dataset Bios_both --emb_size <span class="m">768</span> --num_classes <span class="m">28</span> --encoder_architecture BERT --batch_size <span class="m">16</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>emb_size</p></td>
+<td><p>2304</p></td>
+<td><p>input embedding dimension</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_classes</p></td>
+<td><p>2</p></td>
+<td><p>number of target classes</p></td>
+</tr>
+<tr class="row-even"><td><p>num_groups</p></td>
+<td><p>2</p></td>
+<td><p>number of protected groups</p></td>
+</tr>
+<tr class="row-odd"><td><p>batch_size</p></td>
+<td><p>1024</p></td>
+<td><p>input batch size for training</p></td>
+</tr>
+<tr class="row-even"><td><p>epochs</p></td>
+<td><p>100</p></td>
+<td><p>number of total epochs to train</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr</p></td>
+<td><p>0.003</p></td>
+<td><p>learning rate used to actually learn stuff</p></td>
+</tr>
+<tr class="row-even"><td><p>epochs_since_improvement</p></td>
+<td><p>5</p></td>
+<td><p>terminate training for early stopping</p></td>
+</tr>
+<tr class="row-odd"><td><p>device_id</p></td>
+<td><p>0</p></td>
+<td><p>device id, -1 is cpu</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Train a model with adversarial debiasing</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --adv_debiasing
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_update_frequency</p></td>
+<td><p>Batch</p></td>
+<td><p>Epoch | Batch</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_level</p></td>
+<td><p>last_hidden</p></td>
+<td><p>input | last_hidden | output</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_lambda</p></td>
+<td><p>1</p></td>
+<td><p>strength of adversarial regularization</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Ensemble adversarial training</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --adv_debiasing --adv_num_subDiscriminator <span class="m">3</span>
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_num_subDiscriminator</p></td>
+<td><p>1</p></td>
+<td><p>number of sub-discriminators.</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Diverse adversarial training</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --adv_debiasing --adv_num_subDiscriminator <span class="m">3</span> --adv_diverse_lambda <span class="m">100</span>
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_num_subDiscriminator</p></td>
+<td><p>1</p></td>
+<td><p>number of subdiscriminators.</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_diverse_lambda</p></td>
+<td><p>0</p></td>
+<td><p>strength of difference loss to encourage diverse representations for ensemble adv.</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Towards conditional independence through adversarial training</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --adv_debiasing --adv_gated
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_gated</p></td>
+<td><p>False</p></td>
+<td><p>gated discriminator for augmented inputs given target labels</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_gated_mapping</p></td>
+<td><p>One-hot</p></td>
+<td><p>mapping function from numerical labels to vectors.</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>INLP</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --INLP
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>INLP_discriminator_reweighting</p></td>
+<td><p>None</p></td>
+<td><p>if train the linear discriminator with reweighting</p></td>
+</tr>
+<tr class="row-odd"><td><p>INLP_by_class</p></td>
+<td><p>False</p></td>
+<td><p>estimate the nullspace by_class</p></td>
+</tr>
+<tr class="row-even"><td><p>INLP_n</p></td>
+<td><p>300</p></td>
+<td><p>the maximum number of null-space projection iteration</p></td>
+</tr>
+<tr class="row-odd"><td><p>INLP_min_acc</p></td>
+<td><p>0.0</p></td>
+<td><p>ignore the iteration if the acc is lower than the threshold</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Fair Contrastive Learning</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --FCL
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>fcl_lambda_y</p></td>
+<td><p>0.1</p></td>
+<td><p>strength of the supervised contrastive loss</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_lambda_g</p></td>
+<td><p>0.1</p></td>
+<td><p>strength of the fair supervised contrastive loss</p></td>
+</tr>
+<tr class="row-even"><td><p>fcl_temperature_y</p></td>
+<td><p>0.01</p></td>
+<td><p>temperature for the fcl wrt main task learning</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_temperature_g</p></td>
+<td><p>0.01</p></td>
+<td><p>temperature for the fcl wrt protected attribute unlearning</p></td>
+</tr>
+<tr class="row-even"><td><p>fcl_base_temperature_y</p></td>
+<td><p>0.01</p></td>
+<td><p>base temperature for the fcl wrt main task learning</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_base_temperature_g</p></td>
+<td><p>0.01</p></td>
+<td><p>base temperature for the fcl wrt protected attribute unlearning</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Train a model with balanced training</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --BT Reweighting --BTObj joint
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BT</p></td>
+<td><p>False</p></td>
+<td><p>Reweighting or Resampling</p></td>
+</tr>
+<tr class="row-odd"><td><p>BTObj</p></td>
+<td><p>None</p></td>
+<td><p>joint | y | g | stratified_y | stratified_g | EO</p></td>
+</tr>
+<tr class="row-even"><td><p>full_label</p></td>
+<td><p>True</p></td>
+<td><p>require full protected label</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Train a model with Dynamic balanced training</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --DyBT FairBatch --DyBTObj stratified_y 
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DyBT</p></td>
+<td><p>False</p></td>
+<td><p>FairBatch | GroupDifference | Others</p></td>
+</tr>
+<tr class="row-odd"><td><p>DyBTObj</p></td>
+<td><p>None</p></td>
+<td><p>joint | y | g | stratified_y | stratified_g | EO</p></td>
+</tr>
+<tr class="row-even"><td><p>DyBTalpha</p></td>
+<td><p>0.1</p></td>
+<td><p>a positive number for dynamic adjustment.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For <code class="docutils literal notranslate"><span class="pre">Connecting</span> <span class="pre">Loss</span> <span class="pre">Difference</span> <span class="pre">with</span> <span class="pre">Equal</span> <span class="pre">Opportunity</span> <span class="pre">for</span> <span class="pre">Fair</span> <span class="pre">Models</span></code>, the <strong>Diff</strong> and <strong>Mean</strong> are:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># L_diff as described in Section 3.2</span>
+python fairlib --DyBT GroupDifference --DyBTObj EO
+
+<span class="c1"># L_mean as described in Section 3.3 </span>
+python fairlib --DyBT GroupDifference --DyBTObj joint
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Train a model to incorporate demographic factors</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --BT --BTObj joint --gated
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gated</p></td>
+<td><p>False</p></td>
+<td><p>gated model for augmented inputs given demographic labels</p></td>
+</tr>
+<tr class="row-odd"><td><p>gated_mapping</p></td>
+<td><p>One-hot</p></td>
+<td><p>mapping function from numerical labels to vectors.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="additional-options">
+<h2>Additional options<a class="headerlink" href="#additional-options" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Logging</p></li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>base_seed</p></td>
+<td><p>1</p></td>
+<td><p>base random seed</p></td>
+</tr>
+<tr class="row-odd"><td><p>log_interval</p></td>
+<td><p>50</p></td>
+<td><p>how many batches to wait before logging training status</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint_interval</p></td>
+<td><p>1</p></td>
+<td><p>checkpoint interval (epoch)</p></td>
+</tr>
+<tr class="row-odd"><td><p>no_log</p></td>
+<td><p>False</p></td>
+<td><p>if set, will not log into file</p></td>
+</tr>
+<tr class="row-even"><td><p>log_level</p></td>
+<td><p>INFO</p></td>
+<td><p>logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Model architecture</p></li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>hidden_size</p></td>
+<td><p>300</p></td>
+<td><p>number of hidden units of each hidden layer for the main task classifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>n_hidden</p></td>
+<td><p>2</p></td>
+<td><p>number of hidden layers</p></td>
+</tr>
+<tr class="row-even"><td><p>dropout</p></td>
+<td><p>0</p></td>
+<td><p>dropout probability</p></td>
+</tr>
+<tr class="row-odd"><td><p>emb_size</p></td>
+<td><p>2304</p></td>
+<td><p>input embedding dimension, i.e., dimension of sentence vectors</p></td>
+</tr>
+<tr class="row-even"><td><p>num_classes</p></td>
+<td><p>2</p></td>
+<td><p>number of target classes</p></td>
+</tr>
+<tr class="row-odd"><td><p>activation_function</p></td>
+<td><p>Tanh</p></td>
+<td><p>nonlinear activation function for the main task model</p></td>
+</tr>
+<tr class="row-even"><td><p>batch_norm</p></td>
+<td><p>False</p></td>
+<td><p>apply 1d batch norm to the model</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Discriminator architecture</p></li>
+</ul>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_hidden_size</p></td>
+<td><p>300</p></td>
+<td><p>number of hidden units of each hidden layer for the main task classifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_n_hidden</p></td>
+<td><p>2</p></td>
+<td><p>number of hidden layers</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_dropout</p></td>
+<td><p>0</p></td>
+<td><p>dropout probability</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_activation_function</p></td>
+<td><p>ReLu</p></td>
+<td><p>nonlinear activation function for the main task model</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_batch_norm</p></td>
+<td><p>False</p></td>
+<td><p>apply 1d batch norm to the model</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="add-new-datasets-models">
+<h2>Add New Datasets/Models<a class="headerlink" href="#add-new-datasets-models" title="Permalink to this headline"></a></h2>
+<p>Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.</p>
+</section>
+<section id="reproducibility">
+<h2>Reproducibility<a class="headerlink" href="#reproducibility" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --conf_file PATH_TO_EXP/opt.yaml
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reference_component_hyperparameter_tuning.html" class="btn btn-neutral float-left" title="Hyperparameter Tuning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference_api_analysis.html" class="btn btn-neutral float-right" title="Analysis Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib Quick-start &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Built-in Debiasing Methods" href="supported_bias_mitigation_algorithms.html" />
+    <link rel="prev" title="Welcome to fairlib’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><em>fairlib</em> Quick-start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-selection-and-fairness-evaluation">Model Selection and Fairness Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#known-issues-and-limitations">Known issues and limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-help">Getting help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><em>fairlib</em> Quick-start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/README.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairlib-quick-start">
+<h1><em>fairlib</em> Quick-start<a class="headerlink" href="#fairlib-quick-start" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://github.com/HanXudong/fairlib"><em>fairlib</em></a> is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.</p>
+<p>The <em>fairlib</em> package includes metrics for fairness evaluation, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md">algorithms for bias mitigation</a>, and functions for analysis.</p>
+<p>For those who want to start with <em>fairlib</em> now, you can try our <a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb">Colab Tutorial</a>, which provides a gentle introduction to the concepts and capabilities.
+<a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/tutorial">The tutorials and other notebooks</a> offer a deeper introduction. The complete API is also available.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p><em>fairlib</em> currently requires Python3.7+ and <a class="reference external" href="https://pytorch.org">Pytorch</a> 1.10 or higher.
+Dependencies of the core modules are listed in <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/requirements.txt"><code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></a>.
+We <em>strongly</em> recommend using a <a class="reference external" href="https://docs.python.org/3/library/venv.html">venv</a> or <a class="reference external" href="https://www.anaconda.com/">conda</a> environment for installation.</p>
+<p><strong>Standard Installation</strong></p>
+<p>If you do not need further modifications, you can install it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a new virtual environment:</span>
+conda create -n fairlib <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
+conda activate fairlib
+
+pip install faircls
+</pre></div>
+</div>
+<p><strong>Development Installation</strong></p>
+<p>To set up a development environment, run the following commands to clone the repository and install
+<em>fairlib</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/HanXudong/fairlib.git ~/fairlib
+<span class="nb">cd</span> ~/fairlib<span class="p">;</span> python setup.py develop
+</pre></div>
+</div>
+<p><strong>Benchmark Datasets</strong></p>
+<p>Please refer to <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/data/README.md">data/README.md</a> for a list of fairness benchmark datasets.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<p>The full description of <em>fairlib</em> usages can be found in <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/usage.md">docs/usage</a>. Here are the most basic examples.</p>
+<ul>
+<li><p><em>fairlib</em> can be run from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --exp_id EXP_NAME
+</pre></div>
+</div>
+</li>
+<li><p><em>fairlib</em> can be imported as a package</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.base_options</span> <span class="kn">import</span> <span class="n">options</span>
+<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">networks</span>
+
+<span class="n">config_file</span> <span class="o">=</span> <span class="s1">&#39;opt.yaml&#39;</span>
+<span class="c1"># Get options</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">conf_file</span><span class="o">=</span><span class="n">config_file</span><span class="p">)</span>
+
+<span class="c1"># Init the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">get_main_model</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1"># Training with debiasing</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="model-selection-and-fairness-evaluation">
+<h2>Model Selection and Fairness Evaluation<a class="headerlink" href="#model-selection-and-fairness-evaluation" title="Permalink to this headline"></a></h2>
+<p>We provide implementation of DTO and DTO based model selection for different models.</p>
+<p>Please see <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/tutorial/demo.ipynb">this tutorial</a> for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
+Moreover, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb">interactive plots</a> are also supported, which can be used for analysis.</p>
+</section>
+<section id="known-issues-and-limitations">
+<h2>Known issues and limitations<a class="headerlink" href="#known-issues-and-limitations" title="Permalink to this headline"></a></h2>
+<p>None are known at this time.</p>
+</section>
+<section id="getting-help">
+<h2>Getting help<a class="headerlink" href="#getting-help" title="Permalink to this headline"></a></h2>
+<p>If you have any problem with our code or have some suggestions, including the future feature, feel free to contact</p>
+<ul class="simple">
+<li><p>Xudong Han (xudongh1&#64;student.unimelb.edu.au)</p></li>
+</ul>
+<p>or describe it in Issues.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<p>We appreciate all contributions. If you are planning to contribute back bug-fixes, please do so without any further discussion. If you plan to contribute new features, utility functions or extensions, please first open an issue and discuss the feature with us.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline"></a></h2>
+<p>This project is distributed under the terms of the <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">APACHE LICENSE, VERSION 2.0</a>.  The license applies to all files in the <a class="reference external" href="http://github.com/HanXudong/fairlib">GitHub repository</a> hosting this file.</p>
+</section>
+<section id="acknowledgments">
+<h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>https://github.com/HanXudong/Decoupling_Adversarial_Training_for_Fair_NLP</p></li>
+<li><p>https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training</p></li>
+<li><p>https://github.com/SsnL/dataset-distillation</p></li>
+<li><p>https://github.com/huggingface/torchMoji</p></li>
+<li><p>https://github.com/mhucka/readmine</p></li>
+<li><p>https://github.com/yanaiela/demog-text-removal</p></li>
+<li><p>https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations</p></li>
+<li><p>https://github.com/yuji-roh/fairbatch</p></li>
+<li><p>https://github.com/shauli-ravfogel/nullspace_projection</p></li>
+<li><p>https://github.com/AiliAili/contrastive_learning_fair_representations</p></li>
+<li><p>https://github.com/AiliAili/Difference_Mean_Fair_Models</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to fairlib’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="supported_bias_mitigation_algorithms.html" class="btn btn-neutral float-right" title="Built-in Debiasing Methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

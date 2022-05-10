@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debiasing for Structured Inputs &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interactive Visualization" href="tutorial_interactive_plots.html" />
+    <link rel="prev" title="Debiasing CV Tasks" href="tutorial_colored_MNIST.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Debiasing for Structured Inputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-and-preprocess-the-compas-dataset">Download and preprocess the COMPAS dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-vanilla-model">Train a Vanilla Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bias-mitigation">Bias Mitigation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Debiasing for Structured Inputs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_COMPAS.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="debiasing-for-structured-inputs">
+<h1>Debiasing for Structured Inputs<a class="headerlink" href="#debiasing-for-structured-inputs" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/COMPAS.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this tutorial we will:</p>
+<ul class="simple">
+<li><p>Show how to add a model for structural classification</p></li>
+<li><p>Show how to add a dataloader with structured data preprocessing</p></li>
+</ul>
+<p>We will be using the Northpointe’s Correctional Offender Management Profiling for Alternative Sanctions (COMPAS) score, used in states like California and Florida.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>Again, the first step will be installing our libarary</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install fairlib
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Collecting fairlib
+  Downloading fairlib-0.0.1-py3-none-any.whl (61 kB)
+[K     |████████████████████████████████| 61 kB 4.1 MB/s 
+[?25hRequirement already satisfied: tqdm in /usr/local/lib/python3.7/dist-packages (from fairlib) (4.63.0)
+Collecting transformers
+  Downloading transformers-4.18.0-py3-none-any.whl (4.0 MB)
+[K     |████████████████████████████████| 4.0 MB 16.9 MB/s 
+[?25hRequirement already satisfied: pandas in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.3.5)
+Requirement already satisfied: docopt in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.6.2)
+Requirement already satisfied: scikit-learn in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.0.2)
+Requirement already satisfied: seaborn in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.11.2)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.2.2)
+Collecting pickle5
+  Downloading pickle5-0.0.12-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.whl (256 kB)
+[K     |████████████████████████████████| 256 kB 45.9 MB/s 
+[?25hRequirement already satisfied: torch in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.10.0+cu111)
+Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.21.5)
+Requirement already satisfied: PyYAML in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.13)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (0.11.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (3.0.7)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (1.4.0)
+Requirement already satisfied: python-dateutil&gt;=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (2.8.2)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib-&gt;fairlib) (3.10.0.2)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil&gt;=2.1-&gt;matplotlib-&gt;fairlib) (1.15.0)
+Requirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas-&gt;fairlib) (2018.9)
+Requirement already satisfied: joblib&gt;=0.11 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.1.0)
+Requirement already satisfied: scipy&gt;=1.1.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.4.1)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (3.1.0)
+Collecting sacremoses
+  Downloading sacremoses-0.0.49-py3-none-any.whl (895 kB)
+[K     |████████████████████████████████| 895 kB 41.5 MB/s 
+[?25hCollecting huggingface-hub&lt;1.0,&gt;=0.1.0
+  Downloading huggingface_hub-0.5.1-py3-none-any.whl (77 kB)
+[K     |████████████████████████████████| 77 kB 6.5 MB/s 
+[?25hRequirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2019.12.20)
+Collecting tokenizers!=0.11.3,&lt;0.13,&gt;=0.11.1
+  Downloading tokenizers-0.11.6-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (6.5 MB)
+[K     |████████████████████████████████| 6.5 MB 28.3 MB/s 
+[?25hRequirement already satisfied: requests in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2.23.0)
+Collecting PyYAML
+  Downloading PyYAML-6.0-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (596 kB)
+[K     |████████████████████████████████| 596 kB 49.2 MB/s 
+[?25hRequirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (4.11.3)
+Requirement already satisfied: filelock in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (3.6.0)
+Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (21.3)
+Requirement already satisfied: zipp&gt;=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata-&gt;transformers-&gt;fairlib) (3.7.0)
+Requirement already satisfied: chardet&lt;4,&gt;=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (3.0.4)
+Requirement already satisfied: idna&lt;3,&gt;=2.5 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2.10)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2021.10.8)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (1.24.3)
+Requirement already satisfied: click in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;transformers-&gt;fairlib) (7.1.2)
+Installing collected packages: PyYAML, tokenizers, sacremoses, huggingface-hub, transformers, pickle5, fairlib
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 3.13
+    Uninstalling PyYAML-3.13:
+      Successfully uninstalled PyYAML-3.13
+Successfully installed PyYAML-6.0 fairlib-0.0.1 huggingface-hub-0.5.1 pickle5-0.0.12 sacremoses-0.0.49 tokenizers-0.11.6 transformers-4.18.0
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fairlib</span>
+</pre></div>
+</div>
+</section>
+<section id="download-and-preprocess-the-compas-dataset">
+<h2>Download and preprocess the COMPAS dataset<a class="headerlink" href="#download-and-preprocess-the-compas-dataset" title="Permalink to this headline"></a></h2>
+<p>https://github.com/google-research/google-research/blob/master/group_agnostic_fairness/data_utils/CreateCompasDatasetFiles.ipynb</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!wget --no-check-certificate --content-disposition &quot;https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv&quot; -O &quot;data/compas-scores-two-years.csv&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>--2022-04-08 15:09:58--  https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.110.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.108.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2546489 (2.4M) [text/plain]
+Saving to: ‘data/compas-scores-two-years.csv’
+
+data/compas-scores- 100%[===================&gt;]   2.43M  --.-KB/s    in 0.03s   
+
+2022-04-08 15:09:58 (70.2 MB/s) - ‘data/compas-scores-two-years.csv’ saved [2546489/2546489]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">float_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:,.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span>
+<span class="n">dataset_base_dir</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span>
+<span class="n">dataset_file_name</span> <span class="o">=</span> <span class="s1">&#39;compas-scores-two-years.csv&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_base_dir</span><span class="p">,</span><span class="n">dataset_file_name</span><span class="p">)</span>
+<span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+<span class="c1"># Columns of interest</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;juv_fel_count&#39;</span><span class="p">,</span> <span class="s1">&#39;juv_misd_count&#39;</span><span class="p">,</span> <span class="s1">&#39;juv_other_count&#39;</span><span class="p">,</span> <span class="s1">&#39;priors_count&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;age&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;c_charge_degree&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;c_charge_desc&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;age_cat&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span>  <span class="s1">&#39;is_recid&#39;</span><span class="p">]</span>
+<span class="n">target_variable</span> <span class="o">=</span> <span class="s1">&#39;is_recid&#39;</span>
+<span class="n">target_value</span> <span class="o">=</span> <span class="s1">&#39;Yes&#39;</span>
+
+<span class="c1"># Drop duplicates</span>
+<span class="n">temp_df</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">[[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Convert columns of type ``object`` to ``category`` </span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[],</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;object&#39;</span><span class="p">]),</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="s1">&#39;object&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="o">.</span><span class="n">astype</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+        <span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Binarize target_variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;is_recid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;Yes&#39;</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;is_recid&#39;</span><span class="p">]</span><span class="o">==</span><span class="mf">1.0</span> <span class="k">else</span> <span class="s1">&#39;No&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="c1"># Process protected-column values</span>
+<span class="n">race_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;African-American&#39;</span><span class="p">:</span><span class="s1">&#39;Black&#39;</span><span class="p">,</span><span class="s1">&#39;Caucasian&#39;</span><span class="p">:</span><span class="s1">&#39;White&#39;</span><span class="p">}</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">race_dict</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]]</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">race_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;Other&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+  <div id="df-7d3a143f-c642-4228-9663-4fe7fafe02bd">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</pre></div>
+</div>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>juv_fel_count</th>
+      <th>juv_misd_count</th>
+      <th>juv_other_count</th>
+      <th>priors_count</th>
+      <th>age</th>
+      <th>c_charge_degree</th>
+      <th>c_charge_desc</th>
+      <th>age_cat</th>
+      <th>sex</th>
+      <th>race</th>
+      <th>is_recid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>69</td>
+      <td>F</td>
+      <td>Aggravated Assault w/Firearm</td>
+      <td>Greater than 45</td>
+      <td>Male</td>
+      <td>Other</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>34</td>
+      <td>F</td>
+      <td>Felony Battery w/Prior Convict</td>
+      <td>25 - 45</td>
+      <td>Male</td>
+      <td>Black</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>24</td>
+      <td>F</td>
+      <td>Possession of Cocaine</td>
+      <td>Less than 25</td>
+      <td>Male</td>
+      <td>Black</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>23</td>
+      <td>F</td>
+      <td>Possession of Cannabis</td>
+      <td>Less than 25</td>
+      <td>Male</td>
+      <td>Black</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>43</td>
+      <td>F</td>
+      <td>arrest case no charge</td>
+      <td>25 - 45</td>
+      <td>Male</td>
+      <td>Other</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7209</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>23</td>
+      <td>F</td>
+      <td>Deliver Cannabis</td>
+      <td>Less than 25</td>
+      <td>Male</td>
+      <td>Black</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7210</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>23</td>
+      <td>F</td>
+      <td>Leaving the Scene of Accident</td>
+      <td>Less than 25</td>
+      <td>Male</td>
+      <td>Black</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7211</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>57</td>
+      <td>F</td>
+      <td>Aggravated Battery / Pregnant</td>
+      <td>Greater than 45</td>
+      <td>Male</td>
+      <td>Other</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7212</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>33</td>
+      <td>M</td>
+      <td>Battery on Law Enforc Officer</td>
+      <td>25 - 45</td>
+      <td>Female</td>
+      <td>Black</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7213</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>23</td>
+      <td>F</td>
+      <td>Possession of Ethylone</td>
+      <td>Less than 25</td>
+      <td>Female</td>
+      <td>Other</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+<p>7214 rows × 11 columns</p>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-7d3a143f-c642-4228-9663-4fe7fafe02bd')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+<p>&lt;svg xmlns=”http://www.w3.org/2000/svg” height=”24px”viewBox=”0 0 24 24”
+width=”24px”&gt;
+<path d="M0 0h24v24H0V0z" fill="none"/>
+<path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+</svg>
+</button></p>
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>  &lt;script&gt;
+    const buttonEl =
+      document.querySelector(&#39;#df-7d3a143f-c642-4228-9663-4fe7fafe02bd button.colab-df-convert&#39;);
+    buttonEl.style.display =
+      google.colab.kernel.accessAllowed ? &#39;block&#39; : &#39;none&#39;;
+
+    async function convertToInteractive(key) {
+      const element = document.querySelector(&#39;#df-7d3a143f-c642-4228-9663-4fe7fafe02bd&#39;);
+      const dataTable =
+        await google.colab.kernel.invokeFunction(&#39;convertToInteractive&#39;,
+                                                 [key], {});
+      if (!dataTable) return;
+
+      const docLinkHtml = &#39;Like what you see? Visit the &#39; +
+        &#39;&lt;a target=&quot;_blank&quot; href=https://colab.research.google.com/notebooks/data_table.ipynb&gt;data table notebook&lt;/a&gt;&#39;
+        + &#39; to learn more about interactive tables.&#39;;
+      element.innerHTML = &#39;&#39;;
+      dataTable[&#39;output_type&#39;] = &#39;display_data&#39;;
+      await google.colab.output.renderOutput(dataTable, element);
+      const docLink = document.createElement(&#39;div&#39;);
+      docLink.innerHTML = docLinkHtml;
+      element.appendChild(docLink);
+    }
+  &lt;/script&gt;
+&lt;/div&gt;
+</pre></div>
+</div>
+  </div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create splits</span>
+<span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">train_df</span><span class="p">,</span> <span class="n">dev_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cat_cols</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">vocab_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">:</span>
+  <span class="n">vocab_dict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vocab_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;c_charge_degree&#39;: [&#39;F&#39;, &#39;M&#39;], &#39;c_charge_desc&#39;: [&#39;Aiding Escape&#39;, &#39;Cash Item w/Intent to Defraud&#39;, &#39;Lewd or Lascivious Molestation&#39;, &#39;Attempted Burg/Convey/Unocc&#39;, &#39;Aggravated Assault W/o Firearm&#39;, &#39;Disorderly Conduct&#39;, &#39;Crlty Twrd Child Urge Oth Act&#39;, &#39;Agg Battery Grt/Bod/Harm&#39;, &#39;Poss Contr Subst W/o Prescript&#39;, &#39;Soliciting For Prostitution&#39;, &#39;Tresspass Struct/Conveyance&#39;, &#39;Unlaw Lic Use/Disply Of Others&#39;, &#39;Aggrav Battery w/Deadly Weapon&#39;, &#39;Opert With Susp DL 2ND Offense&#39;, &#39;Deliver Cannabis&#39;, &#39;Battery&#39;, &#39;Intoxicated/Safety Of Another&#39;, &#39;Fail Sex Offend Report Bylaw&#39;, &#39;Attempted Deliv Control Subst&#39;, &#39;Lewd Act Presence Child 16-&#39;, &#39;Violation Of Boater Safety Id&#39;, &#39;Del Morphine at/near Park&#39;, &#39;Possession of LSD&#39;, &#39;Possession Of Diazepam&#39;, &#39;Possession Of Anabolic Steroid&#39;, &#39;Aggravated Battery (Firearm)&#39;, &#39;Possession Of Carisoprodol&#39;, &#39;Possession Of Cocaine&#39;, &#39;Purchase/P/W/Int Cannabis&#39;, &#39;Attempt Armed Burglary Dwell&#39;, &#39;Cause Anoth Phone Ring Repeat&#39;, &#39;Sexual Performance by a Child&#39;, &#39;Purchase Cannabis&#39;, &#39;Falsely Impersonating Officer&#39;, &#39;False Motor Veh Insurance Card&#39;, &#39;Strong Armed  Robbery&#39;, &#39;Deliver Cannabis 1000FTSch&#39;, &#39;Possession of Morphine&#39;, &#39;Possession of Methadone&#39;, &#39;Alcoholic Beverage Violation-FL&#39;, &#39;Battery On A Person Over 65&#39;, &#39;Lewd/Lasc Battery Pers 12+/&lt;16&#39;, &#39;Sel/Pur/Mfr/Del Control Substa&#39;, &#39;Sound Articles Over 100&#39;, &#39;Petit Theft&#39;, &#39;DWLS Canceled Disqul 1st Off&#39;, &#39;Present Proof of Invalid Insur&#39;, &#39;Sex Batt Faml/Cust Vict 12-17Y&#39;, &#39;Felony Battery w/Prior Convict&#39;, &#39;Use Of 2 Way Device To Fac Fel&#39;, &#39;Possession of Oxycodone&#39;, &#39;Poss Firearm W/Altered ID#&#39;, &#39;Neglect Child / No Bodily Harm&#39;, &#39;Sex Battery Deft 18+/Vict 11-&#39;, &#39;Poss Unlaw Issue Driver Licenc&#39;, &#39;Att Burgl Struc/Conv Dwel/Occp&#39;, &#39;Robbery W/Firearm&#39;, &#39;Trans/Harm/Material to a Minor&#39;, &#39;Lve/Scen/Acc/Veh/Prop/Damage&#39;, &#39;Burglary Conveyance Occupied&#39;, &#39;Child Abuse&#39;, &#39;Robbery / Weapon&#39;, &#39;Offer Agree Secure/Lewd Act&#39;, &#39;Poss/Sell/Deliver Clonazepam&#39;, &#39;Giving False Crime Report&#39;, &#39;Possession Of Buprenorphine&#39;, &#39;Burglary Conveyance Assault/Bat&#39;, &#39;Prostitution/Lewdness/Assign&#39;, &#39;Aggress/Panhandle/Beg/Solict&#39;, &#39;Tampering with a Victim&#39;, &#39;Crim Use Of Personal Id Info&#39;, &#39;Use Computer for Child Exploit&#39;, &#39;Possession Child Pornography&#39;, &#39;Uttering Forged Bills&#39;, &#39;Fleeing or Eluding a LEO&#39;, &#39;Possession of Alcohol Under 21&#39;, &#39;Possess/Use Weapon 1 Deg Felon&#39;, &#39;Battery Spouse Or Girlfriend&#39;, &#39;DUI- Enhanced&#39;, &#39;Prostitution&#39;, &#39;DUI - Property Damage/Personal Injury&#39;, &#39;Traff In Cocaine &lt;400g&gt;150 Kil&#39;, &#39;Solicit Purchase Cocaine&#39;, &#39;Delivery of Heroin&#39;, &#39;Crimin Mischief Damage $1000+&#39;, &#39;Unlawful Use Of Police Badges&#39;, &#39;Fail Register Vehicle&#39;, &#39;Poss Pyrrolidinobutiophenone&#39;, &#39;Sexual Battery / Vict 12 Yrs +&#39;, &#39;False Ownership Info/Pawn Item&#39;, &#39;Forging Bank Bills/Promis Note&#39;, &#39;Crim Attempt/Solic/Consp&#39;, &#39;Aggravated Battery / Pregnant&#39;, &#39;Leave Accd/Attend Veh/Less $50&#39;, &#39;Theft/To Deprive&#39;, &#39;Grand Theft (motor Vehicle)&#39;, &#39;Compulsory Attendance Violation&#39;, &#39;Murder In 2nd Degree W/firearm&#39;, &#39;Poss/pur/sell/deliver Cocaine&#39;, &#39;Criminal Mischief Damage &lt;$200&#39;, &#39;Possession Of Clonazepam&#39;, &#39;Burglary With Assault/battery&#39;, &#39;Poss Counterfeit Payment Inst&#39;, &#39;Possession of Cannabis&#39;, &#39;False Info LEO During Invest&#39;, &#39;Dealing In Stolen Property&#39;, &#39;Accessory After the Fact&#39;, &#39;Unlawful Conveyance of Fuel&#39;, &#39;Delivery of 5-Fluoro PB-22&#39;, &#39;Battery On Fire Fighter&#39;, &#39;Contradict Statement&#39;, &#39;Possess Controlled Substance&#39;, &#39;Computer Pornography&#39;, &#39;Grand Theft in the 3rd Degree&#39;, &#39;Sale/Del Cannabis At/Near Scho&#39;, &#39;Poss of Firearm by Convic Felo&#39;, &#39;DOC/Cause Public Danger&#39;, &#39;Attempted Burg/struct/unocc&#39;, &#39;Principal In The First Degree&#39;, &#39;Resist/Obstruct W/O Violence&#39;, &#39;Unlaw Use False Name/Identity&#39;, &#39;Felony Driving While Lic Suspd&#39;, &#39;Possession of Cocaine&#39;, &#39;Deliver Cocaine 1000FT Park&#39;, &#39;Del Cannabis At/Near Park&#39;, &#39;Failure To Pay Taxi Cab Charge&#39;, &#39;Traffick Oxycodone     4g&gt;&lt;14g&#39;, &#39;Fel Drive License Perm Revoke&#39;, &#39;Murder in 2nd Degree&#39;, &#39;Possession Of Fentanyl&#39;, &#39;Poss F/Arm Delinq&#39;, &#39;Purchasing Of Alprazolam&#39;, &#39;Trespass Struct/Convey Occupy&#39;, &#39;Poss/Sell/Del Cocaine 1000FT Sch&#39;, &#39;False Name By Person Arrest&#39;, &#39;Fail To Redeliv Hire/Leas Prop&#39;, &#39;Del of JWH-250 2-Methox 1-Pentyl&#39;, &#39;Possession Of Heroin&#39;, &#39;Robbery W/Deadly Weapon&#39;, &#39;Trespass Structure/Conveyance&#39;, &#39;Leaving the Scene of Accident&#39;, &#39;Deliver Cocaine 1000FT Store&#39;, &#39;Driving License Suspended&#39;, &#39;Carry Open/Uncov Bev In Pub&#39;, &#39;Criminal Attempt 3rd Deg Felon&#39;, &#39;Deliver Alprazolam&#39;, &#39;Agg Assault W/int Com Fel Dome&#39;, &#39;Use Scanning Device to Defraud&#39;, &#39;Possess Weapon On School Prop&#39;, &#39;Fail Register Career Offender&#39;, &#39;Corrupt Public Servant&#39;, &#39;Poss Wep Conv Felon&#39;, &#39;Unlicensed Telemarketing&#39;, &#39;Del 3,4 Methylenedioxymethcath&#39;, &#39;Arson in the First Degree&#39;, &#39;Poss Similitude of Drivers Lic&#39;, &#39;Grand Theft (Motor Vehicle)&#39;, &#39;Delivery Of Drug Paraphernalia&#39;, &#39;Carjacking with a Firearm&#39;, &#39;Poss Pyrrolidinovalerophenone W/I/D/S&#39;, &#39;Offn Against Intellectual Prop&#39;, &#39;Burglary Assault/Battery Armed&#39;, &#39;Theft&#39;, &#39;DUI Level 0.15 Or Minor In Veh&#39;, &#39;Neglect Child / Bodily Harm&#39;, &#39;Harm Public Servant Or Family&#39;, &#39;Poss Tetrahydrocannabinols&#39;, &#39;Opert With Susp DL 2nd Offens&#39;, &#39;Robbery Sudd Snatch No Weapon&#39;, &#39;Assault&#39;, &#39;Grand Theft of the 2nd Degree&#39;, &#39;Unauth C/P/S Sounds&gt;1000/Audio&#39;, &#39;Viol Pretrial Release Dom Viol&#39;, &#39;Obstruct Fire Equipment&#39;, &#39;Battery on Law Enforc Officer&#39;, &#39;Uttering Worthless Check +$150&#39;, &#39;Poss Unlaw Issue Id&#39;, &#39;Unlaw LicTag/Sticker Attach&#39;, &#39;Disrupting School Function&#39;, &#39;Fail Obey Driv Lic Restrictions&#39;, &#39;Felony Committing Prostitution&#39;, &#39;Agg Assault Law Enforc Officer&#39;, &#39;Throw In Occupied Dwell&#39;, &#39;Aggravated Assault W/Dead Weap&#39;, &#39;Sale/Del Counterfeit Cont Subs&#39;, &#39;Felony Battery (Dom Strang)&#39;, &#39;Criminal Mischief&#39;, &#39;Possession Of 3,4Methylenediox&#39;, &#39;Tresspass in Structure or Conveyance&#39;, &#39;Traffick Amphetamine 28g&gt;&lt;200g&#39;, &#39;Throw Deadly Missile Into Veh&#39;, &#39;Burglary Conveyance Armed&#39;, &#39;Possess Cannabis/20 Grams Or Less&#39;, &#39;Lease For Purpose Trafficking&#39;, &#39;Tamper With Witness/Victim/CI&#39;, &#39;D.U.I. Serious Bodily Injury&#39;, &#39;Lewd/Lasciv Molest Elder Persn&#39;, &#39;Possession of Benzylpiperazine&#39;, &#39;Violation License Restrictions&#39;, &#39;Issuing a Worthless Draft&#39;, &#39;Throw Missile Into Pub/Priv Dw&#39;, &#39;Pos Cannabis For Consideration&#39;, &#39;Attempted Robbery  No Weapon&#39;, &#39;Possession of Ethylone&#39;, &#39;Aggravated Assault w/Firearm&#39;, &#39;Susp Drivers Lic 1st Offense&#39;, &#39;Purchase Of Cocaine&#39;, &#39;Possess Mot Veh W/Alt Vin #&#39;, &#39;Viol Injunct Domestic Violence&#39;, &#39;Felony DUI (level 3)&#39;, &#39;Sell or Offer for Sale Counterfeit Goods&#39;, &#39;Poss 3,4 MDMA (Ecstasy)&#39;, &#39;Fabricating Physical Evidence&#39;, &#39;Possess w/I/Utter Forged Bills&#39;, &#39;Threat Public Servant&#39;, &#39;Insurance Fraud&#39;, &#39;Extradition/Defendants&#39;, &#39;Traffic Counterfeit Cred Cards&#39;, &#39;Petit Theft $100- $300&#39;, &#39;Att Burgl Unoccupied Dwel&#39;, &#39;Poss Cntrft Contr Sub w/Intent&#39;, &#39;Abuse Without Great Harm&#39;, &#39;arrest case no charge&#39;, &#39;DUI - Enhanced&#39;, &#39;Grand Theft Dwell Property&#39;, &#39;Resist Officer w/Violence&#39;, &#39;False 911 Call&#39;, &#39;Poss Pyrrolidinovalerophenone&#39;, &#39;Trespass Other Struct/Conve&#39;, &#39;Fighting/Baiting Animals&#39;, &#39;Possess Cannabis 1000FTSch&#39;, &#39;Possession of Hydromorphone&#39;, &#39;Grand Theft on 65 Yr or Older&#39;, &#39;Interfere W/Traf Cont Dev RR&#39;, &#39;Exhibition Weapon School Prop&#39;, &#39;Imperson Public Officer or Emplyee&#39;, &#39;Agg Fleeing and Eluding&#39;, &#39;Viol Injunction Protect Dom Vi&#39;, &#39;Traffick Hydrocodone   4g&gt;&lt;14g&#39;, &#39;Refuse to Supply DNA Sample&#39;, &#39;Pos Methylenedioxymethcath W/I/D/S&#39;, &#39;Trespass Struct/Conveyance&#39;, &#39;Restraining Order Dating Viol&#39;, &#39;Tamper With Victim&#39;, &#39;Compulsory Sch Attnd Violation&#39;, &#39;Deliver Cocaine&#39;, &#39;Reckless Driving&#39;, &#39;Fail To Obey Police Officer&#39;, &#39;Deliver 3,4 Methylenediox&#39;, &#39;Contribute Delinquency Of A Minor&#39;, &#39;Open Carrying Of Weapon&#39;, &#39;Burglary Conveyance Unoccup&#39;, &#39;Grand Theft in the 1st Degree&#39;, &#39;Possession Of Amphetamine&#39;, &#39;Burglary Structure Assault/Batt&#39;, &#39;Possession of Codeine&#39;, &#39;Harass Witness/Victm/Informnt&#39;, &#39;Aggr Child Abuse-Torture,Punish&#39;, &#39;Poss of Vessel w/Altered ID NO&#39;, &#39;Carrying Concealed Firearm&#39;, &#39;Escape&#39;, &#39;Poss Meth/Diox/Meth/Amp (MDMA)&#39;, &#39;Aggravated Battery&#39;, &#39;Criminal Mischief&gt;$200&lt;$1000&#39;, &#39;Att Tamper w/Physical Evidence&#39;, &#39;Possession Of Methamphetamine&#39;, &#39;Robbery / No Weapon&#39;, &#39;Possession Of Alprazolam&#39;, &#39;Refuse Submit Blood/Breath Test&#39;, &#39;Trespass Structure w/Dang Weap&#39;, &#39;Bribery Athletic Contests&#39;, &#39;Felon in Pos of Firearm or Amm&#39;, &#39;Posses/Disply Susp/Revk/Frd DL&#39;, &#39;Exposes Culpable Negligence&#39;, &#39;Leave Acc/Attend Veh/More $50&#39;, &#39;Agg Abuse Elderlly/Disabled Adult&#39;, &#39;Interference with Custody&#39;, &#39;Tampering With Physical Evidence&#39;, &#39;Counterfeit Lic Plates/Sticker&#39;, &#39;Trespass On School Grounds&#39;, &#39;PL/Unlaw Use Credit Card&#39;, &#39;Possess Drug Paraphernalia&#39;, &#39;Cruelty Toward Child&#39;, &#39;Poss Oxycodone W/Int/Sell/Del&#39;, &#39;Exploit Elderly Person 20-100K&#39;, &#39;Solic to Commit Battery&#39;, &#39;Stalking (Aggravated)&#39;, &#39;Depriv LEO of Protect/Communic&#39;, &#39;Defrauding Innkeeper $300/More&#39;, &#39;Lewd/Lasc Exhib Presence &lt;16yr&#39;, &#39;Prostitution/Lewd Act Assignation&#39;, &#39;Poss Alprazolam W/int Sell/Del&#39;, &#39;Poss Of RX Without RX&#39;, &#39;Unauthorized Interf w/Railroad&#39;, &#39;False Imprisonment&#39;, &#39;Burglary Structure Unoccup&#39;, &#39;Unemployment Compensatn Fraud&#39;, &#39;Flee/Elude LEO-Agg Flee Unsafe&#39;, &#39;DWI w/Inj Susp Lic / Habit Off&#39;, &#39;DUI/Property Damage/Persnl Inj&#39;, &#39;Conspiracy to Deliver Cocaine&#39;, &#39;Fail To Secure Load&#39;, &#39;Misuse Of 911 Or E911 System&#39;, &#39;Pos Cannabis W/Intent Sel/Del&#39;, &#39;Money Launder 100K or More Dols&#39;, &#39;Leaving Acc/Unattended Veh&#39;, &#39;Burglary Dwelling Armed&#39;, &#39;Burglary Dwelling Occupied&#39;, &#39;Trespassing/Construction Site&#39;, &#39;Culpable Negligence&#39;, &#39;Burgl Dwel/Struct/Convey Armed&#39;, &#39;Consp Traff Oxycodone  4g&gt;&lt;14g&#39;, &#39;Battery Emergency Care Provide&#39;, &#39;Shoot In Occupied Dwell&#39;, &#39;Hiring with Intent to Defraud&#39;, &#39;Poss Of 1,4-Butanediol&#39;, &#39;Fraud Obtain Food or Lodging&#39;, &#39;License Suspended Revoked&#39;, &#39;Murder in the First Degree&#39;, &#39;Deliver Cocaine 1000FT School&#39;, &#39;Kidnapping / Domestic Violence&#39;, &#39;Attempted Robbery  Weapon&#39;, &#39;Aggrav Stalking After Injunctn&#39;, &#39;Unl/Disturb Education/Instui&#39;, &#39;Fleeing Or Attmp Eluding A Leo&#39;, &#39;Manslaughter W/Weapon/Firearm&#39;, &#39;Possess Tobacco Product Under 18&#39;, &#39;Viol Prot Injunc Repeat Viol&#39;, &#39;Battery On Parking Enfor Speci&#39;, &#39;DUI Property Damage/Injury&#39;, &#39;Tamper With Witness&#39;, &#39;Aide/Abet Prostitution Lewdness&#39;, &#39;Possession Of Lorazepam&#39;, &#39;Poss3,4 Methylenedioxymethcath&#39;, &#39;Burglary Unoccupied Dwelling&#39;, &#39;Carjacking w/o Deadly Weapon&#39;, &#39;Sell Cannabis&#39;, &#39;Sell Conterfeit Cont Substance&#39;, &#39;Fail To Redeliver Hire Prop&#39;, &#39;Attempted Robbery Firearm&#39;, &#39;Grand Theft Firearm&#39;, &#39;Consp Traff Oxycodone 28g&gt;&lt;30k&#39;, &#39;Agg Fleeing/Eluding High Speed&#39;, &#39;Consume Alcoholic Bev Pub&#39;, &#39;Grand Theft of a Fire Extinquisher&#39;, &#39;Possession Firearm School Prop&#39;, &#39;Possession of Hydrocodone&#39;, &#39;Voyeurism&#39;, &#39;Deliver Cocaine 1000FT Church&#39;, &#39;Aggravated Battery (Firearm/Actual Possession)&#39;, &#39;Poss/Sell/Del/Man Amobarbital&#39;, &#39;Uttering Forged Credit Card&#39;, &#39;Grand Theft In The 3Rd Degree&#39;, &#39;Aggrav Child Abuse-Causes Harm&#39;, &#39;Poss Cocaine/Intent To Del/Sel&#39;, &#39;Structuring Transactions&#39;, &#39;Conspiracy Dealing Stolen Prop&#39;, &#39;Burglary Dwelling Assault/Batt&#39;, &#39;Expired DL More Than 6 Months&#39;, &#39;Fraudulent Use of Credit Card&#39;, &#39;Possession of Butylone&#39;, &#39;Offer Agree Secure For Lewd Act&#39;, &#39;Battery on a Person Over 65&#39;, &#39;Att Burgl Conv Occp&#39;, &#39;Felony DUI - Enhanced&#39;, &#39;Ride Tri-Rail Without Paying&#39;, &#39;Simulation of Legal Process&#39;, &#39;Introduce Contraband Into Jail&#39;, &#39;Poss Trifluoromethylphenylpipe&#39;, &#39;Lewdness Violation&#39;, &#39;Dealing in Stolen Property&#39;, &#39;Driving Under The Influence&#39;, &#39;Gambling/Gamb Paraphernalia&#39;, &#39;Obstruct Officer W/Violence&#39;, &#39;Assault Law Enforcement Officer&#39;, &#39;Violation of Injunction Order/Stalking/Cyberstalking&#39;, &#39;Manufacture Cannabis&#39;, &#39;Crim Use of Personal ID Info&#39;, &#39;Aggravated Battery On 65/Older&#39;, &#39;Carrying A Concealed Weapon&#39;, &#39;Attempt Burglary (Struct)&#39;, &#39;Del Cannabis For Consideration&#39;, &#39;Unauth Poss ID Card or DL&#39;, &#39;Solicit Deliver Cocaine&#39;, &#39;Poss Drugs W/O A Prescription&#39;, &#39;Sel Etc/Pos/w/Int Contrft Schd&#39;, &#39;Obtain Control Substance By Fraud&#39;, &#39;Burglary Structure Occupied&#39;, &#39;Sex Offender Fail Comply W/Law&#39;, &#39;Retail Theft $300 1st Offense&#39;, &#39;Uttering a Forged Instrument&#39;, &#39;Cruelty to Animals&#39;, &#39;Felony Batt(Great Bodily Harm)&#39;, &#39;Oper Motorcycle W/O Valid DL&#39;, &#39;Trespass Property w/Dang Weap&#39;, &#39;Possession Burglary Tools&#39;, &#39;Disorderly Intoxication&#39;, &#39;Stalking&#39;, &#39;Aggravated Assault W/dead Weap&#39;, &#39;Video Voyeur-&lt;24Y on Child &gt;16&#39;, &#39;Poss of Cocaine W/I/D/S 1000FT Park&#39;, &#39;False Bomb Report&#39;, &#39;Operating W/O Valid License&#39;, &#39;Neglect/Abuse Elderly Person&#39;, &#39;Felony Battery&#39;, &#39;Littering&#39;, &#39;Possession Of Phentermine&#39;, &#39;Shoot Into Vehicle&#39;, &#39;Sell/Man/Del Pos/w/int Heroin&#39;, &#39;Felony/Driving Under Influence&#39;, &#39;Retail Theft $300 2nd Offense&#39;, &#39;Prowling/Loitering&#39;, &#39;Possession of XLR11&#39;, &#39;Solicit To Deliver Cocaine&#39;, &#39;Possession Of Paraphernalia&#39;, &#39;Crim Attempt/Solicit/Consp&#39;, &#39;DUI Blood Alcohol Above 0.20&#39;, &#39;Driving While License Revoked&#39;, &#39;Possess Countrfeit Credit Card&#39;, &#39;Poss Anti-Shoplifting Device&#39;, &#39;Felony Petit Theft&#39;, &#39;Failure To Return Hired Vehicle&#39;, &#39;Use of Anti-Shoplifting Device&#39;, &#39;Trespass Private Property&#39;, &#39;Aggravated Assault&#39;, &#39;Poss of Methylethcathinone&#39;, &#39;Manage Busn W/O City Occup Lic&#39;, &#39;DWLS Susp/Cancel Revoked&#39;, &#39;Drivg While Lic Suspd/Revk/Can&#39;, &#39;Poss Of Controlled Substance&#39;, &#39;Armed Trafficking in Cannabis&#39;, &#39;Defrauding Innkeeper&#39;, &#39;Live on Earnings of Prostitute&#39;, &#39;Aggrav Child Abuse-Agg Battery&#39;, &#39;Solicitation On Felony 3 Deg&#39;, &#39;Discharge Firearm From Vehicle&#39;, &#39;Arson II (Vehicle)&#39;], &#39;age_cat&#39;: [&#39;Less than 25&#39;, &#39;25 - 45&#39;, &#39;Greater than 45&#39;], &#39;sex&#39;: [&#39;Male&#39;, &#39;Female&#39;], &#39;race&#39;: [&#39;Black&#39;, &#39;White&#39;, &#39;Other&#39;], &#39;is_recid&#39;: [&#39;Yes&#39;, &#39;No&#39;]}
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">temp_dict</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="n">mean_std_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">temp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+  <span class="n">mean_std_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_std_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;juv_fel_count&#39;: [0.0721830985915493, 0.5187066204966256], &#39;juv_misd_count&#39;: [0.09793133802816902, 0.5348148993571356], &#39;juv_other_count&#39;: [0.10629401408450705, 0.47329289176000755], &#39;priors_count&#39;: [3.504181338028169, 4.9829540064651585], &#39;age&#39;: [34.875220070422536, 11.929411671055068]}
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">preprocessing</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">):</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Normalize numberiacal columns</span>
+    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">mean_std_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">_mean</span><span class="p">,</span> <span class="n">_std</span> <span class="o">=</span> <span class="n">mean_std_dict</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span>
+        <span class="n">features</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">tmp_df</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span><span class="o">-</span><span class="n">_mean</span><span class="p">)</span><span class="o">/</span><span class="n">_std</span><span class="p">)</span>
+    <span class="c1"># Encode categorical columns as indices</span>
+    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">vocab_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">features</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">j</span><span class="p">:</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vocab_dict</span><span class="p">[</span><span class="n">col_name</span><span class="p">])</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="c1"># One-hot encoding categorical features</span>
+    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;c_charge_degree&quot;</span><span class="p">,</span> <span class="s2">&quot;c_charge_desc&quot;</span><span class="p">,</span> <span class="s2">&quot;age_cat&quot;</span><span class="p">]:</span>
+        <span class="n">features</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">col_name</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="n">col_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">dev_df</span> <span class="o">=</span>  <span class="n">preprocessing</span><span class="p">(</span><span class="n">dev_df</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_base_dir</span><span class="p">,</span> <span class="s2">&quot;train.pkl&quot;</span><span class="p">))</span>
+<span class="n">dev_df</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_base_dir</span><span class="p">,</span> <span class="s2">&quot;dev.pkl&quot;</span><span class="p">))</span>
+<span class="n">test_df</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_base_dir</span><span class="p">,</span> <span class="s2">&quot;test.pkl&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="train-a-vanilla-model">
+<h2>Train a Vanilla Model<a class="headerlink" href="#train-a-vanilla-model" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib</span> <span class="kn">import</span> <span class="n">networks</span><span class="p">,</span> <span class="n">BaseOptions</span><span class="p">,</span> <span class="n">dataloaders</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shared_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># The name of the dataset, correponding dataloader will be used,</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>  <span class="s2">&quot;COMPAS&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Specifiy the path to the input data</span>
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;./data&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Device for computing, -1 is the cpu</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># The default path for saving experimental results</span>
+    <span class="s2">&quot;results_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The same as the dataset</span>
+    <span class="s2">&quot;project_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+
+    <span class="c1"># We will focusing on TPR GAP, implying the Equalized Odds for binay classification.</span>
+    <span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;TPR_GAP&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The overall performance will be measured as accuracy</span>
+    <span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Model selections are based on DTO</span>
+    <span class="s2">&quot;selection_criterion&quot;</span><span class="p">:</span>  <span class="s2">&quot;DTO&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Default dirs for saving checkpoints</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span>   <span class="s2">&quot;models&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;checkpoint_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;checkpoint_epoch&quot;</span><span class="p">,</span>
+
+
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span>   <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span> 
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;data_dir&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;vanilla&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;emb_size&quot;</span><span class="p">:</span> <span class="mi">450</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="s2">&quot;hidden_size&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;n_hidden&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;activation_function&quot;</span><span class="p">:</span> <span class="s2">&quot;ReLu&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;num_classes&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;num_groups&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="c1"># Balck; White; and Other</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO:root:Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-2b94b31d-201f-46ea-842f-e5f6c625b168.json&#39;]
+INFO:root:Logging to ./results/dev/COMPAS/vanilla/output.log
+
+
+2022-04-08 15:10:45 [INFO ]  ======================================== 2022-04-08 15:10:45 ========================================
+2022-04-08 15:10:45 [INFO ]  Base directory is ./results/dev/COMPAS/vanilla
+Not implemented
+2022-04-08 15:10:45 [INFO ]  dataloaders need to be initialized!
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomizedDataset</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseDataset</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.pkl&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;is_recid&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;is_recid&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protected_label</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">customized_train_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">customized_dev_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+<span class="n">customized_test_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+
+<span class="c1"># DataLoader Parameters</span>
+<span class="n">tran_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="n">eval_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">test_batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="c1"># init dataloader</span>
+<span class="n">customized_training_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">tran_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_validation_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_dev_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_test_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_test_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Loaded data shapes: (4544, 447), (4544,), (4544,)
+Loaded data shapes: (505, 447), (505,), (505,)
+Loaded data shapes: (2165, 447), (2165,), (2165,)
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">MLP</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:10:53 [INFO ]  MLP( 
+2022-04-08 15:10:53 [INFO ]    (output_layer): Linear(in_features=32, out_features=2, bias=True)
+2022-04-08 15:10:53 [INFO ]    (AF): ReLU()
+2022-04-08 15:10:53 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:10:53 [INFO ]      (0): Linear(in_features=447, out_features=32, bias=True)
+2022-04-08 15:10:53 [INFO ]      (1): ReLU()
+2022-04-08 15:10:53 [INFO ]    )
+2022-04-08 15:10:53 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:10:53 [INFO ]  )
+2022-04-08 15:10:53 [INFO ]  Total number of parameters: 14402 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">(</span>
+    <span class="n">train_generator</span> <span class="o">=</span> <span class="n">customized_training_generator</span><span class="p">,</span>
+    <span class="n">dev_generator</span> <span class="o">=</span> <span class="n">customized_validation_generator</span><span class="p">,</span>
+    <span class="n">test_generator</span> <span class="o">=</span> <span class="n">customized_test_generator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:10:56 [INFO ]  Epoch:    0 [      0/   4544 ( 0%)]	Loss: 0.6934	 Data Time: 0.05s	Train Time: 0.18s
+2022-04-08 15:10:56 [INFO ]  Evaluation at Epoch 0
+2022-04-08 15:10:56 [INFO ]  Validation accuracy: 65.35	macro_fscore: 64.74	micro_fscore: 65.35	TPR_GAP: 29.34	FPR_GAP: 29.34	PPR_GAP: 31.29	
+2022-04-08 15:10:56 [INFO ]  Test accuracy: 67.16	macro_fscore: 66.42	micro_fscore: 67.16	TPR_GAP: 30.35	FPR_GAP: 30.35	PPR_GAP: 35.61	
+2022-04-08 15:10:56 [INFO ]  Epoch:    1 [      0/   4544 ( 0%)]	Loss: 0.6347	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:56 [INFO ]  Evaluation at Epoch 1
+2022-04-08 15:10:56 [INFO ]  Validation accuracy: 66.53	macro_fscore: 66.34	micro_fscore: 66.53	TPR_GAP: 28.61	FPR_GAP: 28.61	PPR_GAP: 31.18	
+2022-04-08 15:10:56 [INFO ]  Test accuracy: 67.39	macro_fscore: 67.07	micro_fscore: 67.39	TPR_GAP: 31.21	FPR_GAP: 31.21	PPR_GAP: 36.49	
+2022-04-08 15:10:56 [INFO ]  Epoch:    2 [      0/   4544 ( 0%)]	Loss: 0.5875	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 2
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 66.53	macro_fscore: 66.42	micro_fscore: 66.53	TPR_GAP: 30.15	FPR_GAP: 30.15	PPR_GAP: 32.84	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.73	macro_fscore: 68.44	micro_fscore: 68.73	TPR_GAP: 32.73	FPR_GAP: 32.73	PPR_GAP: 38.85	
+2022-04-08 15:10:57 [INFO ]  Epoch:    3 [      0/   4544 ( 0%)]	Loss: 0.6307	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 3
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 64.95	macro_fscore: 64.75	micro_fscore: 64.95	TPR_GAP: 30.37	FPR_GAP: 30.37	PPR_GAP: 32.78	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.96	macro_fscore: 68.58	micro_fscore: 68.96	TPR_GAP: 32.78	FPR_GAP: 32.78	PPR_GAP: 38.32	
+2022-04-08 15:10:57 [INFO ]  Epoch:    4 [      0/   4544 ( 0%)]	Loss: 0.5862	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 4
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 65.54	macro_fscore: 65.52	micro_fscore: 65.54	TPR_GAP: 35.21	FPR_GAP: 35.21	PPR_GAP: 38.30	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.87	macro_fscore: 68.76	micro_fscore: 68.87	TPR_GAP: 33.56	FPR_GAP: 33.56	PPR_GAP: 40.54	
+2022-04-08 15:10:57 [INFO ]  Epoch:    5 [      0/   4544 ( 0%)]	Loss: 0.5576	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Epochs since last improvement: 3
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 5
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 65.94	macro_fscore: 65.67	micro_fscore: 65.94	TPR_GAP: 33.95	FPR_GAP: 33.95	PPR_GAP: 37.23	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.91	macro_fscore: 68.41	micro_fscore: 68.91	TPR_GAP: 29.95	FPR_GAP: 29.95	PPR_GAP: 35.99	
+2022-04-08 15:10:57 [INFO ]  Epoch:    6 [      0/   4544 ( 0%)]	Loss: 0.5662	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Epochs since last improvement: 4
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 6
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 64.75	macro_fscore: 64.62	micro_fscore: 64.75	TPR_GAP: 35.02	FPR_GAP: 35.02	PPR_GAP: 37.66	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.91	macro_fscore: 68.66	micro_fscore: 68.91	TPR_GAP: 30.55	FPR_GAP: 30.55	PPR_GAP: 37.57	
+2022-04-08 15:10:57 [INFO ]  Epoch:    7 [      0/   4544 ( 0%)]	Loss: 0.6291	 Data Time: 0.00s	Train Time: 0.00s
+2022-04-08 15:10:57 [INFO ]  Epochs since last improvement: 5
+2022-04-08 15:10:57 [INFO ]  Evaluation at Epoch 7
+2022-04-08 15:10:57 [INFO ]  Validation accuracy: 65.15	macro_fscore: 65.13	micro_fscore: 65.15	TPR_GAP: 33.15	FPR_GAP: 33.15	PPR_GAP: 36.60	
+2022-04-08 15:10:57 [INFO ]  Test accuracy: 68.73	macro_fscore: 68.63	micro_fscore: 68.73	TPR_GAP: 30.15	FPR_GAP: 30.15	PPR_GAP: 37.46	
+</pre></div>
+</div>
+</section>
+<section id="bias-mitigation">
+<h2>Bias Mitigation<a class="headerlink" href="#bias-mitigation" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debiasing_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span> 
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;data_dir&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;BT_Adv&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;emb_size&quot;</span><span class="p">:</span> <span class="mi">450</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="s2">&quot;hidden_size&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;n_hidden&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;activation_function&quot;</span><span class="p">:</span> <span class="s2">&quot;ReLu&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;num_classes&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;num_groups&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="c1"># Balck; White; and Other</span>
+
+    <span class="c1"># Perform adversarial training if True</span>
+    <span class="s2">&quot;adv_debiasing&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+
+    <span class="c1"># Specify the hyperparameters for Balanced Training</span>
+    <span class="s2">&quot;BT&quot;</span><span class="p">:</span><span class="s2">&quot;Resampling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BTObj&quot;</span><span class="p">:</span><span class="s2">&quot;EO&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">debias_options</span> <span class="o">=</span> <span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">debias_state</span> <span class="o">=</span> <span class="n">debias_options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debiasing_args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">customized_train_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">customized_dev_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+<span class="n">customized_test_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+
+<span class="c1"># DataLoader Parameters</span>
+<span class="n">tran_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="n">eval_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">test_batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="c1"># init dataloader</span>
+<span class="n">customized_training_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">tran_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_validation_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_dev_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_test_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_test_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+
+<span class="n">debias_model</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">MLP</span><span class="p">(</span><span class="n">debias_state</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:11:04 [INFO ]  Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-2b94b31d-201f-46ea-842f-e5f6c625b168.json&#39;]
+2022-04-08 15:11:04 [INFO ]  Logging to ./results/dev/COMPAS/BT_Adv/output.log
+2022-04-08 15:11:04 [INFO ]  ======================================== 2022-04-08 15:11:04 ========================================
+2022-04-08 15:11:04 [INFO ]  Base directory is ./results/dev/COMPAS/BT_Adv
+Not implemented
+2022-04-08 15:11:04 [INFO ]  dataloaders need to be initialized!
+2022-04-08 15:11:04 [INFO ]  SubDiscriminator( 
+2022-04-08 15:11:04 [INFO ]    (grad_rev): GradientReversal()
+2022-04-08 15:11:04 [INFO ]    (output_layer): Linear(in_features=300, out_features=3, bias=True)
+2022-04-08 15:11:04 [INFO ]    (AF): ReLU()
+2022-04-08 15:11:04 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:11:04 [INFO ]      (0): Linear(in_features=32, out_features=300, bias=True)
+2022-04-08 15:11:04 [INFO ]      (1): ReLU()
+2022-04-08 15:11:04 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:11:04 [INFO ]      (3): ReLU()
+2022-04-08 15:11:04 [INFO ]    )
+2022-04-08 15:11:04 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:11:04 [INFO ]  )
+2022-04-08 15:11:04 [INFO ]  Total number of parameters: 101103 
+
+2022-04-08 15:11:04 [INFO ]  Discriminator built!
+Loaded data shapes: (2001, 447), (2001,), (2001,)
+Loaded data shapes: (252, 447), (252,), (252,)
+Loaded data shapes: (939, 447), (939,), (939,)
+2022-04-08 15:11:04 [INFO ]  MLP( 
+2022-04-08 15:11:04 [INFO ]    (output_layer): Linear(in_features=32, out_features=2, bias=True)
+2022-04-08 15:11:04 [INFO ]    (AF): ReLU()
+2022-04-08 15:11:04 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:11:04 [INFO ]      (0): Linear(in_features=447, out_features=32, bias=True)
+2022-04-08 15:11:04 [INFO ]      (1): ReLU()
+2022-04-08 15:11:04 [INFO ]    )
+2022-04-08 15:11:04 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:11:04 [INFO ]  )
+2022-04-08 15:11:04 [INFO ]  Total number of parameters: 14402 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debias_model</span><span class="o">.</span><span class="n">train_self</span><span class="p">(</span>
+    <span class="n">train_generator</span> <span class="o">=</span> <span class="n">customized_training_generator</span><span class="p">,</span>
+    <span class="n">dev_generator</span> <span class="o">=</span> <span class="n">customized_validation_generator</span><span class="p">,</span>
+    <span class="n">test_generator</span> <span class="o">=</span> <span class="n">customized_test_generator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:11:07 [INFO ]  Epoch:    0 [      0/   2001 ( 0%)]	Loss: -0.3949	 Data Time: 0.01s	Train Time: 0.04s
+2022-04-08 15:11:08 [INFO ]  Evaluation at Epoch 0
+2022-04-08 15:11:08 [INFO ]  Validation accuracy: 55.16	macro_fscore: 43.87	micro_fscore: 55.16	TPR_GAP: 9.77	FPR_GAP: 9.77	PPR_GAP: 8.73	
+2022-04-08 15:11:08 [INFO ]  Test accuracy: 66.24	macro_fscore: 47.19	micro_fscore: 66.24	TPR_GAP: 7.53	FPR_GAP: 7.53	PPR_GAP: 5.11	
+2022-04-08 15:11:08 [INFO ]  Epoch:    1 [      0/   2001 ( 0%)]	Loss: -0.4219	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:08 [INFO ]  Evaluation at Epoch 1
+2022-04-08 15:11:08 [INFO ]  Validation accuracy: 55.95	macro_fscore: 45.35	micro_fscore: 55.95	TPR_GAP: 7.64	FPR_GAP: 7.64	PPR_GAP: 7.14	
+2022-04-08 15:11:08 [INFO ]  Test accuracy: 66.67	macro_fscore: 48.27	micro_fscore: 66.67	TPR_GAP: 10.50	FPR_GAP: 10.50	PPR_GAP: 6.18	
+2022-04-08 15:11:08 [INFO ]  Epoch:    2 [      0/   2001 ( 0%)]	Loss: -0.4536	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:08 [INFO ]  Evaluation at Epoch 2
+2022-04-08 15:11:08 [INFO ]  Validation accuracy: 58.73	macro_fscore: 50.64	micro_fscore: 58.73	TPR_GAP: 19.20	FPR_GAP: 19.20	PPR_GAP: 16.67	
+2022-04-08 15:11:08 [INFO ]  Test accuracy: 67.52	macro_fscore: 51.29	micro_fscore: 67.52	TPR_GAP: 13.91	FPR_GAP: 13.91	PPR_GAP: 8.09	
+2022-04-08 15:11:08 [INFO ]  Epoch:    3 [      0/   2001 ( 0%)]	Loss: -0.4428	 Data Time: 0.00s	Train Time: 0.02s
+2022-04-08 15:11:09 [INFO ]  Evaluation at Epoch 3
+2022-04-08 15:11:09 [INFO ]  Validation accuracy: 59.13	macro_fscore: 52.36	micro_fscore: 59.13	TPR_GAP: 22.48	FPR_GAP: 22.48	PPR_GAP: 20.63	
+2022-04-08 15:11:09 [INFO ]  Test accuracy: 68.37	macro_fscore: 54.69	micro_fscore: 68.37	TPR_GAP: 15.95	FPR_GAP: 15.95	PPR_GAP: 10.86	
+2022-04-08 15:11:09 [INFO ]  Epoch:    4 [      0/   2001 ( 0%)]	Loss: -0.4942	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:09 [INFO ]  Evaluation at Epoch 4
+2022-04-08 15:11:09 [INFO ]  Validation accuracy: 61.11	macro_fscore: 56.25	micro_fscore: 61.11	TPR_GAP: 24.95	FPR_GAP: 24.95	PPR_GAP: 23.81	
+2022-04-08 15:11:09 [INFO ]  Test accuracy: 69.22	macro_fscore: 57.71	micro_fscore: 69.22	TPR_GAP: 22.75	FPR_GAP: 22.75	PPR_GAP: 14.27	
+2022-04-08 15:11:09 [INFO ]  Epoch:    5 [      0/   2001 ( 0%)]	Loss: -0.4361	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:09 [INFO ]  Evaluation at Epoch 5
+2022-04-08 15:11:09 [INFO ]  Validation accuracy: 61.51	macro_fscore: 57.77	micro_fscore: 61.51	TPR_GAP: 31.73	FPR_GAP: 31.73	PPR_GAP: 30.95	
+2022-04-08 15:11:09 [INFO ]  Test accuracy: 69.54	macro_fscore: 59.98	micro_fscore: 69.54	TPR_GAP: 23.34	FPR_GAP: 23.34	PPR_GAP: 15.34	
+2022-04-08 15:11:09 [INFO ]  Epoch:    6 [      0/   2001 ( 0%)]	Loss: -0.4565	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:10 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:11:10 [INFO ]  Evaluation at Epoch 6
+2022-04-08 15:11:10 [INFO ]  Validation accuracy: 62.70	macro_fscore: 59.38	micro_fscore: 62.70	TPR_GAP: 31.73	FPR_GAP: 31.73	PPR_GAP: 30.95	
+2022-04-08 15:11:10 [INFO ]  Test accuracy: 69.54	macro_fscore: 60.41	micro_fscore: 69.54	TPR_GAP: 23.16	FPR_GAP: 23.16	PPR_GAP: 16.19	
+2022-04-08 15:11:10 [INFO ]  Epoch:    7 [      0/   2001 ( 0%)]	Loss: -0.5079	 Data Time: 0.01s	Train Time: 0.03s
+2022-04-08 15:11:10 [INFO ]  Evaluation at Epoch 7
+2022-04-08 15:11:10 [INFO ]  Validation accuracy: 64.68	macro_fscore: 62.17	micro_fscore: 64.68	TPR_GAP: 33.00	FPR_GAP: 33.00	PPR_GAP: 32.54	
+2022-04-08 15:11:10 [INFO ]  Test accuracy: 70.18	macro_fscore: 62.32	micro_fscore: 70.18	TPR_GAP: 26.50	FPR_GAP: 26.50	PPR_GAP: 19.17	
+2022-04-08 15:11:10 [INFO ]  Epoch:    8 [      0/   2001 ( 0%)]	Loss: -0.5115	 Data Time: 0.00s	Train Time: 0.03s
+2022-04-08 15:11:11 [INFO ]  Evaluation at Epoch 8
+2022-04-08 15:11:11 [INFO ]  Validation accuracy: 65.08	macro_fscore: 62.83	micro_fscore: 65.08	TPR_GAP: 33.30	FPR_GAP: 33.30	PPR_GAP: 32.54	
+2022-04-08 15:11:11 [INFO ]  Test accuracy: 70.07	macro_fscore: 62.94	micro_fscore: 70.07	TPR_GAP: 27.85	FPR_GAP: 27.85	PPR_GAP: 18.74	
+2022-04-08 15:11:11 [INFO ]  Epoch:    9 [      0/   2001 ( 0%)]	Loss: -0.5244	 Data Time: 0.01s	Train Time: 0.02s
+2022-04-08 15:11:11 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:11:11 [INFO ]  Evaluation at Epoch 9
+2022-04-08 15:11:11 [INFO ]  Validation accuracy: 65.48	macro_fscore: 63.17	micro_fscore: 65.48	TPR_GAP: 33.92	FPR_GAP: 33.92	PPR_GAP: 33.33	
+2022-04-08 15:11:11 [INFO ]  Test accuracy: 70.29	macro_fscore: 63.03	micro_fscore: 70.29	TPR_GAP: 25.90	FPR_GAP: 25.90	PPR_GAP: 18.32	
+2022-04-08 15:11:11 [INFO ]  Epoch:   10 [      0/   2001 ( 0%)]	Loss: -0.5170	 Data Time: 0.00s	Train Time: 0.03s
+2022-04-08 15:11:11 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:11:11 [INFO ]  Evaluation at Epoch 10
+2022-04-08 15:11:11 [INFO ]  Validation accuracy: 64.68	macro_fscore: 62.33	micro_fscore: 64.68	TPR_GAP: 32.35	FPR_GAP: 32.35	PPR_GAP: 30.95	
+2022-04-08 15:11:11 [INFO ]  Test accuracy: 70.18	macro_fscore: 62.86	micro_fscore: 70.18	TPR_GAP: 26.16	FPR_GAP: 26.16	PPR_GAP: 17.89	
+2022-04-08 15:11:11 [INFO ]  Epoch:   11 [      0/   2001 ( 0%)]	Loss: -0.4809	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:11 [INFO ]  Epochs since last improvement: 3
+2022-04-08 15:11:11 [INFO ]  Evaluation at Epoch 11
+2022-04-08 15:11:11 [INFO ]  Validation accuracy: 65.48	macro_fscore: 63.33	micro_fscore: 65.48	TPR_GAP: 35.23	FPR_GAP: 35.23	PPR_GAP: 34.13	
+2022-04-08 15:11:11 [INFO ]  Test accuracy: 69.86	macro_fscore: 62.85	micro_fscore: 69.86	TPR_GAP: 26.16	FPR_GAP: 26.16	PPR_GAP: 17.89	
+2022-04-08 15:11:11 [INFO ]  Epoch:   12 [      0/   2001 ( 0%)]	Loss: -0.5162	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:12 [INFO ]  Epochs since last improvement: 4
+2022-04-08 15:11:12 [INFO ]  Evaluation at Epoch 12
+2022-04-08 15:11:12 [INFO ]  Validation accuracy: 64.29	macro_fscore: 61.98	micro_fscore: 64.29	TPR_GAP: 33.67	FPR_GAP: 33.67	PPR_GAP: 32.54	
+2022-04-08 15:11:12 [INFO ]  Test accuracy: 69.65	macro_fscore: 62.75	micro_fscore: 69.65	TPR_GAP: 26.87	FPR_GAP: 26.87	PPR_GAP: 17.68	
+2022-04-08 15:11:12 [INFO ]  Epoch:   13 [      0/   2001 ( 0%)]	Loss: -0.4658	 Data Time: 0.00s	Train Time: 0.01s
+2022-04-08 15:11:12 [INFO ]  Epochs since last improvement: 5
+2022-04-08 15:11:12 [INFO ]  Evaluation at Epoch 13
+2022-04-08 15:11:12 [INFO ]  Validation accuracy: 63.89	macro_fscore: 61.64	micro_fscore: 63.89	TPR_GAP: 34.87	FPR_GAP: 34.87	PPR_GAP: 34.13	
+2022-04-08 15:11:12 [INFO ]  Test accuracy: 69.01	macro_fscore: 62.31	micro_fscore: 69.01	TPR_GAP: 26.53	FPR_GAP: 26.53	PPR_GAP: 17.89	
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_colored_MNIST.html" class="btn btn-neutral float-left" title="Debiasing CV Tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_interactive_plots.html" class="btn btn-neutral float-right" title="Interactive Visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

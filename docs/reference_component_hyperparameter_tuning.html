@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hyperparameter Tuning &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="fairlib Cheat Sheet" href="tutorial_usage.html" />
+    <link rel="prev" title="Bias Mitigation" href="reference_component_bias_mitigation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adversarial-training">Adversarial Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adv">Adv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dadv">DAdv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#inlp">INLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fairscl">FairSCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#balanced-learning">Balanced Learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fairbatch">FairBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#balanced-training">Balanced Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group-difference">Group Difference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Hyperparameter Tuning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reference_component_hyperparameter_tuning.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hyperparameter-tuning">
+<h1>Hyperparameter Tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permalink to this headline"></a></h1>
+<p>Here we also provide detailed strategies of how we tune hyperparameters for each model.</p>
+<section id="adversarial-training">
+<h2>Adversarial Training<a class="headerlink" href="#adversarial-training" title="Permalink to this headline"></a></h2>
+<section id="adv">
+<h3>Adv<a class="headerlink" href="#adv" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p><strong>Intro:</strong><br />
+Adversarial training employs an additional discriminator component, which shares the same encoder with the main model and is trained to identify the protected attributes. In addition to making correct predictions, the main model is also trained to unlearn the signal from the discriminator.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --adv_debiasing
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_update_frequency</p></td>
+<td><p>Batch</p></td>
+<td><p>Epoch | Batch</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_level</p></td>
+<td><p>last_hidden</p></td>
+<td><p>input | last_hidden | output</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_lambda</p></td>
+<td><p>1</p></td>
+<td><p>strength of adversarial regularization</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_hidden_size</p></td>
+<td><p>300</p></td>
+<td><p>number of hidden units of each hidden layer for the main task classifier</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_n_hidden</p></td>
+<td><p>2</p></td>
+<td><p>number of hidden layers</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_dropout</p></td>
+<td><p>0</p></td>
+<td><p>dropout probability</p></td>
+</tr>
+<tr class="row-even"><td><p>adv_activation_function</p></td>
+<td><p>ReLu</p></td>
+<td><p>nonlinear activation function for the main task model</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_batch_norm</p></td>
+<td><p>False</p></td>
+<td><p>apply 1d batch norm to the model</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong></p>
+<ul class="simple">
+<li><p><strong>Discriminator architecture</strong><br />
+<a class="reference external" href="https://arxiv.org/pdf/1808.06640.pdf">Elazar and Goldberg (2018)</a> explore different capacities of adversarial components by increasing the <code class="docutils literal notranslate"><span class="pre">adv_hidden_size</span></code>, and they show that there is no significant difference. Moreover, <a class="reference external" href="https://aclanthology.org/2020.emnlp-main.665.pdf">Stacey et al. (2020)</a> investigate the influence of varying <code class="docutils literal notranslate"><span class="pre">adv_n_hidden</span></code> and <code class="docutils literal notranslate"><span class="pre">adv_activation_function</span></code> and show that even a linear adversary (i.e. a single layer MLP with a linear activation function) leads to similar results of using a more complex adversary.</p></li>
+<li><p><strong>Adv level</strong><br />
+The most common choice of <code class="docutils literal notranslate"><span class="pre">adv_level</span></code> is the last hidden layer (<code class="docutils literal notranslate"><span class="pre">--adv_level</span> <span class="pre">last_hidden</span></code>), for example, a LSTM model followed by an output layer, where we take the output of LSTM as the input to the adversary. <a class="reference external" href="https://arxiv.org/pdf/1811.08489.pdf">Wang et al. (2019)</a> also consider adding adversaries at different levels, for example at the input level, which leads to a mask for the inputs (<code class="docutils literal notranslate"><span class="pre">--adv_level</span> <span class="pre">input</span></code>), and at the intermediate level of the encoder. However, their experiments show that models using the last hidden layer (final convolutional layer of ResNet-50) consistently outperform other methods. <a class="reference external" href="https://arxiv.org/abs/1807.00199">Wadsworth et al. (2018)</a> also train a different variant which takes logits as input and even argue that inputs from hidden layers are not necessary, and we implement this type of method as <code class="docutils literal notranslate"><span class="pre">--adv_level</span> <span class="pre">output</span></code>.</p></li>
+<li><p><strong>Update frequency</strong><br />
+There are mainly two types of adversarial training strategies: (1) GAN-style, which iteratively train the discriminator to identify protected attributes and train the main model to make predictions while unlearn the discriminator (<code class="docutils literal notranslate"><span class="pre">--adv_update_frequency</span> <span class="pre">Epoch</span></code>); and (2) using Gradient Reversal Layer during backpropagation, which formulates the adversarial training as a multi-task learning that trains the main model and adversarial component jointly (<code class="docutils literal notranslate"><span class="pre">--adv_update_frequency</span> <span class="pre">Batch</span></code>).</p></li>
+<li><p><strong>Lambda</strong><br />
+There is no doubt that lambda is the most important hyperparameter of adversarial learning, denoting the strength of adversarial regularization. By setting lambda to 0, any adversarial training would degrade to a vanilla model.</p></li>
+</ul>
+</li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>Lambda (<code class="docutils literal notranslate"><span class="pre">adv_lambda</span></code>): log-uniformly grid search between 10^-3 ~ 10^3 with 60 trials.</p></li>
+<li><p>Update frequency (<code class="docutils literal notranslate"><span class="pre">adv_update_frequency</span></code>): try both Batch and Epoch updates.</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong></p>
+<ul class="simple">
+<li><p>Adv level (<code class="docutils literal notranslate"><span class="pre">adv_level</span></code>): Most previous works have used <code class="docutils literal notranslate"><span class="pre">last_hidden</span></code> in their projects, and <a class="reference external" href="https://arxiv.org/pdf/1811.08489.pdf">Wang et al. (2019)</a> have shown that <code class="docutils literal notranslate"><span class="pre">last_hidden</span></code> works the best in a complex NN, and thus we follow the same setting.</p></li>
+<li><p>Discriminator architecture: Previous work have demonstrated that different model architectures lead to almost identical results, so we didn’t tune these models.</p></li>
+</ul>
+<p>Another reason of not tuning adv level and discriminator architecture related hyperparameters is that, these hyperparameters need to be tuned jointly with lambda, which is too much expensive.</p>
+</li>
+<li><p><strong>Results</strong></p>
+  <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/Moji_Adv_Epoch-verse-Batch-update.png?raw=true" width="800"/>
+  </p>
+</li>
+</ul>
+</section>
+<section id="dadv">
+<h3>DAdv<a class="headerlink" href="#dadv" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p><strong>Intro:</strong><br />
+DAdv is a variant of Adv, which employs multiple subdiscriminators and encourages each subdiscriminator to identify protect attributes from different aspects.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --adv_debiasing --adv_num_subDiscriminator <span class="m">3</span> --adv_diverse_lambda <span class="m">10</span>
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adv_num_subDiscriminator</p></td>
+<td><p>1</p></td>
+<td><p>number of subdiscriminators.</p></td>
+</tr>
+<tr class="row-odd"><td><p>adv_diverse_lambda</p></td>
+<td><p>0</p></td>
+<td><p>strength of difference loss to encourage diverse representations for ensemble adv.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong></p>
+<ul class="simple">
+<li><p><strong>adv_num_subDiscriminator</strong><br />
+This controls the number of adversaries that are employed, and setting it to 1 essentially lead to a Adv. <a class="reference external" href="https://arxiv.org/pdf/2101.10001.pdf">Han et al. (2021)</a> show that DAdv is quite robust to the number of sub-discriminators over the Moji dataset, and using 3 sub-discriminators is as good as using 5 or 8 sub-discriminators with properly tuned diverse lambda.</p></li>
+<li><p><strong>adv_diverse_lambda</strong><br />
+Diverse lambda is the strength of difference loss, which encourages the diversity among sub-discriminators. By setting this to 0, DAdv degrades to an Ensemble Adv (3 subdiscriminators without any constraints). <a class="reference external" href="https://arxiv.org/pdf/2101.10001.pdf">Han et al. (2021)</a> show that <code class="docutils literal notranslate"><span class="pre">adv_diverse_lambda</span></code> can be safely tuned separately with all other hyperparameters fixed. In addition, <a class="reference external" href="https://arxiv.org/pdf/2101.10001.pdf">Han et al. (2021)</a> also show that a overly large diverse lambda can decrease the performance and fairness.</p></li>
+</ul>
+</li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adv_diverse_lambda</span></code>: although <code class="docutils literal notranslate"><span class="pre">adv_diverse_lambda</span></code> can be tuned separately, to get a trade-off plot for this method, we tune it jointly with lambda, where the range of <code class="docutils literal notranslate"><span class="pre">adv_diverse_lambda</span></code> is [0.01, 0.1, 1, 10, 100], adopting batch updating.</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adv_num_subDiscriminator</span></code>: We follow <a class="reference external" href="https://arxiv.org/pdf/2101.10001.pdf">Han et al. (2021)</a> in using 3 sub-discriminators.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="inlp">
+<h2>INLP<a class="headerlink" href="#inlp" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p><strong>Intro:</strong><br />
+As the name of INLP, it iteratively projects fixed text representations to a null-space of protected attributes. It can be treated as a variant of Adv, where the encoder is fixed, and the discriminator unlearning is achieved by null-space projection rather than BP to the encoder. This limits the discriminator to be a generalized linear model, as the null-space can only be derived from the parameters of a single-layer model.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --INLP
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>INLP_discriminator_reweighting</p></td>
+<td><p>None</p></td>
+<td><p>if train the linear discriminator with reweighting</p></td>
+</tr>
+<tr class="row-odd"><td><p>INLP_by_class</p></td>
+<td><p>False</p></td>
+<td><p>the nullspace estimation by_class</p></td>
+</tr>
+<tr class="row-even"><td><p>INLP_n</p></td>
+<td><p>300</p></td>
+<td><p>the maximum number of null-space projection iteration</p></td>
+</tr>
+<tr class="row-odd"><td><p>INLP_min_acc</p></td>
+<td><p>0.0</p></td>
+<td><p>ignore the iteration if the acc is lower than the threshold</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong><br />
+<a class="reference external" href="https://aclanthology.org/2020.acl-main.647.pdf">Shauli et al. (2020)</a> only introduce <code class="docutils literal notranslate"><span class="pre">INLP_by_class</span></code> and <code class="docutils literal notranslate"><span class="pre">INLP_n</span></code> in their paper.</p>
+<ul class="simple">
+<li><p><strong>INLP_by_class</strong><br />
+For the <code class="docutils literal notranslate"><span class="pre">by_class</span></code>, in each iteration, INLP train a classifier to predict the protected attribute not on the entire training set, but only on the training examples belonging to a single (randomly chosen) main-task class (e.g. profession). They use <code class="docutils literal notranslate"><span class="pre">by_class</span></code> as default setting for experiments over Moji and Bios.</p></li>
+<li><p><strong>INLP_n</strong><br />
+INLP_n for INLP is similar to lambda for Adv. A single null-space projection is not enough for removing protected attributes, so they iteratively train a linear discriminator and do the null-space projection <code class="docutils literal notranslate"><span class="pre">INLP_n</span></code> times. In theory, each null-space projection decreases the 1st rank of fixed representations, and in practice, this hyperparameter controls the trade-off. Following <a class="reference external" href="https://aclanthology.org/2020.acl-main.647.pdf">Shauli et al. (2020)</a>, we retrain a linear model for each iteration with the projected representations for the main task, and use the corresponding results for the trade-off plot. This is also the reason why we cannot report statistics of INLP given a certain trade-off hyperparameter value, as same iterations of different random seeds can lead to quite different results, making such statistics meaningless.</p></li>
+</ul>
+</li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>INLP_by_class: [True, False]</p></li>
+<li><p>INLP_n: [0 - 300], as 300 is the dim of fixed representations.</p></li>
+<li><p>INLP_discriminator_reweighting: [True, False]<br />
+This is <strong>not</strong> discussed in the original INLP paper but shown to be important for <code class="docutils literal notranslate"><span class="pre">by_class</span></code> settings. <code class="docutils literal notranslate"><span class="pre">INLP_discriminator_reweighting</span></code> indicates whether or not to use instance reweighting during the linear discriminator training. Specifically, the balanced model uses the values of protected label to automatically adjust weights inversely proportional to protected group frequencies in the input data. Considering a <code class="docutils literal notranslate"><span class="pre">by_class</span></code> example in Moji dataset, for the Positive class, 80% instances are labeled as AAE, and thus a trained discriminator without RW will be biased to AAE. The null-space derived form such a biased discriminator is also a biased estimation of the actual null-space. Given this, INLP_discriminator_reweighting is an important hyperparameter when protected labels are imbalanced distributed.</p></li>
+<li><p>INLP_min_acc: [0, 0.5]<br />
+This is <strong>not</strong> discussed in the INLP paper. <code class="docutils literal notranslate"><span class="pre">INLP_min_acc</span></code> is a threshold for the discriminator accuracy over the dev set. In the Moji dataset, we used a balanced dev set, thus if a discriminator achieves an accuracy that is smaller than 0.5, we could argue that it is not able to represent the correct null-space, and thus we skip the null-space projection at this iteration, and jump directly to training another discriminator. By setting a large <code class="docutils literal notranslate"><span class="pre">INLP_min_acc</span></code> value, we could improve the robustness against uncertainty in discriminator training. Moreover, <code class="docutils literal notranslate"><span class="pre">INLP_min_acc</span></code> could be used to handle the problem caused by imbalanced training in <code class="docutils literal notranslate"><span class="pre">by_class</span></code> without <code class="docutils literal notranslate"><span class="pre">INLP_discriminator_reweighting</span></code>, as it will ignore those biased model that can not achieve a reasonable accuracy over the balanced dev set.</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong></p>
+<ul class="simple">
+<li><p>Discriminator related hyperparameters. There are lots of hyperparameters associated with discriminator training, for example, architectures using Logistic Regression verse Linear SVM, penalty, tolerance for stopping criteria, optimizer, etc. <a class="reference external" href="https://aclanthology.org/2020.acl-main.647.pdf">Shauli et al. (2020)</a> do not discuss these choices in their paper, and we found that the results are quite robust to these hyperparameters in our previous experiments. Thus, we use default setting of the Logistic Regression model in Sci-kit Learn Lib.</p></li>
+</ul>
+</li>
+<li><p><strong>Results</strong></p>
+  <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/INLP_hypertune.png?raw=true" width="800"/>
+  </p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">by_class</span></code>: It is clear that setting <code class="docutils literal notranslate"><span class="pre">by_class=True</span></code> can improve trade-offs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INLP_discriminator_reweighting</span></code>: consistent with our discussion, <code class="docutils literal notranslate"><span class="pre">INLP_discriminator_reweighting</span></code> is essential for the <code class="docutils literal notranslate"><span class="pre">by_class</span></code> setting, which leads to better results. But for the overall setting (<code class="docutils literal notranslate"><span class="pre">by_class=False</span></code>), <code class="docutils literal notranslate"><span class="pre">INLP_discriminator_reweighting</span></code> dose not lead to significant differences as the the protected label is balanced at the overall level in Moji dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INLP_min_acc</span></code>: By setting <code class="docutils literal notranslate"><span class="pre">INLP_min_acc=0.5</span></code>, we can solve the problem caused by imbalanced training to a certain extent. As shown in the right figure, the gap between different colors are reduced, implying that balanced training will not be necessary for by_class given a proper <code class="docutils literal notranslate"><span class="pre">INLP_min_acc</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="fairscl">
+<h2>FairSCL<a class="headerlink" href="#fairscl" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p><strong>Intro:</strong></p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --FCL
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>fcl_lambda_y</p></td>
+<td><p>0.1</p></td>
+<td><p>strength of the supervised contrastive loss</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_lambda_g</p></td>
+<td><p>0.1</p></td>
+<td><p>strength of the fair supervised contrastive loss</p></td>
+</tr>
+<tr class="row-even"><td><p>fcl_temperature_y</p></td>
+<td><p>0.01</p></td>
+<td><p>temperature for the fcl wrt main task learning</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_temperature_g</p></td>
+<td><p>0.01</p></td>
+<td><p>temperature for the fcl wrt protected attribute unlearning</p></td>
+</tr>
+<tr class="row-even"><td><p>fcl_base_temperature_y</p></td>
+<td><p>0.01</p></td>
+<td><p>base temperature for the fcl wrt main task learning</p></td>
+</tr>
+<tr class="row-odd"><td><p>fcl_base_temperature_g</p></td>
+<td><p>0.01</p></td>
+<td><p>base temperature for the fcl wrt protected attribute unlearning</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong><br />
+<a class="reference external" href="https://arxiv.org/abs/2109.10645">Shen et al. (2021)</a> show that using the same weight for <code class="docutils literal notranslate"><span class="pre">fcl_lambda_y</span></code> and <code class="docutils literal notranslate"><span class="pre">fcl_lambda_g</span></code> leads to better results, so we use the same strategy for tuning <code class="docutils literal notranslate"><span class="pre">fcl_lambda_y</span></code> and <code class="docutils literal notranslate"><span class="pre">fcl_lambda_g</span></code>.</p></li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>same valued <code class="docutils literal notranslate"><span class="pre">fcl_lambda_y</span></code> and <code class="docutils literal notranslate"><span class="pre">fcl_lambda_g</span></code>: log-uniformly between 10^-3 ~ 10^1, 40 trials.</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong></p>
+<ul class="simple">
+<li><p>temperature values</p></li>
+</ul>
+</li>
+<li><p><strong>Results</strong></p>
+  <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/FSCL_hypertune.png?raw=true" width="400"/>
+  </p>
+</li>
+</ul>
+</section>
+<section id="balanced-learning">
+<h2>Balanced Learning<a class="headerlink" href="#balanced-learning" title="Permalink to this headline"></a></h2>
+<p>Different objectives have been established in previous work. We now briefly described five types when considering balanced learning for target classes and demographic attributes:</p>
+<ol class="arabic simple">
+<li><p>Balanced Target Classes: this has been widely used in long-tail learning literature, encouraging the trained model to be equally good to both head and tail classes. We denote this objective as <code class="docutils literal notranslate"><span class="pre">y</span></code> in our implementation.</p></li>
+<li><p>Balanced Demographics: this objective encourages the model to perform equally well to different demographic groups, closely related to the Demographic Parity criterion. We denote this objective as <code class="docutils literal notranslate"><span class="pre">g</span></code> in our implementation.</p></li>
+<li><p>Conditional Balance of Demographics: as suggested by Equalized Odds and its relaxation, Equal Opportunity, the model is expected to be fair to different groups conditioned on target classes. We denote this objective as <code class="docutils literal notranslate"><span class="pre">stratified_y</span></code>, meaning that demographics are stratified balanced according to y distributions.</p></li>
+<li><p>Conditional Balance of Classes: Like <code class="docutils literal notranslate"><span class="pre">stratified_y</span></code>, we have also implemented <code class="docutils literal notranslate"><span class="pre">stratified_g</span></code>, which will only be used for discriminator training. For example, when training INLP discriminators under the <code class="docutils literal notranslate"><span class="pre">by_class</span></code> setting, the balanced training of discriminators requires demographics to be balanced within each target class.</p></li>
+<li><p>Joint Balance: demographics and classes are jointly balanced, equivalent to using the combination of <code class="docutils literal notranslate"><span class="pre">y</span></code> and  <code class="docutils literal notranslate"><span class="pre">stratified_y</span></code>  or the combination of  <code class="docutils literal notranslate"><span class="pre">g</span></code> and <code class="docutils literal notranslate"><span class="pre">stratified_g</span></code> at the same time. This objective can be treated as handling class imbalance and fairness, denoted as <code class="docutils literal notranslate"><span class="pre">joint</span></code>.</p></li>
+</ol>
+<p>In order to achieve those objectives, we have implemented 4 types of methods:</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Static</p></th>
+<th class="head"><p>Dynamic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Processing Data</strong></p></td>
+<td><p>Down-sampling; Re-sampling</p></td>
+<td><p>FairBatch</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Manipulating Loss</strong></p></td>
+<td><p>Instance Reweighting</p></td>
+<td><p>Group Difference</p></td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
+<li><p>Static-data-processing: this type of method creates a balanced dataset from the original training set, such that proportions of different subsets are the same.</p></li>
+<li><p>Static-loss-manipulating: weights of different subsets of instances are derived from the empirical distribution in the training set.</p></li>
+<li><p>Dynamic-data-processing: the subset proportions within each mini-batch are dynamically adjusted during training.</p></li>
+<li><p>Dynamic-loss-manipulating: the weights of different subsets of instances are dynamically adjusted during training.</p></li>
+</ol>
+<section id="fairbatch">
+<h3>FairBatch<a class="headerlink" href="#fairbatch" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p><strong>Intro:</strong><br />
+This method aims at minimizing CE loss gap though resampling. Specifically, it dynamically adjusts the resampling probability of each group according to their losses, i.e., increasing the probability of groups with larger CE loss and decreasing the probability otherwise.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --DyBT FairBatch --DyBTObj stratified_y 
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DyBTalpha</p></td>
+<td><p>0.1</p></td>
+<td><p>a positive number for dynamic adjustment.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong></p>
+<ul class="simple">
+<li><p>DyBTalpha: adjustment rate of resampling probabilities.</p></li>
+</ul>
+</li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>DyBTalpha: log-uniformly between 10^-2 ~ 10^0, 20 trials.</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong><br />
+Besides Equal Opportunity, the original FairBatch paper also proposes objectives for Equalized Odds and Demographic Parity. However, their implementations are formulations that are very specific to binary classification with binary groups. In order to support multi-class target labels and demographic attributes, we have made modifications. As a result, our re-implementation of FairBatch with <code class="docutils literal notranslate"><span class="pre">--DyBTObj</span> <span class="pre">stratified_y</span> </code> is the same as the Equalized Odds formulation in the original paper, which considers both TPR and FPR in the binary situation, which is consistent with our RMS TPR GAP evaluation metric.</p></li>
+<li><p><strong>Results</strong></p>
+  <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/FairBatch_hypertune.png?raw=true" width="400"/>
+  </p>
+</li>
+</ul>
+</section>
+<section id="balanced-training">
+<h3>Balanced Training<a class="headerlink" href="#balanced-training" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p><strong>Intro:</strong><br />
+Balance the training through resampling and instance reweighting.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py --BT Reweighting --BTObj joint
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BT</p></td>
+<td><p>False</p></td>
+<td><p>Reweighting or Resampling</p></td>
+</tr>
+<tr class="row-odd"><td><p>BTObj</p></td>
+<td><p>None</p></td>
+<td><p>joint | y | g | stratified_y | stratified_g | EO</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong><br />
+We follow <a class="reference external" href="https://arxiv.org/abs/2109.08253">Han et al.</a> in comparing joint balance, balance demographic, condition balance, and EO balance.</p></li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>BT: [Reweighting, Resampling]</p></li>
+<li><p>BTObj:  [joint (JB), g (BD), stratified_y (CB), EO]</p></li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong></p>
+<ul class="simple">
+<li><p>Model architecture. BT models share the same hyperparameters as the naive trained model. Tuning such hyperparameters, for example batch size and learning rate, may lead to better results for BT models.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="group-difference">
+<h3>Group Difference<a class="headerlink" href="#group-difference" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p><strong>Intro:</strong><br />
+<a class="reference external" href="https://arxiv.org/abs/2205.02393">Shen et al. (2022)</a> propose two methods to minimize the CE loss gap across different groups during training: (1) the <code class="docutils literal notranslate"><span class="pre">Diff</span></code> method focuses on the differences across demographic groups within each class, and (2) the <code class="docutils literal notranslate"><span class="pre">Mean</span></code> method additionally minimizes the gap between different classes, such that gaps are jointly minimized with respect to demographic groups and target classes.</p></li>
+<li><p><strong>Hyperparameters:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># L_diff as described in Section 3.2</span>
+python main.py --DyBT GroupDifference --DyBTObj EO
+
+<span class="c1"># L_mean as described in Section 3.3 </span>
+python main.py --DyBT GroupDifference --DyBTObj joint
+</pre></div>
+</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DyBTObj</p></td>
+<td><p>None</p></td>
+<td><p>joint | y | g | stratified_y | stratified_g | EO</p></td>
+</tr>
+<tr class="row-odd"><td><p>DyBTalpha</p></td>
+<td><p>0.1</p></td>
+<td><p>a positive number for dynamic adjustment.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>Previous Work:</strong><br />
+Following <a class="reference external" href="https://arxiv.org/abs/2205.02393">Shen et al. (2022)</a>, we tune the strength of CE difference penalty.</p></li>
+<li><p><strong>Tuned:</strong></p>
+<ul class="simple">
+<li><p>DyBTObj: [joint, EO]</p></li>
+<li><p>DyBTalpha: 40 trials for each setting</p>
+<ul>
+<li><p>Moji-joint: log-uniformly grid search between 10^-3 ~ 10^1</p></li>
+<li><p>Moji-EO: log-uniformly grid search between 10^-3 ~ 10^1</p></li>
+<li><p>Bios-joint: log-uniformly grid search between 10^-3 ~ 10^-1</p></li>
+<li><p>Bios-EO: log-uniformly grid search between 10^-3 ~ 10^-1</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Not Tuned:</strong><br />
+None</p></li>
+<li><p><strong>Results</strong></p>
+<ul>
+<li><p>Diff</p>
+  <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/GDEO_hypertune.png?raw=true" width="400"/>
+  </p>
+</li>
+<li><p>Mean</p>
+ <p align="center">
+      <img src="https://github.com/HanXudong/fairlib/blob/main/analysis/plots/GDMean_hypertune.png?raw=true" width="400"/>
+  </p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reference_component_bias_mitigation.html" class="btn btn-neutral float-left" title="Bias Mitigation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_usage.html" class="btn btn-neutral float-right" title="fairlib Cheat Sheet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

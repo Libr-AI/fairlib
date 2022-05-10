@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Customized Debiasing Methods &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bias Detection" href="reference_component_bias_detection.html" />
+    <link rel="prev" title="Adding Customized NN Architecture" href="tutorial_customized_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Customized Debiasing Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-hyperparameters">Step 1: Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-methods-implementations">Step 2: Methods Implementations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pre-processing-methods">Pre-processing Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#at-training-methods">At-training Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-processing-methods">Post-processing Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Adding Customized Debiasing Methods</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_customized_methods.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-customized-debiasing-methods">
+<h1>Adding Customized Debiasing Methods<a class="headerlink" href="#adding-customized-debiasing-methods" title="Permalink to this headline"></a></h1>
+<p>Debiasing methods in <em>fairlib</em> should be connected the <code class="docutils literal notranslate"><span class="pre">BaseModel</span></code> class, such that these these methods generalize to any model architectures. There are different ways of introducing new methods to <em>fairlib</em>, and here we just show on of them.</p>
+<section id="step-1-hyperparameters">
+<h2>Step 1: Hyperparameters<a class="headerlink" href="#step-1-hyperparameters" title="Permalink to this headline"></a></h2>
+<p>Taking the balanced training method (BT) as an example, we need to specify objective for BT and the way of achieving desired objectives.</p>
+<p>These options (hyperparameters) are introduced in the <code class="docutils literal notranslate"><span class="pre">fairlib/src/base_options.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--BT&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Reweighting | Resampling&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--BTObj&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;joint | y | g | stratified_y | stratified_g&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For consistency, our suggestions for defining method-specific hyperparameters includes:</p>
+<ul>
+<li><p>By default, the debiasing method is not employed during training. We could either set the default value as <code class="docutils literal notranslate"><span class="pre">None</span></code> as shown for BT, or store the decision as a bool type, for example,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--adv_debiasing&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adv debiasing?&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>For better readability, use string type options.</p></li>
+<li><p>Use the same prefix for the same set of hyperparameters.</p></li>
+</ul>
+</section>
+<section id="step-2-methods-implementations">
+<h2>Step 2: Methods Implementations<a class="headerlink" href="#step-2-methods-implementations" title="Permalink to this headline"></a></h2>
+<section id="pre-processing-methods">
+<h3>Pre-processing Methods<a class="headerlink" href="#pre-processing-methods" title="Permalink to this headline"></a></h3>
+<p>Pre-processing methods manipulate data distributions at the beginning, so these methods could either be applied outside of the process <em>fairlib</em> statically when preparing dataset, or be combined with the dataloader initialization.</p>
+<p>To be incorporated with dataloader initialization, such methods should be integrated with the <code class="docutils literal notranslate"><span class="pre">BaseDataset</span></code> class as defined in <code class="docutils literal notranslate"><span class="pre">fairlib/src/dataloaders/utils.py</span></code>.</p>
+</section>
+<section id="at-training-methods">
+<h3>At-training Methods<a class="headerlink" href="#at-training-methods" title="Permalink to this headline"></a></h3>
+<p>This type of method generally introduces objectives or regularizations in addition to the main model training. In <em>fairlib</em>, we have implemented such methods as a child class of <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>, which could be integrated with automatic differentiation.</p>
+<p>For a simplest example, please see the implementation of fair supervised contrastive learning method (FairSCL) as an example.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/FairCL/</span></code></p>
+<p>Please create a new dir within the <code class="docutils literal notranslate"><span class="pre">networks</span></code> dir, e.g., <code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/NEW_METHODS</span></code>, and include all related files in that dir.</p>
+<p>To be integrated with <em>fairlib</em>, corresponding methods should be added to the <code class="docutils literal notranslate"><span class="pre">train_epoch</span></code> function (<code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/utils.py</span></code>), which trains the the main model one epoch.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">FCL</span><span class="p">:</span>
+            <span class="c1"># get hidden representations</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gated</span><span class="p">:</span>
+                <span class="n">hs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">hidden</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">p_tags</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">hidden</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+            <span class="c1"># update the loss with Fair Supervised Contrastive Loss</span>
+            <span class="n">fscl_loss</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">FairSCL</span><span class="p">(</span><span class="n">hs</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">p_tags</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="n">fscl_loss</span>
+</pre></div>
+</div>
+</section>
+<section id="post-processing-methods">
+<h3>Post-processing Methods<a class="headerlink" href="#post-processing-methods" title="Permalink to this headline"></a></h3>
+<p>Post-processing method implementations should also be included in <code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/NEW_METHODS</span></code>.</p>
+<p>Taking the INLP method as an example, related codes can be found from <code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/INLP</span></code></p>
+<p>Different ot pre-processing and at-training, post-processing methods need to perform additional evaluations. which could be done by the built-in function</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.evaluators</span> <span class="kn">import</span> <span class="n">present_evaluation_scores</span>
+        <span class="n">present_evaluation_scores</span><span class="p">(</span>
+            <span class="n">valid_preds</span> <span class="o">=</span> <span class="n">dev_y_pred</span><span class="p">,</span> <span class="n">valid_labels</span> <span class="o">=</span> <span class="n">dev_labels</span><span class="p">,</span> 
+            <span class="n">valid_private_labels</span> <span class="o">=</span> <span class="n">dev_private_labels</span><span class="p">,</span>
+            <span class="n">test_preds</span> <span class="o">=</span> <span class="n">test_y_pred</span><span class="p">,</span> <span class="n">test_labels</span> <span class="o">=</span> <span class="n">test_labels</span><span class="p">,</span> 
+            <span class="n">test_private_labels</span> <span class="o">=</span> <span class="n">test_private_labels</span><span class="p">,</span>
+            <span class="n">epoch</span> <span class="o">=</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">epochs_since_improvement</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">,</span> <span class="n">epoch_valid_loss</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">is_best</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;INLP_checkpoint&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>This function will evaluate valid and test scores, save checkpoints, and print scores corresponding to a epoch.</p>
+<p>To be integrated with <em>fairlib</em>, a post-processing method should be employed after the model training. Thus, we will employ this method apart from the model training.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">fairlib/__main__.py</span></code> file, we first init the options and train a model. After which, we prot-process the trained model as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">BaseOptions</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+
+
+    <span class="c1"># Init the model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">get_main_model</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="c1"># state.opt.main_model = model</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Model Initialized!&#39;</span><span class="p">)</span>
+
+
+    <span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Model Trained!&#39;</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">INLP</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Run INLP&#39;</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">src.networks.INLP</span> <span class="kn">import</span> <span class="n">get_INLP_trade_offs</span>
+        <span class="n">get_INLP_trade_offs</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_customized_models.html" class="btn btn-neutral float-left" title="Adding Customized NN Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference_component_bias_detection.html" class="btn btn-neutral float-right" title="Bias Detection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

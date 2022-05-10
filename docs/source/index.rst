@@ -15,4 +15,33 @@ Welcome to fairlib's documentation!
    tutorial_Moji_demo
    tutorial_colored_MNIST
    tutorial_COMPAS
+   tutorial_interactive_plots
+   tutorial_plot_gallery
+   tutorial_customized_datasets_and_dataloaders.md
    tutorial_customized_evaluation
+   tutorial_customized_models
+   tutorial_customized_methods
+
+.. toctree::
+   :caption: Component Reference
+   :maxdepth: 1
+
+   reference_component_bias_detection
+   reference_component_bias_mitigation
+   reference_component_hyperparameter_tuning
+
+.. toctree::
+   :caption: Scripts Reference
+   :maxdepth: 2
+
+   tutorial_usage
+
+.. toctree::
+   :caption: API Reference
+   :maxdepth: 2
+
+   reference_api_analysis
+   reference_api_utils
+   reference_api_evaluators
+   reference_api_dataloaders
+   reference_api_networks

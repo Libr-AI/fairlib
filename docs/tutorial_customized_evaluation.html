@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Customized Evaluation Metrics &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding Customized NN Architecture" href="tutorial_customized_models.html" />
+    <link rel="prev" title="Adding Customized Datasets" href="tutorial_customized_datasets_and_dataloaders.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Customized Evaluation Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-model">Train a Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#confusion-matrix-based-metrics">Confusion Matrix Based Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Adding Customized Evaluation Metrics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_customized_evaluation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-customized-evaluation-metrics">
+<h1>Adding Customized Evaluation Metrics<a class="headerlink" href="#adding-customized-evaluation-metrics" title="Permalink to this headline"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install fairlib
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Collecting fairlib
+  Downloading fairlib-0.0.3-py3-none-any.whl (63 kB)
+[K     |████████████████████████████████| 63 kB 2.0 MB/s 
+[?25hRequirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.21.6)
+Requirement already satisfied: scikit-learn in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.0.2)
+Requirement already satisfied: seaborn in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.11.2)
+Requirement already satisfied: tqdm in /usr/local/lib/python3.7/dist-packages (from fairlib) (4.64.0)
+Requirement already satisfied: docopt in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.6.2)
+Requirement already satisfied: pandas in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.3.5)
+Requirement already satisfied: PyYAML in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.13)
+Collecting pickle5
+  Downloading pickle5-0.0.12-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.whl (256 kB)
+[K     |████████████████████████████████| 256 kB 29.1 MB/s 
+[?25hRequirement already satisfied: matplotlib in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.2.2)
+Collecting transformers
+  Downloading transformers-4.18.0-py3-none-any.whl (4.0 MB)
+[K     |████████████████████████████████| 4.0 MB 55.2 MB/s 
+[?25hRequirement already satisfied: torch in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.11.0+cu113)
+Requirement already satisfied: python-dateutil&gt;=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (2.8.2)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (1.4.2)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (0.11.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (3.0.8)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib-&gt;fairlib) (4.2.0)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil&gt;=2.1-&gt;matplotlib-&gt;fairlib) (1.15.0)
+Requirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas-&gt;fairlib) (2022.1)
+Requirement already satisfied: scipy&gt;=1.1.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.4.1)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (3.1.0)
+Requirement already satisfied: joblib&gt;=0.11 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.1.0)
+Collecting sacremoses
+  Downloading sacremoses-0.0.53.tar.gz (880 kB)
+[K     |████████████████████████████████| 880 kB 51.9 MB/s 
+[?25hRequirement already satisfied: requests in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2.23.0)
+Requirement already satisfied: filelock in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (3.6.0)
+Requirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (4.11.3)
+Collecting huggingface-hub&lt;1.0,&gt;=0.1.0
+  Downloading huggingface_hub-0.5.1-py3-none-any.whl (77 kB)
+[K     |████████████████████████████████| 77 kB 6.9 MB/s 
+[?25hCollecting PyYAML
+  Downloading PyYAML-6.0-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (596 kB)
+[K     |████████████████████████████████| 596 kB 60.7 MB/s 
+[?25hRequirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2019.12.20)
+Collecting tokenizers!=0.11.3,&lt;0.13,&gt;=0.11.1
+  Downloading tokenizers-0.12.1-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (6.6 MB)
+[K     |████████████████████████████████| 6.6 MB 54.8 MB/s 
+[?25hRequirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (21.3)
+Requirement already satisfied: zipp&gt;=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata-&gt;transformers-&gt;fairlib) (3.8.0)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (1.24.3)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2021.10.8)
+Requirement already satisfied: idna&lt;3,&gt;=2.5 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2.10)
+Requirement already satisfied: chardet&lt;4,&gt;=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (3.0.4)
+Requirement already satisfied: click in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;transformers-&gt;fairlib) (7.1.2)
+Building wheels for collected packages: sacremoses
+  Building wheel for sacremoses (setup.py) ... [?25l[?25hdone
+  Created wheel for sacremoses: filename=sacremoses-0.0.53-py3-none-any.whl size=895260 sha256=c5c48dec8f73ec0d60ebce7e2289c19af0e22809669612f2359f236a871759ad
+  Stored in directory: /root/.cache/pip/wheels/87/39/dd/a83eeef36d0bf98e7a4d1933a4ad2d660295a40613079bafc9
+Successfully built sacremoses
+Installing collected packages: PyYAML, tokenizers, sacremoses, huggingface-hub, transformers, pickle5, fairlib
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 3.13
+    Uninstalling PyYAML-3.13:
+      Successfully uninstalled PyYAML-3.13
+Successfully installed PyYAML-6.0 fairlib-0.0.3 huggingface-hub-0.5.1 pickle5-0.0.12 sacremoses-0.0.53 tokenizers-0.12.1 transformers-4.18.0
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fairlib</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!mkdir -p data/deepmoji
+!wget &#39;https://storage.googleapis.com/ai2i/nullspace/deepmoji/pos_pos.npy&#39; -P &#39;data/deepmoji&#39;
+!wget &#39;https://storage.googleapis.com/ai2i/nullspace/deepmoji/pos_neg.npy&#39; -P &#39;data/deepmoji&#39;
+!wget &#39;https://storage.googleapis.com/ai2i/nullspace/deepmoji/neg_pos.npy&#39; -P &#39;data/deepmoji&#39;
+!wget &#39;https://storage.googleapis.com/ai2i/nullspace/deepmoji/neg_neg.npy&#39; -P &#39;data/deepmoji&#39;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>--2022-05-07 15:30:11--  https://storage.googleapis.com/ai2i/nullspace/deepmoji/pos_pos.npy
+Resolving storage.googleapis.com (storage.googleapis.com)... 108.177.127.128, 172.217.218.128, 142.251.18.128, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|108.177.127.128|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 405494864 (387M) [application/octet-stream]
+Saving to: ‘data/deepmoji/pos_pos.npy’
+
+pos_pos.npy         100%[===================&gt;] 386.71M   139MB/s    in 2.8s    
+
+2022-05-07 15:30:14 (139 MB/s) - ‘data/deepmoji/pos_pos.npy’ saved [405494864/405494864]
+
+--2022-05-07 15:30:14--  https://storage.googleapis.com/ai2i/nullspace/deepmoji/pos_neg.npy
+Resolving storage.googleapis.com (storage.googleapis.com)... 173.194.69.128, 108.177.127.128, 172.217.218.128, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|173.194.69.128|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 405504080 (387M) [application/octet-stream]
+Saving to: ‘data/deepmoji/pos_neg.npy’
+
+pos_neg.npy         100%[===================&gt;] 386.72M   173MB/s    in 2.2s    
+
+2022-05-07 15:30:16 (173 MB/s) - ‘data/deepmoji/pos_neg.npy’ saved [405504080/405504080]
+
+--2022-05-07 15:30:16--  https://storage.googleapis.com/ai2i/nullspace/deepmoji/neg_pos.npy
+Resolving storage.googleapis.com (storage.googleapis.com)... 142.251.18.128, 142.250.153.128, 74.125.128.128, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|142.251.18.128|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 405494864 (387M) [application/octet-stream]
+Saving to: ‘data/deepmoji/neg_pos.npy’
+
+neg_pos.npy         100%[===================&gt;] 386.71M   136MB/s    in 2.9s    
+
+2022-05-07 15:30:19 (136 MB/s) - ‘data/deepmoji/neg_pos.npy’ saved [405494864/405494864]
+
+--2022-05-07 15:30:19--  https://storage.googleapis.com/ai2i/nullspace/deepmoji/neg_neg.npy
+Resolving storage.googleapis.com (storage.googleapis.com)... 74.125.128.128, 173.194.69.128, 108.177.119.128, ...
+Connecting to storage.googleapis.com (storage.googleapis.com)|74.125.128.128|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 405504080 (387M) [application/octet-stream]
+Saving to: ‘data/deepmoji/neg_neg.npy’
+
+neg_neg.npy         100%[===================&gt;] 386.72M   142MB/s    in 2.7s    
+
+2022-05-07 15:30:22 (142 MB/s) - ‘data/deepmoji/neg_neg.npy’ saved [405504080/405504080]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fairlib</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="mi">2022</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">read_data_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">vecs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vecs</span><span class="p">[:</span><span class="mi">40000</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">40000</span><span class="p">:</span><span class="mi">42000</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">42000</span><span class="p">:</span><span class="mi">44000</span><span class="p">]</span>
+
+<span class="n">in_dir</span> <span class="o">=</span> <span class="s2">&quot;data/deepmoji&quot;</span>
+<span class="n">out_dir</span> <span class="o">=</span> <span class="s2">&quot;data/deepmoji&quot;</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pos_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;pos_neg&#39;</span><span class="p">,</span> <span class="s1">&#39;neg_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;neg_neg&#39;</span><span class="p">]:</span>
+    <span class="n">train</span><span class="p">,</span> <span class="n">dev</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">read_data_file</span><span class="p">(</span><span class="n">in_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">split</span> <span class="o">+</span> <span class="s1">&#39;.npy&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">split_dir</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;dev&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">dev</span><span class="p">,</span> <span class="n">test</span><span class="p">]):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">split_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">split_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">split</span> <span class="o">+</span> <span class="s1">&#39;.npy&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="train-a-model">
+<h2>Train a Model<a class="headerlink" href="#train-a-model" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shared_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># The name of the dataset, corresponding dataloader will be used,</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>  <span class="s2">&quot;Moji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Specifiy the path to the input data</span>
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;data/deepmoji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Device for computing, -1 is the cpu</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span>    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># The default path for saving experimental results</span>
+    <span class="s2">&quot;results_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Will be used for saving experimental results</span>
+    <span class="s2">&quot;project_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+
+    <span class="c1"># We will focusing on TPR GAP, implying the Equalized Odds for binary classification.</span>
+    <span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;TPR_GAP&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The overall performance will be measured as accuracy</span>
+    <span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Model selections are based on DTO</span>
+    <span class="s2">&quot;selection_criterion&quot;</span><span class="p">:</span>  <span class="s2">&quot;DTO&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Default dirs for saving checkpoints</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span>   <span class="s2">&quot;models&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;checkpoint_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;checkpoint_epoch&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Loading experimental results</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span>   <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span> 
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;data_dir&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;vanilla&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">fairlib</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="mi">2022</span><span class="p">)</span>
+
+<span class="c1"># Init Model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">get_main_model</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO:root:Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-3dad1bfd-dd35-40d7-b985-35feaaff967a.json&#39;]
+INFO:root:Logging to ./results/dev/Moji/vanilla/output.log
+
+
+2022-05-07 15:30:29 [INFO ]  ======================================== 2022-05-07 15:30:29 ========================================
+2022-05-07 15:30:29 [INFO ]  Base directory is ./results/dev/Moji/vanilla
+Loaded data shapes: (99998, 2304), (99998,), (99998,)
+Loaded data shapes: (8000, 2304), (8000,), (8000,)
+Loaded data shapes: (7998, 2304), (7998,), (7998,)
+2022-05-07 15:30:30 [INFO ]  MLP( 
+2022-05-07 15:30:30 [INFO ]    (output_layer): Linear(in_features=300, out_features=2, bias=True)
+2022-05-07 15:30:30 [INFO ]    (AF): Tanh()
+2022-05-07 15:30:30 [INFO ]    (hidden_layers): ModuleList(
+2022-05-07 15:30:30 [INFO ]      (0): Linear(in_features=2304, out_features=300, bias=True)
+2022-05-07 15:30:30 [INFO ]      (1): Tanh()
+2022-05-07 15:30:30 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-05-07 15:30:30 [INFO ]      (3): Tanh()
+2022-05-07 15:30:30 [INFO ]    )
+2022-05-07 15:30:30 [INFO ]    (criterion): CrossEntropyLoss()
+2022-05-07 15:30:30 [INFO ]  )
+2022-05-07 15:30:30 [INFO ]  Total number of parameters: 782402 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-05-07 15:30:30 [INFO ]  Epoch:    0 [      0/  99998 ( 0%)]	Loss: 0.6906	 Data Time: 0.02s	Train Time: 0.19s
+2022-05-07 15:30:34 [INFO ]  Epoch:    0 [  51200/  99998 (51%)]	Loss: 0.3926	 Data Time: 0.36s	Train Time: 3.30s
+2022-05-07 15:30:38 [INFO ]  Evaluation at Epoch 0
+2022-05-07 15:30:38 [INFO ]  Validation accuracy: 72.55	macro_fscore: 72.44	micro_fscore: 72.55	TPR_GAP: 40.07	FPR_GAP: 40.07	PPR_GAP: 39.10	
+2022-05-07 15:30:38 [INFO ]  Test accuracy: 71.41	macro_fscore: 71.30	micro_fscore: 71.41	TPR_GAP: 39.01	FPR_GAP: 39.01	PPR_GAP: 37.84	
+2022-05-07 15:30:38 [INFO ]  Epoch:    1 [      0/  99998 ( 0%)]	Loss: 0.4105	 Data Time: 0.01s	Train Time: 0.07s
+2022-05-07 15:30:42 [INFO ]  Epoch:    1 [  51200/  99998 (51%)]	Loss: 0.4156	 Data Time: 0.37s	Train Time: 3.24s
+2022-05-07 15:30:46 [INFO ]  Evaluation at Epoch 1
+2022-05-07 15:30:46 [INFO ]  Validation accuracy: 72.36	macro_fscore: 72.32	micro_fscore: 72.36	TPR_GAP: 39.81	FPR_GAP: 39.81	PPR_GAP: 39.27	
+2022-05-07 15:30:46 [INFO ]  Test accuracy: 71.01	macro_fscore: 70.98	micro_fscore: 71.01	TPR_GAP: 39.40	FPR_GAP: 39.40	PPR_GAP: 38.64	
+2022-05-07 15:30:46 [INFO ]  Epoch:    2 [      0/  99998 ( 0%)]	Loss: 0.3433	 Data Time: 0.01s	Train Time: 0.07s
+2022-05-07 15:30:49 [INFO ]  Epoch:    2 [  51200/  99998 (51%)]	Loss: 0.3734	 Data Time: 0.38s	Train Time: 3.25s
+2022-05-07 15:30:53 [INFO ]  Epochs since last improvement: 1
+2022-05-07 15:30:53 [INFO ]  Evaluation at Epoch 2
+2022-05-07 15:30:53 [INFO ]  Validation accuracy: 72.42	macro_fscore: 72.37	micro_fscore: 72.42	TPR_GAP: 40.91	FPR_GAP: 40.91	PPR_GAP: 40.20	
+2022-05-07 15:30:53 [INFO ]  Test accuracy: 70.98	macro_fscore: 70.93	micro_fscore: 70.98	TPR_GAP: 40.21	FPR_GAP: 40.21	PPR_GAP: 39.39	
+2022-05-07 15:30:53 [INFO ]  Epoch:    3 [      0/  99998 ( 0%)]	Loss: 0.3773	 Data Time: 0.01s	Train Time: 0.06s
+2022-05-07 15:30:57 [INFO ]  Epoch:    3 [  51200/  99998 (51%)]	Loss: 0.3479	 Data Time: 0.38s	Train Time: 3.25s
+2022-05-07 15:31:01 [INFO ]  Epochs since last improvement: 2
+2022-05-07 15:31:01 [INFO ]  Evaluation at Epoch 3
+2022-05-07 15:31:01 [INFO ]  Validation accuracy: 72.09	macro_fscore: 71.92	micro_fscore: 72.09	TPR_GAP: 41.54	FPR_GAP: 41.54	PPR_GAP: 40.17	
+2022-05-07 15:31:01 [INFO ]  Test accuracy: 71.17	macro_fscore: 71.02	micro_fscore: 71.17	TPR_GAP: 40.32	FPR_GAP: 40.32	PPR_GAP: 38.96	
+2022-05-07 15:31:01 [INFO ]  Epoch:    4 [      0/  99998 ( 0%)]	Loss: 0.3839	 Data Time: 0.02s	Train Time: 0.06s
+2022-05-07 15:31:05 [INFO ]  Epoch:    4 [  51200/  99998 (51%)]	Loss: 0.3499	 Data Time: 0.38s	Train Time: 3.28s
+2022-05-07 15:31:11 [INFO ]  Epochs since last improvement: 3
+2022-05-07 15:31:11 [INFO ]  Evaluation at Epoch 4
+2022-05-07 15:31:11 [INFO ]  Validation accuracy: 71.50	macro_fscore: 71.43	micro_fscore: 71.50	TPR_GAP: 42.76	FPR_GAP: 42.76	PPR_GAP: 42.00	
+2022-05-07 15:31:11 [INFO ]  Test accuracy: 70.49	macro_fscore: 70.43	micro_fscore: 70.49	TPR_GAP: 41.37	FPR_GAP: 41.37	PPR_GAP: 40.51	
+2022-05-07 15:31:11 [INFO ]  Epoch:    5 [      0/  99998 ( 0%)]	Loss: 0.3746	 Data Time: 0.03s	Train Time: 0.28s
+2022-05-07 15:31:15 [INFO ]  Epoch:    5 [  51200/  99998 (51%)]	Loss: 0.3748	 Data Time: 0.37s	Train Time: 3.28s
+2022-05-07 15:31:19 [INFO ]  Epochs since last improvement: 4
+2022-05-07 15:31:19 [INFO ]  Evaluation at Epoch 5
+2022-05-07 15:31:19 [INFO ]  Validation accuracy: 72.67	macro_fscore: 72.60	micro_fscore: 72.67	TPR_GAP: 39.17	FPR_GAP: 39.17	PPR_GAP: 38.35	
+2022-05-07 15:31:19 [INFO ]  Test accuracy: 71.69	macro_fscore: 71.62	micro_fscore: 71.69	TPR_GAP: 37.97	FPR_GAP: 37.97	PPR_GAP: 36.91	
+2022-05-07 15:31:19 [INFO ]  Epoch:    6 [      0/  99998 ( 0%)]	Loss: 0.3624	 Data Time: 0.01s	Train Time: 0.06s
+2022-05-07 15:31:23 [INFO ]  Epoch:    6 [  51200/  99998 (51%)]	Loss: 0.3529	 Data Time: 0.38s	Train Time: 3.24s
+2022-05-07 15:31:26 [INFO ]  Epochs since last improvement: 5
+2022-05-07 15:31:27 [INFO ]  Evaluation at Epoch 6
+2022-05-07 15:31:27 [INFO ]  Validation accuracy: 72.70	macro_fscore: 72.62	micro_fscore: 72.70	TPR_GAP: 38.29	FPR_GAP: 38.29	PPR_GAP: 37.50	
+2022-05-07 15:31:27 [INFO ]  Test accuracy: 71.76	macro_fscore: 71.70	micro_fscore: 71.76	TPR_GAP: 37.59	FPR_GAP: 37.59	PPR_GAP: 36.79	
+</pre></div>
+</div>
+<p>By default, fairlib print and save 6 metrics:</p>
+<ul class="simple">
+<li><p>accuracy, macro F1 score, and micro F1 score, which are most commenly used evaluation metrics for performance evaluation.</p></li>
+<li><p>rms aggregated TPR, FPR, and PPR GAP scores for fairness assesment.</p></li>
+</ul>
+</section>
+<section id="confusion-matrix-based-metrics">
+<h2>Confusion Matrix Based Metrics<a class="headerlink" href="#confusion-matrix-based-metrics" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{results_dir}</span><span class="s2">/</span><span class="si">{project_dir}</span><span class="s2">/</span><span class="si">{dataset}</span><span class="s2">/</span><span class="si">{exp_id}</span><span class="s2">/</span><span class="si">{checkpoint_dir}</span><span class="s2">/</span><span class="si">{checkpoint_name}{epoch}</span><span class="s2">.pth.tar&quot;</span>
+
+<span class="c1"># Path to the first epoch</span>
+<span class="n">path_vanilla_epoch0</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">exp_id</span> <span class="o">=</span> <span class="s2">&quot;vanilla&quot;</span><span class="p">,</span>
+    <span class="n">epoch</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="n">results_dir</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;results_dir&quot;</span><span class="p">],</span>
+    <span class="n">project_dir</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;project_dir&quot;</span><span class="p">],</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_dir</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_name</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_name&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">epoch_results</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_vanilla_epoch0</span><span class="p">)</span>
+<span class="c1"># The keys for saved items</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">epoch_results</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;epoch&#39;, &#39;epochs_since_improvement&#39;, &#39;loss&#39;, &#39;valid_confusion_matrices&#39;, &#39;test_confusion_matrices&#39;, &#39;dev_evaluations&#39;, &#39;test_evaluations&#39;])
+</pre></div>
+</div>
+<p><em>fairlib</em> saves confusion matrices for each protected groups as well as the overall confusion matrix. These matrices are stored in a dictionary, indexed with the group id.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">epoch_results</span><span class="p">[</span><span class="s2">&quot;valid_confusion_matrices&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;overall&#39;, 0, 1])
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">epoch_results</span><span class="p">[</span><span class="s2">&quot;valid_confusion_matrices&quot;</span><span class="p">][</span><span class="s2">&quot;overall&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[2655, 1345],
+       [ 851, 3149]])
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.evaluators.evaluator</span> <span class="kn">import</span> <span class="n">confusion_matrix_based_scores</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix_based_scores</span><span class="p">(</span><span class="n">epoch_results</span><span class="p">[</span><span class="s2">&quot;valid_confusion_matrices&quot;</span><span class="p">][</span><span class="s2">&quot;overall&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;ACC&#39;: array([0.7255, 0.7255]),
+ &#39;FDR&#39;: array([0.24272676, 0.29928794]),
+ &#39;FNR&#39;: array([0.33625, 0.21275]),
+ &#39;FPR&#39;: array([0.21275, 0.33625]),
+ &#39;NPV&#39;: array([0.70071206, 0.75727324]),
+ &#39;PPR&#39;: array([0.43825, 0.56175]),
+ &#39;PPV&#39;: array([0.75727324, 0.70071206]),
+ &#39;TNR&#39;: array([0.78725, 0.66375]),
+ &#39;TPR&#39;: array([0.66375, 0.78725])}
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.evaluators.evaluator</span> <span class="kn">import</span> <span class="n">power_mean</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="c1"># generalized mean aggregation</span>
+<span class="p">[</span>
+ <span class="n">power_mean</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span> <span class="c1"># Max</span>
+ <span class="n">power_mean</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="c1"># Root Mean Square</span>
+ <span class="n">power_mean</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="c1"># Arithmetic Mean</span>
+ <span class="n">power_mean</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">p</span><span class="o">=-</span><span class="mi">100</span><span class="p">),</span> <span class="c1"># Min</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[5, 3.3166247903554, 3.0, 1]
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Max Violation</p></li>
+<li><p>RMS GAP</p></li>
+<li><p>Max Min Fairness</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.evaluators.evaluator</span> <span class="kn">import</span> <span class="n">Aggregation_GAP</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Confusion matrices of the vanilla model&#39;s first epoch over the vailidation dataset</span>
+<span class="n">confusion_matrices</span> <span class="o">=</span> <span class="n">epoch_results</span><span class="p">[</span><span class="s2">&quot;valid_confusion_matrices&quot;</span><span class="p">]</span>
+
+<span class="c1"># all_scores = dict()</span>
+<span class="n">all_scores</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># Overall evaluation</span>
+<span class="n">all_scores</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">confusion_matrix_based_scores</span><span class="p">(</span><span class="n">confusion_matrices</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">])</span>
+
+<span class="c1"># Group scores</span>
+<span class="n">distinct_groups</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># binary protected groups, AAE verse SAE</span>
+<span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">distinct_groups</span><span class="p">:</span>
+    <span class="n">group_confusion_matrix</span> <span class="o">=</span> <span class="n">confusion_matrices</span><span class="p">[</span><span class="n">gid</span><span class="p">]</span>
+    <span class="n">all_scores</span><span class="p">[</span><span class="n">gid</span><span class="p">]</span> <span class="o">=</span> <span class="n">confusion_matrix_based_scores</span><span class="p">(</span><span class="n">group_confusion_matrix</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Aggregation_GAP</span><span class="p">(</span>
+    <span class="n">distinct_groups</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">all_scores</span><span class="o">=</span><span class="n">all_scores</span><span class="p">,</span> 
+
+    <span class="c1"># Take the absolute different if None, </span>
+    <span class="c1"># using generalized mean aggregation if not None.</span>
+    <span class="n">group_agg_power</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span>
+    
+    <span class="c1"># RMS aggregation by default</span>
+    <span class="n">class_agg_power</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;TPR&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.2003354978462722
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_customized_datasets_and_dataloaders.html" class="btn btn-neutral float-left" title="Adding Customized Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_customized_models.html" class="btn btn-neutral float-right" title="Adding Customized NN Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

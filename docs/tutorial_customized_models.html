@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Customized NN Architecture &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding Customized Debiasing Methods" href="tutorial_customized_methods.html" />
+    <link rel="prev" title="Adding Customized Evaluation Metrics" href="tutorial_customized_evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Customized NN Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#classification-head">Classification Head</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customized-model-architecture">Customized model architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#register-model">Register Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#register-the-dataloader">Register the Dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extensions">Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Adding Customized NN Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_customized_models.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-customized-nn-architecture">
+<h1>Adding Customized NN Architecture<a class="headerlink" href="#adding-customized-nn-architecture" title="Permalink to this headline"></a></h1>
+<section id="classification-head">
+<h2>Classification Head<a class="headerlink" href="#classification-head" title="Permalink to this headline"></a></h2>
+<p>Our current MLP implementation (<code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/classifier</span></code>) can be used as a classification head for different backbone nets. All our methods such as balanced training and adversarial training will be supported for the new model.</p>
+</section>
+<section id="customized-model-architecture">
+<h2>Customized model architecture<a class="headerlink" href="#customized-model-architecture" title="Permalink to this headline"></a></h2>
+<p>Take a look at the following example, we use the BERT model as the feature extracting network, i.e., extracting sentence representations from the BERT, and then use the extracted features as the input to the MLP classifier to make predictions.</p>
+<p>We only need to define three functions: <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, which is used to init the model with pretrained BERT parameters, MLP classifier, and optimizers; <code class="docutils literal notranslate"><span class="pre">forward</span></code>, which is the same to before where we extract sentence representations then use MLP to make predictions; and <code class="docutils literal notranslate"><span class="pre">hidden</span></code>, which is used to get hidden representations for adversarial training.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">BertModel</span>
+<span class="kn">from</span> <span class="nn">fairlib.networks.classifier</span> <span class="kn">import</span> <span class="n">MLP</span>
+
+<span class="k">class</span> <span class="nc">BERTClassifier</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;bert-base-cased&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BERTClassifier</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+        <span class="c1"># Load pretrained model parameters.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bert</span> <span class="o">=</span> <span class="n">BertModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="c1"># Init the classification head </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># Init optimizers, criterions, etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_for_training</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">group_label</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Extract sentence representations from bert</span>
+        <span class="n">bert_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bert</span><span class="p">(</span><span class="n">input_data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Make predictions</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">bert_output</span><span class="p">,</span> <span class="n">group_label</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">group_label</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Extract sentence representations from bert</span>
+        <span class="n">bert_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bert</span><span class="p">(</span><span class="n">input_data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Make predictions</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">hidden</span><span class="p">(</span><span class="n">bert_output</span><span class="p">,</span> <span class="n">group_label</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="register-model">
+<h2>Register Model<a class="headerlink" href="#register-model" title="Permalink to this headline"></a></h2>
+<p>the model architecture is indicated by <code class="docutils literal notranslate"><span class="pre">--encoder_architecture</span></code>, so we will need to handle different values of this argument.
+Specifically, we need to modify the <code class="docutils literal notranslate"><span class="pre">get_main_model</span></code> function in <code class="docutils literal notranslate"><span class="pre">fairlib/src/networks/__init__.py</span></code> to support new models.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_main_model</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Add the new model name here.</span>
+    <span class="k">assert</span> <span class="n">args</span><span class="o">.</span><span class="n">encoder_architecture</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Fixed&quot;</span><span class="p">,</span> <span class="s2">&quot;BERT&quot;</span><span class="p">,</span> <span class="s2">&quot;DeepMoji&quot;</span><span class="p">,</span> <span class="s2">&quot;NEW_MODEL_NAME&quot;</span><span class="p">],</span> <span class="s2">&quot;Not implemented&quot;</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">encoder_architecture</span> <span class="o">==</span> <span class="s2">&quot;Fixed&quot;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">encoder_architecture</span> <span class="o">==</span> <span class="s2">&quot;BERT&quot;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">BERTClassifier</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="c1"># Init the model </span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">encoder_architecture</span> <span class="o">==</span> <span class="s2">&quot;NEW_MODEL_NAME&quot;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">MODEL</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="s2">&quot;not implemented yet&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="register-the-dataloader">
+<h2>Register the Dataloader<a class="headerlink" href="#register-the-dataloader" title="Permalink to this headline"></a></h2>
+<p>Since different models have their own mapping from tokens to numerical ids. We need to handle this in the dataloader.</p>
+<p>Firstly, we need to init the tokenizer in <code class="docutils literal notranslate"><span class="pre">fairlib/src/dataloaders/encoder.py</span></code>, for example,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;bert-base-cased&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, we need to modify the corresponding dataloader to return the idx of input texts. Please take a look at the Bios loader in <code class="docutils literal notranslate"><span class="pre">fairlib/src/dataloaders/loaders.py</span></code> for detailed examples.</p>
+<p>Noticing that, to avoid encoding text to idx repeatedly, we could pre-calculate the mapped idx for the desired model, and load from file to save time.</p>
+</section>
+<section id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BiLSTMPOSTagger</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">input_dim</span><span class="p">,</span> 
+                <span class="n">embedding_dim</span><span class="p">,</span> 
+                <span class="n">hidden_dim</span><span class="p">,</span> 
+                <span class="n">output_dim</span><span class="p">,</span> 
+                <span class="n">n_layers</span><span class="p">,</span> 
+                <span class="n">bidirectional</span><span class="p">,</span> 
+                <span class="n">dropout</span><span class="p">,</span> 
+                <span class="n">pad_idx</span><span class="p">):</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">padding_idx</span> <span class="o">=</span> <span class="n">pad_idx</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lstm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">,</span> 
+                            <span class="n">hidden_dim</span><span class="p">,</span> 
+                            <span class="n">num_layers</span> <span class="o">=</span> <span class="n">n_layers</span><span class="p">,</span> 
+                            <span class="n">bidirectional</span> <span class="o">=</span> <span class="n">bidirectional</span><span class="p">,</span>
+                            <span class="n">dropout</span> <span class="o">=</span> <span class="n">dropout</span> <span class="k">if</span> <span class="n">n_layers</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">bidirectional</span> <span class="k">else</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">)</span>
+
+        <span class="c1"># args.input_dim = hidden_dim * 2 if bidirectional else hidden_dim</span>
+        <span class="c1"># args.output_dim = hidden_dim * 2 if bidirectional else output_dim</span>
+        <span class="c1"># args.n_hidden = 0</span>
+        <span class="c1"># self.fc = MLP(args)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+
+        <span class="c1">#text = [sent len, batch size]</span>
+        
+        <span class="c1">#pass text through embedding layer</span>
+        <span class="n">embedded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        
+        <span class="c1">#embedded = [sent len, batch size, emb dim]</span>
+        
+        <span class="c1">#pass embeddings into LSTM</span>
+        <span class="n">outputs</span><span class="p">,</span> <span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstm</span><span class="p">(</span><span class="n">embedded</span><span class="p">)</span>
+        
+        <span class="c1">#outputs holds the backward and forward hidden states in the final layer</span>
+        <span class="c1">#hidden and cell are the backward and forward hidden and cell states at the final time-step</span>
+        
+        <span class="c1">#output = [sent len, batch size, hid dim * n directions]</span>
+        <span class="c1">#hidden/cell = [n layers * n directions, batch size, hid dim]</span>
+        
+        <span class="c1">#we use our outputs to make a prediction of what the tag should be</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">outputs</span><span class="p">))</span>
+        
+        <span class="c1">#predictions = [sent len, batch size, output dim]</span>
+        
+        <span class="k">return</span> <span class="n">predictions</span>
+
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_customized_evaluation.html" class="btn btn-neutral float-left" title="Adding Customized Evaluation Metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_customized_methods.html" class="btn btn-neutral float-right" title="Adding Customized Debiasing Methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

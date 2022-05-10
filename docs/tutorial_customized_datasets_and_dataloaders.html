@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Customized Datasets &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding Customized Evaluation Metrics" href="tutorial_customized_evaluation.html" />
+    <link rel="prev" title="Visualization" href="tutorial_plot_gallery.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Customized Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-implement-the-dataset-class">Step 1. Implement the dataset class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-register-the-dataset">Step 2. Register the dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Adding Customized Datasets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_customized_datasets_and_dataloaders.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-customized-datasets">
+<h1>Adding Customized Datasets<a class="headerlink" href="#adding-customized-datasets" title="Permalink to this headline"></a></h1>
+<section id="step-1-implement-the-dataset-class">
+<h2>Step 1. Implement the dataset class<a class="headerlink" href="#step-1-implement-the-dataset-class" title="Permalink to this headline"></a></h2>
+<p>A custom dataset class must implement the <code class="docutils literal notranslate"><span class="pre">load_data</span></code> function. Take a look at this sample implementation; the split is stored in a directory <code class="docutils literal notranslate"><span class="pre">self.data_dir</span></code>, which is determined by the <code class="docutils literal notranslate"><span class="pre">args.data_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">split</span></code>. <code class="docutils literal notranslate"><span class="pre">args.data_dir</span></code> is either loaded from the arguments <code class="docutils literal notranslate"><span class="pre">--data_dir</span></code> or from the default value, which will be introduced into details later. While <code class="docutils literal notranslate"><span class="pre">split</span></code> has three possible string values, <code class="docutils literal notranslate"><span class="pre">{&quot;train&quot;,</span> <span class="pre">&quot;dev&quot;,</span> <span class="pre">&quot;test&quot;}</span></code>, indicating the split that will be loaded.</p>
+<p>Then the <code class="docutils literal notranslate"><span class="pre">load_data</span></code> function must assign the value of <code class="docutils literal notranslate"><span class="pre">self.X</span></code> as inputs, <code class="docutils literal notranslate"><span class="pre">self.y</span></code> as target labels, and <code class="docutils literal notranslate"><span class="pre">self.protected_label</span></code> as the information for debiasing, such as gender, age, and race.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.dataloaders.utils</span> <span class="kn">import</span> <span class="n">BaseDataset</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">class</span> <span class="nc">SampleDataset</span><span class="p">(</span><span class="n">BaseDataset</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Path to the data split.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_df.pkl&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># Assuming the size of the split is N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="c1"># N * input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="c1"># N, numerical labels, for example, {0,1}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protected_label</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;protected_label&quot;</span><span class="p">]</span> <span class="c1"># N, numerical labels</span>
+
+</pre></div>
+</div>
+<p>For more example, please take a look at <code class="docutils literal notranslate"><span class="pre">fairlib/src/dataloader/loaders.py</span></code>.</p>
+<p>Debiasing methods such as instance reweighting will be automatically applied to the loaded dataset, which is implemented in <code class="docutils literal notranslate"><span class="pre">fairlib.src.dataloaders.utils.BaseDataset</span></code>.</p>
+</section>
+<section id="step-2-register-the-dataset">
+<h2>Step 2. Register the dataset<a class="headerlink" href="#step-2-register-the-dataset" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">default_dataset_roots</span></code></p></li>
+</ul>
+<p>To avoid identifying the data root every time, we could predefine the default root the our dataset. we just need to add the path to the dictionary <code class="docutils literal notranslate"><span class="pre">default_dataset_roots</span></code> in <code class="docutils literal notranslate"><span class="pre">fairlib/src/dataloaders/__init__.py</span></code>. Take a look at the following example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">default_dataset_roots</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">Moji</span><span class="o">=</span><span class="s1">&#39;/data/deepmoji/split2/&#39;</span><span class="p">,</span>
+        <span class="c1"># New dataset</span>
+        <span class="n">New_dataset</span><span class="o">=</span><span class="s1">&#39;./data/path_to_dataset&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_dataloaders</span></code>
+New, we need to register the dataset class for later use. Specially, all we need to do is adding an extra else if statement for the new dataset.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+
+<span class="k">def</span> <span class="nf">get_dataloaders</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Add the new dataset name here to avoid assert</span>
+    <span class="k">assert</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Moji&quot;</span><span class="p">,</span> <span class="s2">&quot;Bios_gender&quot;</span><span class="p">,</span> <span class="s2">&quot;Bios_economy&quot;</span><span class="p">,</span> <span class="s2">&quot;Bios_both&quot;</span><span class="p">,</span> <span class="s2">&quot;New_dataset&quot;</span><span class="p">],</span> <span class="s2">&quot;Not implemented&quot;</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;Moji&quot;</span><span class="p">:</span>
+        <span class="n">task_dataloader</span> <span class="o">=</span> <span class="n">DeepMojiDataset</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Bios_gender&quot;</span><span class="p">,</span> <span class="s2">&quot;Bios_economy&quot;</span><span class="p">,</span> <span class="s2">&quot;Bios_both&quot;</span><span class="p">]:</span>
+        <span class="n">task_dataloader</span> <span class="o">=</span> <span class="n">BiosDataset</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">protected_task</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># Add an additional else if statement for the new dataset</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;New_dataset&quot;</span><span class="p">:</span>
+        <span class="n">task_dataloader</span> <span class="o">=</span> <span class="n">SampleDataset</span> <span class="c1"># The SampleDataset class is the introduced in the previous section.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_plot_gallery.html" class="btn btn-neutral float-left" title="Visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_customized_evaluation.html" class="btn btn-neutral float-right" title="Adding Customized Evaluation Metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

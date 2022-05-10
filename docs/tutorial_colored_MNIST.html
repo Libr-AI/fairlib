@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debiasing CV Tasks &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Debiasing for Structured Inputs" href="tutorial_COMPAS.html" />
+    <link rel="prev" title="Basic Usage" href="tutorial_Moji_demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Debiasing CV Tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-data">Prepare Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-vanilla-model">Train a Vanilla Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bias-mitigation">Bias Mitigation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Debiasing CV Tasks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial_colored_MNIST.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="debiasing-cv-tasks">
+<h1>Debiasing CV Tasks<a class="headerlink" href="#debiasing-cv-tasks" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/colored_MNIST.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this tutorial we will:</p>
+<ul class="simple">
+<li><p>Show how to add a model for image classification</p></li>
+<li><p>Show how to add a dataloader with image preprocessing</p></li>
+</ul>
+<p>We will be using the colored MNIST dataset, please see the <a class="reference external" href="https://colab.research.google.com/github/reiinakano/invariant-risk-minimization/blob/master/invariant_risk_minimization_colored_mnist.ipynb#scrollTo=knP-xNzavgAb&amp;uniqifier=1">origianl</a> demo for more details.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>Again, the first step will be installing our libarary</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install fairlib
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Collecting fairlib
+  Downloading fairlib-0.0.1-py3-none-any.whl (61 kB)
+[K     |████████████████████████████████| 61 kB 3.6 MB/s 
+[?25hCollecting transformers
+  Downloading transformers-4.18.0-py3-none-any.whl (4.0 MB)
+[K     |████████████████████████████████| 4.0 MB 14.8 MB/s 
+[?25hRequirement already satisfied: tqdm in /usr/local/lib/python3.7/dist-packages (from fairlib) (4.63.0)
+Requirement already satisfied: docopt in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.6.2)
+Requirement already satisfied: scikit-learn in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.0.2)
+Requirement already satisfied: seaborn in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.11.2)
+Requirement already satisfied: torch in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.10.0+cu111)
+Requirement already satisfied: PyYAML in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.13)
+Collecting pickle5
+  Downloading pickle5-0.0.12-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.whl (256 kB)
+[K     |████████████████████████████████| 256 kB 64.7 MB/s 
+[?25hRequirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.21.5)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.2.2)
+Requirement already satisfied: pandas in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.3.5)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (3.0.7)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (1.4.0)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (0.11.0)
+Requirement already satisfied: python-dateutil&gt;=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (2.8.2)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib-&gt;fairlib) (3.10.0.2)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil&gt;=2.1-&gt;matplotlib-&gt;fairlib) (1.15.0)
+Requirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas-&gt;fairlib) (2018.9)
+Requirement already satisfied: joblib&gt;=0.11 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.1.0)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (3.1.0)
+Requirement already satisfied: scipy&gt;=1.1.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.4.1)
+Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (21.3)
+Collecting huggingface-hub&lt;1.0,&gt;=0.1.0
+  Downloading huggingface_hub-0.5.1-py3-none-any.whl (77 kB)
+[K     |████████████████████████████████| 77 kB 5.2 MB/s 
+[?25hRequirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2019.12.20)
+Collecting PyYAML
+  Downloading PyYAML-6.0-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (596 kB)
+[K     |████████████████████████████████| 596 kB 50.9 MB/s 
+[?25hRequirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (4.11.3)
+Collecting tokenizers!=0.11.3,&lt;0.13,&gt;=0.11.1
+  Downloading tokenizers-0.11.6-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (6.5 MB)
+[K     |████████████████████████████████| 6.5 MB 48.3 MB/s 
+[?25hRequirement already satisfied: filelock in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (3.6.0)
+Requirement already satisfied: requests in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2.23.0)
+Collecting sacremoses
+  Downloading sacremoses-0.0.49-py3-none-any.whl (895 kB)
+[K     |████████████████████████████████| 895 kB 47.9 MB/s 
+[?25hRequirement already satisfied: zipp&gt;=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata-&gt;transformers-&gt;fairlib) (3.7.0)
+Requirement already satisfied: chardet&lt;4,&gt;=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (3.0.4)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (1.24.3)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2021.10.8)
+Requirement already satisfied: idna&lt;3,&gt;=2.5 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2.10)
+Requirement already satisfied: click in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;transformers-&gt;fairlib) (7.1.2)
+Installing collected packages: PyYAML, tokenizers, sacremoses, huggingface-hub, transformers, pickle5, fairlib
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 3.13
+    Uninstalling PyYAML-3.13:
+      Successfully uninstalled PyYAML-3.13
+Successfully installed PyYAML-6.0 fairlib-0.0.1 huggingface-hub-0.5.1 pickle5-0.0.12 sacremoses-0.0.49 tokenizers-0.11.6 transformers-4.18.0
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fairlib</span>
+</pre></div>
+</div>
+</section>
+<section id="prepare-data">
+<h2>Prepare Data<a class="headerlink" href="#prepare-data" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">grad</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">import</span> <span class="nn">torchvision.datasets.utils</span> <span class="k">as</span> <span class="nn">dataset_utils</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">color_grayscale_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">red</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts grayscale image to either red or green&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">red</span><span class="p">:</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+            <span class="n">arr</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="n">arr</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">arr</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./data/MNIST/raw/train-images-idx3-ubyte.gz
+
+
+
+  0%|          | 0/9912422 [00:00&lt;?, ?it/s]
+
+
+Extracting ./data/MNIST/raw/train-images-idx3-ubyte.gz to ./data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./data/MNIST/raw/train-labels-idx1-ubyte.gz
+
+
+
+  0%|          | 0/28881 [00:00&lt;?, ?it/s]
+
+
+Extracting ./data/MNIST/raw/train-labels-idx1-ubyte.gz to ./data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./data/MNIST/raw/t10k-images-idx3-ubyte.gz
+
+
+
+  0%|          | 0/1648877 [00:00&lt;?, ?it/s]
+
+
+Extracting ./data/MNIST/raw/t10k-images-idx3-ubyte.gz to ./data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./data/MNIST/raw/t10k-labels-idx1-ubyte.gz
+
+
+
+  0%|          | 0/4542 [00:00&lt;?, ?it/s]
+
+
+Extracting ./data/MNIST/raw/t10k-labels-idx1-ubyte.gz to ./data/MNIST/raw
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>60000
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Original</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_grayscale_arr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span> <span class="c1"># Red</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_grayscale_arr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="kc">False</span><span class="p">))</span> <span class="c1"># Green</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f1b9516cb10&gt;
+</pre></div>
+</div>
+<p><img alt="png" src="_images/tutorial_colored_MNIST_8_1.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test_mnist</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">test_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Original</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_grayscale_arr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span> <span class="c1"># Red</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_grayscale_arr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_mnist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="kc">False</span><span class="p">))</span> <span class="c1"># Green</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f1b950ad650&gt;
+</pre></div>
+</div>
+<p><img alt="png" src="_images/tutorial_colored_MNIST_10_1.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process_colored_MNIST</span><span class="p">(</span><span class="n">loaded_data</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+    <span class="n">im_list</span><span class="p">,</span> <span class="n">target_class</span><span class="p">,</span> <span class="n">protected_class</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="c1"># Iterate over all images</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loaded_data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">5000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Converting image </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">loaded_data</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">im_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+
+        <span class="c1"># Assign a binary label y to the image based on the digit</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">red_prob</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">red_prob</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">ratio</span>
+        
+        <span class="n">color_red</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">red_prob</span><span class="p">)</span>
+
+        <span class="n">colored_array</span> <span class="o">=</span> <span class="n">color_grayscale_arr</span><span class="p">(</span><span class="n">im_array</span><span class="p">,</span> <span class="n">red</span><span class="o">=</span><span class="n">color_red</span><span class="p">)</span>
+
+        <span class="n">im_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">colored_array</span><span class="p">))</span>
+        <span class="n">target_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+        <span class="n">protected_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_red</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">im_list</span><span class="p">,</span> <span class="n">target_class</span><span class="p">,</span> <span class="n">protected_class</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">num_train</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">)</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_train</span><span class="p">))</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="n">train_idx</span><span class="p">,</span> <span class="n">valid_idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="mi">10000</span><span class="p">:],</span> <span class="n">indices</span><span class="p">[:</span><span class="mi">10000</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">colored_MNIST_train</span> <span class="o">=</span> <span class="n">process_colored_MNIST</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Subset</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">,</span> <span class="n">train_idx</span><span class="p">),</span> <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">colored_MNIST_dev</span> <span class="o">=</span> <span class="n">process_colored_MNIST</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Subset</span><span class="p">(</span><span class="n">train_mnist</span><span class="p">,</span> <span class="n">valid_idx</span><span class="p">),</span> <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">colored_MNIST_test</span> <span class="o">=</span> <span class="n">process_colored_MNIST</span><span class="p">(</span><span class="n">test_mnist</span><span class="p">,</span> <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Converting image 0/50000
+Converting image 5000/50000
+Converting image 10000/50000
+Converting image 15000/50000
+Converting image 20000/50000
+Converting image 25000/50000
+Converting image 30000/50000
+Converting image 35000/50000
+Converting image 40000/50000
+Converting image 45000/50000
+Converting image 0/10000
+Converting image 5000/10000
+Converting image 0/10000
+Converting image 5000/10000
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">colored_MNIST_train</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="s2">&quot;colored_MNIST_train.pt&quot;</span><span class="p">))</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">colored_MNIST_dev</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="s2">&quot;colored_MNIST_dev.pt&quot;</span><span class="p">))</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">colored_MNIST_test</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="s2">&quot;colored_MNIST_test.pt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="train-a-vanilla-model">
+<h2>Train a Vanilla Model<a class="headerlink" href="#train-a-vanilla-model" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib</span> <span class="kn">import</span> <span class="n">networks</span><span class="p">,</span> <span class="n">BaseOptions</span><span class="p">,</span> <span class="n">dataloaders</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shared_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># The name of the dataset, correponding dataloader will be used,</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>  <span class="s2">&quot;MNIST&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Specifiy the path to the input data</span>
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;./data&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Device for computing, -1 is the cpu</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># The default path for saving experimental results</span>
+    <span class="s2">&quot;results_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The same as the dataset</span>
+    <span class="s2">&quot;project_dir&quot;</span><span class="p">:</span>  <span class="sa">r</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+
+    <span class="c1"># We will focusing on TPR GAP, implying the Equalized Odds for binay classification.</span>
+    <span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;TPR_GAP&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The overall performance will be measured as accuracy</span>
+    <span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Model selections are based on DTO</span>
+    <span class="s2">&quot;selection_criterion&quot;</span><span class="p">:</span>  <span class="s2">&quot;DTO&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Default dirs for saving checkpoints</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span>   <span class="s2">&quot;models&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;checkpoint_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;checkpoint_epoch&quot;</span><span class="p">,</span>
+
+
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span>   <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConvNet</span><span class="p">(</span><span class="n">networks</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConvNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">MLP</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_for_training</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">group_label</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">input_data</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">group_label</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">group_label</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">input_data</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">hidden</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">group_label</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span> 
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;data_dir&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;vanilla&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;emb_size&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span>
+    <span class="s2">&quot;num_classes&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;num_groups&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>INFO:root:Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-9c3335e9-652e-4f42-97e0-8b86721e4921.json&#39;]
+INFO:root:Logging to ./results/dev/MNIST/vanilla/output.log
+
+
+2022-04-08 15:15:04 [INFO ]  ======================================== 2022-04-08 15:15:04 ========================================
+2022-04-08 15:15:04 [INFO ]  Base directory is ./results/dev/MNIST/vanilla
+Not implemented
+2022-04-08 15:15:04 [INFO ]  dataloaders need to be initialized!
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomizedDataset</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseDataset</span><span class="p">):</span>
+
+    <span class="n">transform</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.1307</span><span class="p">,</span> <span class="mf">0.1307</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.3081</span><span class="p">,</span> <span class="mf">0.3081</span><span class="p">,</span> <span class="mf">0.3081</span><span class="p">))])</span>
+
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;colored_MNIST_</span><span class="si">{}</span><span class="s2">.pt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">_img</span><span class="p">)</span> <span class="k">for</span> <span class="n">_img</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protected_label</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">customized_train_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">customized_dev_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+<span class="n">customized_test_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+
+<span class="c1"># DataLoader Parameters</span>
+<span class="n">tran_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="n">eval_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">test_batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="c1"># init dataloader</span>
+<span class="n">customized_training_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">tran_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_validation_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_dev_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_test_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_test_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.7/dist-packages/fairlib/src/dataloaders/utils.py:163: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  self.X = np.array(self.X)
+
+
+Loaded data shapes: (50000,), (50000,), (50000,)
+Loaded data shapes: (10000,), (10000,), (10000,)
+Loaded data shapes: (10000,), (10000,), (10000,)
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ConvNet</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:15:28 [INFO ]  MLP( 
+2022-04-08 15:15:28 [INFO ]    (output_layer): Linear(in_features=300, out_features=10, bias=True)
+2022-04-08 15:15:28 [INFO ]    (AF): Tanh()
+2022-04-08 15:15:28 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:15:28 [INFO ]      (0): Linear(in_features=800, out_features=300, bias=True)
+2022-04-08 15:15:28 [INFO ]      (1): Tanh()
+2022-04-08 15:15:28 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:15:28 [INFO ]      (3): Tanh()
+2022-04-08 15:15:28 [INFO ]    )
+2022-04-08 15:15:28 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:15:28 [INFO ]  )
+2022-04-08 15:15:28 [INFO ]  Total number of parameters: 333610 
+
+2022-04-08 15:15:28 [INFO ]  ConvNet( 
+2022-04-08 15:15:28 [INFO ]    (conv1): Conv2d(3, 20, kernel_size=(5, 5), stride=(1, 1))
+2022-04-08 15:15:28 [INFO ]    (conv2): Conv2d(20, 50, kernel_size=(5, 5), stride=(1, 1))
+2022-04-08 15:15:28 [INFO ]    (classifier): MLP(
+2022-04-08 15:15:28 [INFO ]      (output_layer): Linear(in_features=300, out_features=10, bias=True)
+2022-04-08 15:15:28 [INFO ]      (AF): Tanh()
+2022-04-08 15:15:28 [INFO ]      (hidden_layers): ModuleList(
+2022-04-08 15:15:28 [INFO ]        (0): Linear(in_features=800, out_features=300, bias=True)
+2022-04-08 15:15:28 [INFO ]        (1): Tanh()
+2022-04-08 15:15:28 [INFO ]        (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:15:28 [INFO ]        (3): Tanh()
+2022-04-08 15:15:28 [INFO ]      )
+2022-04-08 15:15:28 [INFO ]      (criterion): CrossEntropyLoss()
+2022-04-08 15:15:28 [INFO ]    )
+2022-04-08 15:15:28 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:15:28 [INFO ]  )
+2022-04-08 15:15:28 [INFO ]  Total number of parameters: 360180 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">(</span>
+    <span class="n">train_generator</span> <span class="o">=</span> <span class="n">customized_training_generator</span><span class="p">,</span>
+    <span class="n">dev_generator</span> <span class="o">=</span> <span class="n">customized_validation_generator</span><span class="p">,</span>
+    <span class="n">test_generator</span> <span class="o">=</span> <span class="n">customized_test_generator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:15:31 [INFO ]  Epoch:    0 [      0/  50000 ( 0%)]	Loss: 2.3092	 Data Time: 0.02s	Train Time: 1.06s
+2022-04-08 15:16:09 [INFO ]  Evaluation at Epoch 0
+2022-04-08 15:16:09 [INFO ]  Validation accuracy: 95.66	macro_fscore: 95.62	micro_fscore: 95.66	TPR_GAP: 4.20	FPR_GAP: 0.42	PPR_GAP: 0.89	
+2022-04-08 15:16:09 [INFO ]  Test accuracy: 95.89	macro_fscore: 95.86	micro_fscore: 95.89	TPR_GAP: 4.93	FPR_GAP: 0.43	PPR_GAP: 1.01	
+2022-04-08 15:16:10 [INFO ]  Epoch:    1 [      0/  50000 ( 0%)]	Loss: 0.1109	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:16:48 [INFO ]  Evaluation at Epoch 1
+2022-04-08 15:16:48 [INFO ]  Validation accuracy: 97.50	macro_fscore: 97.49	micro_fscore: 97.50	TPR_GAP: 2.36	FPR_GAP: 0.29	PPR_GAP: 0.70	
+2022-04-08 15:16:48 [INFO ]  Test accuracy: 97.70	macro_fscore: 97.70	micro_fscore: 97.70	TPR_GAP: 3.01	FPR_GAP: 0.35	PPR_GAP: 0.75	
+2022-04-08 15:16:48 [INFO ]  Epoch:    2 [      0/  50000 ( 0%)]	Loss: 0.0479	 Data Time: 0.01s	Train Time: 0.63s
+2022-04-08 15:17:24 [INFO ]  Evaluation at Epoch 2
+2022-04-08 15:17:24 [INFO ]  Validation accuracy: 98.05	macro_fscore: 98.03	micro_fscore: 98.05	TPR_GAP: 1.54	FPR_GAP: 0.20	PPR_GAP: 0.58	
+2022-04-08 15:17:24 [INFO ]  Test accuracy: 98.44	macro_fscore: 98.42	micro_fscore: 98.44	TPR_GAP: 1.42	FPR_GAP: 0.15	PPR_GAP: 0.52	
+2022-04-08 15:17:25 [INFO ]  Epoch:    3 [      0/  50000 ( 0%)]	Loss: 0.0367	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:18:01 [INFO ]  Evaluation at Epoch 3
+2022-04-08 15:18:01 [INFO ]  Validation accuracy: 98.15	macro_fscore: 98.15	micro_fscore: 98.15	TPR_GAP: 2.43	FPR_GAP: 0.21	PPR_GAP: 0.73	
+2022-04-08 15:18:01 [INFO ]  Test accuracy: 98.32	macro_fscore: 98.31	micro_fscore: 98.32	TPR_GAP: 2.52	FPR_GAP: 0.23	PPR_GAP: 0.71	
+2022-04-08 15:18:02 [INFO ]  Epoch:    4 [      0/  50000 ( 0%)]	Loss: 0.0225	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:18:38 [INFO ]  Evaluation at Epoch 4
+2022-04-08 15:18:38 [INFO ]  Validation accuracy: 98.25	macro_fscore: 98.24	micro_fscore: 98.25	TPR_GAP: 1.92	FPR_GAP: 0.19	PPR_GAP: 0.57	
+2022-04-08 15:18:38 [INFO ]  Test accuracy: 98.48	macro_fscore: 98.48	micro_fscore: 98.48	TPR_GAP: 2.00	FPR_GAP: 0.20	PPR_GAP: 0.65	
+2022-04-08 15:18:38 [INFO ]  Epoch:    5 [      0/  50000 ( 0%)]	Loss: 0.0089	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:19:14 [INFO ]  Evaluation at Epoch 5
+2022-04-08 15:19:14 [INFO ]  Validation accuracy: 98.54	macro_fscore: 98.53	micro_fscore: 98.54	TPR_GAP: 1.22	FPR_GAP: 0.15	PPR_GAP: 0.58	
+2022-04-08 15:19:14 [INFO ]  Test accuracy: 98.98	macro_fscore: 98.98	micro_fscore: 98.98	TPR_GAP: 1.70	FPR_GAP: 0.14	PPR_GAP: 0.62	
+2022-04-08 15:19:15 [INFO ]  Epoch:    6 [      0/  50000 ( 0%)]	Loss: 0.0104	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:19:51 [INFO ]  Evaluation at Epoch 6
+2022-04-08 15:19:51 [INFO ]  Validation accuracy: 98.66	macro_fscore: 98.65	micro_fscore: 98.66	TPR_GAP: 1.23	FPR_GAP: 0.12	PPR_GAP: 0.54	
+2022-04-08 15:19:51 [INFO ]  Test accuracy: 98.83	macro_fscore: 98.83	micro_fscore: 98.83	TPR_GAP: 1.27	FPR_GAP: 0.18	PPR_GAP: 0.60	
+2022-04-08 15:19:52 [INFO ]  Epoch:    7 [      0/  50000 ( 0%)]	Loss: 0.0110	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:20:26 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:20:29 [INFO ]  Evaluation at Epoch 7
+2022-04-08 15:20:29 [INFO ]  Validation accuracy: 98.40	macro_fscore: 98.39	micro_fscore: 98.40	TPR_GAP: 1.66	FPR_GAP: 0.16	PPR_GAP: 0.63	
+2022-04-08 15:20:29 [INFO ]  Test accuracy: 98.91	macro_fscore: 98.90	micro_fscore: 98.91	TPR_GAP: 1.55	FPR_GAP: 0.13	PPR_GAP: 0.57	
+2022-04-08 15:20:30 [INFO ]  Epoch:    8 [      0/  50000 ( 0%)]	Loss: 0.0040	 Data Time: 0.01s	Train Time: 0.70s
+2022-04-08 15:21:03 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:21:06 [INFO ]  Evaluation at Epoch 8
+2022-04-08 15:21:06 [INFO ]  Validation accuracy: 98.44	macro_fscore: 98.43	micro_fscore: 98.44	TPR_GAP: 1.91	FPR_GAP: 0.18	PPR_GAP: 0.58	
+2022-04-08 15:21:06 [INFO ]  Test accuracy: 98.80	macro_fscore: 98.79	micro_fscore: 98.80	TPR_GAP: 2.21	FPR_GAP: 0.22	PPR_GAP: 0.60	
+2022-04-08 15:21:06 [INFO ]  Epoch:    9 [      0/  50000 ( 0%)]	Loss: 0.0037	 Data Time: 0.01s	Train Time: 0.63s
+2022-04-08 15:21:40 [INFO ]  Epochs since last improvement: 3
+2022-04-08 15:21:42 [INFO ]  Evaluation at Epoch 9
+2022-04-08 15:21:42 [INFO ]  Validation accuracy: 98.51	macro_fscore: 98.50	micro_fscore: 98.51	TPR_GAP: 1.01	FPR_GAP: 0.14	PPR_GAP: 0.57	
+2022-04-08 15:21:42 [INFO ]  Test accuracy: 98.99	macro_fscore: 98.98	micro_fscore: 98.99	TPR_GAP: 1.03	FPR_GAP: 0.14	PPR_GAP: 0.57	
+2022-04-08 15:21:43 [INFO ]  Epoch:   10 [      0/  50000 ( 0%)]	Loss: 0.0045	 Data Time: 0.01s	Train Time: 0.63s
+2022-04-08 15:22:19 [INFO ]  Evaluation at Epoch 10
+2022-04-08 15:22:19 [INFO ]  Validation accuracy: 98.75	macro_fscore: 98.74	micro_fscore: 98.75	TPR_GAP: 1.02	FPR_GAP: 0.11	PPR_GAP: 0.59	
+2022-04-08 15:22:19 [INFO ]  Test accuracy: 99.02	macro_fscore: 99.01	micro_fscore: 99.02	TPR_GAP: 1.08	FPR_GAP: 0.12	PPR_GAP: 0.54	
+2022-04-08 15:22:20 [INFO ]  Epoch:   11 [      0/  50000 ( 0%)]	Loss: 0.0023	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:22:53 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:22:56 [INFO ]  Evaluation at Epoch 11
+2022-04-08 15:22:56 [INFO ]  Validation accuracy: 98.66	macro_fscore: 98.65	micro_fscore: 98.66	TPR_GAP: 1.38	FPR_GAP: 0.14	PPR_GAP: 0.58	
+2022-04-08 15:22:56 [INFO ]  Test accuracy: 99.03	macro_fscore: 99.03	micro_fscore: 99.03	TPR_GAP: 0.91	FPR_GAP: 0.11	PPR_GAP: 0.50	
+2022-04-08 15:22:56 [INFO ]  Epoch:   12 [      0/  50000 ( 0%)]	Loss: 0.0019	 Data Time: 0.01s	Train Time: 0.63s
+2022-04-08 15:23:30 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:23:32 [INFO ]  Evaluation at Epoch 12
+2022-04-08 15:23:32 [INFO ]  Validation accuracy: 98.71	macro_fscore: 98.70	micro_fscore: 98.71	TPR_GAP: 1.19	FPR_GAP: 0.10	PPR_GAP: 0.57	
+2022-04-08 15:23:32 [INFO ]  Test accuracy: 99.08	macro_fscore: 99.07	micro_fscore: 99.08	TPR_GAP: 0.94	FPR_GAP: 0.10	PPR_GAP: 0.53	
+2022-04-08 15:23:33 [INFO ]  Epoch:   13 [      0/  50000 ( 0%)]	Loss: 0.0011	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:24:07 [INFO ]  Epochs since last improvement: 3
+2022-04-08 15:24:09 [INFO ]  Evaluation at Epoch 13
+2022-04-08 15:24:09 [INFO ]  Validation accuracy: 98.79	macro_fscore: 98.78	micro_fscore: 98.79	TPR_GAP: 1.05	FPR_GAP: 0.12	PPR_GAP: 0.58	
+2022-04-08 15:24:09 [INFO ]  Test accuracy: 99.16	macro_fscore: 99.15	micro_fscore: 99.16	TPR_GAP: 0.98	FPR_GAP: 0.10	PPR_GAP: 0.55	
+2022-04-08 15:24:10 [INFO ]  Epoch:   14 [      0/  50000 ( 0%)]	Loss: 0.0004	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:24:43 [INFO ]  Epochs since last improvement: 4
+2022-04-08 15:24:46 [INFO ]  Evaluation at Epoch 14
+2022-04-08 15:24:46 [INFO ]  Validation accuracy: 98.78	macro_fscore: 98.77	micro_fscore: 98.78	TPR_GAP: 1.25	FPR_GAP: 0.12	PPR_GAP: 0.57	
+2022-04-08 15:24:46 [INFO ]  Test accuracy: 99.22	macro_fscore: 99.22	micro_fscore: 99.22	TPR_GAP: 0.83	FPR_GAP: 0.10	PPR_GAP: 0.51	
+2022-04-08 15:24:46 [INFO ]  Epoch:   15 [      0/  50000 ( 0%)]	Loss: 0.0002	 Data Time: 0.01s	Train Time: 0.64s
+2022-04-08 15:25:20 [INFO ]  Epochs since last improvement: 5
+2022-04-08 15:25:22 [INFO ]  Evaluation at Epoch 15
+2022-04-08 15:25:22 [INFO ]  Validation accuracy: 98.78	macro_fscore: 98.77	micro_fscore: 98.78	TPR_GAP: 1.17	FPR_GAP: 0.12	PPR_GAP: 0.59	
+2022-04-08 15:25:22 [INFO ]  Test accuracy: 99.20	macro_fscore: 99.20	micro_fscore: 99.20	TPR_GAP: 0.87	FPR_GAP: 0.11	PPR_GAP: 0.54	
+</pre></div>
+</div>
+</section>
+<section id="bias-mitigation">
+<h2>Bias Mitigation<a class="headerlink" href="#bias-mitigation" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debiasing_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span> 
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;data_dir&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;BT_Adv&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;emb_size&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span>
+    <span class="s2">&quot;num_classes&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;num_groups&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+
+    <span class="c1"># Perform adversarial training if True</span>
+    <span class="s2">&quot;adv_debiasing&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+
+    <span class="c1"># Specify the hyperparameters for Balanced Training</span>
+    <span class="s2">&quot;BT&quot;</span><span class="p">:</span><span class="s2">&quot;Resampling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BTObj&quot;</span><span class="p">:</span><span class="s2">&quot;EO&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">debias_options</span> <span class="o">=</span> <span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">debias_state</span> <span class="o">=</span> <span class="n">debias_options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debiasing_args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">customized_train_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">customized_dev_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+<span class="n">customized_test_data</span> <span class="o">=</span> <span class="n">CustomizedDataset</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debias_state</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+
+<span class="c1"># DataLoader Parameters</span>
+<span class="n">tran_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="n">eval_dataloader_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">test_batch_size</span><span class="p">,</span>
+        <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">num_workers</span><span class="p">}</span>
+
+<span class="c1"># init dataloader</span>
+<span class="n">customized_training_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">tran_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_validation_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_dev_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+<span class="n">customized_test_generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">customized_test_data</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_dataloader_params</span><span class="p">)</span>
+
+<span class="n">debias_model</span> <span class="o">=</span> <span class="n">ConvNet</span><span class="p">(</span><span class="n">debias_state</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:25:37 [INFO ]  Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-9c3335e9-652e-4f42-97e0-8b86721e4921.json&#39;]
+2022-04-08 15:25:37 [INFO ]  Logging to ./results/dev/MNIST/BT_Adv/output.log
+2022-04-08 15:25:37 [INFO ]  ======================================== 2022-04-08 15:25:37 ========================================
+2022-04-08 15:25:37 [INFO ]  Base directory is ./results/dev/MNIST/BT_Adv
+Not implemented
+2022-04-08 15:25:37 [INFO ]  dataloaders need to be initialized!
+2022-04-08 15:25:37 [INFO ]  SubDiscriminator( 
+2022-04-08 15:25:37 [INFO ]    (grad_rev): GradientReversal()
+2022-04-08 15:25:37 [INFO ]    (output_layer): Linear(in_features=300, out_features=2, bias=True)
+2022-04-08 15:25:37 [INFO ]    (AF): ReLU()
+2022-04-08 15:25:37 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:25:37 [INFO ]      (0): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:25:37 [INFO ]      (1): ReLU()
+2022-04-08 15:25:37 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:25:37 [INFO ]      (3): ReLU()
+2022-04-08 15:25:37 [INFO ]    )
+2022-04-08 15:25:37 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:25:37 [INFO ]  )
+2022-04-08 15:25:37 [INFO ]  Total number of parameters: 181202 
+
+2022-04-08 15:25:38 [INFO ]  Discriminator built!
+
+
+/usr/local/lib/python3.7/dist-packages/fairlib/src/dataloaders/utils.py:163: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  self.X = np.array(self.X)
+/usr/local/lib/python3.7/dist-packages/fairlib/src/dataloaders/utils.py:211: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  self.X = np.array(X)
+
+
+Loaded data shapes: (20018,), (20018,), (20018,)
+Loaded data shapes: (9794,), (9794,), (9794,)
+Loaded data shapes: (9798,), (9798,), (9798,)
+2022-04-08 15:25:51 [INFO ]  MLP( 
+2022-04-08 15:25:51 [INFO ]    (output_layer): Linear(in_features=300, out_features=10, bias=True)
+2022-04-08 15:25:51 [INFO ]    (AF): Tanh()
+2022-04-08 15:25:51 [INFO ]    (hidden_layers): ModuleList(
+2022-04-08 15:25:51 [INFO ]      (0): Linear(in_features=800, out_features=300, bias=True)
+2022-04-08 15:25:51 [INFO ]      (1): Tanh()
+2022-04-08 15:25:51 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:25:51 [INFO ]      (3): Tanh()
+2022-04-08 15:25:51 [INFO ]    )
+2022-04-08 15:25:51 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:25:51 [INFO ]  )
+2022-04-08 15:25:51 [INFO ]  Total number of parameters: 333610 
+
+2022-04-08 15:25:51 [INFO ]  ConvNet( 
+2022-04-08 15:25:51 [INFO ]    (conv1): Conv2d(3, 20, kernel_size=(5, 5), stride=(1, 1))
+2022-04-08 15:25:51 [INFO ]    (conv2): Conv2d(20, 50, kernel_size=(5, 5), stride=(1, 1))
+2022-04-08 15:25:51 [INFO ]    (classifier): MLP(
+2022-04-08 15:25:51 [INFO ]      (output_layer): Linear(in_features=300, out_features=10, bias=True)
+2022-04-08 15:25:51 [INFO ]      (AF): Tanh()
+2022-04-08 15:25:51 [INFO ]      (hidden_layers): ModuleList(
+2022-04-08 15:25:51 [INFO ]        (0): Linear(in_features=800, out_features=300, bias=True)
+2022-04-08 15:25:51 [INFO ]        (1): Tanh()
+2022-04-08 15:25:51 [INFO ]        (2): Linear(in_features=300, out_features=300, bias=True)
+2022-04-08 15:25:51 [INFO ]        (3): Tanh()
+2022-04-08 15:25:51 [INFO ]      )
+2022-04-08 15:25:51 [INFO ]      (criterion): CrossEntropyLoss()
+2022-04-08 15:25:51 [INFO ]    )
+2022-04-08 15:25:51 [INFO ]    (criterion): CrossEntropyLoss()
+2022-04-08 15:25:51 [INFO ]  )
+2022-04-08 15:25:51 [INFO ]  Total number of parameters: 360180 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debias_model</span><span class="o">.</span><span class="n">train_self</span><span class="p">(</span>
+    <span class="n">train_generator</span> <span class="o">=</span> <span class="n">customized_training_generator</span><span class="p">,</span>
+    <span class="n">dev_generator</span> <span class="o">=</span> <span class="n">customized_validation_generator</span><span class="p">,</span>
+    <span class="n">test_generator</span> <span class="o">=</span> <span class="n">customized_test_generator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2022-04-08 15:26:01 [INFO ]  Epoch:    0 [      0/  20018 ( 0%)]	Loss: 1.6324	 Data Time: 0.02s	Train Time: 2.12s
+2022-04-08 15:26:40 [INFO ]  Evaluation at Epoch 0
+2022-04-08 15:26:40 [INFO ]  Validation accuracy: 91.53	macro_fscore: 91.46	micro_fscore: 91.53	TPR_GAP: 5.13	FPR_GAP: 0.75	PPR_GAP: 1.08	
+2022-04-08 15:26:40 [INFO ]  Test accuracy: 92.26	macro_fscore: 92.18	micro_fscore: 92.26	TPR_GAP: 4.50	FPR_GAP: 0.50	PPR_GAP: 0.83	
+2022-04-08 15:26:42 [INFO ]  Epoch:    1 [      0/  20018 ( 0%)]	Loss: -0.4085	 Data Time: 0.01s	Train Time: 1.82s
+2022-04-08 15:27:21 [INFO ]  Evaluation at Epoch 1
+2022-04-08 15:27:21 [INFO ]  Validation accuracy: 94.82	macro_fscore: 94.77	micro_fscore: 94.82	TPR_GAP: 4.61	FPR_GAP: 0.52	PPR_GAP: 0.69	
+2022-04-08 15:27:21 [INFO ]  Test accuracy: 95.24	macro_fscore: 95.18	micro_fscore: 95.24	TPR_GAP: 3.36	FPR_GAP: 0.49	PPR_GAP: 0.63	
+2022-04-08 15:27:23 [INFO ]  Epoch:    2 [      0/  20018 ( 0%)]	Loss: -0.5775	 Data Time: 0.01s	Train Time: 1.79s
+2022-04-08 15:28:02 [INFO ]  Evaluation at Epoch 2
+2022-04-08 15:28:02 [INFO ]  Validation accuracy: 96.91	macro_fscore: 96.89	micro_fscore: 96.91	TPR_GAP: 1.45	FPR_GAP: 0.11	PPR_GAP: 0.21	
+2022-04-08 15:28:02 [INFO ]  Test accuracy: 96.94	macro_fscore: 96.92	micro_fscore: 96.94	TPR_GAP: 1.21	FPR_GAP: 0.11	PPR_GAP: 0.20	
+2022-04-08 15:28:03 [INFO ]  Epoch:    3 [      0/  20018 ( 0%)]	Loss: -0.5939	 Data Time: 0.01s	Train Time: 1.74s
+2022-04-08 15:28:42 [INFO ]  Evaluation at Epoch 3
+2022-04-08 15:28:42 [INFO ]  Validation accuracy: 97.77	macro_fscore: 97.76	micro_fscore: 97.77	TPR_GAP: 1.13	FPR_GAP: 0.13	PPR_GAP: 0.20	
+2022-04-08 15:28:42 [INFO ]  Test accuracy: 98.15	macro_fscore: 98.15	micro_fscore: 98.15	TPR_GAP: 1.04	FPR_GAP: 0.13	PPR_GAP: 0.19	
+2022-04-08 15:28:43 [INFO ]  Epoch:    4 [      0/  20018 ( 0%)]	Loss: -0.6504	 Data Time: 0.01s	Train Time: 1.73s
+2022-04-08 15:29:22 [INFO ]  Evaluation at Epoch 4
+2022-04-08 15:29:22 [INFO ]  Validation accuracy: 97.92	macro_fscore: 97.91	micro_fscore: 97.92	TPR_GAP: 0.85	FPR_GAP: 0.10	PPR_GAP: 0.14	
+2022-04-08 15:29:22 [INFO ]  Test accuracy: 98.40	macro_fscore: 98.39	micro_fscore: 98.40	TPR_GAP: 1.10	FPR_GAP: 0.13	PPR_GAP: 0.19	
+2022-04-08 15:29:24 [INFO ]  Epoch:    5 [      0/  20018 ( 0%)]	Loss: -0.6614	 Data Time: 0.01s	Train Time: 1.76s
+2022-04-08 15:30:03 [INFO ]  Evaluation at Epoch 5
+2022-04-08 15:30:03 [INFO ]  Validation accuracy: 98.09	macro_fscore: 98.08	micro_fscore: 98.09	TPR_GAP: 0.79	FPR_GAP: 0.13	PPR_GAP: 0.18	
+2022-04-08 15:30:03 [INFO ]  Test accuracy: 98.34	macro_fscore: 98.33	micro_fscore: 98.34	TPR_GAP: 1.15	FPR_GAP: 0.07	PPR_GAP: 0.14	
+2022-04-08 15:30:04 [INFO ]  Epoch:    6 [      0/  20018 ( 0%)]	Loss: -0.6657	 Data Time: 0.01s	Train Time: 1.73s
+2022-04-08 15:30:45 [INFO ]  Evaluation at Epoch 6
+2022-04-08 15:30:45 [INFO ]  Validation accuracy: 98.25	macro_fscore: 98.24	micro_fscore: 98.25	TPR_GAP: 0.72	FPR_GAP: 0.09	PPR_GAP: 0.11	
+2022-04-08 15:30:45 [INFO ]  Test accuracy: 98.63	macro_fscore: 98.62	micro_fscore: 98.63	TPR_GAP: 0.83	FPR_GAP: 0.12	PPR_GAP: 0.13	
+2022-04-08 15:30:47 [INFO ]  Epoch:    7 [      0/  20018 ( 0%)]	Loss: -0.6750	 Data Time: 0.01s	Train Time: 1.77s
+2022-04-08 15:31:24 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:31:27 [INFO ]  Evaluation at Epoch 7
+2022-04-08 15:31:27 [INFO ]  Validation accuracy: 98.19	macro_fscore: 98.18	micro_fscore: 98.19	TPR_GAP: 0.96	FPR_GAP: 0.09	PPR_GAP: 0.14	
+2022-04-08 15:31:27 [INFO ]  Test accuracy: 98.59	macro_fscore: 98.58	micro_fscore: 98.59	TPR_GAP: 0.68	FPR_GAP: 0.11	PPR_GAP: 0.14	
+2022-04-08 15:31:28 [INFO ]  Epoch:    8 [      0/  20018 ( 0%)]	Loss: -0.6807	 Data Time: 0.01s	Train Time: 1.77s
+2022-04-08 15:32:04 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:32:07 [INFO ]  Evaluation at Epoch 8
+2022-04-08 15:32:07 [INFO ]  Validation accuracy: 98.28	macro_fscore: 98.27	micro_fscore: 98.28	TPR_GAP: 0.77	FPR_GAP: 0.07	PPR_GAP: 0.11	
+2022-04-08 15:32:07 [INFO ]  Test accuracy: 98.40	macro_fscore: 98.39	micro_fscore: 98.40	TPR_GAP: 0.82	FPR_GAP: 0.11	PPR_GAP: 0.13	
+2022-04-08 15:32:09 [INFO ]  Epoch:    9 [      0/  20018 ( 0%)]	Loss: -0.6773	 Data Time: 0.01s	Train Time: 1.75s
+2022-04-08 15:32:47 [INFO ]  Evaluation at Epoch 9
+2022-04-08 15:32:47 [INFO ]  Validation accuracy: 98.45	macro_fscore: 98.44	micro_fscore: 98.45	TPR_GAP: 0.81	FPR_GAP: 0.08	PPR_GAP: 0.11	
+2022-04-08 15:32:47 [INFO ]  Test accuracy: 98.80	macro_fscore: 98.79	micro_fscore: 98.80	TPR_GAP: 0.57	FPR_GAP: 0.10	PPR_GAP: 0.10	
+2022-04-08 15:32:49 [INFO ]  Epoch:   10 [      0/  20018 ( 0%)]	Loss: -0.6867	 Data Time: 0.01s	Train Time: 1.77s
+2022-04-08 15:33:25 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:33:28 [INFO ]  Evaluation at Epoch 10
+2022-04-08 15:33:28 [INFO ]  Validation accuracy: 98.50	macro_fscore: 98.48	micro_fscore: 98.50	TPR_GAP: 0.61	FPR_GAP: 0.06	PPR_GAP: 0.09	
+2022-04-08 15:33:28 [INFO ]  Test accuracy: 98.77	macro_fscore: 98.76	micro_fscore: 98.77	TPR_GAP: 0.65	FPR_GAP: 0.08	PPR_GAP: 0.09	
+2022-04-08 15:33:29 [INFO ]  Epoch:   11 [      0/  20018 ( 0%)]	Loss: -0.6892	 Data Time: 0.01s	Train Time: 1.76s
+2022-04-08 15:34:05 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:34:08 [INFO ]  Evaluation at Epoch 11
+2022-04-08 15:34:08 [INFO ]  Validation accuracy: 98.34	macro_fscore: 98.32	micro_fscore: 98.34	TPR_GAP: 0.79	FPR_GAP: 0.09	PPR_GAP: 0.11	
+2022-04-08 15:34:08 [INFO ]  Test accuracy: 98.67	macro_fscore: 98.66	micro_fscore: 98.67	TPR_GAP: 0.80	FPR_GAP: 0.09	PPR_GAP: 0.13	
+2022-04-08 15:34:10 [INFO ]  Epoch:   12 [      0/  20018 ( 0%)]	Loss: -0.6875	 Data Time: 0.01s	Train Time: 1.77s
+2022-04-08 15:34:49 [INFO ]  Evaluation at Epoch 12
+2022-04-08 15:34:49 [INFO ]  Validation accuracy: 98.70	macro_fscore: 98.69	micro_fscore: 98.70	TPR_GAP: 0.64	FPR_GAP: 0.07	PPR_GAP: 0.11	
+2022-04-08 15:34:49 [INFO ]  Test accuracy: 98.77	macro_fscore: 98.76	micro_fscore: 98.77	TPR_GAP: 0.80	FPR_GAP: 0.09	PPR_GAP: 0.14	
+2022-04-08 15:34:51 [INFO ]  Epoch:   13 [      0/  20018 ( 0%)]	Loss: -0.6881	 Data Time: 0.01s	Train Time: 1.83s
+2022-04-08 15:35:26 [INFO ]  Epochs since last improvement: 1
+2022-04-08 15:35:29 [INFO ]  Evaluation at Epoch 13
+2022-04-08 15:35:29 [INFO ]  Validation accuracy: 98.40	macro_fscore: 98.38	micro_fscore: 98.40	TPR_GAP: 0.69	FPR_GAP: 0.07	PPR_GAP: 0.09	
+2022-04-08 15:35:29 [INFO ]  Test accuracy: 98.64	macro_fscore: 98.63	micro_fscore: 98.64	TPR_GAP: 0.82	FPR_GAP: 0.09	PPR_GAP: 0.13	
+2022-04-08 15:35:31 [INFO ]  Epoch:   14 [      0/  20018 ( 0%)]	Loss: -0.6886	 Data Time: 0.01s	Train Time: 1.75s
+2022-04-08 15:36:06 [INFO ]  Epochs since last improvement: 2
+2022-04-08 15:36:09 [INFO ]  Evaluation at Epoch 14
+2022-04-08 15:36:09 [INFO ]  Validation accuracy: 98.49	macro_fscore: 98.48	micro_fscore: 98.49	TPR_GAP: 0.75	FPR_GAP: 0.10	PPR_GAP: 0.14	
+2022-04-08 15:36:09 [INFO ]  Test accuracy: 98.77	macro_fscore: 98.75	micro_fscore: 98.77	TPR_GAP: 0.79	FPR_GAP: 0.07	PPR_GAP: 0.10	
+2022-04-08 15:36:11 [INFO ]  Epoch:   15 [      0/  20018 ( 0%)]	Loss: -0.6904	 Data Time: 0.01s	Train Time: 1.74s
+2022-04-08 15:36:47 [INFO ]  Epochs since last improvement: 3
+2022-04-08 15:36:50 [INFO ]  Evaluation at Epoch 15
+2022-04-08 15:36:50 [INFO ]  Validation accuracy: 98.48	macro_fscore: 98.46	micro_fscore: 98.48	TPR_GAP: 0.59	FPR_GAP: 0.08	PPR_GAP: 0.12	
+2022-04-08 15:36:50 [INFO ]  Test accuracy: 98.80	macro_fscore: 98.79	micro_fscore: 98.80	TPR_GAP: 0.68	FPR_GAP: 0.07	PPR_GAP: 0.10	
+2022-04-08 15:36:52 [INFO ]  Epoch:   16 [      0/  20018 ( 0%)]	Loss: -0.6925	 Data Time: 0.01s	Train Time: 1.75s
+2022-04-08 15:37:27 [INFO ]  Epochs since last improvement: 4
+2022-04-08 15:37:30 [INFO ]  Evaluation at Epoch 16
+2022-04-08 15:37:30 [INFO ]  Validation accuracy: 98.48	macro_fscore: 98.47	micro_fscore: 98.48	TPR_GAP: 0.61	FPR_GAP: 0.06	PPR_GAP: 0.10	
+2022-04-08 15:37:30 [INFO ]  Test accuracy: 98.73	macro_fscore: 98.73	micro_fscore: 98.73	TPR_GAP: 0.73	FPR_GAP: 0.07	PPR_GAP: 0.10	
+2022-04-08 15:37:32 [INFO ]  Epoch:   17 [      0/  20018 ( 0%)]	Loss: -0.6918	 Data Time: 0.02s	Train Time: 1.74s
+2022-04-08 15:38:08 [INFO ]  Epochs since last improvement: 5
+2022-04-08 15:38:11 [INFO ]  Evaluation at Epoch 17
+2022-04-08 15:38:11 [INFO ]  Validation accuracy: 98.62	macro_fscore: 98.61	micro_fscore: 98.62	TPR_GAP: 0.65	FPR_GAP: 0.07	PPR_GAP: 0.09	
+2022-04-08 15:38:11 [INFO ]  Test accuracy: 98.85	macro_fscore: 98.84	micro_fscore: 98.85	TPR_GAP: 0.70	FPR_GAP: 0.08	PPR_GAP: 0.10	
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_Moji_demo.html" class="btn btn-neutral float-left" title="Basic Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial_COMPAS.html" class="btn btn-neutral float-right" title="Debiasing for Structured Inputs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
