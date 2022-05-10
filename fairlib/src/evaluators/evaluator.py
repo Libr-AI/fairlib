@@ -20,9 +20,16 @@ from tqdm import tqdm
 from collections import defaultdict 
 
 def confusion_matrix_based_scores(cnf):
-    """
+    """Calculate confusion matrix based scores.
+
     Implementation from https://stackoverflow.com/a/43331484
     See https://en.wikipedia.org/wiki/Confusion_matrix for different scores
+
+    Args:
+        cnf (np.array): a confusion matrix.
+
+    Returns:
+        dict: a set of metrics for each class, indexed by the metric name.
     """
     FP = cnf.sum(axis=0) - np.diag(cnf) + 1e-5
     FN = cnf.sum(axis=1) - np.diag(cnf) + 1e-5
@@ -63,6 +70,16 @@ def confusion_matrix_based_scores(cnf):
     }
 
 def power_mean(series, p, axis=0):
+    """calculate the generalized mean of a given list.
+
+    Args:
+        series (list): a list of numbers.
+        p (int): power of the generalized mean aggregation
+        axis (int, optional): aggregation along which dim of the input. Defaults to 0.
+
+    Returns:
+        np.array: aggregated socres.
+    """
     if p>50:
         return np.max(series, axis=axis)
     elif p<-50:
@@ -73,6 +90,18 @@ def power_mean(series, p, axis=0):
 
 
 def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power = None, class_agg_power=2):
+    """Aggregate fairness metrics at the group level and class level.
+
+    Args:
+        distinct_groups (list): a list of distinc labels of protected groups.
+        all_scores (dict): confusion matrix based scores for each protected group and all.
+        metric (str, optional): fairness metric. Defaults to "TPR".
+        group_agg_power (int, optional): generalized mean aggregation power at the group level. Use absolute value aggregation if None. Defaults to None.
+        class_agg_power (int, optional): generalized mean aggregation power at the class level. Defaults to 2.
+
+    Returns:
+        np.array: aggregated fairness score.
+    """
     group_scores = []
     for gid in distinct_groups:
         # Save the TPR direct to the list 
@@ -92,6 +121,17 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
     return score_gaps
 
 def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","PPR"]):
+    """fairness evaluation
+
+    Args:
+        y_pred (np.array): model predictions.
+        y_true (np.array): target labels.
+        protected_attribute (np.array): protected labels.
+        metrics (list, optional): a list of metric names that will be considered for fairness evaluation. Defaults to ["TPR","FPR","PPR"].
+
+    Returns:
+        tuple: (fairness evaluation results, confusion matrices)
+    """
     y_pred = np.array(y_pred)
     y_true = np.array(y_true)
     protected_attribute = np.array(protected_attribute)

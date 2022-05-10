@@ -5,6 +5,12 @@ import time
 from pathlib import Path
 
 def print_network(net, verbose=False):
+    """print the NN architecture and number of parameters
+
+    Args:
+        net (torch.Module): the model object.
+        verbose (bool, optional): whether or not print the model architecture. Defaults to False.
+    """
     num_params = 0
     for i, param in enumerate(net.parameters()):
         num_params += param.numel()
@@ -18,6 +24,23 @@ def save_checkpoint(
     valid_confusion_matrices, test_confusion_matrices,
     test_evaluations, is_best, checkpoint_dir, prefix = "checkpoint",
     dev_predictions=None, test_predictions=None):
+    """save check points to a specified file.
+
+    Args:
+        epoch (float): number of epoch of the model training.
+        epochs_since_improvement (int): epoch since the best epoch is updated.
+        model (torch.module): the trained model.     
+        loss (float): training loss.
+        dev_evaluations (dict): evaluation results over the development set.
+        valid_confusion_matrices (dict): a dict of confusion matrices over the validation set.
+        test_confusion_matrices (dict): a dict of confusion matrices over the test set.
+        test_evaluations (dict): evaluation results over the test set.
+        is_best (bool): indicator of whether the current epoch is the best.
+        checkpoint_dir (str): path the to checkpoint directory.
+        prefix (str, optional): the predict of checkpoint file names. Defaults to "checkpoint".
+        dev_predictions (_type_, optional): save the model predictions over the development set if needed. Defaults to None.
+        test_predictions (_type_, optional): save the model predictions over the test set if needed. Defaults to None.
+    """
 
     _state = {
         'epoch': epoch,

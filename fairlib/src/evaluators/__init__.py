@@ -7,6 +7,22 @@ def present_evaluation_scores(
     epoch, epochs_since_improvement, model, epoch_valid_loss,
     is_best, prefix = "checkpoint",
     ):
+    """Conduct evaluation, present results, and save evaluation results to file.
+
+    Args:
+        valid_preds (np.array): model predictions over the validation dataset.
+        valid_labels (np.array): true labels over the validation dataset.
+        valid_private_labels (np.array): protected labels over the validation dataset.
+        test_preds (np.array): model predictions over the test dataset.
+        test_labels (np.array): true labels over the test dataset.
+        test_private_labels (np.array): protected labels over the test dataset.
+        epoch (float): number of epoch of the model training.
+        epochs_since_improvement (int): epoch since the best epoch is updated.
+        model (torch.module): the trained model.
+        epoch_valid_loss (float): loss over the validation dataset.
+        is_best (bool): indicator of whether the current epoch is the best.
+        prefix (str, optional): _description_. Defaults to "checkpoint".
+    """
     valid_scores, valid_confusion_matrices = gap_eval_scores(
         y_pred=valid_preds,
         y_true=valid_labels, 
