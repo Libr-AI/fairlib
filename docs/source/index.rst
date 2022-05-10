@@ -11,3 +11,6 @@ Welcome to fairlib's documentation!
    :maxdepth: 1
 
    README
+   supported_bias_mitigation_algorithms
+   tutorial_Moji_demo
+   tutorial_colored_MNIST
