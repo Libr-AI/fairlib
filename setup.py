@@ -35,7 +35,7 @@ except:
 if __name__ == '__main__':
     setup(
         name='fairlib',
-        version="0.0.3",
+        version="0.0.4",
         author="Xudong Han",
         author_email="xudongh1@student.unimelb.edu.au",
         description='Unified framework for assessing and improving classification fairness.',
