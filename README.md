@@ -16,6 +16,7 @@ For those who want to start with *fairlib* now, you can try our [Colab Tutorial]
   - [Model Selection and Fairness Evaluation](#model-selection-and-fairness-evaluation)
   - [Known issues and limitations](#known-issues-and-limitations)
   - [Getting help](#getting-help)
+  - [Paper](#paper)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgments](#acknowledgments)
@@ -97,6 +98,21 @@ If you have any problem with our code or have some suggestions, including the fu
 - Xudong Han (xudongh1@student.unimelb.edu.au)
 
 or describe it in Issues.
+
+
+## Paper
+
+**fairlib: A Unified Framework for Assessing and Improving Classification Fairness**
+
+Cite Us
+```
+@article{han2022fairlib,
+  title={fairlib: A Unified Framework for Assessing and Improving Classification Fairness},
+  author={Han, Xudong and Shen, Aili and Li, Yitong and Frermann, Lea and Baldwin, Timothy and Cohn, Trevor},
+  journal={arXiv preprint arXiv:2205.01876},
+  year={2022}
+}
+```
 
 
 ## Contributing
