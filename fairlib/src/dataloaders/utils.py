@@ -11,12 +11,31 @@ from random import shuffle
 from random import choices
 
 def full_label_data(df, tasks):
+    """filter the instances with all required labels
+
+    Args:
+        df (pd.DataFrame): a DataFrame containing data instances
+        tasks (list): a list of names of target columns
+
+    Returns:
+        np.array: an array of boolean values indicating whether or not each row meets the requirement.
+    """
     selected_rows = np.array([True]*len(df))
     for task in tasks:
         selected_rows = selected_rows & df[task].notnull().to_numpy()
     return selected_rows
 
 def get_weights(BTObj, y, protected_label):
+    """Given the balanced training objective, target labels, and protected labels, pre-calculate weights for each instance.
+
+    Args:
+        BTObj (str): y| g | joint | stratified_y | stratified_g | EO.
+        y (list): a list of target labels.
+        protected_label (list): a list of protected labels.
+
+    Returns:
+        list: instance weights w.r.t. the balanced training objective.
+    """
     # init a dict for storing the index of each group.
 
     n_total = len(y)
@@ -70,8 +89,19 @@ def get_weights(BTObj, y, protected_label):
     return instance_weights
 
 def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
-    # init a dict for storing the index of each group.
+    """Given the balanced training objective, target labels, and protected labels, sampling instances for each group.
 
+    Args:
+        BTObj (str): y| g | joint | stratified_y | stratified_g | EO.
+        y (list): a list of target labels.
+        protected_label (list): a list of protected labels.
+        method (str, optional): Downsampling | Resampling. Defaults to "Downsampling".
+
+    Returns:
+        list: a list of indices of selected instacnes.
+    """
+
+    # init a dict for storing the index of each group.
     group_idx = {}
     if BTObj in ["joint", "stratified_y", "stratified_g", "EO"]:
         group_labels = [(i,j) for i,j in zip(y, protected_label)]

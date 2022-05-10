@@ -1,6 +1,8 @@
 from transformers import AutoTokenizer
 
 class text2id():
+    """mapping natural language to numeric identifiers.
+    """
     def __init__(self, args) -> None:
         if args.encoder_architecture == "Fixed":
             self.encoder = None
