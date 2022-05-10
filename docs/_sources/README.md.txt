@@ -84,6 +84,20 @@ If you have any problem with our code or have some suggestions, including the fu
 
 or describe it in Issues.
 
+## Paper
+
+[fairlib: A Unified Framework for Assessing and Improving Classification Fairness](https://arxiv.org/abs/2205.01876)
+
+Cite Us
+```
+@article{han2022fairlib,
+  title={fairlib: A Unified Framework for Assessing and Improving Classification Fairness},
+  author={Han, Xudong and Shen, Aili and Li, Yitong and Frermann, Lea and Baldwin, Timothy and Cohn, Trevor},
+  journal={arXiv preprint arXiv:2205.01876},
+  year={2022}
+}
+```
+
 
 ## Contributing
 

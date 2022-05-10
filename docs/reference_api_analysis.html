@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Utils Module" href="reference_api_utils.html" />
+    <link rel="next" title="Evaluator Module" href="reference_api_evaluators.html" />
     <link rel="prev" title="fairlib Cheat Sheet" href="tutorial_usage.html" /> 
 </head>
 
@@ -63,11 +63,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Analysis Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analysis Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.analysis.load_results">fairlib.src.analysis.load_results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.analysis.tables_and_figures">fairlib.src.analysis.tables_and_figures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.analysis.utils">fairlib.src.analysis.utils</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_debiasing.html">Debiasing Module</a></li>
 </ul>
 
         </div>
@@ -96,6 +101,348 @@
              
   <section id="analysis-module">
 <h1>Analysis Module<a class="headerlink" href="#analysis-module" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.analysis.load_results">
+<span id="fairlib-src-analysis-load-results"></span><h2>fairlib.src.analysis.load_results<a class="headerlink" href="#module-fairlib.src.analysis.load_results" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.load_results.model_selection_parallel">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.load_results.</span></span><span class="sig-name descname"><span class="pre">model_selection_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GAP_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_criterion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'checkpoint_epoch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_column_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['adv_lambda',</span> <span class="pre">'adv_num_subDiscriminator',</span> <span class="pre">'adv_diverse_lambda']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.load_results.model_selection_parallel" title="Permalink to this definition"></a></dt>
+<dd><p>perform model selection over different runs wrt different hyperparameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_dir</strong> (<em>str</em>) – dir to the saved experimental results</p></li>
+<li><p><strong>project_dir</strong> (<em>str</em>) – experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.</p></li>
+<li><p><strong>checkpoint_dir</strong> (<em>str</em>) – dir to checkpoints, <cite>models</cite> by default.</p></li>
+<li><p><strong>checkpoint_name</strong> (<em>str</em>) – checkpoint_epoch{num_epoch}.ptr.gz</p></li>
+<li><p><strong>model_id</strong> (<em>str</em>) – read all experiment start with the same model_id. E.g., “Adv” when tuning hyperparameters for standard adversarial</p></li>
+<li><p><strong>GAP_metric_name</strong> (<em>str</em>) – fairness metric in the log</p></li>
+<li><p><strong>Performance_metric_name</strong> (<em>str</em>) – performance metric name in the log</p></li>
+<li><p><strong>selection_criterion</strong> (<em>str</em>) – {GAP_metric_name | Performance_metric_name | “DTO”}</p></li>
+<li><p><strong>index_column_names</strong> (<em>list</em>) – tuned hyperparameters, [‘adv_lambda’, ‘adv_num_subDiscriminator’, ‘adv_diverse_lambda’] by default.</p></li>
+<li><p><strong>n_jobs</strong> (<em>nonnegative int</em>) – 0 for non-parallel, positive integer refers to the number of parallel processes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loaded results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.analysis.tables_and_figures">
+<span id="fairlib-src-analysis-tables-and-figures"></span><h2>fairlib.src.analysis.tables_and_figures<a class="headerlink" href="#module-fairlib.src.analysis.tables_and_figures" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.tables_and_figures.final_results_df">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.tables_and_figures.</span></span><span class="sig-name descname"><span class="pre">final_results_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fairness_metric_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fairness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_metric_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'performance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pareto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pareto_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DTO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fairness_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_conf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_conf_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_trail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.tables_and_figures.final_results_df" title="Permalink to this definition"></a></dt>
+<dd><p>Process the results to a single dataset from creating tables and plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_dict</strong> (<em>dict</em>) – retrived results dictionary, which is typically the returned dict from function <cite>retrive_results</cite></p></li>
+<li><p><strong>model_order</strong> (<em>list</em><em>, </em><em>optional</em>) – a list of models that will be considered in the final df. Defaults to None.</p></li>
+<li><p><strong>Fairness_metric_name</strong> (<em>str</em><em>, </em><em>optional</em>) – the metric name for fairness evaluation. Defaults to “fairness”.</p></li>
+<li><p><strong>Performance_metric_name</strong> (<em>str</em><em>, </em><em>optional</em>) – the metric name for performance evaluation. Defaults to “performance”.</p></li>
+<li><p><strong>pareto</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether or not to return only the Pareto frontiers. Defaults to True.</p></li>
+<li><p><strong>pareto_selection</strong> (<em>str</em><em>, </em><em>optional</em>) – which split is used to select the frontiers. Defaults to “test”.</p></li>
+<li><p><strong>selection_criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – model selection criteria, one of {performance, fairness, both (DTO)} . Defaults to “DTO”.</p></li>
+<li><p><strong>return_dev</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether or not to return dev results in the df. Defaults to True.</p></li>
+<li><p><strong>Fairness_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – filtering rows with a minimal fairness as the threshold. Defaults to 0.0.</p></li>
+<li><p><strong>Performance_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – filtering rows with a minimal performance as the threshold. Defaults to 0.0.</p></li>
+<li><p><strong>return_conf</strong> (<em>bool</em><em>, </em><em>optional</em>) – return the selected epoch and corresponding YAML configure files if True. Defaults to False.</p></li>
+<li><p><strong>save_conf_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – save selected epoch and configure files to the dir. Defaults to None.</p></li>
+<li><p><strong>num_trail</strong> (<em>int</em><em>, </em><em>optional</em>) – downsampling the number of searches of each method to $num_trail if not None. Defaults to None.</p></li>
+<li><p><strong>additional_metrics</strong> (<em>list</em><em>, </em><em>optional</em>) – report additional evaluation metrics for the selected epoch. Defaults to [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>selected results of different models for report</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.tables_and_figures.interactive_plot">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.tables_and_figures.</span></span><span class="sig-name descname"><span class="pre">interactive_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">7)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DTO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.tables_and_figures.interactive_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Create interactive plots for DTO and constrained selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_df</strong> (<em>_type_</em>) – a pd.DataFrame including numbers for each method.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – figure size in tuple. Defaults to (12, 7).</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) – figure resolution. Defaults to 100.</p></li>
+<li><p><strong>selection</strong> (<em>str</em><em>, </em><em>optional</em>) – constrained | DTO, indicating which model selection approach is used. Defaults to “DTO”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.tables_and_figures.make_zoom_plot">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.tables_and_figures.</span></span><span class="sig-name descname"><span class="pre">make_zoom_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7.5,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom_xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom_ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoomed_location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.05,</span> <span class="pre">0.05,</span> <span class="pre">0.37,</span> <span class="pre">0.9]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.tables_and_figures.make_zoom_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Make tradeoff plots with zoomed-in area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_df</strong> (<em>pd.DataFrame</em>) – a pd.DataFrame including numbers for each method.</p></li>
+<li><p><strong>figure_name</strong> (<em>str</em><em>, </em><em>optional</em>) – save the plot with figure_name. Defaults to None.</p></li>
+<li><p><strong>xlim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – x-axis limit. Defaults to None.</p></li>
+<li><p><strong>ylim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – y-aix limit. Defaults to None.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – figure size. Defaults to (7.5, 6).</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) – figure resolution. Defaults to 150.</p></li>
+<li><p><strong>zoom_xlim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – x-axis interval of the zoomed-in area. Defaults to None.</p></li>
+<li><p><strong>zoom_ylim</strong> (<em>tuple</em><em>, </em><em>optional</em>) – y-axis interval of the zoomed-in area. Defaults to None.</p></li>
+<li><p><strong>zoomed_location</strong> (<em>list</em><em>, </em><em>optional</em>) – location of the zoomed-in area, [x, y, length, height]. Defaults to [1.05, 0.05, 0.37, 0.9].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.tables_and_figures.retrive_results">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.tables_and_figures.</span></span><span class="sig-name descname"><span class="pre">retrive_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'results'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.tables_and_figures.retrive_results" title="Permalink to this definition"></a></dt>
+<dd><p>retrive loaded results of a dataset from files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em>) – dataset name, e.g. Moji, Bios_both, and Bios_gender</p></li>
+<li><p><strong>log_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – _description_. Defaults to “results”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>experimental result dataframes of different methods.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.analysis.utils">
+<span id="fairlib-src-analysis-utils"></span><h2>fairlib.src.analysis.utils<a class="headerlink" href="#module-fairlib.src.analysis.utils" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.DTO">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">DTO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fairness_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performacne_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utopia_fairness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utopia_performance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.DTO" title="Permalink to this definition"></a></dt>
+<dd><p>calculate DTO for each condidate model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fairness_metric</strong> (<em>List</em>) – fairness evaluation results (1-GAP)</p></li>
+<li><p><strong>performacne_metric</strong> (<em>List</em>) – performance evaluation results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.auc_performance_fairness_tradeoff">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">auc_performance_fairness_tradeoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pareto_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_performance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pareto_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fairness_metric_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fairness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_metric_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'performance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.auc_performance_fairness_tradeoff" title="Permalink to this definition"></a></dt>
+<dd><p>calculate the area under the performance–fairness trade-off curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pareto_df</strong> (<em>DataFrame</em>) – A data frame of pareto frontiers</p></li>
+<li><p><strong>random_performance</strong> (<em>float</em><em>, </em><em>optional</em>) – the lowest performance, which leads to the 1 fairness. Defaults to 0.</p></li>
+<li><p><strong>pareto_selection</strong> (<em>str</em><em>, </em><em>optional</em>) – which split is used to select the frontiers. Defaults to “test”.</p></li>
+<li><p><strong>fairness_metric_name</strong> (<em>str</em><em>, </em><em>optional</em>) – . the metric name for fairness evaluation. Defaults to “fairness”.</p></li>
+<li><p><strong>performance_metric_name</strong> (<em>str</em><em>, </em><em>optional</em>) – the metric name for performance evaluation. Defaults to “performance”.</p></li>
+<li><p><strong>interpolation</strong> (<em>str</em><em>, </em><em>optional</em>) – interpolation method for the threshold fairness. Defaults to “linear”.</p></li>
+<li><p><strong>performance_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – the performance threshold for the method. Defaults to None.</p></li>
+<li><p><strong>normalization</strong> (<em>bool</em><em>, </em><em>optional</em>) – if normalize the auc score with the maximum auc that can be achieved. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(AUC score, AUC DataFrame)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.get_dir">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">get_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.get_dir" title="Permalink to this definition"></a></dt>
+<dd><p>retrive logs for experiments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_dir</strong> (<em>str</em>) – dir to the saved experimental results</p></li>
+<li><p><strong>project_dir</strong> (<em>str</em>) – experiment type identifier, e.g., final, hypertune, dev. Same as the arguments.</p></li>
+<li><p><strong>checkpoint_dir</strong> (<em>str</em>) – dir to checkpoints, <cite>models</cite> by default.</p></li>
+<li><p><strong>checkpoint_name</strong> (<em>str</em>) – checkpoint_epoch{num_epoch}.ptr.gz</p></li>
+<li><p><strong>model_id</strong> (<em>str</em>) – read all experiment start with the same model_id. E.g., “Adv” when tuning hyperparameters for standard adversarial</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of dictionaries, where each dict contains the information for a experiment.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.get_model_scores">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">get_model_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GAP_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.get_model_scores" title="Permalink to this definition"></a></dt>
+<dd><p>given the log path for a exp, read log and return the dev&amp;test performacne, fairness, and DTO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exp</strong> (<em>str</em>) – get_dir output, includeing the options and path to checkpoints</p></li>
+<li><p><strong>GAP_metric</strong> (<em>str</em>) – the target GAP metric name</p></li>
+<li><p><strong>Performance_metric</strong> (<em>str</em>) – the target performance metric name, e.g., F1, Acc.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a pandas df including dev and test scores for each epoch</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.is_pareto_efficient">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">is_pareto_efficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.is_pareto_efficient" title="Permalink to this definition"></a></dt>
+<dd><p>Find the pareto-efficient points</p>
+<p>If return_mask is True, this will be an (n_points, ) boolean array
+Otherwise it will be a (n_efficient_points, ) integer array of indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>costs</strong> (<em>np.array</em>) – An (n_points, n_costs) array</p></li>
+<li><p><strong>return_mask</strong> (<em>bool</em><em>, </em><em>optional</em>) – True to return a mask. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An array of indices of pareto-efficient points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.l2norm">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">l2norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.l2norm" title="Permalink to this definition"></a></dt>
+<dd><p>calculate Euclidean distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix_1</strong> (<em>n*d np array</em>) – n is the number of instances, d is num of metric</p></li>
+<li><p><strong>matrix_2</strong> (<em>n*d np array</em>) – same as matrix_1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the row-wise Euclidean distance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.mkdir">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">mkdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.mkdir" title="Permalink to this definition"></a></dt>
+<dd><p>make a new directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to the directory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.mkdirs">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">mkdirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.mkdirs" title="Permalink to this definition"></a></dt>
+<dd><p>make a set of new directories</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paths</strong> (<em>list</em>) – a list of directories</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.power_mean">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">power_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.power_mean" title="Permalink to this definition"></a></dt>
+<dd><p>calculate the generalized mean</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>series</strong> (<em>np.array</em>) – a array of numbers.</p></li>
+<li><p><strong>p</strong> (<em>int</em>) – power of the generalized mean.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – axis to the aggregation. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>generalized mean of the inputs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.retrive_all_exp_results">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">retrive_all_exp_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GAP_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_column_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.retrive_all_exp_results" title="Permalink to this definition"></a></dt>
+<dd><p>retrive experimental results according to the input list of experiments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exp</strong> (<em>list</em>) – a list of experiment info.</p></li>
+<li><p><strong>GAP_metric_name</strong> (<em>str</em>) – gap metric name, such as TPR_GAP.</p></li>
+<li><p><strong>Performance_metric_name</strong> (<em>str</em>) – performance metric name, such as accuracy.</p></li>
+<li><p><strong>index_column_names</strong> (<em>_type_</em>) – a list of hyperparameters that will be used to differentiate runs within a single method.</p></li>
+<li><p><strong>keep_original_metrics</strong> (<em>bool</em>) – whether or not keep all experimental results in the checkpoint. Default to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>retrived results.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.analysis.utils.retrive_exp_results">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.analysis.utils.</span></span><span class="sig-name descname"><span class="pre">retrive_exp_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GAP_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Performance_metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_criterion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_column_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.analysis.utils.retrive_exp_results" title="Permalink to this definition"></a></dt>
+<dd><p>Retrive experimental results of a epoch from the saved checkpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exp</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>GAP_metric_name</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>Performance_metric_name</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>selection_criterion</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>index_column_names</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>keep_original_metrics</strong> (<em>bool</em><em>, </em><em>optional</em>) – besides selected performance and fairness, show original metrics. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>retrived results.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -103,7 +450,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="tutorial_usage.html" class="btn btn-neutral float-left" title="fairlib Cheat Sheet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="reference_api_utils.html" class="btn btn-neutral float-right" title="Utils Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="reference_api_evaluators.html" class="btn btn-neutral float-right" title="Evaluator Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

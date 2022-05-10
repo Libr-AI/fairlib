@@ -18,6 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Debiasing Module" href="reference_api_debiasing.html" />
     <link rel="prev" title="DataLoader Module" href="reference_api_dataloaders.html" /> 
 </head>
 
@@ -63,10 +64,16 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Network Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Network Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.networks.__init__">fairlib.src.networks.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.networks.classifier">fairlib.src.networks.classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.networks.augmentation_layer">fairlib.src.networks.augmentation_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.networks.utils">fairlib.src.networks.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_debiasing.html">Debiasing Module</a></li>
 </ul>
 
         </div>
@@ -95,6 +102,92 @@
              
   <section id="network-module">
 <h1>Network Module<a class="headerlink" href="#network-module" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.networks.__init__">
+<span id="fairlib-src-networks-init"></span><h2>fairlib.src.networks.__init__<a class="headerlink" href="#module-fairlib.src.networks.__init__" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-fairlib.src.networks.classifier">
+<span id="fairlib-src-networks-classifier"></span><h2>fairlib.src.networks.classifier<a class="headerlink" href="#module-fairlib.src.networks.classifier" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.classifier.BERTClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.classifier.</span></span><span class="sig-name descname"><span class="pre">BERTClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.classifier.BERTClassifier" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.classifier.BERTClassifier.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.classifier.BERTClassifier.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.classifier.BERTClassifier.freeze_roberta_layers">
+<span class="sig-name descname"><span class="pre">freeze_roberta_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_layers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.classifier.BERTClassifier.freeze_roberta_layers" title="Permalink to this definition"></a></dt>
+<dd><p>number of layers: the first number of layers to be freezed</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.classifier.MLP">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.classifier.</span></span><span class="sig-name descname"><span class="pre">MLP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.classifier.MLP" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.classifier.MLP.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.classifier.MLP.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.augmentation_layer">
+<span id="fairlib-src-networks-augmentation-layer"></span><h2>fairlib.src.networks.augmentation_layer<a class="headerlink" href="#module-fairlib.src.networks.augmentation_layer" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.augmentation_layer.Augmentation_layer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.augmentation_layer.</span></span><span class="sig-name descname"><span class="pre">Augmentation_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_component</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.augmentation_layer.Augmentation_layer" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.augmentation_layer.Augmentation_layer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.augmentation_layer.Augmentation_layer.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.utils">
+<span id="fairlib-src-networks-utils"></span><h2>fairlib.src.networks.utils<a class="headerlink" href="#module-fairlib.src.networks.utils" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.utils.BaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.utils.</span></span><span class="sig-name descname"><span class="pre">BaseModel</span></span><a class="headerlink" href="#fairlib.src.networks.utils.BaseModel" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.utils.BaseModel.zero_cls_grad">
+<span class="sig-name descname"><span class="pre">zero_cls_grad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.utils.BaseModel.zero_cls_grad" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the gradients of cls layers</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -102,6 +195,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="reference_api_dataloaders.html" class="btn btn-neutral float-left" title="DataLoader Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference_api_debiasing.html" class="btn btn-neutral float-right" title="Debiasing Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

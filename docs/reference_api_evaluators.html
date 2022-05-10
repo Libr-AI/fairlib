@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="DataLoader Module" href="reference_api_dataloaders.html" />
-    <link rel="prev" title="Utils Module" href="reference_api_utils.html" /> 
+    <link rel="prev" title="Analysis Module" href="reference_api_analysis.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,10 +64,15 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluator Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluator Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.evaluators.__init__">fairlib.src.evaluators.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.evaluators.evaluator">fairlib.src.evaluators.evaluator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.evaluators.utils">fairlib.src.evaluators.utils</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_debiasing.html">Debiasing Module</a></li>
 </ul>
 
         </div>
@@ -96,13 +101,170 @@
              
   <section id="evaluator-module">
 <h1>Evaluator Module<a class="headerlink" href="#evaluator-module" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.evaluators.__init__">
+<span id="fairlib-src-evaluators-init"></span><h2>fairlib.src.evaluators.__init__<a class="headerlink" href="#module-fairlib.src.evaluators.__init__" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.__init__.present_evaluation_scores">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.__init__.</span></span><span class="sig-name descname"><span class="pre">present_evaluation_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_private_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_private_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_since_improvement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_valid_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_best</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'checkpoint'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.__init__.present_evaluation_scores" title="Permalink to this definition"></a></dt>
+<dd><p>Conduct evaluation, present results, and save evaluation results to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>valid_preds</strong> (<em>np.array</em>) – model predictions over the validation dataset.</p></li>
+<li><p><strong>valid_labels</strong> (<em>np.array</em>) – true labels over the validation dataset.</p></li>
+<li><p><strong>valid_private_labels</strong> (<em>np.array</em>) – protected labels over the validation dataset.</p></li>
+<li><p><strong>test_preds</strong> (<em>np.array</em>) – model predictions over the test dataset.</p></li>
+<li><p><strong>test_labels</strong> (<em>np.array</em>) – true labels over the test dataset.</p></li>
+<li><p><strong>test_private_labels</strong> (<em>np.array</em>) – protected labels over the test dataset.</p></li>
+<li><p><strong>epoch</strong> (<em>float</em>) – number of epoch of the model training.</p></li>
+<li><p><strong>epochs_since_improvement</strong> (<em>int</em>) – epoch since the best epoch is updated.</p></li>
+<li><p><strong>model</strong> (<em>torch.module</em>) – the trained model.</p></li>
+<li><p><strong>epoch_valid_loss</strong> (<em>float</em>) – loss over the validation dataset.</p></li>
+<li><p><strong>is_best</strong> (<em>bool</em>) – indicator of whether the current epoch is the best.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – _description_. Defaults to “checkpoint”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.evaluators.evaluator">
+<span id="fairlib-src-evaluators-evaluator"></span><h2>fairlib.src.evaluators.evaluator<a class="headerlink" href="#module-fairlib.src.evaluators.evaluator" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.Aggregation_GAP">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">Aggregation_GAP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinct_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TPR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.Aggregation_GAP" title="Permalink to this definition"></a></dt>
+<dd><p>Aggregate fairness metrics at the group level and class level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distinct_groups</strong> (<em>list</em>) – a list of distinc labels of protected groups.</p></li>
+<li><p><strong>all_scores</strong> (<em>dict</em>) – confusion matrix based scores for each protected group and all.</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – fairness metric. Defaults to “TPR”.</p></li>
+<li><p><strong>group_agg_power</strong> (<em>int</em><em>, </em><em>optional</em>) – generalized mean aggregation power at the group level. Use absolute value aggregation if None. Defaults to None.</p></li>
+<li><p><strong>class_agg_power</strong> (<em>int</em><em>, </em><em>optional</em>) – generalized mean aggregation power at the class level. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>aggregated fairness score.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.confusion_matrix_based_scores">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">confusion_matrix_based_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.confusion_matrix_based_scores" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate confusion matrix based scores.</p>
+<p>Implementation from <a class="reference external" href="https://stackoverflow.com/a/43331484">https://stackoverflow.com/a/43331484</a>
+See <a class="reference external" href="https://en.wikipedia.org/wiki/Confusion_matrix">https://en.wikipedia.org/wiki/Confusion_matrix</a> for different scores</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cnf</strong> (<em>np.array</em>) – a confusion matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a set of metrics for each class, indexed by the metric name.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.gap_eval_scores">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">gap_eval_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protected_attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['TPR',</span> <span class="pre">'FPR',</span> <span class="pre">'PPR']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.gap_eval_scores" title="Permalink to this definition"></a></dt>
+<dd><p>fairness evaluation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.array</em>) – model predictions.</p></li>
+<li><p><strong>y_true</strong> (<em>np.array</em>) – target labels.</p></li>
+<li><p><strong>protected_attribute</strong> (<em>np.array</em>) – protected labels.</p></li>
+<li><p><strong>metrics</strong> (<em>list</em><em>, </em><em>optional</em>) – a list of metric names that will be considered for fairness evaluation. Defaults to [“TPR”,”FPR”,”PPR”].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(fairness evaluation results, confusion matrices)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.power_mean">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">power_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.power_mean" title="Permalink to this definition"></a></dt>
+<dd><p>calculate the generalized mean of a given list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>series</strong> (<em>list</em>) – a list of numbers.</p></li>
+<li><p><strong>p</strong> (<em>int</em>) – power of the generalized mean aggregation</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – aggregation along which dim of the input. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>aggregated socres.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.evaluators.utils">
+<span id="fairlib-src-evaluators-utils"></span><h2>fairlib.src.evaluators.utils<a class="headerlink" href="#module-fairlib.src.evaluators.utils" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.utils.print_network">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.utils.</span></span><span class="sig-name descname"><span class="pre">print_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.utils.print_network" title="Permalink to this definition"></a></dt>
+<dd><p>print the NN architecture and number of parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> (<em>torch.Module</em>) – the model object.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether or not print the model architecture. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.utils.save_checkpoint">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.utils.</span></span><span class="sig-name descname"><span class="pre">save_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_since_improvement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_evaluations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_confusion_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_confusion_matrices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_evaluations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_best</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'checkpoint'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_predictions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_predictions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.utils.save_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>save check points to a specified file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> (<em>float</em>) – number of epoch of the model training.</p></li>
+<li><p><strong>epochs_since_improvement</strong> (<em>int</em>) – epoch since the best epoch is updated.</p></li>
+<li><p><strong>model</strong> (<em>torch.module</em>) – the trained model.</p></li>
+<li><p><strong>loss</strong> (<em>float</em>) – training loss.</p></li>
+<li><p><strong>dev_evaluations</strong> (<em>dict</em>) – evaluation results over the development set.</p></li>
+<li><p><strong>valid_confusion_matrices</strong> (<em>dict</em>) – a dict of confusion matrices over the validation set.</p></li>
+<li><p><strong>test_confusion_matrices</strong> (<em>dict</em>) – a dict of confusion matrices over the test set.</p></li>
+<li><p><strong>test_evaluations</strong> (<em>dict</em>) – evaluation results over the test set.</p></li>
+<li><p><strong>is_best</strong> (<em>bool</em>) – indicator of whether the current epoch is the best.</p></li>
+<li><p><strong>checkpoint_dir</strong> (<em>str</em>) – path the to checkpoint directory.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – the predict of checkpoint file names. Defaults to “checkpoint”.</p></li>
+<li><p><strong>dev_predictions</strong> (<em>_type_</em><em>, </em><em>optional</em>) – save the model predictions over the development set if needed. Defaults to None.</p></li>
+<li><p><strong>test_predictions</strong> (<em>_type_</em><em>, </em><em>optional</em>) – save the model predictions over the test set if needed. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="reference_api_utils.html" class="btn btn-neutral float-left" title="Utils Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference_api_analysis.html" class="btn btn-neutral float-left" title="Analysis Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="reference_api_dataloaders.html" class="btn btn-neutral float-right" title="DataLoader Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

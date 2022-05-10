@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib.src.networks.adv &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="fairlib.src.networks.INLP" href="INLP.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DyBT.html">fairlib.src.networks.DyBT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FairSCL.html">fairlib.src.networks.FairCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INLP.html">fairlib.src.networks.INLP</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fairlib.src.networks.adv</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.adv.customized_loss">fairlib.src.networks.adv.customized_loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.adv.utils">fairlib.src.networks.adv.utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.adv.discriminator">fairlib.src.networks.adv.discriminator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../reference_api_debiasing.html">Debiasing Module</a> &raquo;</li>
+      <li>fairlib.src.networks.adv</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference_api_debiasing/adv.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairlib-src-networks-adv">
+<h1>fairlib.src.networks.adv<a class="headerlink" href="#fairlib-src-networks-adv" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.networks.adv.customized_loss">
+<span id="fairlib-src-networks-adv-customized-loss"></span><h2>fairlib.src.networks.adv.customized_loss<a class="headerlink" href="#module-fairlib.src.networks.adv.customized_loss" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.customized_loss.DiffLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.customized_loss.</span></span><span class="sig-name descname"><span class="pre">DiffLoss</span></span><a class="headerlink" href="#fairlib.src.networks.adv.customized_loss.DiffLoss" title="Permalink to this definition"></a></dt>
+<dd><p>compute the Frobenius norm of two tensors</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.customized_loss.DiffLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.customized_loss.DiffLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.adv.utils">
+<span id="fairlib-src-networks-adv-utils"></span><h2>fairlib.src.networks.adv.utils<a class="headerlink" href="#module-fairlib.src.networks.adv.utils" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.BaseDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.utils.</span></span><span class="sig-name descname"><span class="pre">BaseDiscriminator</span></span><a class="headerlink" href="#fairlib.src.networks.adv.utils.BaseDiscriminator" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.GradientReversal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.utils.</span></span><span class="sig-name descname"><span class="pre">GradientReversal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.GradientReversal" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.GradientReversal.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.GradientReversal.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.GradientReversalFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.utils.</span></span><span class="sig-name descname"><span class="pre">GradientReversalFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.GradientReversalFunction" title="Permalink to this definition"></a></dt>
+<dd><p>From:
+<a class="reference external" href="https://github.com/jvanvugt/pytorch-domain-adaptation/blob/cb65581f20b71ff9883dd2435b2275a1fd4b90df/utils.py#L26">https://github.com/jvanvugt/pytorch-domain-adaptation/blob/cb65581f20b71ff9883dd2435b2275a1fd4b90df/utils.py#L26</a>
+Gradient Reversal Layer from:
+Unsupervised Domain Adaptation by Backpropagation (Ganin &amp; Lempitsky, 2015)
+Forward pass is the identity function. In the backward pass,
+the upstream gradients are multiplied by -lambda (i.e. gradient is reversed)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.GradientReversalFunction.backward">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grads</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.backward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines a formula for differentiating the operation with backward mode
+automatic differentiation (alias to the vjp function).</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs as the <a class="reference internal" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.forward" title="fairlib.src.networks.adv.utils.GradientReversalFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> returned (None will be passed in
+for non tensor outputs of the forward function),
+and it should return as many tensors, as there were inputs to
+<a class="reference internal" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.forward" title="fairlib.src.networks.adv.utils.GradientReversalFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the gradient w.r.t the given output,
+and each returned value should be the gradient w.r.t. the
+corresponding input. If an input is not a Tensor or is a Tensor not
+requiring grads, you can just pass None as a gradient for that input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.backward" title="fairlib.src.networks.adv.utils.GradientReversalFunction.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.forward" title="fairlib.src.networks.adv.utils.GradientReversalFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.GradientReversalFunction.forward">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.GradientReversalFunction.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store arbitrary data that can be then
+retrieved during the backward pass. Tensors should not be stored
+directly on <cite>ctx</cite> (though this is not currently enforced for
+backward compatibility). Instead, tensors should be saved either with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ctx.save_for_backward()</span></code> if they are intended to be used in
+<code class="docutils literal notranslate"><span class="pre">backward</span></code> (equivalently, <code class="docutils literal notranslate"><span class="pre">vjp</span></code>) or <code class="xref py py-func docutils literal notranslate"><span class="pre">ctx.save_for_forward()</span></code>
+if they are intended to be used for in <code class="docutils literal notranslate"><span class="pre">jvp</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.SubDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.utils.</span></span><span class="sig-name descname"><span class="pre">SubDiscriminator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.SubDiscriminator" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.utils.SubDiscriminator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.utils.SubDiscriminator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.adv.discriminator">
+<span id="fairlib-src-networks-adv-discriminator"></span><h2>fairlib.src.networks.adv.discriminator<a class="headerlink" href="#module-fairlib.src.networks.adv.discriminator" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.discriminator.adv_eval_epoch">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.discriminator.</span></span><span class="sig-name descname"><span class="pre">adv_eval_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discriminators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.discriminator.adv_eval_epoch" title="Permalink to this definition"></a></dt>
+<dd><p>evaluate the discriminator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – the main task model.</p></li>
+<li><p><strong>discriminators</strong> (<em>torch.nn.Module</em>) – the discriminator</p></li>
+<li><p><strong>iterator</strong> (<em>dataloader</em>) – torch data iterator.</p></li>
+<li><p><strong>args</strong> (<em>namespace</em>) – arguments for training.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(evaluation loss, evaluation metrics)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.discriminator.adv_train_batch">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.discriminator.</span></span><span class="sig-name descname"><span class="pre">adv_train_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discriminators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.discriminator.adv_train_batch" title="Permalink to this definition"></a></dt>
+<dd><p>train the discriminator one batch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – the main task model</p></li>
+<li><p><strong>discriminators</strong> (<em>torch.nn.Module</em>) – the discriminator</p></li>
+<li><p><strong>batch</strong> (<em>tuple</em>) – bach data, including inputs, target labels, protected labels, etc.</p></li>
+<li><p><strong>args</strong> (<em>namespace</em>) – arguments for training</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>training loss</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.adv.discriminator.adv_train_epoch">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.adv.discriminator.</span></span><span class="sig-name descname"><span class="pre">adv_train_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discriminators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.adv.discriminator.adv_train_epoch" title="Permalink to this definition"></a></dt>
+<dd><p>train the discriminator one epoch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – the main task model.</p></li>
+<li><p><strong>discriminators</strong> (<em>torch.nn.Module</em>) – the discriminator</p></li>
+<li><p><strong>iterator</strong> (<em>dataloader</em>) – torch data iterator.</p></li>
+<li><p><strong>args</strong> (<em>namespace</em>) – arguments for training.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>training loss.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="INLP.html" class="btn btn-neutral float-left" title="fairlib.src.networks.INLP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -64,10 +64,16 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference_api_utils.html">Utils Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DataLoader Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DataLoader Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.__init__">fairlib.src.dataloaders.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.encoder">fairlib.src.dataloaders.encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.loaders">fairlib.src.dataloaders.loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.utils">fairlib.src.dataloaders.utils</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_debiasing.html">Debiasing Module</a></li>
 </ul>
 
         </div>
@@ -96,6 +102,132 @@
              
   <section id="dataloader-module">
 <h1>DataLoader Module<a class="headerlink" href="#dataloader-module" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.dataloaders.__init__">
+<span id="fairlib-src-dataloaders-init"></span><h2>fairlib.src.dataloaders.__init__<a class="headerlink" href="#module-fairlib.src.dataloaders.__init__" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.__init__.get_dataloaders">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.__init__.</span></span><span class="sig-name descname"><span class="pre">get_dataloaders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.__init__.get_dataloaders" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the torch dataloaders according to arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>namespace</em>) – arguments</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – if correspoding components have not been implemented.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataloaders for training set, development set, and test set.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.dataloaders.encoder">
+<span id="fairlib-src-dataloaders-encoder"></span><h2>fairlib.src.dataloaders.encoder<a class="headerlink" href="#module-fairlib.src.dataloaders.encoder" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.encoder.text2id">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.encoder.</span></span><span class="sig-name descname"><span class="pre">text2id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.encoder.text2id" title="Permalink to this definition"></a></dt>
+<dd><p>mapping natural language to numeric identifiers.</p>
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.dataloaders.loaders">
+<span id="fairlib-src-dataloaders-loaders"></span><h2>fairlib.src.dataloaders.loaders<a class="headerlink" href="#module-fairlib.src.dataloaders.loaders" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.loaders.BiosDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.loaders.</span></span><span class="sig-name descname"><span class="pre">BiosDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.loaders.BiosDataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.loaders.DeepMojiDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.loaders.</span></span><span class="sig-name descname"><span class="pre">DeepMojiDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.loaders.DeepMojiDataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.loaders.SampleDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.loaders.</span></span><span class="sig-name descname"><span class="pre">SampleDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.loaders.SampleDataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.loaders.TestDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.loaders.</span></span><span class="sig-name descname"><span class="pre">TestDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.loaders.TestDataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-fairlib.src.dataloaders.utils">
+<span id="fairlib-src-dataloaders-utils"></span><h2>fairlib.src.dataloaders.utils<a class="headerlink" href="#module-fairlib.src.dataloaders.utils" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.BaseDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">BaseDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.BaseDataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.full_label_data">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">full_label_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.full_label_data" title="Permalink to this definition"></a></dt>
+<dd><p>filter the instances with all required labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – a DataFrame containing data instances</p></li>
+<li><p><strong>tasks</strong> (<em>list</em>) – a list of names of target columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an array of boolean values indicating whether or not each row meets the requirement.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.get_sampled_indices">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">get_sampled_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BTObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protected_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Downsampling'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.get_sampled_indices" title="Permalink to this definition"></a></dt>
+<dd><p>Given the balanced training objective, target labels, and protected labels, sampling instances for each group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BTObj</strong> (<em>str</em>) – y| g | joint | stratified_y | stratified_g | EO.</p></li>
+<li><p><strong>y</strong> (<em>list</em>) – a list of target labels.</p></li>
+<li><p><strong>protected_label</strong> (<em>list</em>) – a list of protected labels.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Downsampling | Resampling. Defaults to “Downsampling”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of indices of selected instacnes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.get_weights">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BTObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protected_label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.get_weights" title="Permalink to this definition"></a></dt>
+<dd><p>Given the balanced training objective, target labels, and protected labels, pre-calculate weights for each instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BTObj</strong> (<em>str</em>) – y| g | joint | stratified_y | stratified_g | EO.</p></li>
+<li><p><strong>y</strong> (<em>list</em>) – a list of target labels.</p></li>
+<li><p><strong>protected_label</strong> (<em>list</em>) – a list of protected labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>instance weights w.r.t. the balanced training objective.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 
 

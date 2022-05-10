@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib.src.networks.DyBT &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fairlib.src.networks.FairCL" href="FairSCL.html" />
+    <link rel="prev" title="Debiasing Module" href="../reference_api_debiasing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fairlib.src.networks.DyBT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.DyBT.gdl">fairlib.src.networks.DyBT.gdl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.DyBT.fairbatch_sampler">fairlib.src.networks.DyBT.fairbatch_sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.DyBT.utils">fairlib.src.networks.DyBT.utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.DyBT.generalized_fairbatch">fairlib.src.networks.DyBT.generalized_fairbatch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="FairSCL.html">fairlib.src.networks.FairCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="INLP.html">fairlib.src.networks.INLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adv.html">fairlib.src.networks.adv</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../reference_api_debiasing.html">Debiasing Module</a> &raquo;</li>
+      <li>fairlib.src.networks.DyBT</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference_api_debiasing/DyBT.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairlib-src-networks-dybt">
+<h1>fairlib.src.networks.DyBT<a class="headerlink" href="#fairlib-src-networks-dybt" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.networks.DyBT.gdl">
+<span id="fairlib-src-networks-dybt-gdl"></span><h2>fairlib.src.networks.DyBT.gdl<a class="headerlink" href="#module-fairlib.src.networks.DyBT.gdl" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.gdl.Group_Difference_Loss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.DyBT.gdl.</span></span><span class="sig-name descname"><span class="pre">Group_Difference_Loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.gdl.Group_Difference_Loss" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.gdl.Group_Difference_Loss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.gdl.Group_Difference_Loss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.DyBT.fairbatch_sampler">
+<span id="fairlib-src-networks-dybt-fairbatch-sampler"></span><h2>fairlib.src.networks.DyBT.fairbatch_sampler<a class="headerlink" href="#module-fairlib.src.networks.DyBT.fairbatch_sampler" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.DyBT.fairbatch_sampler.</span></span><span class="sig-name descname"><span class="pre">FairBatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch" title="Permalink to this definition"></a></dt>
+<dd><p>FairBatch (Sampler in DataLoader).</p>
+<p>This class is for implementing the lambda adjustment and batch selection of FairBatch.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.model" title="Permalink to this definition"></a></dt>
+<dd><p>A model containing the intermediate states of the training.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">x_,</span> <span class="pre">y_,</span> <span class="pre">g_data</span></span></dt>
+<dd><p>Tensor-based train data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.alpha" title="Permalink to this definition"></a></dt>
+<dd><p>A positive number for step size that used in the lambda adjustment.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.fairness_type">
+<span class="sig-name descname"><span class="pre">fairness_type</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.fairness_type" title="Permalink to this definition"></a></dt>
+<dd><p>A string indicating the target fairness type
+stratified_y : equalized odds (eqodds) in binary and equal opportunity (eqopp) in multi-class classification
+stratified_g : demographic parity</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.replacement">
+<span class="sig-name descname"><span class="pre">replacement</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.replacement" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean indicating whether a batch consists of data with or without replacement.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.N">
+<span class="sig-name descname"><span class="pre">N</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.N" title="Permalink to this definition"></a></dt>
+<dd><p>An integer counting the size of data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.batch_size" title="Permalink to this definition"></a></dt>
+<dd><p>An integer for the size of a batch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.batch_num">
+<span class="sig-name descname"><span class="pre">batch_num</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.batch_num" title="Permalink to this definition"></a></dt>
+<dd><p>An integer for total number of batches in an epoch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_item</span></span></dt>
+<dd><p>Lists that contains the unique values of the y_data and g_data, respectively.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.yg_tuple">
+<span class="sig-name descname"><span class="pre">yg_tuple</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.yg_tuple" title="Permalink to this definition"></a></dt>
+<dd><p>Lists for pairs of y_item and g_item.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_mask</span></span></dt>
+<dd><p>Dictionaries utilizing as array masks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_index</span></span></dt>
+<dd><p>Dictionaries containing the index of each class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_len</span></span></dt>
+<dd><p>Dictionaries containing the length information.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.S">
+<span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.S" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary containing the default size of each class in a batch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.lb_dict">
+<span class="sig-name descname"><span class="pre">lb_dict</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.lb_dict" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary of real numbers indicating the lambda values in FairBatch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.adjust_lambda">
+<span class="sig-name descname"><span class="pre">adjust_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.adjust_lambda" title="Permalink to this definition"></a></dt>
+<dd><p>Adjusts the lambda values for FairBatch algorithm.</p>
+<p>The detailed algorithms are decribed in the paper.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.select_batch_replacement">
+<span class="sig-name descname"><span class="pre">select_batch_replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.fairbatch_sampler.FairBatch.select_batch_replacement" title="Permalink to this definition"></a></dt>
+<dd><p>Selects a certain number of batches based on the given batch size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch_size</strong> – An integer for the data size in a batch.</p></li>
+<li><p><strong>full_index</strong> – An array containing the candidate data indices.</p></li>
+<li><p><strong>batch_num</strong> – An integer indicating the number of batches.</p></li>
+<li><p><strong>replacement</strong> – A boolean indicating whether a batch consists of data with or without replacement.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Indices that indicate the data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.DyBT.utils">
+<span id="fairlib-src-networks-dybt-utils"></span><h2>fairlib.src.networks.DyBT.utils<a class="headerlink" href="#module-fairlib.src.networks.DyBT.utils" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.DyBT.utils.</span></span><span class="sig-name descname"><span class="pre">BaseDyBT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT" title="Permalink to this definition"></a></dt>
+<dd><p>Base Sample Class (Sampler in DataLoader).
+.. attribute:: model</p>
+<blockquote>
+<div><p>A model containing the intermediate states of the training.</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">x_,</span> <span class="pre">y_,</span> <span class="pre">g_data</span></span></dt>
+<dd><p>Tensor-based train data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.alpha" title="Permalink to this definition"></a></dt>
+<dd><p>A positive number for step size that used in the lambda adjustment.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.fairness_type">
+<span class="sig-name descname"><span class="pre">fairness_type</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.fairness_type" title="Permalink to this definition"></a></dt>
+<dd><p>A string indicating the target fairness type
+stratified_y : equalized odds (eqodds) in binary and equal opportunity (eqopp) in multi-class classification
+stratified_g : demographic parity</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.replacement">
+<span class="sig-name descname"><span class="pre">replacement</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.replacement" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean indicating whether a batch consists of data with or without replacement.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.N">
+<span class="sig-name descname"><span class="pre">N</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.N" title="Permalink to this definition"></a></dt>
+<dd><p>An integer counting the size of data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.batch_size" title="Permalink to this definition"></a></dt>
+<dd><p>An integer for the size of a batch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.batch_num">
+<span class="sig-name descname"><span class="pre">batch_num</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.batch_num" title="Permalink to this definition"></a></dt>
+<dd><p>An integer for total number of batches in an epoch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_item</span></span></dt>
+<dd><p>Lists that contains the unique values of the y_data and g_data, respectively.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.yg_tuple">
+<span class="sig-name descname"><span class="pre">yg_tuple</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.yg_tuple" title="Permalink to this definition"></a></dt>
+<dd><p>Lists for pairs of y_item and g_item.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_mask</span></span></dt>
+<dd><p>Dictionaries utilizing as array masks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_index</span></span></dt>
+<dd><p>Dictionaries containing the index of each class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">y_,</span> <span class="pre">g_,</span> <span class="pre">yg_len</span></span></dt>
+<dd><p>Dictionaries containing the length information.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.S">
+<span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.S" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary containing the default size of each class in a batch.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.lb_dict">
+<span class="sig-name descname"><span class="pre">lb_dict</span></span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.lb_dict" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary of real numbers indicating the lambda values in FairBatch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.adjust_lambda">
+<span class="sig-name descname"><span class="pre">adjust_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.adjust_lambda" title="Permalink to this definition"></a></dt>
+<dd><p>Adjusts the lambda values for each group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.utils.BaseDyBT.select_batch_replacement">
+<span class="sig-name descname"><span class="pre">select_batch_replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.utils.BaseDyBT.select_batch_replacement" title="Permalink to this definition"></a></dt>
+<dd><p>Selects a certain number of batches based on the given batch size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch_size</strong> – An integer for the data size in a batch.</p></li>
+<li><p><strong>full_index</strong> – An array containing the candidate data indices.</p></li>
+<li><p><strong>batch_num</strong> – An integer indicating the number of batches.</p></li>
+<li><p><strong>replacement</strong> – A boolean indicating whether a batch consists of data with or without replacement.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Indices that indicate the data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fairlib.src.networks.DyBT.generalized_fairbatch">
+<span id="fairlib-src-networks-dybt-generalized-fairbatch"></span><h2>fairlib.src.networks.DyBT.generalized_fairbatch<a class="headerlink" href="#module-fairlib.src.networks.DyBT.generalized_fairbatch" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.generalized_fairbatch.Generalized_FairBatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.DyBT.generalized_fairbatch.</span></span><span class="sig-name descname"><span class="pre">Generalized_FairBatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.generalized_fairbatch.Generalized_FairBatch" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="fairlib.src.networks.DyBT.generalized_fairbatch.Generalized_FairBatch.adjust_lambda">
+<span class="sig-name descname"><span class="pre">adjust_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.DyBT.generalized_fairbatch.Generalized_FairBatch.adjust_lambda" title="Permalink to this definition"></a></dt>
+<dd><p>Adjusts the lambda values for each group</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../reference_api_debiasing.html" class="btn btn-neutral float-left" title="Debiasing Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="FairSCL.html" class="btn btn-neutral float-right" title="fairlib.src.networks.FairCL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

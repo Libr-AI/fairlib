@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib.src.networks.INLP &mdash; fairlib 0.0.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fairlib.src.networks.adv" href="adv.html" />
+    <link rel="prev" title="fairlib.src.networks.FairCL" href="FairSCL.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_Moji_demo.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_colored_MNIST.html">Debiasing CV Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_COMPAS.html">Debiasing for Structured Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_interactive_plots.html">Interactive Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_plot_gallery.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DyBT.html">fairlib.src.networks.DyBT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FairSCL.html">fairlib.src.networks.FairCL</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fairlib.src.networks.INLP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.INLP.__init__">fairlib.src.networks.INLP.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.INLP.classifier">fairlib.src.networks.INLP.classifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fairlib.src.networks.INLP.debias">fairlib.src.networks.INLP.debias</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="adv.html">fairlib.src.networks.adv</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../reference_api_debiasing.html">Debiasing Module</a> &raquo;</li>
+      <li>fairlib.src.networks.INLP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference_api_debiasing/INLP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairlib-src-networks-inlp">
+<h1>fairlib.src.networks.INLP<a class="headerlink" href="#fairlib-src-networks-inlp" title="Permalink to this headline"></a></h1>
+<section id="module-fairlib.src.networks.INLP.__init__">
+<span id="fairlib-src-networks-inlp-init"></span><h2>fairlib.src.networks.INLP.__init__<a class="headerlink" href="#module-fairlib.src.networks.INLP.__init__" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-fairlib.src.networks.INLP.classifier">
+<span id="fairlib-src-networks-inlp-classifier"></span><h2>fairlib.src.networks.INLP.classifier<a class="headerlink" href="#module-fairlib.src.networks.INLP.classifier" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-fairlib.src.networks.INLP.debias">
+<span id="fairlib-src-networks-inlp-debias"></span><h2>fairlib.src.networks.INLP.debias<a class="headerlink" href="#module-fairlib.src.networks.INLP.debias" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.INLP.debias.debias_by_specific_directions">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.INLP.debias.</span></span><span class="sig-name descname"><span class="pre">debias_by_specific_directions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.INLP.debias.debias_by_specific_directions" title="Permalink to this definition"></a></dt>
+<dd><p>the goal of this function is to perform INLP on a set of user-provided directiosn (instead of learning those directions).
+:param directions: list of vectors, as numpy arrays.
+:param input_dim: dimensionality of the vectors.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.INLP.debias.get_debiasing_projection">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.INLP.debias.</span></span><span class="sig-name descname"><span class="pre">get_debiasing_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classifier_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_autoregressive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_accuracy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_dev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_dev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_train_main</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_dev_main</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_identifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#fairlib.src.networks.INLP.debias.get_debiasing_projection" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classifier_class</strong> – the sklearn classifier class (SVM/Perceptron etc.)</p></li>
+<li><p><strong>cls_params</strong> – a dictionary, containing the params for the sklearn classifier</p></li>
+<li><p><strong>num_classifiers</strong> – number of iterations (equivalent to number of dimensions to remove)</p></li>
+<li><p><strong>input_dim</strong> – size of input vectors</p></li>
+<li><p><strong>is_autoregressive</strong> – whether to train the ith classiifer on the data projected to the nullsapces of w1,…,wi-1</p></li>
+<li><p><strong>min_accuracy</strong> – above this threshold, ignore the learned classifier</p></li>
+<li><p><strong>X_train</strong> – ndarray, training vectors</p></li>
+<li><p><strong>Y_train</strong> – ndarray, training labels (protected attributes)</p></li>
+<li><p><strong>X_dev</strong> – ndarray, eval vectors</p></li>
+<li><p><strong>Y_dev</strong> – ndarray, eval labels (protected attributes)</p></li>
+<li><p><strong>by_class</strong> – if true, at each iteration sample one main-task label, and extract the protected attribute only from vectors from this class</p></li>
+<li><p><strong>T_train_main</strong> – ndarray, main-task train labels</p></li>
+<li><p><strong>Y_dev_main</strong> – ndarray, main-task eval labels</p></li>
+<li><p><strong>dropout_rate</strong> – float, default: 0 (note: not recommended to be used with autoregressive=True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>P, the debiasing projection; rowspace_projections, the list of all rowspace projection; Ws, the list of all calssifiers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.INLP.debias.get_projection_to_intersection_of_nullspaces">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.INLP.debias.</span></span><span class="sig-name descname"><span class="pre">get_projection_to_intersection_of_nullspaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rowspace_projection_matrices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.networks.INLP.debias.get_projection_to_intersection_of_nullspaces" title="Permalink to this definition"></a></dt>
+<dd><p>Given a list of rowspace projection matrices P_R(w_1), …, P_R(w_n),
+this function calculates the projection to the intersection of all nullspasces of the matrices w_1, …, w_n.
+uses the intersection-projection formula of Ben-Israel 2013 <a class="reference external" href="http://benisrael.net/BEN-ISRAEL-NOV-30-13.pdf">http://benisrael.net/BEN-ISRAEL-NOV-30-13.pdf</a>:
+N(w1)∩ N(w2) ∩ … ∩ N(wn) = N(P_R(w1) + P_R(w2) + … + P_R(wn))
+:param rowspace_projection_matrices: List[np.array], a list of rowspace projections
+:param dim: input dim</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.networks.INLP.debias.get_rowspace_projection">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.networks.INLP.debias.</span></span><span class="sig-name descname"><span class="pre">get_rowspace_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#fairlib.src.networks.INLP.debias.get_rowspace_projection" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>W</strong> – the matrix over its nullspace to project</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the projection matrix over the rowspace</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="FairSCL.html" class="btn btn-neutral float-left" title="fairlib.src.networks.FairCL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adv.html" class="btn btn-neutral float-right" title="fairlib.src.networks.adv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

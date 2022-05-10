@@ -41,7 +41,7 @@ Welcome to fairlib's documentation!
    :maxdepth: 2
 
    reference_api_analysis
-   reference_api_utils
    reference_api_evaluators
    reference_api_dataloaders
    reference_api_networks
+   reference_api_debiasing
