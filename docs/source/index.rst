@@ -14,3 +14,5 @@ Welcome to fairlib's documentation!
    supported_bias_mitigation_algorithms
    tutorial_Moji_demo
    tutorial_colored_MNIST
+   tutorial_COMPAS
+   tutorial_customized_evaluation
