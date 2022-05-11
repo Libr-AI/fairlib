@@ -1,12 +1,12 @@
 # *fairlib*
 
+
 [*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
 
 The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html), and functions for analysis.
 
 For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
-[The tutorials and other notebooks](https://github.com/HanXudong/fairlib/tree/main/tutorial) offer a deeper introduction. The [complete API](https://hanxudong.github.io/fairlib/tutorial_usage.html) is also available.
-
+[The tutorials and other notebooks](https://hanxudong.github.io/fairlib/tutorial_interactive_demos.html) offer a deeper introduction. The [complete API](https://hanxudong.github.io/fairlib) is also available.
 
 ## Installation
 
@@ -33,7 +33,8 @@ To set up a development environment, run the following commands to clone the rep
 
 ```bash
 git clone https://github.com/HanXudong/fairlib.git ~/fairlib
-cd ~/fairlib; python setup.py develop
+cd ~/fairlib
+python setup.py develop
 ```
 
 **Benchmark Datasets**  
@@ -42,7 +43,7 @@ Please refer to [data/README.md](https://github.com/HanXudong/fairlib/blob/main/
 
 ## Usage
 
-The full description of *fairlib* usages can be found in [docs/usage](https://github.com/HanXudong/fairlib/blob/main/docs/usage.md). Here are the most basic examples.
+The full description of *fairlib* usages can be found in [*fairlib* cheat sheet](https://hanxudong.github.io/fairlib/tutorial_usage.html) and API reference. Here are the most basic examples.
 
 - *fairlib* can be run from the command line:
   ```bash
@@ -67,10 +68,10 @@ The full description of *fairlib* usages can be found in [docs/usage](https://gi
 
 ## Model Selection and Fairness Evaluation
 
-We provide implementation of DTO and DTO based model selection for different models. 
+Besides the classical loss- and performance-based model selection, we provide performance-fairness trade-off based model selection (see the paper below). 
 
-Please see [this tutorial](https://github.com/HanXudong/fairlib/blob/main/tutorial/demo.ipynb) for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
-Moreover, [interactive plots](https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb) are also supported, which can be used for analysis.
+Please see [this tutorial](https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_Moji_demo.html) for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
+Moreover, [interactive plots](https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_interactive_plots.html) are also supported, which can be used for analysis.
 
 ## Known issues and limitations
 
@@ -84,7 +85,6 @@ If you have any problem with our code or have some suggestions, including the fu
 - Xudong Han (xudongh1@student.unimelb.edu.au)
 
 or describe it in Issues.
-
 
 ## Paper
 
