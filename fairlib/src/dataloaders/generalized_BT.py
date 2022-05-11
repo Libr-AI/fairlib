@@ -116,7 +116,7 @@ def generalized_sampling(
 
     # 1st priority: joint_dict
     if joint_dist is not None:
-        target_dist = joint_dist
+        target_dist = target_joint_dist
     
     # 2nd priority: y_dist and y_cond_g_dist
     elif (y_dist is not None) or (y_cond_g_dist is not None):
@@ -151,3 +151,34 @@ def generalized_sampling(
             selected_index = selected_index + choices(_yg_index, k=(_target_N - len(_yg_index)))
     
     return selected_index
+
+def manipulate_data_distribution(default_distribution_dict, N = None, GBTObj = "original", alpha = 1):
+    """generalized BT
+
+    Args:
+        default_distribution_dict (dict): a dict of distribution information of the original dataset.
+        N (int, optional): The total number of returned indices. Defaults to None.
+        GBTObj (str, optional): original | joint | g | y | g_cond_y | y_cond_g. Defaults to "original".
+        alpha (int, optional): interpolation between the original distribution and the target distribution. Defaults to 1.
+
+    Returns:
+        list: list of selected indices.
+    """
+
+    if GBTObj == "original":
+        return generalized_sampling(default_distribution_dict, N)
+    elif GBTObj == "joint":
+        target_joint_dist = np.ones_like(default_distribution_dict["joint_dist"])
+        target_joint_dist = target_joint_dist / (target_joint_dist.shape[0]*target_joint_dist.shape[1])
+        target_joint_dist = target_joint_dist * alpha + (1-alpha) * default_distribution_dict["joint_dist"]
+        return generalized_sampling(default_distribution_dict, N, joint_dist = target_joint_dist)
+    elif GBTObj == "g":
+        pass
+    elif GBTObj == "y":
+        pass
+    elif GBTObj == "g_cond_y":
+        pass
+    elif GBTObj == "y_cond_g":
+        pass
+    else:
+        raise NotImplementedError
