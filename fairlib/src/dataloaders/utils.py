@@ -82,8 +82,8 @@ class BaseDataset(torch.utils.data.Dataset):
                 self.X = np.array(X)
                 y = [self.y[index] for index in selected_index]
                 self.y = np.array(y)
-                gender_label = [self.protected_label[index] for index in selected_index]
-                self.protected_label = np.array(gender_label)
+                _protected_label = [self.protected_label[index] for index in selected_index]
+                self.protected_label = np.array(_protected_label)
                 self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
 
             else:
