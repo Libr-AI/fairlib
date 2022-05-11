@@ -2,7 +2,7 @@ import itertools
 import numpy as np
 
 def get_data_distribution(y_data, g_data):
-    """Given target label and protected labels, calculate empirical distributions.
+    """Given target label and protected labels, calculate emprical distributions.
 
     joint_dist: n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size.
     g_dist: n_groups array, indicating the prob of each group
@@ -43,8 +43,8 @@ def get_data_distribution(y_data, g_data):
         count_matrix[tmp_yg] = len(yg_index[tmp_yg])
     
     # normalize the count to prob, i.e., sum to 1
-    N = np.sum(count_matrix)
-    joint_dist = count_matrix / N
+    N_instacnes = np.sum(count_matrix)
+    joint_dist = count_matrix / N_instacnes
 
     g_dist = np.sum(joint_dist,axis=0)
     y_dist = np.sum(joint_dist,axis=1)
@@ -58,6 +58,8 @@ def get_data_distribution(y_data, g_data):
         "y_dist":y_dist,
         "g_cond_y_dist":g_cond_y_dist,
         "y_cond_g_dist":y_cond_g_dist,
+        "yg_index":yg_index,
+        "N":N_instacnes,
     }
 
     return distribution_dict
