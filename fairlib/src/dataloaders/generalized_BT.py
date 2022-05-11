@@ -49,15 +49,15 @@ def get_data_distribution(y_data, g_data):
     g_dist = np.sum(joint_dist,axis=0)
     y_dist = np.sum(joint_dist,axis=1)
 
-    g_cond_y_dit = joint_dist / y_dist.reshape(-1,1)
-    y_cond_g_dit = joint_dist / g_dist.reshape(1,-1)
+    g_cond_y_dist = joint_dist / y_dist.reshape(-1,1)
+    y_cond_g_dist = joint_dist / g_dist.reshape(1,-1)
     
     distribution_dict = {
         "joint_dist":joint_dist, 
         "g_dist":g_dist, 
         "y_dist":y_dist,
-        "g_cond_y_dit":g_cond_y_dit,
-        "y_cond_g_dit":y_cond_g_dit,
+        "g_cond_y_dist":g_cond_y_dist,
+        "y_cond_g_dist":y_cond_g_dist,
     }
 
     return distribution_dict
