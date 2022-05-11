@@ -103,9 +103,9 @@
   <section id="fairlib-quick-start">
 <h1><em>fairlib</em> Quick-start<a class="headerlink" href="#fairlib-quick-start" title="Permalink to this headline"></a></h1>
 <p><a class="reference external" href="https://github.com/HanXudong/fairlib"><em>fairlib</em></a> is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.</p>
-<p>The <em>fairlib</em> package includes metrics for fairness evaluation, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md">algorithms for bias mitigation</a>, and functions for analysis.</p>
+<p>The <em>fairlib</em> package includes metrics for fairness evaluation, <a class="reference external" href="https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html">algorithms for bias mitigation</a>, and functions for analysis.</p>
 <p>For those who want to start with <em>fairlib</em> now, you can try our <a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb">Colab Tutorial</a>, which provides a gentle introduction to the concepts and capabilities.
-<a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/tutorial">The tutorials and other notebooks</a> offer a deeper introduction. The complete API is also available.</p>
+<a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_interactive_demos.html">The tutorials and other notebooks</a> offer a deeper introduction. The complete API is also available.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <p><em>fairlib</em> currently requires Python3.7+ and <a class="reference external" href="https://pytorch.org">Pytorch</a> 1.10 or higher.
@@ -124,7 +124,8 @@ pip install faircls
 <p>To set up a development environment, run the following commands to clone the repository and install
 <em>fairlib</em>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/HanXudong/fairlib.git ~/fairlib
-<span class="nb">cd</span> ~/fairlib<span class="p">;</span> python setup.py develop
+<span class="nb">cd</span> ~/fairlib
+python setup.py develop
 </pre></div>
 </div>
 <p><strong>Benchmark Datasets</strong></p>
@@ -132,7 +133,7 @@ pip install faircls
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
-<p>The full description of <em>fairlib</em> usages can be found in <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/usage.md">docs/usage</a>. Here are the most basic examples.</p>
+<p>The full description of <em>fairlib</em> usages can be found in <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_usage.html"><em>fairlib</em> cheat sheet</a> and API reference. Here are the most basic examples.</p>
 <ul>
 <li><p><em>fairlib</em> can be run from the command line:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python fairlib --exp_id EXP_NAME
@@ -159,9 +160,9 @@ pip install faircls
 </section>
 <section id="model-selection-and-fairness-evaluation">
 <h2>Model Selection and Fairness Evaluation<a class="headerlink" href="#model-selection-and-fairness-evaluation" title="Permalink to this headline"></a></h2>
-<p>We provide implementation of DTO and DTO based model selection for different models.</p>
-<p>Please see <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/tutorial/demo.ipynb">this tutorial</a> for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
-Moreover, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb">interactive plots</a> are also supported, which can be used for analysis.</p>
+<p>Besides the classical loss- and performance-based model selection, we provide performance-fairness trade-off based model selection (see the paper below).</p>
+<p>Please see <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_Moji_demo.html">this tutorial</a> for an example of loading training history, performing model selections based on different strategies, and creating basic plots.
+Moreover, <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_interactive_plots.html">interactive plots</a> are also supported, which can be used for analysis.</p>
 </section>
 <section id="known-issues-and-limitations">
 <h2>Known issues and limitations<a class="headerlink" href="#known-issues-and-limitations" title="Permalink to this headline"></a></h2>
