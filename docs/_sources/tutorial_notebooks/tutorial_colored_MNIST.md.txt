@@ -1,4 +1,4 @@
-# Debiasing CV Tasks
+# Using *fairlib* with Image Inputs
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/colored_MNIST.ipynb)
 

@@ -12,12 +12,8 @@ Welcome to fairlib's documentation!
 
    README
    supported_bias_mitigation_algorithms
-   tutorial_Moji_demo
-   tutorial_colored_MNIST
-   tutorial_COMPAS
-   tutorial_interactive_plots
-   tutorial_plot_gallery
-   tutorial_customized_datasets_and_dataloaders.md
+   tutorial_interactive_demos
+   tutorial_customized_datasets_and_dataloaders
    tutorial_customized_evaluation
    tutorial_customized_models
    tutorial_customized_methods

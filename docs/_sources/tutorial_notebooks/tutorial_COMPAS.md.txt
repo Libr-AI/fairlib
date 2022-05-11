@@ -1,4 +1,4 @@
-# Debiasing for Structured Inputs
+# Using *fairlib* with Structured Inputs
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/COMPAS.ipynb)
 
