@@ -31,6 +31,7 @@ Welcome to fairlib's documentation!
    :maxdepth: 2
 
    tutorial_usage
+   reference_script_data_manipulation
 
 .. toctree::
    :caption: API Reference
