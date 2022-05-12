@@ -11,3 +11,4 @@ Interactive Demos
     tutorial_notebooks/tutorial_COMPAS
     tutorial_notebooks/tutorial_plot_gallery
     tutorial_notebooks/tutorial_interactive_plots
+    tutorial_notebooks/tutorial_manipulate_dist
