@@ -118,12 +118,12 @@ def generalized_sampling(
     if joint_dist is not None:
         target_dist = target_joint_dist
     
-    # 2nd priority: y_dist and y_cond_g_dist
-    elif (y_dist is not None) or (y_cond_g_dist is not None):
+    # 2nd priority: y_dist and g_cond_y_dist
+    elif (y_dist is not None) or (g_cond_y_dist is not None):
         target_dist = target_g_cond_y_dist * target_y_dist.reshape(-1,1)
     
-    # 3rd priority: g_dist and g_cond_y_dist
-    elif (g_dist is not None) or (g_cond_y_dist is not None):
+    # 3rd priority: g_dist and y_cond_g_dist
+    elif (g_dist is not None) or (y_cond_g_dist is not None):
         target_dist = target_y_cond_g_dist * target_g_dist.reshape(1,-1)
 
     # If all arguments are None, use the original distribution for sampling
