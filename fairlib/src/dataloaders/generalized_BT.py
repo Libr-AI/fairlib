@@ -130,6 +130,7 @@ def generalized_sampling(
     else:
         target_dist = default_distribution_dict["joint_dist"]
     
+    assert np.min(target_dist) >= 0, "probs mush be non-negative, check the manipulation function"
     # Make sure that the sum of probs is 1
     target_dist = target_dist / np.sum(target_dist)
 
