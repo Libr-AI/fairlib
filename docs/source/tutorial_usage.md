@@ -55,7 +55,7 @@ The corresponding results such options and output logs will be saved in `results
 | epochs_since_improvement | 5             | terminate training for early stopping                     |
 | device_id                | 0             | device id, -1 is cpu                                      |
 
-- Train a model with adversarial debiasing
+### Train a model with adversarial debiasing
 
 ```bash
 python fairlib --adv_debiasing
@@ -67,7 +67,7 @@ python fairlib --adv_debiasing
 | adv_level            | last_hidden   | input \| last_hidden \| output                         |
 | adv_lambda           | 1             | strength of adversarial regularization                 |
 
-- Ensemble adversarial training
+### Ensemble adversarial training
 
 ```bash
 python fairlib --adv_debiasing --adv_num_subDiscriminator 3
@@ -77,7 +77,7 @@ python fairlib --adv_debiasing --adv_num_subDiscriminator 3
 |--------------------------|---------------|------------------------------|
 | adv_num_subDiscriminator | 1             | number of sub-discriminators. |
 
-- Diverse adversarial training
+### Diverse adversarial training
 
 ```bash
 python fairlib --adv_debiasing --adv_num_subDiscriminator 3 --adv_diverse_lambda 100
@@ -88,7 +88,7 @@ python fairlib --adv_debiasing --adv_num_subDiscriminator 3 --adv_diverse_lambda
 | adv_num_subDiscriminator | 1             | number of subdiscriminators.                                                       |
 | adv_diverse_lambda       | 0             | strength of difference loss to encourage diverse representations for ensemble adv. |
 
-- Towards conditional independence through adversarial training
+### Towards conditional independence through adversarial training
 
 ```bash
 python fairlib --adv_debiasing --adv_gated
@@ -99,7 +99,7 @@ python fairlib --adv_debiasing --adv_gated
 | adv_gated         | False         | gated discriminator for augmented inputs given target labels |
 | adv_gated_mapping | One-hot       | mapping function from numerical labels to vectors.           |
 
-- INLP
+### INLP
 
 ```bash
 python fairlib --INLP
@@ -113,7 +113,7 @@ python fairlib --INLP
 | INLP_min_acc                    | 0.0           | ignore the iteration if the acc is lower than the threshold |
 
 
-- Fair Contrastive Learning
+### Fair Contrastive Learning
 
 ```bash
 python fairlib --FCL
@@ -128,7 +128,7 @@ python fairlib --FCL
 | fcl_base_temperature_y  | 0.01          | base temperature for the fcl wrt main task learning             |
 | fcl_base_temperature_g  | 0.01          | base temperature for the fcl wrt protected attribute unlearning |
 
-- Train a model with balanced training
+### Train a model with balanced training
 
 ```bash
 python fairlib --BT Reweighting --BTObj joint
@@ -136,11 +136,11 @@ python fairlib --BT Reweighting --BTObj joint
 
 | Name       | Default value | Description                                                  |
 |------------|---------------|--------------------------------------------------------------|
-| BT         | False         | Reweighting or Resampling                                    |
+| BT         | False         | Reweighting \| Resampling \| Downsampling                                    |
 | BTObj      | None          | joint \| y \| g \| stratified_y \| stratified_g \| EO        |
 | full_label | True          | require full protected label                                 |
 
-- Train a model with Dynamic balanced training
+### Train a model with Dynamic balanced training
 
 ```bash
 python fairlib --DyBT FairBatch --DyBTObj stratified_y 
@@ -161,7 +161,7 @@ python fairlib --DyBT GroupDifference --DyBTObj EO
 python fairlib --DyBT GroupDifference --DyBTObj joint
 ```
 
-- Train a model to incorporate demographic factors
+### Train a model to incorporate demographic factors
 
 ```bash
 python fairlib --BT --BTObj joint --gated
@@ -174,7 +174,7 @@ python fairlib --BT --BTObj joint --gated
 
 ## Additional options
 
-- Logging
+### Logging
 
 | Name                | Default value | Description                                                |
 |---------------------|---------------|------------------------------------------------------------|
@@ -184,7 +184,7 @@ python fairlib --BT --BTObj joint --gated
 | no_log              | False         | if set, will not log into file                             |
 | log_level           | INFO          | logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL |
 
-- Model architecture
+### Model architecture
 
 | Name                | Default value | Description                                                              |
 |---------------------|---------------|--------------------------------------------------------------------------|
@@ -196,7 +196,7 @@ python fairlib --BT --BTObj joint --gated
 | activation_function | Tanh          | nonlinear activation function for the main task model                    |
 | batch_norm          | False         | apply 1d batch norm to the model                                         |
 
-- Discriminator architecture
+### Discriminator architecture
 
 | Name                    | Default value | Description                                                              |
 |-------------------------|---------------|--------------------------------------------------------------------------|
@@ -206,12 +206,31 @@ python fairlib --BT --BTObj joint --gated
 | adv_activation_function | ReLu          | nonlinear activation function for the main task model                    |
 | adv_batch_norm          | False         | apply 1d batch norm to the model                                         |
 
-## Add New Datasets/Models
-
-Our implementation is friendly for adding new datasets and model architectures, please see docs for detailed instructions.
-
 ## Reproducibility
 
 ```bash
 python fairlib --conf_file PATH_TO_EXP/opt.yaml
+```
+
+## Manipulate Label Distribution
+
+### Generalized Balanced Training (GBT)
+
+```bash
+python fairlib --GBT --BGTObj joint
+```
+
+| Name      | Default value | Description |
+|-----------|---------------|-------------|
+| GBT       | False         | whether or not manipulate loaded data distribution |
+| GBTObj    | None          | joint \| y \| g \| y_cond_g \| g_cond_y |
+| GBT_N     | None          | size of the manipulated dataset |
+| GBT_alpha | 1             | interpolation for generalized BT |
+
+Note that GBT could either be used as a balanced training debiasing method or a pre-process step for manipulating label distributions in the dataset.
+
+For example, we could use GBT as data manipulation and test BT as:
+
+```bash
+python fairlib --GBT --BGTObj joint --BT Downsampling --BTObj joint
 ```
