@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from .BT import get_weights, get_sampled_indices
+from .generalized_BT import get_data_distribution, manipulate_data_distribution
 
 def full_label_data(df, tasks):
     """filter the instances with all required labels
@@ -33,8 +34,10 @@ class BaseDataset(torch.utils.data.Dataset):
         self.X = np.array(self.X)
         if len(self.X.shape) == 3:
             self.X = np.concatenate(list(self.X), axis=0)
-        self.y = np.array(self.y)
-        self.protected_label = np.array(self.protected_label)
+        self.y = np.array(self.y).astype(int)
+        self.protected_label = np.array(self.protected_label).astype(int)
+
+        self.manipulate_data_distribution()
 
         self.balanced_training()
 
@@ -52,6 +55,21 @@ class BaseDataset(torch.utils.data.Dataset):
     
     def load_data(self):
         pass
+
+    def manipulate_data_distribution(self):
+        if self.args.GBT:
+            # Get data distribution
+            distribution_dict = get_data_distribution(y_data=self.y, g_data=self.protected_label)
+
+            selected_index = manipulate_data_distribution(
+                default_distribution_dict = distribution_dict, 
+                N = self.args.GBT_N, 
+                GBTObj = self.args.GBTObj, 
+                alpha = self.args.GBT_alpha)
+
+            self.X = self.X[selected_index]
+            self.y = self.y[selected_index]
+            self.protected_label = self.protected_label[selected_index]
 
     def balanced_training(self):
         if self.args.BT is None:

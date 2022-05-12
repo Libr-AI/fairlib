@@ -321,7 +321,11 @@ class BaseOptions(object):
         parser.add_argument("--fcl_lambda_g", type=float, default=0.1,
                             help="strength of the fair supervised contrastive loss")
 
-
+        # Manipulate data distribution directly after data loading by interpolating distributions.
+        parser.add_argument('--GBT', action="store_true", default=False, help='whether or not manipulate loaded data distribution')
+        parser.add_argument('--GBTObj', type=str, default=None, help='joint | y | g | y_cond_g | g_cond_y')
+        parser.add_argument('--GBT_N', type=nonneg_int, default=None, help='size of the manipulated dataset')
+        parser.add_argument("--GBT_alpha", type=float, default=1, help="interpolation for generalized BT")
 
     def get_dummy_state(self, *cmdargs, yaml_file=None, **opt_pairs):
         if yaml_file is None:
