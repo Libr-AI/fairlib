@@ -174,12 +174,26 @@ def manipulate_data_distribution(default_distribution_dict, N = None, GBTObj = "
         target_joint_dist = target_joint_dist * alpha + (1-alpha) * default_distribution_dict["joint_dist"]
         return generalized_sampling(default_distribution_dict, N, joint_dist = target_joint_dist)
     elif GBTObj == "g":
-        pass
+        target_g_dist = np.ones_like(default_distribution_dict["g_dist"])
+        target_g_dist = target_g_dist / len(target_g_dist)
+        target_g_dist = target_g_dist * alpha + (1-alpha) * default_distribution_dict["g_dist"]
+        return generalized_sampling(default_distribution_dict, N, g_dist = target_g_dist)
     elif GBTObj == "y":
-        pass
+        target_y_dist = np.ones_like(default_distribution_dict["y_dist"])
+        target_y_dist = target_y_dist / len(target_y_dist)
+        target_y_dist = target_y_dist * alpha + (1-alpha) * default_distribution_dict["y_dist"]
+        print(target_y_dist)
+        return generalized_sampling(default_distribution_dict, N, y_dist = target_y_dist)
     elif GBTObj == "g_cond_y":
-        pass
+        target_g_cond_y_dist = np.ones_like(default_distribution_dict["g_cond_y_dist"])
+        target_g_cond_y_dist = target_g_cond_y_dist / (target_g_cond_y_dist.shape[1]*np.ones((1,target_g_cond_y_dist.shape[1])))
+        target_g_cond_y_dist = target_g_cond_y_dist * alpha + (1-alpha) * default_distribution_dict["g_cond_y_dist"]
+        print(target_g_cond_y_dist)
+        return generalized_sampling(default_distribution_dict, N, g_cond_y_dist = target_g_cond_y_dist)
     elif GBTObj == "y_cond_g":
-        pass
+        target_y_cond_g_dist = np.ones_like(default_distribution_dict["y_cond_g_dist"])
+        target_y_cond_g_dist = target_y_cond_g_dist / (target_y_cond_g_dist.shape[0]*np.ones((target_y_cond_g_dist.shape[0],1)))
+        target_y_cond_g_dist = target_y_cond_g_dist * alpha + (1-alpha) * default_distribution_dict["y_cond_g_dist"]
+        return generalized_sampling(default_distribution_dict, N, y_cond_g_dist = target_y_cond_g_dist)
     else:
         raise NotImplementedError
