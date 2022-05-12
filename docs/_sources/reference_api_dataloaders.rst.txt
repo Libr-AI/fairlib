@@ -25,3 +25,9 @@ fairlib.src.dataloaders.utils
 
 .. automodule:: fairlib.src.dataloaders.utils
     :members:
+
+fairlib.src.dataloaders.generalized_BT
+======================================
+
+.. automodule:: fairlib.src.dataloaders.generalized_BT
+    :members:

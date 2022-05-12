@@ -56,6 +56,7 @@
 <p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_script_data_manipulation.html">Manipulating Data Distribution</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
@@ -66,6 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.encoder">fairlib.src.dataloaders.encoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.loaders">fairlib.src.dataloaders.loaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.utils">fairlib.src.dataloaders.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fairlib.src.dataloaders.generalized_BT">fairlib.src.dataloaders.generalized_BT</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
@@ -179,21 +181,27 @@
 </dl>
 </dd></dl>
 
+</section>
+<section id="module-fairlib.src.dataloaders.generalized_BT">
+<span id="fairlib-src-dataloaders-generalized-bt"></span><h2>fairlib.src.dataloaders.generalized_BT<a class="headerlink" href="#module-fairlib.src.dataloaders.generalized_BT" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.get_sampled_indices">
-<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">get_sampled_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BTObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protected_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Downsampling'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.get_sampled_indices" title="Permalink to this definition"></a></dt>
-<dd><p>Given the balanced training objective, target labels, and protected labels, sampling instances for each group.</p>
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.generalized_BT.generalized_sampling">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.generalized_BT.</span></span><span class="sig-name descname"><span class="pre">generalized_sampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_distribution_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g_cond_y_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_cond_g_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.generalized_BT.generalized_sampling" title="Permalink to this definition"></a></dt>
+<dd><p>Perform resampling according to the specified distribution information</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>BTObj</strong> (<em>str</em>) – y| g | joint | stratified_y | stratified_g | EO.</p></li>
-<li><p><strong>y</strong> (<em>list</em>) – a list of target labels.</p></li>
-<li><p><strong>protected_label</strong> (<em>list</em>) – a list of protected labels.</p></li>
-<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Downsampling | Resampling. Defaults to “Downsampling”.</p></li>
+<li><p><strong>default_distribution_dict</strong> (<em>dict</em>) – a dict of distribution information of the original dataset.</p></li>
+<li><p><strong>N</strong> (<em>int</em><em>, </em><em>optional</em>) – The total number of returned indices. Defaults to None.</p></li>
+<li><p><strong>joint_dist</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size. Defaults to None.</p></li>
+<li><p><strong>g_dist</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – n_groups array, indicating the prob of each group. Defaults to None.</p></li>
+<li><p><strong>y_dist</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – n_class array, indicating the prob of each class. Defaults to None.</p></li>
+<li><p><strong>g_cond_y_dist</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – n_class * n_groups matrix, g_cond_y_dit[y_id,:] refers to the group distribution within class y_id. Defaults to None.</p></li>
+<li><p><strong>y_cond_g_dist</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – n_class * n_groups matrix, y_cond_g_dit[:,g_id] refers to the class distribution within group g_id. Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a list of indices of selected instacnes.</p>
+<dd class="field-even"><p>list of selected indices.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list</p>
@@ -202,19 +210,45 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fairlib.src.dataloaders.utils.get_weights">
-<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.utils.</span></span><span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BTObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protected_label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.utils.get_weights" title="Permalink to this definition"></a></dt>
-<dd><p>Given the balanced training objective, target labels, and protected labels, pre-calculate weights for each instance.</p>
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.generalized_BT.get_data_distribution">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.generalized_BT.</span></span><span class="sig-name descname"><span class="pre">get_data_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.generalized_BT.get_data_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>Given target label and protected labels, calculate empirical distributions.</p>
+<p>joint_dist: n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size.
+g_dist: n_groups array, indicating the prob of each group
+y_dist: n_class array, indicating the prob of each class
+g_cond_y_dit: n_class * n_groups matrix, g_cond_y_dit[y_id,:] refers to the group distribution within class y_id
+y_cond_g_dit: n_class * n_groups matrix, y_cond_g_dit[:,g_id] refers to the class distribution within group g_id</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>BTObj</strong> (<em>str</em>) – y| g | joint | stratified_y | stratified_g | EO.</p></li>
-<li><p><strong>y</strong> (<em>list</em>) – a list of target labels.</p></li>
-<li><p><strong>protected_label</strong> (<em>list</em>) – a list of protected labels.</p></li>
+<li><p><strong>y_data</strong> (<em>np.ndarray</em>) – target labels</p></li>
+<li><p><strong>g_data</strong> (<em>np.ndarray</em>) – protected labels</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>instance weights w.r.t. the balanced training objective.</p>
+<dd class="field-even"><p>a dict of distribution info.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.dataloaders.generalized_BT.manipulate_data_distribution">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.dataloaders.generalized_BT.</span></span><span class="sig-name descname"><span class="pre">manipulate_data_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_distribution_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GBTObj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'original'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.dataloaders.generalized_BT.manipulate_data_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>generalized BT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>default_distribution_dict</strong> (<em>dict</em>) – a dict of distribution information of the original dataset.</p></li>
+<li><p><strong>N</strong> (<em>int</em><em>, </em><em>optional</em>) – The total number of returned indices. Defaults to None.</p></li>
+<li><p><strong>GBTObj</strong> (<em>str</em><em>, </em><em>optional</em>) – original | joint | g | y | g_cond_y | y_cond_g. Defaults to “original”.</p></li>
+<li><p><strong>alpha</strong> (<em>int</em><em>, </em><em>optional</em>) – interpolation between the original distribution and the target distribution. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of selected indices.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list</p>

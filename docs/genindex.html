@@ -53,6 +53,7 @@
 <p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_script_data_manipulation.html">Manipulating Data Distribution</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -240,10 +241,24 @@
 </li>
       </ul></li>
       <li>
+    fairlib.src.dataloaders.BT
+
+      <ul>
+        <li><a href="reference_api_debiasing/BT.html#module-fairlib.src.dataloaders.BT">module</a>
+</li>
+      </ul></li>
+      <li>
     fairlib.src.dataloaders.encoder
 
       <ul>
         <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.encoder">module</a>
+</li>
+      </ul></li>
+      <li>
+    fairlib.src.dataloaders.generalized_BT
+
+      <ul>
+        <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.generalized_BT">module</a>
 </li>
       </ul></li>
       <li>
@@ -316,6 +331,8 @@
         <li><a href="reference_api_networks.html#module-fairlib.src.networks.augmentation_layer">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fairlib.src.networks.classifier
 
@@ -323,8 +340,6 @@
         <li><a href="reference_api_networks.html#module-fairlib.src.networks.classifier">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fairlib.src.networks.DyBT.fairbatch_sampler
 
@@ -439,23 +454,27 @@
 </li>
       <li><a href="reference_api_debiasing/DyBT.html#fairlib.src.networks.DyBT.generalized_fairbatch.Generalized_FairBatch">Generalized_FairBatch (class in fairlib.src.networks.DyBT.generalized_fairbatch)</a>
 </li>
+      <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.generalized_BT.generalized_sampling">generalized_sampling() (in module fairlib.src.dataloaders.generalized_BT)</a>
+</li>
+      <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.generalized_BT.get_data_distribution">get_data_distribution() (in module fairlib.src.dataloaders.generalized_BT)</a>
+</li>
       <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.__init__.get_dataloaders">get_dataloaders() (in module fairlib.src.dataloaders.__init__)</a>
 </li>
       <li><a href="reference_api_debiasing/INLP.html#fairlib.src.networks.INLP.debias.get_debiasing_projection">get_debiasing_projection() (in module fairlib.src.networks.INLP.debias)</a>
 </li>
       <li><a href="reference_api_analysis.html#fairlib.src.analysis.utils.get_dir">get_dir() (in module fairlib.src.analysis.utils)</a>
 </li>
-      <li><a href="reference_api_analysis.html#fairlib.src.analysis.utils.get_model_scores">get_model_scores() (in module fairlib.src.analysis.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference_api_analysis.html#fairlib.src.analysis.utils.get_model_scores">get_model_scores() (in module fairlib.src.analysis.utils)</a>
+</li>
       <li><a href="reference_api_debiasing/INLP.html#fairlib.src.networks.INLP.debias.get_projection_to_intersection_of_nullspaces">get_projection_to_intersection_of_nullspaces() (in module fairlib.src.networks.INLP.debias)</a>
 </li>
       <li><a href="reference_api_debiasing/INLP.html#fairlib.src.networks.INLP.debias.get_rowspace_projection">get_rowspace_projection() (in module fairlib.src.networks.INLP.debias)</a>
 </li>
-      <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.utils.get_sampled_indices">get_sampled_indices() (in module fairlib.src.dataloaders.utils)</a>
+      <li><a href="reference_api_debiasing/BT.html#fairlib.src.dataloaders.BT.get_sampled_indices">get_sampled_indices() (in module fairlib.src.dataloaders.BT)</a>
 </li>
-      <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.utils.get_weights">get_weights() (in module fairlib.src.dataloaders.utils)</a>
+      <li><a href="reference_api_debiasing/BT.html#fairlib.src.dataloaders.BT.get_weights">get_weights() (in module fairlib.src.dataloaders.BT)</a>
 </li>
       <li><a href="reference_api_debiasing/adv.html#fairlib.src.networks.adv.utils.GradientReversal">GradientReversal (class in fairlib.src.networks.adv.utils)</a>
 </li>
@@ -499,6 +518,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference_api_analysis.html#fairlib.src.analysis.tables_and_figures.make_zoom_plot">make_zoom_plot() (in module fairlib.src.analysis.tables_and_figures)</a>
 </li>
+      <li><a href="reference_api_dataloaders.html#fairlib.src.dataloaders.generalized_BT.manipulate_data_distribution">manipulate_data_distribution() (in module fairlib.src.dataloaders.generalized_BT)</a>
+</li>
       <li><a href="reference_api_analysis.html#fairlib.src.analysis.utils.mkdir">mkdir() (in module fairlib.src.analysis.utils)</a>
 </li>
       <li><a href="reference_api_analysis.html#fairlib.src.analysis.utils.mkdirs">mkdirs() (in module fairlib.src.analysis.utils)</a>
@@ -521,7 +542,11 @@
 </li>
         <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.__init__">fairlib.src.dataloaders.__init__</a>
 </li>
+        <li><a href="reference_api_debiasing/BT.html#module-fairlib.src.dataloaders.BT">fairlib.src.dataloaders.BT</a>
+</li>
         <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.encoder">fairlib.src.dataloaders.encoder</a>
+</li>
+        <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.generalized_BT">fairlib.src.dataloaders.generalized_BT</a>
 </li>
         <li><a href="reference_api_dataloaders.html#module-fairlib.src.dataloaders.loaders">fairlib.src.dataloaders.loaders</a>
 </li>
