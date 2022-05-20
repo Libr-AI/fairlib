@@ -115,11 +115,11 @@
 <li><p>Analysis the loaded dataset distribution</p></li>
 <li><p>Resample isntacnes based on their target labels and protected labels</p></li>
 </ol>
-<p>Impelemtations for steps 1 and 4 are the same with others. Please see <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_dataloaders.html">dataloader</a> for detailed description.</p>
+<p>Implementations for steps 1 and 4 are the same with others. Please see <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_dataloaders.html">dataloader</a> for detailed description.</p>
 <section id="load-data">
 <h2>Load data<a class="headerlink" href="#load-data" title="Permalink to this headline"></a></h2>
-<p>Similar to long-tail leaning, the data distribution is essentially the label distributions. However, besides the target label in long-tail leanring, we also need to consider the demographic labels.</p>
-<p>Since the input distribution is not required for manipulating data distributions, we just create synthetic labels for demostration purpose.</p>
+<p>Similar to long-tail leaning, the data distribution is essentially the label distributions. However, besides the target label in long-tail learning, we also need to consider the demographic labels.</p>
+<p>Since the input distribution is not required for manipulating data distributions, we just create synthetic labels for demonstration purpose.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
@@ -139,9 +139,9 @@
 </section>
 <section id="analysis-the-loaded-dataset-distribution">
 <h2>Analysis the loaded dataset distribution<a class="headerlink" href="#analysis-the-loaded-dataset-distribution" title="Permalink to this headline"></a></h2>
-<p>Essentialy, we are instereseted with the joint distribution of target label <em>y</em> and protected label <em>g</em>, which are both discrete random variables.</p>
+<p>Essentially, we are interested in the joint distribution of target label <em>y</em> and protected label <em>g</em>, which are both discrete random variables.</p>
 <p>We save the corresponding results in probability tables:</p>
-<p>Given target label and protected labels, calculate emprical distributions.</p>
+<p>Given target label and protected labels, calculate empirical distributions.</p>
 <ul class="simple">
 <li><p>joint_dist: n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size.</p></li>
 <li><p>g_dist: n_groups array, indicating the prob of each group</p></li>
@@ -179,7 +179,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.dataloaders.generalized_BT</span> <span class="kn">import</span> <span class="n">generalized_sampling</span>
 </pre></div>
 </div>
-<p>Taking the group label distribution as an example, we would like the group label is uniformaly distributed, i.e., <em>p(g=0)=p(g=1)=p(g=2)</em></p>
+<p>Taking the group label distribution as an example, we would like the group label is uniformly distributed, i.e., <em>p(g=0)=p(g=1)=p(g=2)</em></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_g_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
 <span class="n">target_g_dist</span>
 </pre></div>
@@ -222,8 +222,8 @@
  &#39;N&#39;: 20.0}
 </pre></div>
 </div>
-<p>Theoritically, we could sample to any data distributions with the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> function. But it is inconvinent to specify distribution arraies every time. We further provide the <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function to simplify the manipulation process.</p>
-<p>Specifically, the manipulation is based on the iterpolation between the original data distribution and a specific balanced target distrition. Essentially, these balanced target distributions are identical to <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_debiasing/BT.html"><strong>BT</strong></a>.</p>
+<p>Theoretically, we could sample any data distributions with the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> function. But it is inconvenient to specify the distribution array every time. We further provide the <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function to simplify the manipulation process.</p>
+<p>Specifically, the manipulation is based on the interpolation between the original data distribution and a specifically balanced target distribution. These balanced target distributions are identical to <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_debiasing/BT.html"><strong>BT</strong></a>.</p>
 <p>The <em>alpha</em> refers to the interpolation extent as $final_dist = \alpha*balanced_dist + (1-\alpha)*origianl_dist$</p>
 <ul class="simple">
 <li><p>default_distribution_dict (dict): a dict of distribution information of the original dataset.</p></li>
@@ -234,7 +234,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.dataloaders.generalized_BT</span> <span class="kn">import</span> <span class="n">manipulate_data_distribution</span>
 </pre></div>
 </div>
-<p>The following examples show to what extent can we manilutale the distribution by tuning the alpha value</p>
+<p>The following examples show to what extent can we manipulate the distribution by tuning the alpha value</p>
 <ul class="simple">
 <li><p>aphla &gt; 1: anto-imbalance.</p></li>
 <li><p>aphla = 1: perfectly balanced distribution as corresponding BT objectives.</p></li>
@@ -267,7 +267,7 @@ aplha -1.0: [0.55 0.15 0.3 ]
 </section>
 <section id="limitation-and-extension">
 <h2>Limitation and Extension<a class="headerlink" href="#limitation-and-extension" title="Permalink to this headline"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function has an strong assumption that the original distribution is <strong>NOT</strong> identical to the target perfectly balanced distribution. For those who has a perfectly balanced dataset, the target distributions will need to the manully speficied and use the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> for resampling.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function strongly assumes that the original distribution is <strong>NOT</strong> identical to the target perfectly balanced distribution. For those with a perfectly balanced dataset, the target distributions will need to be manually specified and use the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> for resampling.</p>
 </section>
 </section>
 

@@ -9,13 +9,13 @@ Overall, the process can be described as:
 2. Analysis the loaded dataset distribution
 3. Resample isntacnes based on their target labels and protected labels
 
-Impelemtations for steps 1 and 4 are the same with others. Please see [dataloader](https://hanxudong.github.io/fairlib/reference_api_dataloaders.html) for detailed description.
+Implementations for steps 1 and 4 are the same with others. Please see [dataloader](https://hanxudong.github.io/fairlib/reference_api_dataloaders.html) for detailed description.
 
 ## Load data
 
-Similar to long-tail leaning, the data distribution is essentially the label distributions. However, besides the target label in long-tail leanring, we also need to consider the demographic labels.
+Similar to long-tail leaning, the data distribution is essentially the label distributions. However, besides the target label in long-tail learning, we also need to consider the demographic labels.
 
-Since the input distribution is not required for manipulating data distributions, we just create synthetic labels for demostration purpose.
+Since the input distribution is not required for manipulating data distributions, we just create synthetic labels for demonstration purpose.
 
 
 ```python
@@ -37,11 +37,11 @@ g = np.array(g)
 
 ## Analysis the loaded dataset distribution
 
-Essentialy, we are instereseted with the joint distribution of target label *y* and protected label *g*, which are both discrete random variables.
+Essentially, we are interested in the joint distribution of target label *y* and protected label *g*, which are both discrete random variables.
 
 We save the corresponding results in probability tables:
 
-Given target label and protected labels, calculate emprical distributions.
+Given target label and protected labels, calculate empirical distributions.
 
 - joint_dist: n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size.
 - g_dist: n_groups array, indicating the prob of each group
@@ -89,7 +89,7 @@ In order to specify a target distribution of *y* and *g*, there are 5 options in
 from fairlib.src.dataloaders.generalized_BT import generalized_sampling
 ```
 
-Taking the group label distribution as an example, we would like the group label is uniformaly distributed, i.e., *p(g=0)=p(g=1)=p(g=2)*
+Taking the group label distribution as an example, we would like the group label is uniformly distributed, i.e., *p(g=0)=p(g=1)=p(g=2)*
 
 
 ```python
@@ -149,9 +149,9 @@ balanced_g_distribution
 
 
 
-Theoritically, we could sample to any data distributions with the `generalized_sampling` function. But it is inconvinent to specify distribution arraies every time. We further provide the `manipulate_data_distribution` function to simplify the manipulation process.
+Theoretically, we could sample any data distributions with the `generalized_sampling` function. But it is inconvenient to specify the distribution array every time. We further provide the `manipulate_data_distribution` function to simplify the manipulation process.
 
-Specifically, the manipulation is based on the iterpolation between the original data distribution and a specific balanced target distrition. Essentially, these balanced target distributions are identical to [**BT**](https://hanxudong.github.io/fairlib/reference_api_debiasing/BT.html).
+Specifically, the manipulation is based on the interpolation between the original data distribution and a specifically balanced target distribution. These balanced target distributions are identical to [**BT**](https://hanxudong.github.io/fairlib/reference_api_debiasing/BT.html).
 
 The *alpha* refers to the interpolation extent as $final\_dist = \alpha*balanced\_dist + (1-\alpha)*origianl\_dist$
 
@@ -165,7 +165,7 @@ The *alpha* refers to the interpolation extent as $final\_dist = \alpha*balanced
 from fairlib.src.dataloaders.generalized_BT import manipulate_data_distribution
 ```
 
-The following examples show to what extent can we manilutale the distribution by tuning the alpha value
+The following examples show to what extent can we manipulate the distribution by tuning the alpha value
 - aphla > 1: anto-imbalance.
 - aphla = 1: perfectly balanced distribution as corresponding BT objectives.
 - 0 < aphla < 1: interpolation between original distribution and the perfectly balanced distribution.
@@ -200,4 +200,4 @@ print("aplha -1.0:", get_data_distribution(y_data = y[g_indices_n10], g_data = g
 
 ## Limitation and Extension
 
-The `manipulate_data_distribution` function has an strong assumption that the original distribution is **NOT** identical to the target perfectly balanced distribution. For those who has a perfectly balanced dataset, the target distributions will need to the manully speficied and use the `generalized_sampling` for resampling.
+The `manipulate_data_distribution` function strongly assumes that the original distribution is **NOT** identical to the target perfectly balanced distribution. For those with a perfectly balanced dataset, the target distributions will need to be manually specified and use the `generalized_sampling` for resampling.
