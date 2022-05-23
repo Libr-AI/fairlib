@@ -1,4 +1,4 @@
-# Manilulating Data Distribution
+# Manipulating Data Distribution
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/manipulate_data_distribution.ipynb)
 
@@ -7,7 +7,7 @@ In this notebook, we will introduce the built-in function for manipulating data 
 Overall, the process can be described as:
 1. Load data from files
 2. Analysis the loaded dataset distribution
-3. Resample isntacnes based on their target labels and protected labels
+3. Resample instances based on their target labels and protected labels
 
 Implementations for steps 1 and 4 are the same with others. Please see [dataloader](https://hanxudong.github.io/fairlib/reference_api_dataloaders.html) for detailed description.
 
