@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import pandas as pd
 from .BT import get_weights, get_sampled_indices
 from .generalized_BT import get_data_distribution, manipulate_data_distribution
 
@@ -28,8 +29,11 @@ class BaseDataset(torch.utils.data.Dataset):
         self.protected_label = []
         self.instance_weights = []
         self.adv_instance_weights = []
+        self.regression_label = []
 
         self.load_data()
+
+        self.regression_init()
         
         self.X = np.array(self.X)
         if len(self.X.shape) == 3:
@@ -51,7 +55,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         'Generates one sample of data'
-        return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index]
+        return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index], self.regression_label[index]
     
     def load_data(self):
         pass
@@ -130,3 +134,17 @@ class BaseDataset(torch.utils.data.Dataset):
             else:
                 raise NotImplementedError
         return None
+    
+    def regression_init(self):
+        if not self.args.regression:
+            self.regression_label = np.array([0 for _ in range(len(self.protected_label))])
+        else:
+            # Discretize variable into equal-sized buckets
+            if self.split == "train":
+                bin_labels, bins = pd.qcut(self.y, q=self.args.n_bins, labels=False, duplicates = "drop", retbins = True)
+                self.args.regression_bins = bins
+            else:
+                bin_labels = pd.cut(self.y, bins=self.args.regression_bins, labels=False, duplicates = "drop")
+            
+            # Reassign labels
+            self.regression_label, self.y = np.array(self.y), bin_labels

@@ -5,6 +5,7 @@ from torch.optim import Adam
 import time
 from pathlib import Path
 from ..evaluators import print_network, present_evaluation_scores
+import pandas as pd
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
@@ -27,6 +28,10 @@ def train_epoch(model, iterator, args, epoch):
         if args.BT is not None and args.BT == "Reweighting":
             instance_weights = batch[3].float()
             instance_weights = instance_weights.to(args.device)
+        
+        if args.regression:
+            regression_tags = batch[5].float().squeeze()
+            regression_tags = regression_tags.to(args.device)
 
         text = text.to(args.device)
         tags = tags.to(args.device)
@@ -41,13 +46,16 @@ def train_epoch(model, iterator, args, epoch):
             predictions = model(text, p_tags)
         else:
             predictions = model(text)
+
+        predictions = predictions if not args.regression else predictions.squeeze()
+
         # main tasks loss
         # add the weighted loss
         if args.BT is not None and args.BT == "Reweighting":
-            loss = criterion(predictions, tags)
+            loss = criterion(predictions, tags if not args.regression else regression_tags)
             loss = torch.mean(loss * instance_weights)
         else:
-            loss = criterion(predictions, tags)
+            loss = criterion(predictions, tags if not args.regression else regression_tags)
 
         if args.adv_debiasing:
             # Update discriminator if needed
@@ -151,25 +159,35 @@ def eval_epoch(model, iterator, args):
             instance_weights = batch[3].float()
             instance_weights = instance_weights.to(device)
 
+        if args.regression:
+            regression_tags = batch[5].squeeze()
+            regression_tags = regression_tags.to(args.device)
+
         # main model predictions
         if args.gated:
             predictions = model(text, p_tags)
         else:
             predictions = model(text)
-        
+
+        predictions = predictions if not args.regression else predictions.squeeze()
+
         # add the weighted loss
         if args.BT is not None and args.BT == "Reweighting":
-            loss = criterion(predictions, tags)
+            loss = criterion(predictions, tags if not args.regression else regression_tags)
             loss = torch.mean(loss * instance_weights)
         else:
-            loss = criterion(predictions, tags)
+            loss = criterion(predictions, tags if not args.regression else regression_tags)
                         
         epoch_loss += loss.item()
         
         predictions = predictions.detach().cpu()
-        tags = tags.cpu().numpy()
 
-        preds += list(torch.argmax(predictions, axis=1).numpy())
+        if args.regression:
+            preds += list(predictions.numpy())
+            tags = regression_tags.cpu().numpy()
+        else:
+            tags = tags.cpu().numpy()
+            preds += list(torch.argmax(predictions, axis=1).numpy())
         labels += list(tags)
 
         private_labels += list(batch[2].cpu().numpy())
@@ -184,12 +202,21 @@ class BaseModel(nn.Module):
         self.to(self.device)
 
         self.learning_rate = self.args.lr
-        self.optimizer = Adam(filter(lambda p: p.requires_grad, self.parameters()), lr=self.learning_rate)
+        self.optimizer = Adam(
+            filter(lambda p: p.requires_grad, self.parameters()), 
+            lr=self.learning_rate,
+            weight_decay = self.args.weight_decay,
+            )
 
         if self.args.BT and self.args.BT == "Reweighting":
-            self.criterion = torch.nn.CrossEntropyLoss(reduction = "none")
+            reduction = "none"
         else:
-            self.criterion = torch.nn.CrossEntropyLoss()
+            reduction = "mean"
+
+        if self.args.regression:
+            self.criterion = torch.nn.MSELoss(reduction = reduction)
+        else:
+            self.criterion = torch.nn.CrossEntropyLoss(reduction = reduction)
         
         print_network(self, verbose=True)
 

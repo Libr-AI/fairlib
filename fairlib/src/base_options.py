@@ -175,6 +175,8 @@ class BaseOptions(object):
                             help='number of total epochs to train (default: 100)')
         parser.add_argument('--lr', type=pos_float, default=0.003, metavar='LR',
                             help='learning rate used to actually learn stuff (default: 0.003)')
+        parser.add_argument('--weight_decay', type=float, default=0.0,
+                            help='weight decay (L2 penalty) (default: 0)')
         parser.add_argument('--epochs_since_improvement', type=pos_int, default=5,
                             help='terminate training for early stopping')
         parser.add_argument('--base_seed', type=int, default=1, metavar='S',
@@ -202,6 +204,12 @@ class BaseOptions(object):
                             help='logging level, e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL')
         parser.add_argument('--conf_file', type=str, default=None,
                             help='path to the YAML file for reproduce an an experiment')
+
+        # Regression related arguments
+        parser.add_argument('--regression',  action='store_true', default=False, 
+                            help='indicate the downstream task is regression')
+        parser.add_argument('--n_bins',  type=int, default=4, 
+                            help='number of bins for discretizing proxy labels')
 
         # Handle iPython arguments
         parser.add_argument('--f', type=str, default=None, help='path to the YAML file for reproduce an an experiment')
@@ -465,6 +473,11 @@ class BaseOptions(object):
             torch.cuda.manual_seed(seed)
             np.random.seed(seed)
             random.seed(seed)
+
+            # Init for regression
+            if state.regression:
+                # Set the output dim to 1
+                state.num_classes = 1
 
             # Init the dataloaders
             if state.data_dir is None:

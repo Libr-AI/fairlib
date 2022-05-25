@@ -33,7 +33,12 @@ def get_dataloaders(args):
     Returns:
         tuple: dataloaders for training set, development set, and test set.
     """
-    assert args.dataset in ["Sample", "test", "Moji", "Bios_gender", "Bios_economy", "Bios_both"], "Not implemented"
+    assert args.dataset in [
+        "Sample", "test", "Moji", 
+        "Bios_gender", "Bios_economy", "Bios_both",
+        "Valence",
+        ], "Not implemented"
+
     if args.dataset == "Moji":
         task_dataloader = DeepMojiDataset
     elif args.dataset in ["Bios_gender", "Bios_economy", "Bios_both"]:
@@ -43,6 +48,8 @@ def get_dataloaders(args):
         task_dataloader = TestDataset
     elif args.dataset == "Sample":
         task_dataloader = SampleDataset
+    elif args.dataset == "Valence":
+        task_dataloader = ValenceDataset
     else:
         pass
     

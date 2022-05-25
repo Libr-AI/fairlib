@@ -12,6 +12,9 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 import numpy as np
 
 from itertools import combinations
@@ -120,7 +123,7 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
 
     return score_gaps
 
-def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","PPR"]):
+def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","PPR"], args = None):
     """fairness evaluation
 
     Args:
@@ -135,6 +138,26 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
     y_pred = np.array(y_pred)
     y_true = np.array(y_true)
     protected_attribute = np.array(protected_attribute)
+
+    if (args is not None) and args.regression:
+        eval_scores = {
+            "mean_absolute_error" : mean_absolute_error(y_true, y_pred),
+            "mean_squared_error" : mean_squared_error(y_true, y_pred),
+            "r2_score" : r2_score(y_true, y_pred),
+        }
+        # Processing regression labels for fairness evaluation under the classification framework
+        y_true = pd.cut(np.squeeze(y_true), bins=args.regression_bins, labels=False, duplicates = "drop")
+        y_pred = pd.cut(np.squeeze(y_pred), bins=args.regression_bins, labels=False, duplicates = "drop")
+        y_true = np.nan_to_num(y_true, nan=0)
+        y_pred = np.nan_to_num(y_pred, nan=0)
+
+    else:
+        # performance evaluation
+        eval_scores = {
+            "accuracy" : accuracy_score(y_true, y_pred),
+            "macro_fscore" : f1_score(y_true, y_pred, average="macro"),
+            "micro_fscore" : f1_score(y_true, y_pred, average="micro"),
+        }
 
     all_scores = {}
     confusion_matrices = {}
@@ -151,12 +174,6 @@ def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","P
         group_confusion_matrix = confusion_matrix(y_true=y_true[group_identifier], y_pred=y_pred[group_identifier], labels=distinct_labels)
         confusion_matrices[gid] = group_confusion_matrix
         all_scores[gid] = confusion_matrix_based_scores(group_confusion_matrix)
-
-    eval_scores = {
-        "accuracy" : accuracy_score(y_true, y_pred),
-        "macro_fscore" : f1_score(y_true, y_pred, average="macro"),
-        "micro_fscore" : f1_score(y_true, y_pred, average="micro"),
-    }
 
     for _metric in metrics:
         eval_scores["{}_GAP".format(_metric)] = Aggregation_GAP(distinct_groups=distinct_groups, all_scores=all_scores, metric=_metric)

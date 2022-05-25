@@ -26,12 +26,16 @@ def present_evaluation_scores(
     valid_scores, valid_confusion_matrices = gap_eval_scores(
         y_pred=valid_preds,
         y_true=valid_labels, 
-        protected_attribute=valid_private_labels)
+        protected_attribute=valid_private_labels,
+        args = model.args,
+        )
                 
     test_scores, test_confusion_matrices = gap_eval_scores(
         y_pred=test_preds,
         y_true=test_labels, 
-        protected_attribute=test_private_labels)
+        protected_attribute=test_private_labels,
+        args = model.args,
+        )
 
     # Save checkpoint
     save_checkpoint(
