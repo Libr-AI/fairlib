@@ -476,8 +476,8 @@ class BaseOptions(object):
 
             # Init for regression
             if state.regression:
-                # Set the output dim to 1
-                state.num_classes = 1
+                # Set the number of classes based on bin labels.
+                state.num_classes = state.n_bins
 
             # Init the dataloaders
             if state.data_dir is None:

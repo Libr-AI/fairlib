@@ -14,10 +14,11 @@ class MLP(BaseModel):
         self.args = args
         
         assert args.n_hidden >= 0, "n_hidden must be nonnegative"
-        if args.n_hidden == 0:
-            self.output_layer = nn.Linear(args.emb_size, args.num_classes)
-        else:
-            self.output_layer = nn.Linear(args.hidden_size, args.num_classes)
+        
+        self.output_layer = nn.Linear(
+            args.emb_size if args.n_hidden == 0 else args.hidden_size, 
+            args.num_classes if not args.regression else 1,
+            )
 
         # Init batch norm, dropout, and activation function
         self.init_hyperparameters()
