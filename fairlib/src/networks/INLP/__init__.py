@@ -2,6 +2,7 @@ from .debias import get_debiasing_projection, get_projection_to_intersection_of_
 
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 
 from collections import Counter, defaultdict
 
@@ -26,6 +27,7 @@ def extract_hidden_representations(model, split, args):
     hidden = []
     labels = []
     private_labels = []
+    regression_labels = []
 
     if split == "train":
         iterator = args.train_generator
@@ -42,14 +44,19 @@ def extract_hidden_representations(model, split, args):
         tags = batch[1].squeeze()
         p_tags = batch[2].squeeze()
         
-        labels += list(tags.cpu().numpy() )
+        labels += list(tags.cpu().numpy())
         private_labels += list(p_tags.cpu().numpy())
 
         text = text.to(args.device)
         tags = tags.to(args.device).long()
         p_tags = p_tags.to(args.device).float()
 
-        # main model predictions
+        if args.regression:
+            regression_tags = batch[5].float().squeeze()
+            regression_labels += list(regression_tags.cpu().numpy() )
+            regression_tags = regression_tags.to(args.device)
+
+        # Extract hidden representations
         if args.gated:
             hidden_state = model.hidden(text, p_tags)
         else:
@@ -62,8 +69,9 @@ def extract_hidden_representations(model, split, args):
     hidden = np.array(hidden)
     labels = np.array(labels)
     private_labels = np.array(private_labels)
+    regression_labels = np.array(regression_labels) if args.regression else None
 
-    return hidden, labels, private_labels
+    return hidden, labels, private_labels, regression_labels
 
 def get_INLP_trade_offs(model, args):
     # Hyperparameters
@@ -80,9 +88,9 @@ def get_INLP_trade_offs(model, args):
     model = load_trained_model(model, args.model_dir, args.device)
 
     # Extract Hidden representations
-    train_hidden, train_labels, train_private_labels = extract_hidden_representations(model, "train", args)
-    dev_hidden, dev_labels, dev_private_labels = extract_hidden_representations(model, "dev", args)
-    test_hidden, test_labels, test_private_labels = extract_hidden_representations(model, "test", args)
+    train_hidden, train_labels, train_private_labels, train_regression_labels = extract_hidden_representations(model, "train", args)
+    dev_hidden, dev_labels, dev_private_labels, dev_regression_labels = extract_hidden_representations(model, "dev", args)
+    test_hidden, test_labels, test_private_labels, test_regression_labels = extract_hidden_representations(model, "test", args)
 
     # Run INLP
 
@@ -94,23 +102,28 @@ def get_INLP_trade_offs(model, args):
 
     for iteration, p_iteration in enumerate(range(1, len(rowspaces))):
         
-        P = get_projection_to_intersection_of_nullspaces(rowspaces[:p_iteration], input_dim=300)
+        P = get_projection_to_intersection_of_nullspaces(rowspaces[:p_iteration], input_dim=train_hidden.shape[1])
         
         debiased_x_train = P.dot(train_hidden.T).T
         debiased_x_dev = P.dot(dev_hidden.T).T
         debiased_x_test = P.dot(test_hidden.T).T
         
-        classifier = LogisticRegression(warm_start = True, 
-                                            penalty = 'l2',
-                                            solver = "sag", 
-                                            multi_class = 'multinomial', 
-                                            fit_intercept = True,
-                                            verbose = 0, 
-                                            max_iter = 10,
-                                            n_jobs = 24, 
-                                            random_state = 1)
+        if not args.regression:
+            classifier = LogisticRegression(warm_start = True, 
+                                                penalty = 'l2',
+                                                solver = "sag", 
+                                                multi_class = 'multinomial', 
+                                                fit_intercept = True,
+                                                verbose = 0, 
+                                                max_iter = 10,
+                                                n_jobs = 24, 
+                                                random_state = 1)
+            classifier.fit(debiased_x_train, train_labels)
+        else:
+            classifier = LinearRegression()
+            classifier.fit(debiased_x_train, train_regression_labels)
 
-        classifier.fit(debiased_x_train, train_labels)
+        
         
         # Evaluation
         dev_y_pred = classifier.predict(debiased_x_dev)
@@ -119,9 +132,11 @@ def get_INLP_trade_offs(model, args):
         logging.info("Evaluation at Epoch %d" % (iteration,))
 
         present_evaluation_scores(
-            valid_preds = dev_y_pred, valid_labels = dev_labels, 
+            valid_preds = dev_y_pred, 
+            valid_labels = dev_labels if not args.regression else dev_regression_labels, 
             valid_private_labels = dev_private_labels,
-            test_preds = test_y_pred, test_labels = test_labels, 
+            test_preds = test_y_pred, 
+            test_labels = test_labels if not args.regression else test_regression_labels, 
             test_private_labels = test_private_labels,
             epoch = iteration, epochs_since_improvement = None, 
             model = model, epoch_valid_loss = None,
