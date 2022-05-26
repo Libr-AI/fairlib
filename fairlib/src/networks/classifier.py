@@ -58,7 +58,7 @@ class MLP(BaseModel):
 
         # Augmentation
         if self.args.gated and self.args.n_hidden > 0:
-            assert group_label is not None, "Group labels are needed for augmentaiton"
+            assert group_label is not None, "Group labels are needed for augmentation"
 
             specific_output = self.augmentation_components(input_data, group_label)
 
@@ -80,7 +80,7 @@ class MLP(BaseModel):
 
             # Augmentation
             if self.args.gated and self.args.n_hidden > 0:
-                assert group_label is not None, "Group labels are needed for augmentaiton"
+                assert group_label is not None, "Group labels are needed for augmentation"
 
                 specific_output = self.augmentation_components(input_data, group_label)
 
@@ -179,7 +179,7 @@ class BERTClassifier(BaseModel):
 
     def freeze_roberta_layers(self, number_of_layers):
         "number of layers: the first number of layers to be freezed"
-        assert (number_of_layers < 14 and number_of_layers > -14), "beyound the total number of RoBERTa layer groups(14)."
+        assert (number_of_layers < 14 and number_of_layers > -14), "beyond the total number of RoBERTa layer groups(14)."
         for target_layer in self.bert_layers[:number_of_layers]:
                 for param in target_layer.parameters():
                     param.requires_grad = False
