@@ -85,7 +85,10 @@ def train_epoch(model, iterator, args, epoch):
             loss = loss + fscl_loss
         
         if (args.DyBT is not None) and (args.DyBT == "GroupDifference"):
-            loss = loss + args.group_difference_loss(predictions, tags, p_tags)
+            loss = loss + args.group_difference_loss(
+                predictions, tags, p_tags, 
+                regression_tags = None if not args.regression else regression_tags,
+                )
 
         loss.backward()
 
