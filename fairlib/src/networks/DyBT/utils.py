@@ -150,7 +150,10 @@ class BaseDyBT(Sampler):
         
         self.model.eval()
 
-        criterion = torch.nn.CrossEntropyLoss(reduction='none')
+        if self.args.regression:
+            criterion = torch.nn.MSELoss(reduction='none')
+        else:
+            criterion = torch.nn.CrossEntropyLoss(reduction='none')
 
         batch_losses = []
 
@@ -168,11 +171,17 @@ class BaseDyBT(Sampler):
                 instance_weights = batch[3].float()
                 instance_weights = instance_weights.to(device)
 
+            if self.args.regression:
+                regression_tags = batch[5].squeeze()
+                regression_tags = regression_tags.to(device)
+
             # main model predictions
             if self.args.gated:
                 predictions = self.model(text, p_tags)
             else:
                 predictions = self.model(text)
+
+            predictions = predictions if not self.args.regression else predictions.squeeze()
 
             # add the weighted loss
             if self.args.BT is not None and self.args.BT == "Reweighting":
