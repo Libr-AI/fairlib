@@ -81,7 +81,7 @@ def power_mean(series, p, axis=0):
         axis (int, optional): aggregation along which dim of the input. Defaults to 0.
 
     Returns:
-        np.array: aggregated socres.
+        np.array: aggregated scores.
     """
     if p>50:
         return np.max(series, axis=axis)
