@@ -144,7 +144,8 @@ class BaseDataset(torch.utils.data.Dataset):
                 bin_labels, bins = pd.qcut(self.y, q=self.args.n_bins, labels=False, duplicates = "drop", retbins = True)
                 self.args.regression_bins = bins
             else:
-                bin_labels = pd.cut(self.y, bins=self.args.regression_bins, labels=False, duplicates = "drop")
+                bin_labels = pd.cut(self.y, bins=self.args.regression_bins, labels=False, duplicates = "drop", include_lowest = True)
+            bin_labels = np.nan_to_num(bin_labels, nan=0)
             
             # Reassign labels
             self.regression_label, self.y = np.array(self.y), bin_labels
