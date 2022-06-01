@@ -58,9 +58,6 @@ def model_selection_parallel(
             _exp_results = retrive_all_exp_results(exp,GAP_metric_name, Performance_metric_name,index_column_names, keep_original_metrics)
             exp_results.append(_exp_results)
 
-        # result_df = pd.concat(exp_results)
-        # result_df["index_epoch"] = result_df["epoch"].copy()
-        # result_df = result_df.set_index(index_column_names+["index_epoch"])
         result_df = pd.concat(exp_results)
         result_df["index_epoch"] = result_df["epoch"].copy()
         result_df = result_df.set_index(index_column_names+["index_epoch"])
