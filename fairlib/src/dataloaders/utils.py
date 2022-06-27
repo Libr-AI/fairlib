@@ -61,7 +61,7 @@ class BaseDataset(torch.utils.data.Dataset):
         pass
 
     def manipulate_data_distribution(self):
-        if self.args.GBT:
+        if self.args.GBT and self.split == "train":
             # Get data distribution
             distribution_dict = get_data_distribution(y_data=self.y, g_data=self.protected_label)
 
