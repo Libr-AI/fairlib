@@ -324,3 +324,55 @@ class BaseModel(nn.Module):
                     epoch, epochs_since_improvement, self, epoch_valid_loss,
                     is_best, 
                     )
+
+    def extract_hidden_representations(self, split):
+        import numpy as np
+
+        hidden = []
+        labels = []
+        private_labels = []
+        regression_labels = []
+
+        if split == "train":
+            iterator = self.args.train_generator
+        elif split == "dev":
+            iterator = self.args.dev_generator
+        elif split == "test":
+            iterator = self.args.test_generator
+        else:
+            raise NotImplementedError
+
+        for batch in iterator:
+            
+            text = batch[0].squeeze()
+            tags = batch[1].squeeze()
+            p_tags = batch[2].squeeze()
+            
+            labels += list(tags.cpu().numpy())
+            private_labels += list(p_tags.cpu().numpy())
+
+            text = text.to(self.args.device)
+            tags = tags.to(self.args.device).long()
+            p_tags = p_tags.to(self.args.device).float()
+
+            if self.args.regression:
+                regression_tags = batch[5].float().squeeze()
+                regression_labels += list(regression_tags.cpu().numpy() )
+                regression_tags = regression_tags.to(self.args.device)
+
+            # Extract hidden representations
+            if self.args.gated:
+                hidden_state = self.hidden(text, p_tags)
+            else:
+                hidden_state = self.hidden(text)
+            
+            hidden.append(hidden_state.detach().cpu().numpy())
+        
+        hidden = np.concatenate(hidden, 0)
+
+        hidden = np.array(hidden)
+        labels = np.array(labels)
+        private_labels = np.array(private_labels)
+        regression_labels = np.array(regression_labels) if self.args.regression else None
+
+        return hidden, labels, private_labels, regression_labels

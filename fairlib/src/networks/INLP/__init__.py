@@ -23,56 +23,6 @@ def load_trained_model(model, checkpoint_dir, device):
     model.eval()
     return model
 
-def extract_hidden_representations(model, split, args):
-    hidden = []
-    labels = []
-    private_labels = []
-    regression_labels = []
-
-    if split == "train":
-        iterator = args.train_generator
-    elif split == "dev":
-        iterator = args.dev_generator
-    elif split == "test":
-        iterator = args.test_generator
-    else:
-        raise NotImplementedError
-
-    for batch in iterator:
-        
-        text = batch[0].squeeze()
-        tags = batch[1].squeeze()
-        p_tags = batch[2].squeeze()
-        
-        labels += list(tags.cpu().numpy())
-        private_labels += list(p_tags.cpu().numpy())
-
-        text = text.to(args.device)
-        tags = tags.to(args.device).long()
-        p_tags = p_tags.to(args.device).float()
-
-        if args.regression:
-            regression_tags = batch[5].float().squeeze()
-            regression_labels += list(regression_tags.cpu().numpy() )
-            regression_tags = regression_tags.to(args.device)
-
-        # Extract hidden representations
-        if args.gated:
-            hidden_state = model.hidden(text, p_tags)
-        else:
-            hidden_state = model.hidden(text)
-        
-        hidden.append(hidden_state.detach().cpu().numpy())
-    
-    hidden = np.concatenate(hidden, 0)
-
-    hidden = np.array(hidden)
-    labels = np.array(labels)
-    private_labels = np.array(private_labels)
-    regression_labels = np.array(regression_labels) if args.regression else None
-
-    return hidden, labels, private_labels, regression_labels
-
 def get_INLP_trade_offs(model, args):
     # Hyperparameters
     discriminator_reweighting = args.INLP_discriminator_reweighting
@@ -88,9 +38,9 @@ def get_INLP_trade_offs(model, args):
     model = load_trained_model(model, args.model_dir, args.device)
 
     # Extract Hidden representations
-    train_hidden, train_labels, train_private_labels, train_regression_labels = extract_hidden_representations(model, "train", args)
-    dev_hidden, dev_labels, dev_private_labels, dev_regression_labels = extract_hidden_representations(model, "dev", args)
-    test_hidden, test_labels, test_private_labels, test_regression_labels = extract_hidden_representations(model, "test", args)
+    train_hidden, train_labels, train_private_labels, train_regression_labels = model.extract_hidden_representations("train")
+    dev_hidden, dev_labels, dev_private_labels, dev_regression_labels = model.extract_hidden_representations("dev")
+    test_hidden, test_labels, test_private_labels, test_regression_labels = model.extract_hidden_representations("test")
 
     # Run INLP
 
