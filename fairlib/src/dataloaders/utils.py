@@ -76,7 +76,7 @@ class BaseDataset(torch.utils.data.Dataset):
             self.protected_label = self.protected_label[selected_index]
 
     def balanced_training(self):
-        if self.args.BT is None:
+        if (self.args.BT is None) or (self.split != "train"):
             # Without balanced training
             self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
         else:
@@ -113,7 +113,7 @@ class BaseDataset(torch.utils.data.Dataset):
         return None
 
     def adv_balanced_training(self):
-        if self.args.adv_BT is None:
+        if (self.args.adv_BT is None) or (self.split != "train"):
             # Without balanced training
             self.adv_instance_weights = np.array([1 for _ in range(len(self.protected_label))])
         else:
