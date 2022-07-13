@@ -2,10 +2,11 @@ import numpy as np
 import torch
 from transformers import *
 import pickle
-from tqdm.auto import tqdm
+from tqdm.auto import tqdm, trange
 
 class BERT_encoder:
-    def __init__(self) -> None:
+    def __init__(self, batch_size=64) -> None:
+        self.batch_size = batch_size
         self.model, self.tokenizer = self.load_lm()
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -20,34 +21,27 @@ class BERT_encoder:
         return model, tokenizer
 
     def tokenize(self, data):
-        """tokenize texts
 
-        Args:
-            data (list): a list of strings
-
-        Returns:
-            list: list of tokenized data
-        """
         tokenized_data = []
-        for row in tqdm(data):
-            tokens = self.tokenizer.encode(row, add_special_tokens=True)
-            # keeping a maximum length of bert tokens: 512
-            tokenized_data.append(tokens[:512])
+        total_n = len(data)
+        n_iterations = (total_n // self.batch_size) + (total_n % self.batch_size > 0)
+        for i in trange(n_iterations):
+            row_lists = list(data)[i*self.batch_size:(i+1)*self.batch_size]
+            tokens = self.tokenizer(row_lists, add_special_tokens=True, padding=True, truncation=True, return_tensors="pt")['input_ids']
+            tokenized_data.append(tokens)
         return tokenized_data
 
     def encode_text(self, data):
         all_data_cls = []
         all_data_avg = []
-        batch = []
         for row in tqdm(data):
-            batch.append(row)
-            input_ids = torch.tensor(batch).cuda()
+            input_ids = row.to(self.device)
             with torch.no_grad():
                 last_hidden_states = self.model(input_ids)[0].detach().cpu()
-                all_data_avg.append(last_hidden_states.squeeze(0).mean(dim=0).numpy())
-                all_data_cls.append(last_hidden_states.squeeze(0)[0].numpy())
-            batch = []
-        return np.array(all_data_avg), np.array(all_data_cls)
+                all_data_avg.append(last_hidden_states.mean(dim=1).numpy())
+                all_data_cls.append(last_hidden_states[:,0].numpy())
+        return np.vstack(np.array(all_data_avg)), np.vstack(np.array(all_data_cls))
+
 
     def encode(self, data):
         tokens = self.tokenize(data)

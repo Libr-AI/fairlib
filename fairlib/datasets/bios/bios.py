@@ -22,9 +22,10 @@ class Bios:
     _NAME = "Bios"
     _SPLITS = ["train", "dev", "test"]
 
-    def __init__(self, dest_folder):
+    def __init__(self, dest_folder, batch_size):
         self.dest_folder = dest_folder
-        self.encoder = BERT_encoder()
+        self.batch_size = batch_size
+        self.encoder = BERT_encoder(self.batch_size)
 
     def download_files(self):
 
@@ -40,6 +41,7 @@ class Bios:
 
             text_data = list(split_df["hard_text"])
             avg_data, cls_data = self.encoder.encode(text_data)
+            print(avg_data.shape, cls_data.shape)
             split_df["bert_avg_SE"] = list(avg_data)
             split_df["bert_cls_SE"] = list(cls_data)
             split_df["gender_class"] = split_df["g"]
@@ -48,5 +50,5 @@ class Bios:
             split_df.to_pickle(Path(self.dest_folder) / "bios_{}_df.pkl".format(split))
 
     def prepare_data(self):
-        self.download_files()
+        # self.download_files()
         self.bert_encoding()
