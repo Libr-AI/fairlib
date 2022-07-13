@@ -1,8 +1,11 @@
 from . import moji
+from . import bios
 
 name2class = {
     "Moji":moji,
     "moji":moji,
+    "bios":bios,
+    "Bios":bios,
 }
 
 def prepare_dataset(name, dest_folder):
