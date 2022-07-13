@@ -1,6 +1,6 @@
 ## Moji
 
-### Download processed data without economy labels
+### Download processed data
     Please use the script provided at [download_data.sh](https://github.com/shauli-ravfogel/nullspace_projection/blob/master/download_data.sh)
 
 ### From scratch
