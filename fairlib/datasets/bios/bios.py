@@ -50,5 +50,5 @@ class Bios:
             split_df.to_pickle(Path(self.dest_folder) / "bios_{}_df.pkl".format(split))
 
     def prepare_data(self):
-        # self.download_files()
+        self.download_files()
         self.bert_encoding()
