@@ -1,6 +1,7 @@
 from . import moji
 from . import bios
 from . import coloredMNIST
+from . import COMPAS
 
 name2class = {
     "Moji":moji,
@@ -9,6 +10,8 @@ name2class = {
     "Bios":bios,
     "coloredMNIST":coloredMNIST,
     "MNIST":coloredMNIST,
+    "COMPAS":COMPAS,
+    "compas":COMPAS,
 }
 
 def prepare_dataset(name, dest_folder,batch_size=64):
