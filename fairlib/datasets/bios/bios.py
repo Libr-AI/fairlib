@@ -41,7 +41,6 @@ class Bios:
 
             text_data = list(split_df["hard_text"])
             avg_data, cls_data = self.encoder.encode(text_data)
-            print(avg_data.shape, cls_data.shape)
             split_df["bert_avg_SE"] = list(avg_data)
             split_df["bert_cls_SE"] = list(cls_data)
             split_df["gender_class"] = split_df["g"]

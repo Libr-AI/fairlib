@@ -35,11 +35,12 @@ class BERT_encoder:
         all_data_cls = []
         all_data_avg = []
         for row in tqdm(data):
-            input_ids = row.to(self.device)
             with torch.no_grad():
+                input_ids = row.to(self.device)
                 last_hidden_states = self.model(input_ids)[0].detach().cpu()
                 all_data_avg.append(last_hidden_states.mean(dim=1).numpy())
                 all_data_cls.append(last_hidden_states[:,0].numpy())
+                input_ids = input_ids.detach().cpu()
         return np.vstack(np.array(all_data_avg)), np.vstack(np.array(all_data_cls))
 
 
