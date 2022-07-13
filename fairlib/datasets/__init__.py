@@ -1,11 +1,14 @@
 from . import moji
 from . import bios
+from . import coloredMNIST
 
 name2class = {
     "Moji":moji,
     "moji":moji,
     "bios":bios,
     "Bios":bios,
+    "coloredMNIST":coloredMNIST,
+    "MNIST":coloredMNIST,
 }
 
 def prepare_dataset(name, dest_folder,batch_size=64):
