@@ -5,7 +5,7 @@ thelibFolder = os.getcwd()
 requirementPath = thelibFolder + '/requirements.txt'
 
 if sys.version_info < (3, 7):
-    sys.exit('Sorry, Python >=3.7 is required for FairCLS.')
+    sys.exit('Sorry, Python >=3.7 is required for fairlib.')
 
 with open('README.md', encoding="utf8") as f:
     # strip the header and badges etc
@@ -35,10 +35,10 @@ except:
 if __name__ == '__main__':
     setup(
         name='fairlib',
-        version="0.0.5",
+        version="0.0.6",
         author="Xudong Han",
         author_email="xudongh1@student.unimelb.edu.au",
-        description='Unified framework for assessing and improving classification fairness.',
+        description='Unified framework for assessing and improving fairness.',
         long_description=readme,
         long_description_content_type='text/markdown',
         url='https://github.com/HanXudong/fairlib',
