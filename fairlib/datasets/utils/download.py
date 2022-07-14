@@ -2,7 +2,7 @@ import os
 import requests
 from tqdm.auto import tqdm
 
-def download(url: str, dest_folder: str, chunk_size: int = 1024*8):
+def download(url: str, dest_folder: str, chunk_size: int = 10*1024*1024):
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)  # create folder if it does not exist
 
