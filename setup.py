@@ -27,6 +27,7 @@ except:
         "matplotlib",
         "pickle5",
         "transformers",
+        "sacremoses",
     ]
 
 
