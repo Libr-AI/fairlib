@@ -3,13 +3,15 @@ from . import bios
 from . import coloredMNIST
 from . import COMPAS
 from . import TP_POS
+from . import Adult
 
 name2class = {
     "moji":moji,
     "bios":bios,
     "coloredmnist":coloredMNIST,
     "compas":COMPAS,
-    "tp_pos":TP_POS
+    "tp_pos":TP_POS,
+    "adult":Adult,
 }
 
 def prepare_dataset(name, dest_folder,batch_size=64):
