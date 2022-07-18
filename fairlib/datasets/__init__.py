@@ -4,6 +4,8 @@ from . import coloredMNIST
 from . import COMPAS
 from . import TP_POS
 from . import Adult
+from . import MSCOCO
+from . import imSitu
 
 name2class = {
     "moji":moji,
@@ -12,6 +14,8 @@ name2class = {
     "compas":COMPAS,
     "tp_pos":TP_POS,
     "adult":Adult,
+    "coco":MSCOCO,
+    "imsitu":imSitu,
 }
 
 def prepare_dataset(name, dest_folder,batch_size=64):
