@@ -10,7 +10,10 @@ def download(url: str, dest_folder: str, chunk_size: int = 10*1024*1024):
     file_path = os.path.join(dest_folder, filename)
 
     r = requests.get(url, stream=True)
-    total_length = int(r.headers.get('content-length'))
+    try:
+        total_length = int(r.headers.get('content-length'))
+    except:
+        total_length = 0
 
     if r.ok:
         print("saving to", os.path.abspath(file_path))
