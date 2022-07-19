@@ -92,6 +92,119 @@
              
   <section id="bias-mitigation">
 <h1>Bias Mitigation<a class="headerlink" href="#bias-mitigation" title="Permalink to this headline"></a></h1>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Built-in debiasing methods</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Algorithm</p></th>
+<th class="head"><p>Regression</p></th>
+<th class="head"><p>Material</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">Pre-</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">BD</div>
+<div class="line">CB</div>
+<div class="line">JB</div>
+<div class="line">BTEO</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Natural</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://aclanthology.org/D17-1323/">Paper</a>, <a class="reference external" href="https://github.com/uclanlp/reducingbias">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/1811.08489">Paper</a>, <a class="reference external" href="https://github.com/uvavision/Balanced-Datasets-Are-Not-Enough">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2006.13114">Paper</a>, <a class="reference external" href="https://github.com/google-research/google-research/tree/master/group_agnostic_fairness">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2109.08253">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/generalized_BT.py">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">At-</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Adv</div>
+<div class="line">EAdv</div>
+<div class="line">DAdv</div>
+<div class="line">AADv &amp; ADAdv</div>
+<div class="line">Gate</div>
+<div class="line">FairBatch</div>
+<div class="line">FairSCL</div>
+<div class="line">EO_CLA</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Natural</div>
+<div class="line">Natural</div>
+<div class="line">Natural</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/1805.06093">Paper</a>, <a class="reference external" href="https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/pdf/1808.06640.pdf">Paper</a>, <a class="reference external" href="https://github.com/yanaiela/demog-text-removal">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2101.10001">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/pdf/2203.06317.pdf">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2109.08253">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/networks/augmentation_layer.py">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/networks/augmentation_layer.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2012.01696">Paper</a>, <a class="reference external" href="https://github.com/yuji-roh/fairbatch">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/networks/DyBT/generalized_fairbatch.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2109.10645">Paper</a>, <a class="reference external" href="https://github.com/AiliAili/contrastive_learning_fair_representations">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/FairCL">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2205.02393">Paper</a>, <a class="reference external" href="https://github.com/AiliAili/Difference_Mean_Fair_Models">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/networks/DyBT/gdl.py">Code</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">Post-</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">INLP</div>
+<div class="line">Soft Gated</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Discretization</div>
+<div class="line">Discretization</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://aclanthology.org/2020.acl-main.647/">Paper</a>, <a class="reference external" href="https://github.com/shauli-ravfogel/nullspace_projection">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/INLP">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2109.08253">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39">Code</a></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 
 
