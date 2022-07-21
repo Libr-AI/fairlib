@@ -112,7 +112,7 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
     # n_class * n_groups
     Scores = np.stack(group_scores, axis = 1)
     # Calculate GAP (n_class * n_groups) - (n_class * 1)
-    score_gaps = Scores - all_scores["overall"][metric].reshape(-1,1)
+    score_gaps = Scores / all_scores["overall"][metric].reshape(-1,1)
     # Sum over gaps of all protected groups within each class
     if group_agg_power is None:
         score_gaps = np.sum(abs(score_gaps),axis=1)
@@ -122,6 +122,38 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
     score_gaps = power_mean(score_gaps, class_agg_power)
 
     return score_gaps
+
+
+def Aggregation_Ratio(distinct_groups, all_scores, metric="TPR", group_agg_power = None, class_agg_power=2):
+    """Aggregate fairness metric ratios at the group level and class level.
+
+    Args:
+        distinct_groups (list): a list of distinc labels of protected groups.
+        all_scores (dict): confusion matrix based scores for each protected group and all.
+        metric (str, optional): fairness metric. Defaults to "TPR".
+        group_agg_power (int, optional): generalized mean aggregation power at the group level. Use absolute value aggregation if None. Defaults to None.
+        class_agg_power (int, optional): generalized mean aggregation power at the class level. Defaults to 2.
+
+    Returns:
+        np.array: aggregated fairness score.
+    """
+    group_scores = []
+    for gid in distinct_groups:
+        # Save the TPR direct to the list 
+        group_scores.append(all_scores[gid][metric]) 
+    # n_class * n_groups
+    Scores = np.stack(group_scores, axis = 1)
+    # Calculate GAP (n_class * n_groups) - (n_class * 1)
+    score_ratios = Scores - all_scores["overall"][metric].reshape(-1,1)
+    # Sum over ratios of all protected groups within each class
+    if group_agg_power is None:
+        score_ratios = np.sum(abs(score_ratios),axis=1)
+    else:
+        score_ratios =power_mean(score_ratios,p=group_agg_power,axis=1)
+    # Aggregate ratios of each class, RMS by default
+    score_ratios = power_mean(score_ratios, class_agg_power)
+
+    return score_ratios
 
 def gap_eval_scores(y_pred, y_true, protected_attribute, metrics=["TPR","FPR","PPR"], args = None):
     """fairness evaluation
