@@ -112,7 +112,7 @@ def Aggregation_GAP(distinct_groups, all_scores, metric="TPR", group_agg_power =
     # n_class * n_groups
     Scores = np.stack(group_scores, axis = 1)
     # Calculate GAP (n_class * n_groups) - (n_class * 1)
-    score_gaps = Scores / all_scores["overall"][metric].reshape(-1,1)
+    score_gaps = Scores - all_scores["overall"][metric].reshape(-1,1)
     # Sum over gaps of all protected groups within each class
     if group_agg_power is None:
         score_gaps = np.sum(abs(score_gaps),axis=1)
@@ -144,7 +144,7 @@ def Aggregation_Ratio(distinct_groups, all_scores, metric="TPR", group_agg_power
     # n_class * n_groups
     Scores = np.stack(group_scores, axis = 1)
     # Calculate GAP (n_class * n_groups) - (n_class * 1)
-    score_ratios = Scores - all_scores["overall"][metric].reshape(-1,1)
+    score_ratios = Scores / all_scores["overall"][metric].reshape(-1,1)
     # Sum over ratios of all protected groups within each class
     if group_agg_power is None:
         score_ratios = np.sum(abs(score_ratios),axis=1)
