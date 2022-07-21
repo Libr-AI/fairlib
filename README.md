@@ -1,7 +1,7 @@
 # *fairlib*
 
 
-[*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
+[*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
 
 The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html), and functions for analysis.
 
