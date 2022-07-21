@@ -5,7 +5,7 @@
 
 The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html), and functions for analysis.
 
-For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
+For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/fairlib_demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
 [The tutorials and other notebooks](https://hanxudong.github.io/fairlib/tutorial_interactive_demos.html) offer a deeper introduction. The [complete API](https://hanxudong.github.io/fairlib) is also available.
 
 ## Installation
