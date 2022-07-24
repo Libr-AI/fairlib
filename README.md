@@ -23,7 +23,7 @@ If you do not need further modifications, you can install it with:
 conda create -n fairlib python=3.7
 conda activate fairlib
 
-pip install faircls
+pip install fairlib
 ```
 
 **Development Installation**
