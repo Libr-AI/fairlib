@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manipulating Data Distribution &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_notebooks.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Manipulating Data Distribution</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="manipulating-data-distribution">
+<h1>Manipulating Data Distribution<a class="headerlink" href="#manipulating-data-distribution" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/manipulate_data_distribution.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this notebook, we will introduce the built-in function for manipulating data distributions.</p>
+<p>Overall, the process can be described as:</p>
+<ol class="arabic simple">
+<li><p>Load data from files</p></li>
+<li><p>Analysis the loaded dataset distribution</p></li>
+<li><p>Resample instances based on their target labels and protected labels</p></li>
+</ol>
+<p>Implementations for steps 1 and 4 are the same with others. Please see <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_dataloaders.html">dataloader</a> for detailed description.</p>
+<section id="load-data">
+<h2>Load data<a class="headerlink" href="#load-data" title="Permalink to this headline"></a></h2>
+<p>Similar to long-tail leaning, the data distribution is essentially the label distributions. However, besides the target label in long-tail learning, we also need to consider the demographic labels.</p>
+<p>Since the input distribution is not required for manipulating data distributions, we just create synthetic labels for demonstration purpose.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">g</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_g</span><span class="p">,</span> <span class="n">_n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># Target labels, y</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># Protected labels, g</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>  <span class="c1"># Number of instances with target label _y and group label _g</span>
+    <span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="p">[</span><span class="n">_y</span><span class="p">]</span><span class="o">*</span><span class="n">_n</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="p">[</span><span class="n">_g</span><span class="p">]</span><span class="o">*</span><span class="n">_n</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="analysis-the-loaded-dataset-distribution">
+<h2>Analysis the loaded dataset distribution<a class="headerlink" href="#analysis-the-loaded-dataset-distribution" title="Permalink to this headline"></a></h2>
+<p>Essentially, we are interested in the joint distribution of target label <em>y</em> and protected label <em>g</em>, which are both discrete random variables.</p>
+<p>We save the corresponding results in probability tables:</p>
+<p>Given target label and protected labels, calculate empirical distributions.</p>
+<ul class="simple">
+<li><p>joint_dist: n_class * n_groups matrix, where each element refers to the joint probability, i.e., proportion size.</p></li>
+<li><p>g_dist: n_groups array, indicating the prob of each group</p></li>
+<li><p>y_dist: n_class array, indicating the prob of each class</p></li>
+<li><p>g_cond_y_dist: n_class * n_groups matrix, g_cond_y_dit[y_id,:] refers to the group distribution within class y_id</p></li>
+<li><p>y_cond_g_dist: n_class * n_groups matrix, y_cond_g_dit[:,g_id] refers to the class distribution within group g_id</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.dataloaders.generalized_BT</span> <span class="kn">import</span> <span class="n">get_data_distribution</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">synthetic_data_distribution</span> <span class="o">=</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">synthetic_data_distribution</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;joint_dist&#39;, &#39;g_dist&#39;, &#39;y_dist&#39;, &#39;g_cond_y_dist&#39;, &#39;y_cond_g_dist&#39;, &#39;yg_index&#39;, &#39;N&#39;])
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># n_class * n_groups matrix, where each element refers to the joint probability</span>
+<span class="n">synthetic_data_distribution</span><span class="p">[</span><span class="s2">&quot;joint_dist&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([[0.26470588, 0.08823529, 0.20588235],
+       [0.17647059, 0.14705882, 0.11764706]])
+</pre></div>
+</div>
+</section>
+<section id="resample-isntacnes-based-on-their-target-labels-and-protected-labels">
+<h2>Resample isntacnes based on their target labels and protected labels<a class="headerlink" href="#resample-isntacnes-based-on-their-target-labels-and-protected-labels" title="Permalink to this headline"></a></h2>
+<p>In order to specify a target distribution of <em>y</em> and <em>g</em>, there are 5 options in the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> function, which can be classified into 3 types as:</p>
+<ol class="arabic simple">
+<li><p>specify the target joint distribution of <em>y</em> and <em>g</em>, i.e., <em>p(y,g)</em>.</p></li>
+<li><p>specify the y_dist (<em>p(y)</em>) and g_cond_y_dist (<em>p(g|y)</em>), and <em>p(y,g) = p(g|y)p(y)</em></p></li>
+<li><p>specify the g_dist (<em>p(g)</em>) and y_cond_g_dist (<em>p(y|g)</em>), and <em>p(y,g) = p(y|g)p(g)</em></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.dataloaders.generalized_BT</span> <span class="kn">import</span> <span class="n">generalized_sampling</span>
+</pre></div>
+</div>
+<p>Taking the group label distribution as an example, we would like the group label is uniformly distributed, i.e., <em>p(g=0)=p(g=1)=p(g=2)</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_g_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">target_g_dist</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.33333333, 0.33333333, 0.33333333])
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">balanced_g_indices</span> <span class="o">=</span> <span class="n">generalized_sampling</span><span class="p">(</span>
+    <span class="n">default_distribution_dict</span> <span class="o">=</span> <span class="n">synthetic_data_distribution</span><span class="p">,</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">g_dist</span><span class="o">=</span><span class="n">target_g_dist</span><span class="p">,)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">balanced_g_indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[25, 26, 27, 28, 15, 16, 17, 18, 19, 20, 21, 9, 10, 11, 4, 5, 6, 7, 0, 1]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">balanced_g_distribution</span> <span class="o">=</span> <span class="n">get_data_distribution</span><span class="p">(</span>
+    <span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">balanced_g_indices</span><span class="p">],</span> 
+    <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">balanced_g_indices</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">balanced_g_distribution</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;joint_dist&#39;: array([[0.2 , 0.15, 0.2 ],
+        [0.15, 0.2 , 0.1 ]]),
+ &#39;g_dist&#39;: array([0.35, 0.35, 0.3 ]),
+ &#39;y_dist&#39;: array([0.55, 0.45]),
+ &#39;g_cond_y_dist&#39;: array([[0.36363636, 0.27272727, 0.36363636],
+        [0.33333333, 0.44444444, 0.22222222]]),
+ &#39;y_cond_g_dist&#39;: array([[0.57142857, 0.42857143, 0.66666667],
+        [0.42857143, 0.57142857, 0.33333333]]),
+ &#39;yg_index&#39;: {(0, 0): array([0, 1, 2, 3], dtype=int64),
+  (0, 1): array([4, 5, 6], dtype=int64),
+  (0, 2): array([ 7,  8,  9, 10], dtype=int64),
+  (1, 0): array([11, 12, 13], dtype=int64),
+  (1, 1): array([14, 15, 16, 17], dtype=int64),
+  (1, 2): array([18, 19], dtype=int64)},
+ &#39;N&#39;: 20.0}
+</pre></div>
+</div>
+<p>Theoretically, we could sample any data distributions with the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> function. But it is inconvenient to specify the distribution array every time. We further provide the <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function to simplify the manipulation process.</p>
+<p>Specifically, the manipulation is based on the interpolation between the original data distribution and a specifically balanced target distribution. These balanced target distributions are identical to <a class="reference external" href="https://hanxudong.github.io/fairlib/reference_api_debiasing/BT.html"><strong>BT</strong></a>.</p>
+<p>The <em>alpha</em> refers to the interpolation extent as $final_dist = \alpha*balanced_dist + (1-\alpha)*origianl_dist$</p>
+<ul class="simple">
+<li><p>default_distribution_dict (dict): a dict of distribution information of the original dataset.</p></li>
+<li><p>N (int, optional): The total number of returned indices. Defaults to None.</p></li>
+<li><p>GBTObj (str, optional): original | joint | g | y | g_cond_y | y_cond_g. Defaults to “original”.</p></li>
+<li><p>alpha (int, optional): interpolation between the original distribution and the target distribution. Defaults to 1.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib.src.dataloaders.generalized_BT</span> <span class="kn">import</span> <span class="n">manipulate_data_distribution</span>
+</pre></div>
+</div>
+<p>The following examples show to what extent can we manipulate the distribution by tuning the alpha value</p>
+<ul class="simple">
+<li><p>aphla &gt; 1: anto-imbalance.</p></li>
+<li><p>aphla = 1: perfectly balanced distribution as corresponding BT objectives.</p></li>
+<li><p>0 &lt; aphla &lt; 1: interpolation between original distribution and the perfectly balanced distribution.</p></li>
+<li><p>alpha = 0: original distribution.</p></li>
+<li><p>alpha &lt; 0: amplify imbalance.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g_indices_10</span> <span class="o">=</span> <span class="n">manipulate_data_distribution</span><span class="p">(</span><span class="n">default_distribution_dict</span> <span class="o">=</span> <span class="n">synthetic_data_distribution</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">GBTObj</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">g_indices_00</span> <span class="o">=</span> <span class="n">manipulate_data_distribution</span><span class="p">(</span><span class="n">default_distribution_dict</span> <span class="o">=</span> <span class="n">synthetic_data_distribution</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">GBTObj</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">g_indices_05</span> <span class="o">=</span> <span class="n">manipulate_data_distribution</span><span class="p">(</span><span class="n">default_distribution_dict</span> <span class="o">=</span> <span class="n">synthetic_data_distribution</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">GBTObj</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">g_indices_n10</span> <span class="o">=</span> <span class="n">manipulate_data_distribution</span><span class="p">(</span><span class="n">default_distribution_dict</span> <span class="o">=</span> <span class="n">synthetic_data_distribution</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">GBTObj</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original:&quot;</span><span class="p">,</span> <span class="n">synthetic_data_distribution</span><span class="p">[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Balanced g:&quot;</span><span class="p">,</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">balanced_g_indices</span><span class="p">],</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">balanced_g_indices</span><span class="p">])[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;aplha 0.0:&quot;</span><span class="p">,</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">g_indices_00</span><span class="p">],</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">g_indices_00</span><span class="p">])[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;aplha 0.5:&quot;</span><span class="p">,</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">g_indices_05</span><span class="p">],</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">g_indices_05</span><span class="p">])[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;aplha 1.0:&quot;</span><span class="p">,</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">g_indices_10</span><span class="p">],</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">g_indices_10</span><span class="p">])[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;aplha -1.0:&quot;</span><span class="p">,</span> <span class="n">get_data_distribution</span><span class="p">(</span><span class="n">y_data</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">g_indices_n10</span><span class="p">],</span> <span class="n">g_data</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">g_indices_n10</span><span class="p">])[</span><span class="s2">&quot;g_dist&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Original: [0.44117647 0.23529412 0.32352941]
+Balanced g: [0.35 0.35 0.3 ]
+aplha 0.0: [0.45 0.25 0.3 ]
+aplha 0.5: [0.4 0.3 0.3]
+aplha 1.0: [0.35 0.35 0.3 ]
+aplha -1.0: [0.55 0.15 0.3 ]
+</pre></div>
+</div>
+</section>
+<section id="limitation-and-extension">
+<h2>Limitation and Extension<a class="headerlink" href="#limitation-and-extension" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">manipulate_data_distribution</span></code> function strongly assumes that the original distribution is <strong>NOT</strong> identical to the target perfectly balanced distribution. For those with a perfectly balanced dataset, the target distributions will need to be manually specified and use the <code class="docutils literal notranslate"><span class="pre">generalized_sampling</span></code> for resampling.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

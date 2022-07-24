@@ -7,6 +7,7 @@
   <title>fairlib.src.networks.INLP &mdash; fairlib  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +16,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,8 +42,7 @@
               <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial_interactive_demos.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_notebooks.html">Interactive Demos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
@@ -49,6 +50,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
@@ -103,7 +105,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="fairlib-src-networks-inlp">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="fairlib-src-networks-inlp">
 <h1>fairlib.src.networks.INLP<a class="headerlink" href="#fairlib-src-networks-inlp" title="Permalink to this headline"></a></h1>
 <section id="module-fairlib.src.networks.INLP.__init__">
 <span id="fairlib-src-networks-inlp-init"></span><h2>fairlib.src.networks.INLP.__init__<a class="headerlink" href="#module-fairlib.src.networks.INLP.__init__" title="Permalink to this headline"></a></h2>

@@ -7,6 +7,7 @@
   <title>Evaluator Module &mdash; fairlib  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,6 +16,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,8 +42,7 @@
               <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="supported_bias_mitigation_algorithms.html">Built-in Debiasing Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial_interactive_demos.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks.html">Interactive Demos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
@@ -49,6 +50,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
@@ -95,7 +97,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="evaluator-module">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="evaluator-module">
 <h1>Evaluator Module<a class="headerlink" href="#evaluator-module" title="Permalink to this headline"></a></h1>
 <section id="module-fairlib.src.evaluators.__init__">
 <span id="fairlib-src-evaluators-init"></span><h2>fairlib.src.evaluators.__init__<a class="headerlink" href="#module-fairlib.src.evaluators.__init__" title="Permalink to this headline"></a></h2>
@@ -130,6 +156,29 @@
 <dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.Aggregation_GAP">
 <span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">Aggregation_GAP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinct_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TPR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.Aggregation_GAP" title="Permalink to this definition"></a></dt>
 <dd><p>Aggregate fairness metrics at the group level and class level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distinct_groups</strong> (<em>list</em>) – a list of distinc labels of protected groups.</p></li>
+<li><p><strong>all_scores</strong> (<em>dict</em>) – confusion matrix based scores for each protected group and all.</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – fairness metric. Defaults to “TPR”.</p></li>
+<li><p><strong>group_agg_power</strong> (<em>int</em><em>, </em><em>optional</em>) – generalized mean aggregation power at the group level. Use absolute value aggregation if None. Defaults to None.</p></li>
+<li><p><strong>class_agg_power</strong> (<em>int</em><em>, </em><em>optional</em>) – generalized mean aggregation power at the class level. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>aggregated fairness score.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fairlib.src.evaluators.evaluator.Aggregation_Ratio">
+<span class="sig-prename descclassname"><span class="pre">fairlib.src.evaluators.evaluator.</span></span><span class="sig-name descname"><span class="pre">Aggregation_Ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distinct_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TPR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_agg_power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fairlib.src.evaluators.evaluator.Aggregation_Ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Aggregate fairness metric ratios at the group level and class level.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

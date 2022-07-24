@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Demos &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_notebooks.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Interactive Demos</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="interactive-demos">
+<h1>Interactive Demos<a class="headerlink" href="#interactive-demos" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html">Using <em>fairlib</em> with Text inputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html#installation">1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html#prepare-dataset">2. Prepare Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html#standard-usage">3. Standard Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html#analysis">4. Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_Moji_demo.html#read-more">5. Read More</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_colored_MNIST.html">Using <em>fairlib</em> with Image Inputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_colored_MNIST.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_colored_MNIST.html#prepare-data">Prepare Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_colored_MNIST.html#train-a-vanilla-model">Train a Vanilla Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_colored_MNIST.html#bias-mitigation">Bias Mitigation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_COMPAS.html">Using <em>fairlib</em> with Structured Inputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_COMPAS.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_COMPAS.html#download-and-preprocess-the-compas-dataset">Download and preprocess the COMPAS dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_COMPAS.html#train-a-vanilla-model">Train a Vanilla Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_COMPAS.html#bias-mitigation">Bias Mitigation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_plot_gallery.html">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_plot_gallery.html#load-experimental-results">Load experimental results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_plot_gallery.html#basic-plot">Basic Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_plot_gallery.html#zoomed-plots">Zoomed Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_plot_gallery.html#auc-performance-fairness-tradeoff">AUC - Performance-Fairness Tradeoff</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_interactive_plots.html">Interactive Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_interactive_plots.html#load-experimental-results">Load experimental results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_interactive_plots.html#crete-plot">Crete Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks/tutorial_manipulate_dist.html">Manipulating Data Distribution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_manipulate_dist.html#load-data">Load data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_manipulate_dist.html#analysis-the-loaded-dataset-distribution">Analysis the loaded dataset distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_manipulate_dist.html#resample-isntacnes-based-on-their-target-labels-and-protected-labels">Resample isntacnes based on their target labels and protected labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_notebooks/tutorial_manipulate_dist.html#limitation-and-extension">Limitation and Extension</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

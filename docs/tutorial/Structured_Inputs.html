@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customized models and datasets for structured inputs &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Load experimental results" href="plot_gallery.html" />
+    <link rel="prev" title="Customized models and datasets for CV" href="Image_Inputs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial_notebooks.html">Interactive Demos</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fairlib_demo.html"><em>fairlib</em>: A Unified Framework for Assessing and Improving Fairness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Image_Inputs.html">Customized models and datasets for CV</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Customized models and datasets for structured inputs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Download-and-preprocess-the-COMPAS-dataset">Download and preprocess the COMPAS dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Train-Models">Train Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Customize-dataset-loader">Customize dataset loader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plot_gallery.html">Load experimental results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interactive_plots.html">Interactive plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulate_data_distribution.html">Manilulating Data Distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html"><em>fairlib</em> Evaluation Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../tutorial_notebooks.html">Interactive Demos</a> &raquo;</li>
+      <li>Customized models and datasets for structured inputs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Customized-models-and-datasets-for-structured-inputs">
+<h1>Customized models and datasets for structured inputs<a class="headerlink" href="#Customized-models-and-datasets-for-structured-inputs" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/Structured_Inputs.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this tutorial we will: - Show how to add a model for structural classification - Show how to add a dataloader with structured data preprocessing</p>
+<p>We will be using the Northpointe’s Correctional Offender Management Profiling for Alternative Sanctions (COMPAS) score, used in states like California and Florida.</p>
+<section id="Installation">
+<h2>Installation<a class="headerlink" href="#Installation" title="Permalink to this headline"></a></h2>
+<p>Again, the first step will be installing our libarary</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install fairlib
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
+Collecting fairlib
+  Downloading fairlib-0.0.9-py3-none-any.whl (85 kB)
+     |████████████████████████████████| 85 kB 2.6 MB/s
+Requirement already satisfied: PyYAML in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.13)
+Requirement already satisfied: torch in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.12.0+cu113)
+Collecting transformers
+  Downloading transformers-4.20.1-py3-none-any.whl (4.4 MB)
+     |████████████████████████████████| 4.4 MB 22.6 MB/s
+Requirement already satisfied: seaborn in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.11.2)
+Requirement already satisfied: scikit-learn in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.0.2)
+Requirement already satisfied: tqdm in /usr/local/lib/python3.7/dist-packages (from fairlib) (4.64.0)
+Requirement already satisfied: docopt in /usr/local/lib/python3.7/dist-packages (from fairlib) (0.6.2)
+Collecting sacremoses
+  Downloading sacremoses-0.0.53.tar.gz (880 kB)
+     |████████████████████████████████| 880 kB 62.2 MB/s
+Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.21.6)
+Requirement already satisfied: pandas in /usr/local/lib/python3.7/dist-packages (from fairlib) (1.3.5)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.7/dist-packages (from fairlib) (3.2.2)
+Collecting pickle5
+  Downloading pickle5-0.0.12-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.whl (256 kB)
+     |████████████████████████████████| 256 kB 47.9 MB/s
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (3.0.9)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (1.4.4)
+Requirement already satisfied: python-dateutil&gt;=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (2.8.2)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib-&gt;fairlib) (0.11.0)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib-&gt;fairlib) (4.1.1)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil&gt;=2.1-&gt;matplotlib-&gt;fairlib) (1.15.0)
+Requirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas-&gt;fairlib) (2022.1)
+Requirement already satisfied: regex in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;fairlib) (2022.6.2)
+Requirement already satisfied: click in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;fairlib) (7.1.2)
+Requirement already satisfied: joblib in /usr/local/lib/python3.7/dist-packages (from sacremoses-&gt;fairlib) (1.1.0)
+Requirement already satisfied: scipy&gt;=1.1.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (1.7.3)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-&gt;fairlib) (3.1.0)
+Collecting huggingface-hub&lt;1.0,&gt;=0.1.0
+  Downloading huggingface_hub-0.8.1-py3-none-any.whl (101 kB)
+     |████████████████████████████████| 101 kB 11.5 MB/s
+Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (21.3)
+Requirement already satisfied: requests in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (2.23.0)
+Requirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (4.12.0)
+Requirement already satisfied: filelock in /usr/local/lib/python3.7/dist-packages (from transformers-&gt;fairlib) (3.7.1)
+Collecting PyYAML
+  Downloading PyYAML-6.0-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (596 kB)
+     |████████████████████████████████| 596 kB 11.8 MB/s
+Collecting tokenizers!=0.11.3,&lt;0.13,&gt;=0.11.1
+  Downloading tokenizers-0.12.1-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (6.6 MB)
+     |████████████████████████████████| 6.6 MB 33.9 MB/s
+Requirement already satisfied: zipp&gt;=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata-&gt;transformers-&gt;fairlib) (3.8.1)
+Requirement already satisfied: idna&lt;3,&gt;=2.5 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2.10)
+Requirement already satisfied: chardet&lt;4,&gt;=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (3.0.4)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (1.24.3)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests-&gt;transformers-&gt;fairlib) (2022.6.15)
+Building wheels for collected packages: sacremoses
+  Building wheel for sacremoses (setup.py) ... done
+  Created wheel for sacremoses: filename=sacremoses-0.0.53-py3-none-any.whl size=895260 sha256=9e7ef0aea29edc17a4bd4ba5d5f00a2eb51f47d5ed5f7ec133443d60dce94969
+  Stored in directory: /root/.cache/pip/wheels/87/39/dd/a83eeef36d0bf98e7a4d1933a4ad2d660295a40613079bafc9
+Successfully built sacremoses
+Installing collected packages: PyYAML, tokenizers, huggingface-hub, transformers, sacremoses, pickle5, fairlib
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 3.13
+    Uninstalling PyYAML-3.13:
+      Successfully uninstalled PyYAML-3.13
+Successfully installed PyYAML-6.0 fairlib-0.0.9 huggingface-hub-0.8.1 pickle5-0.0.12 sacremoses-0.0.53 tokenizers-0.12.1 transformers-4.20.1
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fairlib
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Download-and-preprocess-the-COMPAS-dataset">
+<h2>Download and preprocess the COMPAS dataset<a class="headerlink" href="#Download-and-preprocess-the-COMPAS-dataset" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://github.com/google-research/google-research/blob/master/group_agnostic_fairness/data_utils/CreateCompasDatasetFiles.ipynb">https://github.com/google-research/google-research/blob/master/group_agnostic_fairness/data_utils/CreateCompasDatasetFiles.ipynb</a></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from fairlib import datasets
+datasets.prepare_dataset(&quot;compas&quot;, &quot;data&quot;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+saving to /content/data/compas-scores-two-years.csv
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f6137cf1210e40f28ed2ab98ecb2ba74"}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+
+pd.read_pickle(&quot;data/COMPAS_dev.pkl&quot;).keys()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Index([&#39;juv_fel_count&#39;, &#39;juv_misd_count&#39;, &#39;juv_other_count&#39;, &#39;priors_count&#39;,
+       &#39;age&#39;, &#39;c_charge_degree_0&#39;, &#39;c_charge_degree_1&#39;, &#39;c_charge_desc_262&#39;,
+       &#39;c_charge_desc_43&#39;, &#39;c_charge_desc_55&#39;,
+       ...
+       &#39;c_charge_desc_323&#39;, &#39;c_charge_desc_66&#39;, &#39;c_charge_desc_40&#39;,
+       &#39;c_charge_desc_33&#39;, &#39;age_cat_1&#39;, &#39;age_cat_0&#39;, &#39;age_cat_2&#39;, &#39;sex&#39;,
+       &#39;race&#39;, &#39;is_recid&#39;],
+      dtype=&#39;object&#39;, length=450)
+</pre></div></div>
+</div>
+</section>
+<section id="Train-Models">
+<h2>Train Models<a class="headerlink" href="#Train-Models" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from fairlib import networks, BaseOptions, dataloaders
+import torch
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Shared_options = {
+    # The name of the dataset, correponding dataloader will be used,
+    &quot;dataset&quot;:  &quot;COMPAS&quot;,
+
+    # Specifiy the path to the input data
+    &quot;data_dir&quot;: &quot;./data&quot;,
+
+    # Device for computing, -1 is the cpu
+    &quot;device_id&quot;: -1,
+
+    # The default path for saving experimental results
+    &quot;results_dir&quot;:  r&quot;results&quot;,
+
+    # The same as the dataset
+    &quot;project_dir&quot;:  r&quot;dev&quot;,
+
+    # We will focusing on TPR GAP, implying the Equalized Odds for binay classification.
+    &quot;GAP_metric_name&quot;:  &quot;TPR_GAP&quot;,
+
+    # The overall performance will be measured as accuracy
+    &quot;Performance_metric_name&quot;:  &quot;accuracy&quot;,
+
+    # Model selections are based on DTO
+    &quot;selection_criterion&quot;:  &quot;DTO&quot;,
+
+    # Default dirs for saving checkpoints
+    &quot;checkpoint_dir&quot;:   &quot;models&quot;,
+    &quot;checkpoint_name&quot;:  &quot;checkpoint_epoch&quot;,
+
+
+    &quot;n_jobs&quot;:   1,
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>args = {
+    &quot;dataset&quot;:Shared_options[&quot;dataset&quot;],
+    &quot;data_dir&quot;:Shared_options[&quot;data_dir&quot;],
+    &quot;device_id&quot;:Shared_options[&quot;device_id&quot;],
+
+    # Give a name to the exp, which will be used in the path
+    &quot;exp_id&quot;:&quot;vanilla&quot;,
+
+    &quot;emb_size&quot;: 450-3,
+    &quot;lr&quot;: 0.001,
+    &quot;batch_size&quot;: 128,
+    &quot;hidden_size&quot;: 32,
+    &quot;n_hidden&quot;: 1,
+    &quot;activation_function&quot;: &quot;ReLu&quot;,
+
+    &quot;num_classes&quot;: 2,
+    &quot;num_groups&quot;: 3, # Balck; White; and Other
+}
+
+# Init the argument
+options = BaseOptions()
+state = options.get_state(args=args, silence=True)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:root:Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-1cc80252-6b1d-427f-a63d-8b70911dfc3b.json&#39;]
+INFO:root:Logging to ./results/dev/COMPAS/vanilla/output.log
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 07:10:35 [INFO ]  ======================================== 2022-07-21 07:10:35 ========================================
+2022-07-21 07:10:35 [INFO ]  Base directory is ./results/dev/COMPAS/vanilla
+2022-07-21 07:10:35 [INFO ]  Exception type : AssertionError
+2022-07-21 07:10:35 [INFO ]  Exception message : Not implemented
+2022-07-21 07:10:35 [INFO ]  Stack trace : [&#39;File : /usr/local/lib/python3.7/dist-packages/fairlib/src/base_options.py , Line : 486, Func.Name : set_state, Message : train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)&#39;, &#39;File : /usr/local/lib/python3.7/dist-packages/fairlib/src/dataloaders/__init__.py , Line : 40, Func.Name : get_dataloaders, Message : ], &#34;Not implemented&#34;&#39;]
+2022-07-21 07:10:35 [INFO ]  dataloaders need to be initialized!
+</pre></div></div>
+</div>
+</section>
+<section id="Customize-dataset-loader">
+<h2>Customize dataset loader<a class="headerlink" href="#Customize-dataset-loader" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
+import pandas as pd
+import numpy as np
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class CustomizedDataset(dataloaders.utils.BaseDataset):
+
+    def load_data(self):
+
+        self.data_dir = os.path.join(self.args.data_dir, &quot;COMPAS_{}.pkl&quot;.format(self.split))
+
+        data = pd.read_pickle(self.data_dir)
+
+        self.X = data.drop([&#39;sex&#39;, &#39;race&#39;, &#39;is_recid&#39;], axis=1).to_numpy().astype(np.float32)
+        self.y = list(data[&quot;is_recid&quot;])
+        self.protected_label = list(data[&quot;race&quot;])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>customized_train_data = CustomizedDataset(args=state, split=&quot;train&quot;)
+customized_dev_data = CustomizedDataset(args=state, split=&quot;dev&quot;)
+customized_test_data = CustomizedDataset(args=state, split=&quot;test&quot;)
+
+# DataLoader Parameters
+tran_dataloader_params = {
+        &#39;batch_size&#39;: state.batch_size,
+        &#39;shuffle&#39;: True,
+        &#39;num_workers&#39;: state.num_workers}
+
+eval_dataloader_params = {
+        &#39;batch_size&#39;: state.test_batch_size,
+        &#39;shuffle&#39;: False,
+        &#39;num_workers&#39;: state.num_workers}
+
+# init dataloader
+customized_training_generator = torch.utils.data.DataLoader(customized_train_data, **tran_dataloader_params)
+customized_validation_generator = torch.utils.data.DataLoader(customized_dev_data, **eval_dataloader_params)
+customized_test_generator = torch.utils.data.DataLoader(customized_test_data, **eval_dataloader_params)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loaded data shapes: (4544, 447), (4544,), (4544,)
+Loaded data shapes: (505, 447), (505,), (505,)
+Loaded data shapes: (2165, 447), (2165,), (2165,)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = networks.classifier.MLP(state)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 07:10:35 [INFO ]  MLP(
+2022-07-21 07:10:35 [INFO ]    (output_layer): Linear(in_features=32, out_features=2, bias=True)
+2022-07-21 07:10:35 [INFO ]    (AF): ReLU()
+2022-07-21 07:10:35 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 07:10:35 [INFO ]      (0): Linear(in_features=447, out_features=32, bias=True)
+2022-07-21 07:10:35 [INFO ]      (1): ReLU()
+2022-07-21 07:10:35 [INFO ]    )
+2022-07-21 07:10:35 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 07:10:35 [INFO ]  )
+2022-07-21 07:10:35 [INFO ]  Total number of parameters: 14402
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.train_self(
+    train_generator = customized_training_generator,
+    dev_generator = customized_validation_generator,
+    test_generator = customized_test_generator,
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 07:10:35 [INFO ]  Epoch:    0 [      0/   4544 ( 0%)]        Loss: 0.6946     Data Time: 0.05s       Train Time: 0.12s
+2022-07-21 07:10:35 [INFO ]  Evaluation at Epoch 0
+2022-07-21 07:10:35 [INFO ]  Validation accuracy: 65.35 macro_fscore: 64.41     micro_fscore: 65.35     TPR_GAP: 37.09  FPR_GAP: 37.09  PPR_GAP: 38.61
+2022-07-21 07:10:35 [INFO ]  Test accuracy: 67.30       macro_fscore: 66.29     micro_fscore: 67.30     TPR_GAP: 28.96  FPR_GAP: 28.96  PPR_GAP: 33.07
+2022-07-21 07:10:35 [INFO ]  Epoch:    1 [      0/   4544 ( 0%)]        Loss: 0.6375     Data Time: 0.00s       Train Time: 0.00s
+2022-07-21 07:10:35 [INFO ]  Evaluation at Epoch 1
+2022-07-21 07:10:35 [INFO ]  Validation accuracy: 66.14 macro_fscore: 65.92     micro_fscore: 66.14     TPR_GAP: 30.20  FPR_GAP: 30.20  PPR_GAP: 32.54
+2022-07-21 07:10:35 [INFO ]  Test accuracy: 67.53       macro_fscore: 67.12     micro_fscore: 67.53     TPR_GAP: 31.45  FPR_GAP: 31.45  PPR_GAP: 36.71
+2022-07-21 07:10:35 [INFO ]  Epoch:    2 [      0/   4544 ( 0%)]        Loss: 0.5948     Data Time: 0.01s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 2
+2022-07-21 07:10:36 [INFO ]  Validation accuracy: 66.14 macro_fscore: 66.00     micro_fscore: 66.14     TPR_GAP: 31.74  FPR_GAP: 31.74  PPR_GAP: 34.83
+2022-07-21 07:10:36 [INFO ]  Test accuracy: 68.55       macro_fscore: 68.24     micro_fscore: 68.55     TPR_GAP: 32.02  FPR_GAP: 32.02  PPR_GAP: 38.27
+2022-07-21 07:10:36 [INFO ]  Epoch:    3 [      0/   4544 ( 0%)]        Loss: 0.6298     Data Time: 0.01s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Epochs since last improvement: 1
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 3
+2022-07-21 07:10:36 [INFO ]  Validation accuracy: 65.94 macro_fscore: 65.71     micro_fscore: 65.94     TPR_GAP: 35.41  FPR_GAP: 35.41  PPR_GAP: 38.06
+2022-07-21 07:10:36 [INFO ]  Test accuracy: 68.96       macro_fscore: 68.54     micro_fscore: 68.96     TPR_GAP: 32.02  FPR_GAP: 32.02  PPR_GAP: 37.86
+2022-07-21 07:10:36 [INFO ]  Epoch:    4 [      0/   4544 ( 0%)]        Loss: 0.5868     Data Time: 0.00s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Epochs since last improvement: 2
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 4
+2022-07-21 07:10:36 [INFO ]  Validation accuracy: 65.35 macro_fscore: 65.32     micro_fscore: 65.35     TPR_GAP: 35.10  FPR_GAP: 35.10  PPR_GAP: 38.32
+2022-07-21 07:10:36 [INFO ]  Test accuracy: 68.91       macro_fscore: 68.80     micro_fscore: 68.91     TPR_GAP: 33.54  FPR_GAP: 33.54  PPR_GAP: 40.45
+2022-07-21 07:10:36 [INFO ]  Epoch:    5 [      0/   4544 ( 0%)]        Loss: 0.5572     Data Time: 0.00s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Epochs since last improvement: 3
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 5
+2022-07-21 07:10:36 [INFO ]  Validation accuracy: 65.54 macro_fscore: 65.24     micro_fscore: 65.54     TPR_GAP: 35.02  FPR_GAP: 35.02  PPR_GAP: 37.96
+2022-07-21 07:10:36 [INFO ]  Test accuracy: 68.96       macro_fscore: 68.47     micro_fscore: 68.96     TPR_GAP: 30.91  FPR_GAP: 30.91  PPR_GAP: 36.59
+2022-07-21 07:10:36 [INFO ]  Epoch:    6 [      0/   4544 ( 0%)]        Loss: 0.5651     Data Time: 0.00s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Epochs since last improvement: 4
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 6
+2022-07-21 07:10:36 [INFO ]  Validation accuracy: 64.36 macro_fscore: 64.22     micro_fscore: 64.36     TPR_GAP: 34.11  FPR_GAP: 34.11  PPR_GAP: 36.69
+2022-07-21 07:10:36 [INFO ]  Test accuracy: 69.01       macro_fscore: 68.75     micro_fscore: 69.01     TPR_GAP: 30.58  FPR_GAP: 30.58  PPR_GAP: 37.35
+2022-07-21 07:10:36 [INFO ]  Epoch:    7 [      0/   4544 ( 0%)]        Loss: 0.6300     Data Time: 0.00s       Train Time: 0.00s
+2022-07-21 07:10:36 [INFO ]  Epochs since last improvement: 5
+2022-07-21 07:10:36 [INFO ]  Evaluation at Epoch 7
+2022-07-21 07:10:37 [INFO ]  Validation accuracy: 64.75 macro_fscore: 64.75     micro_fscore: 64.75     TPR_GAP: 31.62  FPR_GAP: 31.62  PPR_GAP: 34.74
+2022-07-21 07:10:37 [INFO ]  Test accuracy: 68.68       macro_fscore: 68.59     micro_fscore: 68.68     TPR_GAP: 31.42  FPR_GAP: 31.42  PPR_GAP: 38.69
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>debiasing_args = {
+    &quot;dataset&quot;:Shared_options[&quot;dataset&quot;],
+    &quot;data_dir&quot;:Shared_options[&quot;data_dir&quot;],
+    &quot;device_id&quot;:Shared_options[&quot;device_id&quot;],
+
+    # Give a name to the exp, which will be used in the path
+    &quot;exp_id&quot;:&quot;BT_Adv&quot;,
+
+    &quot;emb_size&quot;: 450-3,
+    &quot;lr&quot;: 0.001,
+    &quot;batch_size&quot;: 128,
+    &quot;hidden_size&quot;: 32,
+    &quot;n_hidden&quot;: 1,
+    &quot;activation_function&quot;: &quot;ReLu&quot;,
+
+    &quot;num_classes&quot;: 2,
+    &quot;num_groups&quot;: 3, # Balck; White; and Other
+
+    # Perform adversarial training if True
+    &quot;adv_debiasing&quot;:True,
+
+    # Specify the hyperparameters for Balanced Training
+    &quot;BT&quot;:&quot;Resampling&quot;,
+    &quot;BTObj&quot;:&quot;EO&quot;,
+}
+
+# Init the argument
+debias_options = BaseOptions()
+debias_state = debias_options.get_state(args=debiasing_args, silence=True)
+
+customized_train_data = CustomizedDataset(args=debias_state, split=&quot;train&quot;)
+customized_dev_data = CustomizedDataset(args=debias_state, split=&quot;dev&quot;)
+customized_test_data = CustomizedDataset(args=debias_state, split=&quot;test&quot;)
+
+# DataLoader Parameters
+tran_dataloader_params = {
+        &#39;batch_size&#39;: state.batch_size,
+        &#39;shuffle&#39;: True,
+        &#39;num_workers&#39;: state.num_workers}
+
+eval_dataloader_params = {
+        &#39;batch_size&#39;: state.test_batch_size,
+        &#39;shuffle&#39;: False,
+        &#39;num_workers&#39;: state.num_workers}
+
+# init dataloader
+customized_training_generator = torch.utils.data.DataLoader(customized_train_data, **tran_dataloader_params)
+customized_validation_generator = torch.utils.data.DataLoader(customized_dev_data, **eval_dataloader_params)
+customized_test_generator = torch.utils.data.DataLoader(customized_test_data, **eval_dataloader_params)
+
+debias_model = networks.classifier.MLP(debias_state)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 07:10:37 [INFO ]  Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-1cc80252-6b1d-427f-a63d-8b70911dfc3b.json&#39;]
+2022-07-21 07:10:37 [INFO ]  Logging to ./results/dev/COMPAS/BT_Adv/output.log
+2022-07-21 07:10:37 [INFO ]  ======================================== 2022-07-21 07:10:37 ========================================
+2022-07-21 07:10:37 [INFO ]  Base directory is ./results/dev/COMPAS/BT_Adv
+2022-07-21 07:10:37 [INFO ]  Exception type : AssertionError
+2022-07-21 07:10:37 [INFO ]  Exception message : Not implemented
+2022-07-21 07:10:37 [INFO ]  Stack trace : [&#39;File : /usr/local/lib/python3.7/dist-packages/fairlib/src/base_options.py , Line : 486, Func.Name : set_state, Message : train_iterator, dev_iterator, test_iterator = dataloaders.get_dataloaders(state)&#39;, &#39;File : /usr/local/lib/python3.7/dist-packages/fairlib/src/dataloaders/__init__.py , Line : 40, Func.Name : get_dataloaders, Message : ], &#34;Not implemented&#34;&#39;]
+2022-07-21 07:10:37 [INFO ]  dataloaders need to be initialized!
+2022-07-21 07:10:37 [INFO ]  SubDiscriminator(
+2022-07-21 07:10:37 [INFO ]    (grad_rev): GradientReversal()
+2022-07-21 07:10:37 [INFO ]    (output_layer): Linear(in_features=300, out_features=3, bias=True)
+2022-07-21 07:10:37 [INFO ]    (AF): ReLU()
+2022-07-21 07:10:37 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 07:10:37 [INFO ]      (0): Linear(in_features=32, out_features=300, bias=True)
+2022-07-21 07:10:37 [INFO ]      (1): ReLU()
+2022-07-21 07:10:37 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-07-21 07:10:37 [INFO ]      (3): ReLU()
+2022-07-21 07:10:37 [INFO ]    )
+2022-07-21 07:10:37 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 07:10:37 [INFO ]  )
+2022-07-21 07:10:37 [INFO ]  Total number of parameters: 101103
+
+2022-07-21 07:10:37 [INFO ]  Discriminator built!
+Loaded data shapes: (4542, 447), (4542,), (4542,)
+Loaded data shapes: (505, 447), (505,), (505,)
+Loaded data shapes: (2165, 447), (2165,), (2165,)
+2022-07-21 07:10:37 [INFO ]  MLP(
+2022-07-21 07:10:37 [INFO ]    (output_layer): Linear(in_features=32, out_features=2, bias=True)
+2022-07-21 07:10:37 [INFO ]    (AF): ReLU()
+2022-07-21 07:10:37 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 07:10:37 [INFO ]      (0): Linear(in_features=447, out_features=32, bias=True)
+2022-07-21 07:10:37 [INFO ]      (1): ReLU()
+2022-07-21 07:10:37 [INFO ]    )
+2022-07-21 07:10:37 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 07:10:37 [INFO ]  )
+2022-07-21 07:10:37 [INFO ]  Total number of parameters: 14402
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>debias_model.train_self(
+    train_generator = customized_training_generator,
+    dev_generator = customized_validation_generator,
+    test_generator = customized_test_generator,
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 07:10:37 [INFO ]  Epoch:    0 [      0/   4542 ( 0%)]        Loss: -0.4072    Data Time: 0.00s       Train Time: 0.05s
+2022-07-21 07:10:37 [INFO ]  Evaluation at Epoch 0
+2022-07-21 07:10:38 [INFO ]  Validation accuracy: 65.54 macro_fscore: 65.27     micro_fscore: 65.54     TPR_GAP: 32.32  FPR_GAP: 32.32  PPR_GAP: 35.63
+2022-07-21 07:10:38 [INFO ]  Test accuracy: 67.44       macro_fscore: 67.00     micro_fscore: 67.44     TPR_GAP: 30.82  FPR_GAP: 30.82  PPR_GAP: 36.06
+2022-07-21 07:10:38 [INFO ]  Epoch:    1 [      0/   4542 ( 0%)]        Loss: -0.4403    Data Time: 0.00s       Train Time: 0.02s
+2022-07-21 07:10:38 [INFO ]  Evaluation at Epoch 1
+2022-07-21 07:10:38 [INFO ]  Validation accuracy: 64.36 macro_fscore: 64.04     micro_fscore: 64.36     TPR_GAP: 31.50  FPR_GAP: 31.50  PPR_GAP: 34.76
+2022-07-21 07:10:38 [INFO ]  Test accuracy: 67.67       macro_fscore: 67.06     micro_fscore: 67.67     TPR_GAP: 28.13  FPR_GAP: 28.13  PPR_GAP: 34.07
+2022-07-21 07:10:38 [INFO ]  Epoch:    2 [      0/   4542 ( 0%)]        Loss: -0.4799    Data Time: 0.00s       Train Time: 0.03s
+2022-07-21 07:10:39 [INFO ]  Evaluation at Epoch 2
+2022-07-21 07:10:39 [INFO ]  Validation accuracy: 61.58 macro_fscore: 61.53     micro_fscore: 61.58     TPR_GAP: 32.47  FPR_GAP: 32.47  PPR_GAP: 34.93
+2022-07-21 07:10:39 [INFO ]  Test accuracy: 66.65       macro_fscore: 66.41     micro_fscore: 66.65     TPR_GAP: 27.35  FPR_GAP: 27.36  PPR_GAP: 33.06
+2022-07-21 07:10:39 [INFO ]  Epoch:    3 [      0/   4542 ( 0%)]        Loss: -0.4201    Data Time: 0.00s       Train Time: 0.02s
+2022-07-21 07:10:40 [INFO ]  Evaluation at Epoch 3
+2022-07-21 07:10:40 [INFO ]  Validation accuracy: 62.97 macro_fscore: 62.76     micro_fscore: 62.97     TPR_GAP: 35.73  FPR_GAP: 35.73  PPR_GAP: 38.56
+2022-07-21 07:10:40 [INFO ]  Test accuracy: 67.62       macro_fscore: 67.05     micro_fscore: 67.62     TPR_GAP: 26.93  FPR_GAP: 26.93  PPR_GAP: 33.23
+2022-07-21 07:10:40 [INFO ]  Epoch:    4 [      0/   4542 ( 0%)]        Loss: -0.5529    Data Time: 0.00s       Train Time: 0.01s
+2022-07-21 07:10:41 [INFO ]  Epochs since last improvement: 1
+2022-07-21 07:10:41 [INFO ]  Evaluation at Epoch 4
+2022-07-21 07:10:41 [INFO ]  Validation accuracy: 61.98 macro_fscore: 61.78     micro_fscore: 61.98     TPR_GAP: 35.31  FPR_GAP: 35.31  PPR_GAP: 37.22
+2022-07-21 07:10:41 [INFO ]  Test accuracy: 67.67       macro_fscore: 67.16     micro_fscore: 67.67     TPR_GAP: 25.47  FPR_GAP: 25.47  PPR_GAP: 31.31
+2022-07-21 07:10:41 [INFO ]  Epoch:    5 [      0/   4542 ( 0%)]        Loss: -0.4623    Data Time: 0.00s       Train Time: 0.02s
+2022-07-21 07:10:42 [INFO ]  Evaluation at Epoch 5
+2022-07-21 07:10:42 [INFO ]  Validation accuracy: 63.37 macro_fscore: 63.24     micro_fscore: 63.37     TPR_GAP: 32.46  FPR_GAP: 32.46  PPR_GAP: 34.72
+2022-07-21 07:10:42 [INFO ]  Test accuracy: 67.02       macro_fscore: 66.56     micro_fscore: 67.02     TPR_GAP: 26.19  FPR_GAP: 26.19  PPR_GAP: 32.26
+2022-07-21 07:10:42 [INFO ]  Epoch:    6 [      0/   4542 ( 0%)]        Loss: -0.4727    Data Time: 0.00s       Train Time: 0.01s
+2022-07-21 07:10:43 [INFO ]  Epochs since last improvement: 1
+2022-07-21 07:10:43 [INFO ]  Evaluation at Epoch 6
+2022-07-21 07:10:43 [INFO ]  Validation accuracy: 65.15 macro_fscore: 65.05     micro_fscore: 65.15     TPR_GAP: 32.60  FPR_GAP: 32.60  PPR_GAP: 35.29
+2022-07-21 07:10:43 [INFO ]  Test accuracy: 66.70       macro_fscore: 66.36     micro_fscore: 66.70     TPR_GAP: 27.40  FPR_GAP: 27.40  PPR_GAP: 32.54
+2022-07-21 07:10:43 [INFO ]  Epoch:    7 [      0/   4542 ( 0%)]        Loss: -0.4569    Data Time: 0.00s       Train Time: 0.02s
+2022-07-21 07:10:44 [INFO ]  Epochs since last improvement: 2
+2022-07-21 07:10:44 [INFO ]  Evaluation at Epoch 7
+2022-07-21 07:10:44 [INFO ]  Validation accuracy: 65.74 macro_fscore: 65.69     micro_fscore: 65.74     TPR_GAP: 32.00  FPR_GAP: 32.00  PPR_GAP: 35.02
+2022-07-21 07:10:44 [INFO ]  Test accuracy: 66.84       macro_fscore: 66.62     micro_fscore: 66.84     TPR_GAP: 27.97  FPR_GAP: 27.97  PPR_GAP: 33.59
+2022-07-21 07:10:44 [INFO ]  Epoch:    8 [      0/   4542 ( 0%)]        Loss: -0.4861    Data Time: 0.00s       Train Time: 0.01s
+2022-07-21 07:10:44 [INFO ]  Epochs since last improvement: 3
+2022-07-21 07:10:44 [INFO ]  Evaluation at Epoch 8
+2022-07-21 07:10:44 [INFO ]  Validation accuracy: 64.36 macro_fscore: 64.16     micro_fscore: 64.36     TPR_GAP: 39.90  FPR_GAP: 39.90  PPR_GAP: 42.72
+2022-07-21 07:10:44 [INFO ]  Test accuracy: 66.28       macro_fscore: 65.64     micro_fscore: 66.28     TPR_GAP: 24.97  FPR_GAP: 24.97  PPR_GAP: 29.19
+2022-07-21 07:10:44 [INFO ]  Epoch:    9 [      0/   4542 ( 0%)]        Loss: -0.5028    Data Time: 0.00s       Train Time: 0.01s
+2022-07-21 07:10:45 [INFO ]  Epochs since last improvement: 4
+2022-07-21 07:10:45 [INFO ]  Evaluation at Epoch 9
+2022-07-21 07:10:45 [INFO ]  Validation accuracy: 63.76 macro_fscore: 63.67     micro_fscore: 63.76     TPR_GAP: 31.83  FPR_GAP: 31.83  PPR_GAP: 34.30
+2022-07-21 07:10:45 [INFO ]  Test accuracy: 66.61       macro_fscore: 66.15     micro_fscore: 66.61     TPR_GAP: 25.55  FPR_GAP: 25.55  PPR_GAP: 29.76
+2022-07-21 07:10:45 [INFO ]  Epoch:   10 [      0/   4542 ( 0%)]        Loss: -0.5265    Data Time: 0.00s       Train Time: 0.01s
+2022-07-21 07:10:46 [INFO ]  Epochs since last improvement: 5
+2022-07-21 07:10:46 [INFO ]  Evaluation at Epoch 10
+2022-07-21 07:10:46 [INFO ]  Validation accuracy: 64.55 macro_fscore: 64.55     micro_fscore: 64.55     TPR_GAP: 30.83  FPR_GAP: 30.83  PPR_GAP: 32.99
+2022-07-21 07:10:46 [INFO ]  Test accuracy: 66.28       macro_fscore: 66.11     micro_fscore: 66.28     TPR_GAP: 26.50  FPR_GAP: 26.50  PPR_GAP: 32.48
+</pre></div></div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"f6137cf1210e40f28ed2ab98ecb2ba74": {"model_module": "@jupyter-widgets/controls", "model_name": "HBoxModel", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_8635022ff82d4fc48ac6ef965b29e043", "IPY_MODEL_32be46c7c1574c17809338831434202f", "IPY_MODEL_3e5331dd05a742729a83fb18f1d5e474"], "layout": "IPY_MODEL_a142bec177e6484eba9439ea554427ad"}}, "8635022ff82d4fc48ac6ef965b29e043": {"model_module": "@jupyter-widgets/controls", "model_name": "HTMLModel", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_ae6e5619acf84bdeb186166075f6a786", "placeholder": "\u200b", "style": "IPY_MODEL_f6be0b84185c4b2c9fdf15e9cb218f0f", "value": "100%"}}, "32be46c7c1574c17809338831434202f": {"model_module": "@jupyter-widgets/controls", "model_name": "FloatProgressModel", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_2dc9d1fd92674cde8844d53acadb6ef1", "max": 1, "min": 0, "orientation": "horizontal", "style": "IPY_MODEL_a8113f07bea140c6a811176a20976707", "value": 1}}, "3e5331dd05a742729a83fb18f1d5e474": {"model_module": "@jupyter-widgets/controls", "model_name": "HTMLModel", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_480f8a7ee5704f98ba463cf2395b63fe", "placeholder": "\u200b", "style": "IPY_MODEL_694dfb22b7704634a3aa34a8cf501444", "value": " 1/1 [00:00&lt;00:00,  6.07it/s]"}}, "a142bec177e6484eba9439ea554427ad": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "ae6e5619acf84bdeb186166075f6a786": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f6be0b84185c4b2c9fdf15e9cb218f0f": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "2dc9d1fd92674cde8844d53acadb6ef1": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a8113f07bea140c6a811176a20976707": {"model_module": "@jupyter-widgets/controls", "model_name": "ProgressStyleModel", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "480f8a7ee5704f98ba463cf2395b63fe": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "694dfb22b7704634a3aa34a8cf501444": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}}
+</script></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Image_Inputs.html" class="btn btn-neutral float-left" title="Customized models and datasets for CV" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_gallery.html" class="btn btn-neutral float-right" title="Load experimental results" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

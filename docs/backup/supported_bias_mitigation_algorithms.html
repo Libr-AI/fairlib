@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Built-in Debiasing Methods &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_notebooks.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Built-in Debiasing Methods</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="built-in-debiasing-methods">
+<h1>Built-in Debiasing Methods<a class="headerlink" href="#built-in-debiasing-methods" title="Permalink to this headline"></a></h1>
+<p>The currently supported bias mitigation methods include:</p>
+<section id="learning-fair-representations">
+<h2>Learning Fair Representations<a class="headerlink" href="#learning-fair-representations" title="Permalink to this headline"></a></h2>
+<section id="adversarial-training">
+<h3>Adversarial Training<a class="headerlink" href="#adversarial-training" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Li, Yitong, Timothy Baldwin and Trevor Cohn (2018) [Towards Robust and Privacy-preserving Text Representations](https://aclanthology.org/P18-2005/), ACL 2018.  
+
+Elazar, Yanai and Yoav Goldberg (2018) [Adversarial Removal of Demographic Attributes from Text Data](https://aclanthology.org/D18-1002/), EMNLP 2018.
+
+Wang, Tianlu, Jieyu Zhao, Mark Yatskar, Kai-Wei Chang and Vicente Ordóñez (2019) [Balanced Datasets Are Not Enough: Estimating and Mitigating Gender Bias in Deep Image Representations](https://arxiv.org/abs/1811.08489), ICCV 2019.  
+
+Zhao, Han and Geoff Gordon (2019) [Inherent Tradeoffs in Learning Fair Representations](https://papers.nips.cc/paper/2019/hash/b4189d9de0fb2b9cce090bd1a15e3420-Abstract.html), NeurIPS 2019.
+</pre></div>
+</div>
+</section>
+<section id="diverse-adversarial-training">
+<h3>Diverse Adversarial Training<a class="headerlink" href="#diverse-adversarial-training" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Diverse Adversaries for Mitigating Bias in Training](https://aclanthology.org/2021.eacl-main.239/), EACL 2021.
+</pre></div>
+</div>
+</section>
+<section id="decoupled-adversarial-training">
+<h3>Decoupled Adversarial Training<a class="headerlink" href="#decoupled-adversarial-training" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Decoupling Adversarial Training for Fair NLP](https://aclanthology.org/2021.findings-acl.41/), Findings of ACL 2021.
+</pre></div>
+</div>
+</section>
+<section id="towards-equal-opportunity-fairness-through-adversarial-learning">
+<h3>Towards Equal Opportunity Fairness through Adversarial Learning<a class="headerlink" href="#towards-equal-opportunity-fairness-through-adversarial-learning" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Han, Xudong, Timothy Baldwin and Trevor Cohn (2022) [Towards Equal Opportunity Fairness through Adversarial Learning](https://arxiv.org/abs/2203.06317), CoRR abs/2203.06317.
+</pre></div>
+</div>
+</section>
+<section id="inlp">
+<h3>INLP<a class="headerlink" href="#inlp" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>  Ravfogel, Shauli, Yanai Elazar, Hila Gonen, Michael Twiton and Yoav Goldberg (2020) [Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection](https://aclanthology.org/2020.acl-main.647.pdf)
+</pre></div>
+</div>
+</section>
+<section id="contrastive-learning-for-fair-representation">
+<h3>Contrastive Learning for Fair Representation<a class="headerlink" href="#contrastive-learning-for-fair-representation" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>  Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2021) [Contrastive Learning for Fair Representations](https://arxiv.org/abs/2109.10645), CoRR abs/2109.10645.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="balanced-training">
+<h2>Balanced Training<a class="headerlink" href="#balanced-training" title="Permalink to this headline"></a></h2>
+<section id="instance-reweighting-and-resampling">
+<h3>Instance Reweighting and Resampling<a class="headerlink" href="#instance-reweighting-and-resampling" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.  
+
+Lahoti, Preethi, Alex Beutel, Jilin Chen, Kang Lee, Flavien Prost, Nithum Thain, Xuezhi Wang and Ed Chi (2020) [Fairness without Demographics through Adversarially Reweighted Learning](https://papers.nips.cc/paper/2020/hash/07fc15c9d169ee48573edd749d25945d-Abstract.html), NeurIPS 2020.  
+
+Wang, Tianlu, Jieyu Zhao, Mark Yatskar, Kai-Wei Chang and Vicente Ordóñez (2019) [Balanced Datasets Are Not Enough: Estimating and Mitigating Gender Bias in Deep Image Representations](https://arxiv.org/abs/1811.08489), ICCV 2019.  
+</pre></div>
+</div>
+</section>
+<section id="fairbatch-resampling-dynamically-during-training">
+<h3>FairBatch: resampling dynamically during training<a class="headerlink" href="#fairbatch-resampling-dynamically-during-training" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Roh, Yuji, Kangwook Lee, Steven Euijong Whang, and Changho Suh (2021) [FairBatch: Batch Selection for Model Fairness](https://arxiv.org/abs/2012.01696), ICLR, 2021
+</pre></div>
+</div>
+</section>
+<section id="minimizing-group-difference-for-equal-opportunity-fairness">
+<h3>Minimizing Group Difference for Equal Opportunity Fairness<a class="headerlink" href="#minimizing-group-difference-for-equal-opportunity-fairness" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Shen, Aili, Xudong Han, Trevor Cohn, Timothy Baldwin, and Lea Frermann (2022) [Connecting Loss Difference with Equal Opportunity for Fair Models ]().
+</pre></div>
+</div>
+</section>
+</section>
+<section id="incorporating-demographic-factors">
+<h2>Incorporating Demographic Factors<a class="headerlink" href="#incorporating-demographic-factors" title="Permalink to this headline"></a></h2>
+<section id="representation-augmentation">
+<h3>Representation Augmentation<a class="headerlink" href="#representation-augmentation" title="Permalink to this headline"></a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Han, Xudong, Timothy Baldwin and Trevor Cohn (2021) [Balancing out Bias: Achieving Fairness Through Training Reweighting](https://arxiv.org/abs/2109.08253), CoRR abs/2109.08253.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

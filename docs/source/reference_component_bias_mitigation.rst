@@ -8,7 +8,7 @@ Bias Mitigation
    * - Type
      - Algorithm
      - Regression
-     - Material
+     - Links
    * -  | Pre-
         |
         |
@@ -40,7 +40,7 @@ Bias Mitigation
         | Gate
         | FairBatch
         | FairSCL
-        | EO_CLA
+        | EO_CLA & EO_GLB
      -  | Natural
         | Natural
         | Natural
@@ -65,3 +65,6 @@ Bias Mitigation
         | Discretization
      -  | `Paper <https://aclanthology.org/2020.acl-main.647/>`__, `Github <https://github.com/shauli-ravfogel/nullspace_projection>`__, `Code <https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/INLP>`__
         | `Paper <https://arxiv.org/abs/2109.08253>`__, `Github <https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39>`__, `Code <https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39>`__
+
+* A list of built-in debiasing methods, check out our `paper <http://arxiv.org/abs/2205.01876>`__ and `cheat sheet <https://hanxudong.github.io/fairlib/tutorial_usage.html>`__ for more details.
+* All debiasing methods are designed for discrete outputs, but may not naturally support for continuous outputs. **Natural** refers to methods that naturally support continuous outputs, and **discretization** refers to discrete proxy label which is an built-in method to adopt classification 

@@ -11,8 +11,7 @@ Welcome to fairlib's documentation!
    :maxdepth: 1
 
    README
-   supported_bias_mitigation_algorithms
-   tutorial_interactive_demos
+   tutorial_notebooks
    tutorial_customized_datasets_and_dataloaders
    tutorial_customized_evaluation
    tutorial_customized_models
@@ -22,6 +21,7 @@ Welcome to fairlib's documentation!
    :caption: Component Reference
    :maxdepth: 1
 
+   reference_component_benchmark_datasets
    reference_component_bias_detection
    reference_component_bias_mitigation
    reference_component_hyperparameter_tuning

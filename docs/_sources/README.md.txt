@@ -1,11 +1,12 @@
 # *fairlib* Quick-start
 
-[*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving classification fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
+
+[*fairlib*](https://github.com/HanXudong/fairlib) is a Python framework for assessing and improving fairness. Built-in algorithms can be applied to text inputs, structured inputs, and image inputs.  
 
 The *fairlib* package includes metrics for fairness evaluation, [algorithms for bias mitigation](https://hanxudong.github.io/fairlib/supported_bias_mitigation_algorithms.html), and functions for analysis.
 
-For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
-[The tutorials and other notebooks](https://hanxudong.github.io/fairlib/tutorial_interactive_demos.html) offer a deeper introduction. The complete API is also available.
+For those who want to start with *fairlib* now, you can try our [Colab Tutorial](https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/fairlib_demo.ipynb), which provides a gentle introduction to the concepts and capabilities. 
+[The tutorials and other notebooks](https://hanxudong.github.io/fairlib/tutorial_interactive_demos.html) offer a deeper introduction. The [complete API](https://hanxudong.github.io/fairlib) is also available.
 
 ## Installation
 
@@ -22,7 +23,7 @@ If you do not need further modifications, you can install it with:
 conda create -n fairlib python=3.7
 conda activate fairlib
 
-pip install faircls
+pip install fairlib
 ```
 
 **Development Installation**
@@ -90,7 +91,7 @@ or describe it in Issues.
 [fairlib: A Unified Framework for Assessing and Improving Classification Fairness](https://arxiv.org/abs/2205.01876)
 
 Cite Us
-```
+```xml
 @article{han2022fairlib,
   title={fairlib: A Unified Framework for Assessing and Improving Classification Fairness},
   author={Han, Xudong and Shen, Aili and Li, Yitong and Frermann, Lea and Baldwin, Timothy and Cohn, Trevor},

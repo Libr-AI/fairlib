@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark Datasets &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bias Detection" href="reference_component_bias_detection.html" />
+    <link rel="prev" title="Adding Customized Debiasing Methods" href="tutorial_customized_methods.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_notebooks.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Benchmark Datasets</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="benchmark-datasets">
+<h1>Benchmark Datasets<a class="headerlink" href="#benchmark-datasets" title="Permalink to this headline"></a></h1>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Built-in debiasing methods</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Task</p></th>
+<th class="head"><p>Links</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">Language</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Moji</div>
+<div class="line">Bios</div>
+<div class="line">TrustPolit</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Sentiment Analysis</div>
+<div class="line">Occupation classification</div>
+<div class="line">POS</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://aclanthology.org/D17-1323/">Paper</a>, <a class="reference external" href="https://github.com/uclanlp/reducingbias">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/1811.08489">Paper</a>, <a class="reference external" href="https://github.com/uvavision/Balanced-Datasets-Are-Not-Enough">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2006.13114">Paper</a>, <a class="reference external" href="https://github.com/google-research/google-research/tree/master/group_agnostic_fairness">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/fairlib/src/dataloaders/BT.py">Code</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">Image</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">MNIST</div>
+<div class="line">imSitu</div>
+<div class="line">MSCOCO</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Digit classification</div>
+<div class="line">Verb classification</div>
+<div class="line">Objective Detection</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/1805.06093">Paper</a>, <a class="reference external" href="https://github.com/lrank/Robust_and_Privacy_preserving_Text_Representations">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/pdf/1808.06640.pdf">Paper</a>, <a class="reference external" href="https://github.com/yanaiela/demog-text-removal">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2101.10001">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/Diverse_Adversaries_for_Mitigating_Bias_in_Training">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/adv">Code</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">Structured</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Adult</div>
+<div class="line">COMPAS</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Income Prediction</div>
+<div class="line">Recidivism Prediction</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://aclanthology.org/2020.acl-main.647/">Paper</a>, <a class="reference external" href="https://github.com/shauli-ravfogel/nullspace_projection">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/src/networks/INLP">Code</a></div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2109.08253">Paper</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39">Github</a>, <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/6dc60888748b2c04fc23eae101a56bcee078518a/fairlib/src/networks/classifier.py#L36-L39">Code</a></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_customized_methods.html" class="btn btn-neutral float-left" title="Adding Customized Debiasing Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference_component_bias_detection.html" class="btn btn-neutral float-right" title="Bias Detection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

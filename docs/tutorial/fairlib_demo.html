@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fairlib: A Unified Framework for Assessing and Improving Fairness &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Customized models and datasets for CV" href="Image_Inputs.html" />
+    <link rel="prev" title="Interactive Demos" href="../tutorial_notebooks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial_notebooks.html">Interactive Demos</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><em>fairlib</em>: A Unified Framework for Assessing and Improving Fairness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#1.-Installation">1. Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#2.-Build-a-dataset">2. Build a dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#3.-Train-a-vanilla-model-without-debiasing">3. Train a vanilla model without debiasing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Specify-hyperparameters">Specify hyperparameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Initialize-a-model">Initialize a model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Train-a-model">Train a model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#4.-Improve-Fairness">4. Improve Fairness</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Enable-debiasing">Enable debiasing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Mitigate-bias">Mitigate bias</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#5.-Analyze-the-results">5. Analyze the results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Epoch-Selection">Epoch Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Model-Selection">Model Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Create-\LaTeX{}-tabels">Create <span class="math notranslate nohighlight">\(\LaTeX{}\)</span> tabels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Create-plots">Create plots</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#6.-Cutomize-pipeline-for-fairness">6. Cutomize pipeline for fairness</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Image_Inputs.html">Customized models and datasets for CV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Structured_Inputs.html">Customized models and datasets for structured inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_gallery.html">Load experimental results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interactive_plots.html">Interactive plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulate_data_distribution.html">Manilulating Data Distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html"><em>fairlib</em> Evaluation Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../tutorial_notebooks.html">Interactive Demos</a> &raquo;</li>
+      <li><em>fairlib</em>: A Unified Framework for Assessing and Improving Fairness</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="fairlib:-A-Unified-Framework-for-Assessing-and-Improving-Fairness">
+<h1><em>fairlib</em>: A Unified Framework for Assessing and Improving Fairness<a class="headerlink" href="#fairlib:-A-Unified-Framework-for-Assessing-and-Improving-Fairness" title="Permalink to this headline"></a></h1>
+<p>Xudong Han<span class="math notranslate nohighlight">\(^{1}\)</span>,   Aili Shen<span class="math notranslate nohighlight">\(^{1,2, a}\)</span>,   Yitong Li<span class="math notranslate nohighlight">\(^{3}\)</span>,   Lea Frermann<span class="math notranslate nohighlight">\(^{1}\)</span>,   Timothy Baldwin<span class="math notranslate nohighlight">\(^{1,4}\)</span>,   and   Trevor Cohn<span class="math notranslate nohighlight">\(^{1}\)</span></p>
+<p><span class="math notranslate nohighlight">\(^{1}\)</span> The University of Melbourne</p>
+<p><span class="math notranslate nohighlight">\(^{2}\)</span> Alexa AI, Amazon</p>
+<p><span class="math notranslate nohighlight">\(^{3}\)</span> Huawei Technologies Co., Ltd.</p>
+<p><span class="math notranslate nohighlight">\(^{4}\)</span> MBZUAI</p>
+<p><img alt="a6444553018c445b81b94620db50919b" class="no-scaled-link" src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/Logo_of_the_University_of_Melbourne.svg/330px-Logo_of_the_University_of_Melbourne.svg.png" style="height: 100px;" />         <img alt="043cde133257460c8567ff81b00e500c" class="no-scaled-link" src="https://2019.emnlp.org/assets/images/logos/huawei-logo.png" style="height: 100px;" />         <img alt="57573e8e6d7e468c812a894a34cc6266" class="no-scaled-link" src="https://mbzuai.ac.ae/application/themes/mbzuai/dist/images/mbzuai_logo.png" style="height: 100px;" /></p>
+<hr class="docutils" />
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(^a\)</span> Work carried out at The University of Melbourne</p></li>
+<li><p><em>fairlib</em> is licensed under the <strong>Apache License 2.0</strong></p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/HanXudong/fairlib">GitHub</a>, <a class="reference external" href="https://hanxudong.github.io/fairlib/">Docs</a>, <a class="reference external" href="https://pypi.org/project/fairlib/">PyPI</a></p>
+<p><a class="reference external" href="https://colab.research.google.com/github/HanXudong/fairlib/blob/main/tutorial/fairlib_demo.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this video, we will demostrate how to: 1. Install <em>fairlib</em> 2. Access fairness benchmark datasets 3. Train a vanilla model without debiasing, and measure fairness 4. Improve fairness with most recent debiasing methods 5. Analyze the results, such as creating tables and figures</p>
+<section id="1.-Installation">
+<h2>1. Installation<a class="headerlink" href="#1.-Installation" title="Permalink to this headline"></a></h2>
+<p>The most straightforward way to install <em>fairlib</em> is with pip:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install -q fairlib
+</pre></div>
+</div>
+</div>
+<p>Check out <em>fairlib</em> <a class="reference external" href="https://hanxudong.github.io/fairlib/README.html">documents</a> for other installation options.</p>
+<p>After installation, let’s import <em>fairlib</em>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fairlib</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Build-a-dataset">
+<h2>2. Build a dataset<a class="headerlink" href="#2.-Build-a-dataset" title="Permalink to this headline"></a></h2>
+<p><em>fairlib</em> provides simple APIs to access fairness benchmark datasets that are publicly available and under strict ethical guidelines.</p>
+<p>In this video, we will be using the preprocessed <a class="reference external" href="https://github.com/shauli-ravfogel/nullspace_projection/blob/master/download_data.sh">Moji</a> dataset, where each tweet is annotated with a binary sentiment label (happy vs sad) and a binary race label (AAE vs SAE). Original tweets are encoded with the pre-trained <a class="reference external" href="https://github.com/bfelbo/DeepMoji">DeepMoji model</a> as 2304d vectors.</p>
+<p>Followings are random examples from the Moji dataset.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 53%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Text</p></th>
+<th class="head"><p>Sentiment</p></th>
+<th class="head"><p>Race</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dfl somebody said to me yesterday that how can u u have a iPhone or an S3 an ur phone off dfl</p></td>
+<td><p>Positive</p></td>
+<td><p>AAE</p></td>
+</tr>
+<tr class="row-odd"><td><p>smh I bet maybe u just don’t care bout poor boo no more</p></td>
+<td><p>Negative</p></td>
+<td><p>AAE</p></td>
+</tr>
+<tr class="row-even"><td><p>I actually put jeans on today and I already wanna go put on leggings or yogas</p></td>
+<td><p>Positive</p></td>
+<td><p>SAE</p></td>
+</tr>
+<tr class="row-odd"><td><p>I’m sitting next to the most awkward couple on the plane like they are making out and holding hands , I just can’t</p></td>
+<td><p>Negative</p></td>
+<td><p>SAE</p></td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://github.com/HanXudong/fairlib/tree/main/fairlib/datasets">here</a> for other avaliable datasets, including texts, images, and structured inputs.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib</span> <span class="kn">import</span> <span class="n">datasets</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datasets</span><span class="o">.</span><span class="n">prepare_dataset</span><span class="p">(</span><span class="s2">&quot;moji&quot;</span><span class="p">,</span> <span class="s2">&quot;data/deepmoji&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+saving to /content/data/deepmoji/pos_pos.npy
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "37c4e040cfea4f8c948c358014f0cd00", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+saving to /content/data/deepmoji/pos_neg.npy
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "686ff88b3e02409db49eef590197e51f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+saving to /content/data/deepmoji/neg_pos.npy
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b5e8af5d11954cdbbdb77bdb205e31ec", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+saving to /content/data/deepmoji/neg_neg.npy
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1f572cf5213c400f86b91e4cb9c5ab03", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>Datasets will be downloaded and saved to <code class="docutils literal notranslate"><span class="pre">data/deepmoji</span></code>, and then be used to create training, validation, and test splits as previous work.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datasets</span><span class="o">.</span><span class="n">name2class</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;moji&#39;, &#39;bios&#39;, &#39;coloredmnist&#39;, &#39;compas&#39;, &#39;tp_pos&#39;, &#39;adult&#39;, &#39;coco&#39;, &#39;imsitu&#39;])
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Train-a-vanilla-model-without-debiasing">
+<h2>3. Train a vanilla model without debiasing<a class="headerlink" href="#3.-Train-a-vanilla-model-without-debiasing" title="Permalink to this headline"></a></h2>
+<section id="Specify-hyperparameters">
+<h3>Specify hyperparameters<a class="headerlink" href="#Specify-hyperparameters" title="Permalink to this headline"></a></h3>
+<p>By default, <em>fairlib</em> trains <code class="docutils literal notranslate"><span class="pre">vanilla</span></code> models without debiasing.</p>
+<p>Here we specify the experiment id (<code class="docutils literal notranslate"><span class="pre">exp_id</span> <span class="pre">=</span> <span class="pre">vanilla</span></code>), which identify the directory for saving experimental results.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># The name of the dataset, corresponding dataloader will be used,</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>  <span class="s2">&quot;Moji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Specifiy the path to the input data</span>
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;data/deepmoji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Device for computing, -1 is the cpu; non-negative numbers indicate GPU id.</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span>    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># Give a name to the exp, which will be used in the path</span>
+    <span class="s2">&quot;exp_id&quot;</span><span class="p">:</span><span class="s2">&quot;vanilla&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Init the argument</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:root:Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-8eb44448-ab67-4429-be7a-d5fc3fe3b2ce.json&#39;]
+INFO:root:Logging to ./results/dev/Moji/vanilla/output.log
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 06:53:09 [INFO ]  ======================================== 2022-07-21 06:53:09 ========================================
+2022-07-21 06:53:09 [INFO ]  Base directory is ./results/dev/Moji/vanilla
+Loaded data shapes: (99998, 2304), (99998,), (99998,)
+Loaded data shapes: (8000, 2304), (8000,), (8000,)
+Loaded data shapes: (7998, 2304), (7998,), (7998,)
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">state</span></code> contains a list of hyperparameters for experiments. Besides, other components that are needed, such as dataloaders, will also automatically be initialized</p>
+</section>
+<section id="Initialize-a-model">
+<h3>Initialize a model<a class="headerlink" href="#Initialize-a-model" title="Permalink to this headline"></a></h3>
+<p>The default architecutre is a 3-layer MLP classifier with Tanh activation functions in between:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">n_hidden</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">activation_function</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+300 2 Tanh
+</pre></div></div>
+</div>
+<p>Users can easily specify model architecutres in the option. Please see the <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/usage.md#basic-operation">model architecture section</a> for more details about the hyperparameters corresponding to the model architecture.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fairlib</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="mi">2022</span><span class="p">)</span>
+
+<span class="c1"># Init Model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">get_main_model</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 06:53:10 [INFO ]  MLP(
+2022-07-21 06:53:10 [INFO ]    (output_layer): Linear(in_features=300, out_features=2, bias=True)
+2022-07-21 06:53:10 [INFO ]    (AF): Tanh()
+2022-07-21 06:53:10 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 06:53:10 [INFO ]      (0): Linear(in_features=2304, out_features=300, bias=True)
+2022-07-21 06:53:10 [INFO ]      (1): Tanh()
+2022-07-21 06:53:10 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-07-21 06:53:10 [INFO ]      (3): Tanh()
+2022-07-21 06:53:10 [INFO ]    )
+2022-07-21 06:53:10 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 06:53:10 [INFO ]  )
+2022-07-21 06:53:10 [INFO ]  Total number of parameters: 782402
+
+</pre></div></div>
+</div>
+</section>
+<section id="Train-a-model">
+<h3>Train a model<a class="headerlink" href="#Train-a-model" title="Permalink to this headline"></a></h3>
+<p>A list of hyperparameters has been predefined in <em>fairlib</em>, so we can now directly train a model with the model class’s built-in <code class="docutils literal notranslate"><span class="pre">train_self</span></code> method.</p>
+<p>Please see the <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/23a32a6f4b3db00134bd651a6e0aa0747ba0adc2/fairlib/src/base_options.py#L162-L200">link</a> for all hyperparameters associated with model training.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train_self</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 06:53:10 [INFO ]  Epoch:    0 [      0/  99998 ( 0%)]        Loss: 0.6907     Data Time: 0.06s       Train Time: 0.18s
+2022-07-21 06:53:14 [INFO ]  Epoch:    0 [  51200/  99998 (51%)]        Loss: 0.4075     Data Time: 0.44s       Train Time: 3.34s
+2022-07-21 06:53:18 [INFO ]  Evaluation at Epoch 0
+2022-07-21 06:53:18 [INFO ]  Validation accuracy: 71.44 macro_fscore: 71.35     micro_fscore: 71.44     TPR_GAP: 39.59  FPR_GAP: 39.59  PPR_GAP: 38.67
+2022-07-21 06:53:18 [INFO ]  Test accuracy: 71.21       macro_fscore: 71.12     micro_fscore: 71.21     TPR_GAP: 39.42  FPR_GAP: 39.42  PPR_GAP: 38.49
+2022-07-21 06:53:18 [INFO ]  Epoch:    1 [      0/  99998 ( 0%)]        Loss: 0.4195     Data Time: 0.01s       Train Time: 0.07s
+2022-07-21 06:53:22 [INFO ]  Epoch:    1 [  51200/  99998 (51%)]        Loss: 0.3780     Data Time: 0.42s       Train Time: 3.29s
+2022-07-21 06:53:26 [INFO ]  Evaluation at Epoch 1
+2022-07-21 06:53:26 [INFO ]  Validation accuracy: 72.10 macro_fscore: 72.06     micro_fscore: 72.10     TPR_GAP: 37.69  FPR_GAP: 37.69  PPR_GAP: 37.00
+2022-07-21 06:53:26 [INFO ]  Test accuracy: 71.72       macro_fscore: 71.68     micro_fscore: 71.72     TPR_GAP: 37.11  FPR_GAP: 37.11  PPR_GAP: 36.41
+2022-07-21 06:53:27 [INFO ]  Epoch:    2 [      0/  99998 ( 0%)]        Loss: 0.3608     Data Time: 0.01s       Train Time: 0.07s
+2022-07-21 06:53:30 [INFO ]  Epoch:    2 [  51200/  99998 (51%)]        Loss: 0.3567     Data Time: 0.42s       Train Time: 3.29s
+2022-07-21 06:53:34 [INFO ]  Epochs since last improvement: 1
+2022-07-21 06:53:34 [INFO ]  Evaluation at Epoch 2
+2022-07-21 06:53:34 [INFO ]  Validation accuracy: 71.53 macro_fscore: 71.44     micro_fscore: 71.53     TPR_GAP: 39.40  FPR_GAP: 39.40  PPR_GAP: 38.40
+2022-07-21 06:53:34 [INFO ]  Test accuracy: 71.38       macro_fscore: 71.28     micro_fscore: 71.38     TPR_GAP: 39.07  FPR_GAP: 39.07  PPR_GAP: 37.99
+2022-07-21 06:53:35 [INFO ]  Epoch:    3 [      0/  99998 ( 0%)]        Loss: 0.3584     Data Time: 0.01s       Train Time: 0.07s
+2022-07-21 06:53:38 [INFO ]  Epoch:    3 [  51200/  99998 (51%)]        Loss: 0.3430     Data Time: 0.42s       Train Time: 3.28s
+2022-07-21 06:53:42 [INFO ]  Epochs since last improvement: 2
+2022-07-21 06:53:42 [INFO ]  Evaluation at Epoch 3
+2022-07-21 06:53:43 [INFO ]  Validation accuracy: 71.08 macro_fscore: 70.73     micro_fscore: 71.08     TPR_GAP: 41.08  FPR_GAP: 41.08  PPR_GAP: 38.75
+2022-07-21 06:53:43 [INFO ]  Test accuracy: 70.87       macro_fscore: 70.49     micro_fscore: 70.87     TPR_GAP: 40.67  FPR_GAP: 40.67  PPR_GAP: 38.42
+2022-07-21 06:53:43 [INFO ]  Epoch:    4 [      0/  99998 ( 0%)]        Loss: 0.3578     Data Time: 0.02s       Train Time: 0.07s
+2022-07-21 06:53:46 [INFO ]  Epoch:    4 [  51200/  99998 (51%)]        Loss: 0.3881     Data Time: 0.44s       Train Time: 3.36s
+2022-07-21 06:53:50 [INFO ]  Epochs since last improvement: 3
+2022-07-21 06:53:50 [INFO ]  Evaluation at Epoch 4
+2022-07-21 06:53:51 [INFO ]  Validation accuracy: 72.06 macro_fscore: 71.96     micro_fscore: 72.06     TPR_GAP: 38.04  FPR_GAP: 38.04  PPR_GAP: 36.87
+2022-07-21 06:53:51 [INFO ]  Test accuracy: 71.72       macro_fscore: 71.61     micro_fscore: 71.72     TPR_GAP: 38.09  FPR_GAP: 38.09  PPR_GAP: 36.96
+2022-07-21 06:53:51 [INFO ]  Epoch:    5 [      0/  99998 ( 0%)]        Loss: 0.4008     Data Time: 0.02s       Train Time: 0.07s
+2022-07-21 06:53:54 [INFO ]  Epoch:    5 [  51200/  99998 (51%)]        Loss: 0.3393     Data Time: 0.43s       Train Time: 3.29s
+2022-07-21 06:53:58 [INFO ]  Epochs since last improvement: 4
+2022-07-21 06:53:58 [INFO ]  Evaluation at Epoch 5
+2022-07-21 06:53:59 [INFO ]  Validation accuracy: 71.44 macro_fscore: 71.41     micro_fscore: 71.44     TPR_GAP: 40.50  FPR_GAP: 40.50  PPR_GAP: 39.97
+2022-07-21 06:53:59 [INFO ]  Test accuracy: 71.13       macro_fscore: 71.11     micro_fscore: 71.13     TPR_GAP: 39.69  FPR_GAP: 39.69  PPR_GAP: 39.19
+2022-07-21 06:53:59 [INFO ]  Epoch:    6 [      0/  99998 ( 0%)]        Loss: 0.3890     Data Time: 0.01s       Train Time: 0.07s
+2022-07-21 06:54:03 [INFO ]  Epoch:    6 [  51200/  99998 (51%)]        Loss: 0.3668     Data Time: 0.44s       Train Time: 3.32s
+2022-07-21 06:54:07 [INFO ]  Epochs since last improvement: 5
+2022-07-21 06:54:07 [INFO ]  Evaluation at Epoch 6
+2022-07-21 06:54:07 [INFO ]  Validation accuracy: 71.96 macro_fscore: 71.92     micro_fscore: 71.96     TPR_GAP: 37.52  FPR_GAP: 37.52  PPR_GAP: 36.82
+2022-07-21 06:54:07 [INFO ]  Test accuracy: 72.04       macro_fscore: 72.00     micro_fscore: 72.04     TPR_GAP: 36.75  FPR_GAP: 36.75  PPR_GAP: 36.01
+</pre></div></div>
+</div>
+<p>After each iteration, a subset of evaluation results over the validation set and test set will be logged, including metrics for both performance and fairness.</p>
+<p>It can be seen that the vanilla model achieves around 40% TPR GAP.</p>
+</section>
+</section>
+<section id="4.-Improve-Fairness">
+<h2>4. Improve Fairness<a class="headerlink" href="#4.-Improve-Fairness" title="Permalink to this headline"></a></h2>
+<p>To mitigate bias, we show an example of employing BTEO (<a class="reference external" href="https://arxiv.org/abs/2109.08253">Han et al., 2021a</a>) and adversarial training (<a class="reference external" href="https://arxiv.org/abs/1805.06093">Li et al., 2018</a>) simultaneously.</p>
+<section id="Enable-debiasing">
+<h3>Enable debiasing<a class="headerlink" href="#Enable-debiasing" title="Permalink to this headline"></a></h3>
+<p>The only difference for debebiasing is to specify corresponding arguments, as shown in the following cell. Everything else are identical to the standard training.</p>
+<ul class="simple">
+<li><p>A list of supported bias mitigation methods is shown <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/docs/supported_bias_mitigation_algorithms.md">here</a>.</p></li>
+<li><p>The <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_usage.html">usage</a> introduces further options associated with each debiasing method.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debiasing_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Update the experiment name</span>
+<span class="n">debiasing_args</span><span class="p">[</span><span class="s2">&quot;exp_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;BT_Adv&quot;</span>
+
+<span class="c1"># Perform adversarial training if True</span>
+<span class="n">debiasing_args</span><span class="p">[</span><span class="s2">&quot;adv_debiasing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Specify the hyperparameters for Balanced Training</span>
+<span class="n">debiasing_args</span><span class="p">[</span><span class="s2">&quot;BT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Downsampling&quot;</span>
+<span class="n">debiasing_args</span><span class="p">[</span><span class="s2">&quot;BTObj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;EO&quot;</span>
+
+<span class="n">debias_options</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">BaseOptions</span><span class="p">()</span>
+<span class="n">debias_state</span> <span class="o">=</span> <span class="n">debias_options</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">debiasing_args</span><span class="p">,</span> <span class="n">silence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">fairlib</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="mi">2022</span><span class="p">)</span>
+
+<span class="n">debias_model</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">get_main_model</span><span class="p">(</span><span class="n">debias_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 06:54:07 [INFO ]  Unexpected args: [&#39;-f&#39;, &#39;/root/.local/share/jupyter/runtime/kernel-8eb44448-ab67-4429-be7a-d5fc3fe3b2ce.json&#39;]
+2022-07-21 06:54:07 [INFO ]  Logging to ./results/dev/Moji/BT_Adv/output.log
+2022-07-21 06:54:07 [INFO ]  ======================================== 2022-07-21 06:54:07 ========================================
+2022-07-21 06:54:07 [INFO ]  Base directory is ./results/dev/Moji/BT_Adv
+Loaded data shapes: (39996, 2304), (39996,), (39996,)
+Loaded data shapes: (8000, 2304), (8000,), (8000,)
+Loaded data shapes: (7998, 2304), (7998,), (7998,)
+2022-07-21 06:54:16 [INFO ]  SubDiscriminator(
+2022-07-21 06:54:16 [INFO ]    (grad_rev): GradientReversal()
+2022-07-21 06:54:16 [INFO ]    (output_layer): Linear(in_features=300, out_features=2, bias=True)
+2022-07-21 06:54:16 [INFO ]    (AF): ReLU()
+2022-07-21 06:54:16 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 06:54:16 [INFO ]      (0): Linear(in_features=300, out_features=300, bias=True)
+2022-07-21 06:54:16 [INFO ]      (1): ReLU()
+2022-07-21 06:54:16 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-07-21 06:54:16 [INFO ]      (3): ReLU()
+2022-07-21 06:54:16 [INFO ]    )
+2022-07-21 06:54:16 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 06:54:16 [INFO ]  )
+2022-07-21 06:54:16 [INFO ]  Total number of parameters: 181202
+
+2022-07-21 06:54:16 [INFO ]  Discriminator built!
+2022-07-21 06:54:16 [INFO ]  MLP(
+2022-07-21 06:54:16 [INFO ]    (output_layer): Linear(in_features=300, out_features=2, bias=True)
+2022-07-21 06:54:16 [INFO ]    (AF): Tanh()
+2022-07-21 06:54:16 [INFO ]    (hidden_layers): ModuleList(
+2022-07-21 06:54:16 [INFO ]      (0): Linear(in_features=2304, out_features=300, bias=True)
+2022-07-21 06:54:16 [INFO ]      (1): Tanh()
+2022-07-21 06:54:16 [INFO ]      (2): Linear(in_features=300, out_features=300, bias=True)
+2022-07-21 06:54:16 [INFO ]      (3): Tanh()
+2022-07-21 06:54:16 [INFO ]    )
+2022-07-21 06:54:16 [INFO ]    (criterion): CrossEntropyLoss()
+2022-07-21 06:54:16 [INFO ]  )
+2022-07-21 06:54:16 [INFO ]  Total number of parameters: 782402
+
+</pre></div></div>
+</div>
+<p>It can be seen from the last cell that the training dataset size is smaller than before (40k verse 100k) due to the downsampling for balanced training, and an MLP adversary is initialized for adversarial debiasing.</p>
+</section>
+<section id="Mitigate-bias">
+<h3>Mitigate bias<a class="headerlink" href="#Mitigate-bias" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">debias_model</span><span class="o">.</span><span class="n">train_self</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2022-07-21 06:54:17 [INFO ]  Epoch:    0 [      0/  39996 ( 0%)]        Loss: 0.0003     Data Time: 0.02s       Train Time: 0.22s
+2022-07-21 06:54:25 [INFO ]  Evaluation at Epoch 0
+2022-07-21 06:54:26 [INFO ]  Validation accuracy: 73.72 macro_fscore: 73.08     micro_fscore: 73.72     TPR_GAP: 19.20  FPR_GAP: 19.20  PPR_GAP: 16.80
+2022-07-21 06:54:26 [INFO ]  Test accuracy: 73.59       macro_fscore: 72.98     micro_fscore: 73.59     TPR_GAP: 20.70  FPR_GAP: 20.70  PPR_GAP: 17.86
+2022-07-21 06:54:26 [INFO ]  Epoch:    1 [      0/  39996 ( 0%)]        Loss: -0.1368    Data Time: 0.01s       Train Time: 0.20s
+2022-07-21 06:54:34 [INFO ]  Epochs since last improvement: 1
+2022-07-21 06:54:34 [INFO ]  Evaluation at Epoch 1
+2022-07-21 06:54:35 [INFO ]  Validation accuracy: 68.96 macro_fscore: 67.36     micro_fscore: 68.96     TPR_GAP: 10.57  FPR_GAP: 10.57  PPR_GAP: 4.67
+2022-07-21 06:54:35 [INFO ]  Test accuracy: 68.89       macro_fscore: 67.33     micro_fscore: 68.89     TPR_GAP: 11.46  FPR_GAP: 11.46  PPR_GAP: 6.46
+2022-07-21 06:54:35 [INFO ]  Epoch:    2 [      0/  39996 ( 0%)]        Loss: -0.1266    Data Time: 0.01s       Train Time: 0.20s
+2022-07-21 06:54:43 [INFO ]  Evaluation at Epoch 2
+2022-07-21 06:54:44 [INFO ]  Validation accuracy: 74.94 macro_fscore: 74.68     micro_fscore: 74.94     TPR_GAP: 14.13  FPR_GAP: 14.13  PPR_GAP: 11.37
+2022-07-21 06:54:44 [INFO ]  Test accuracy: 75.54       macro_fscore: 75.33     micro_fscore: 75.54     TPR_GAP: 14.66  FPR_GAP: 14.66  PPR_GAP: 11.41
+2022-07-21 06:54:44 [INFO ]  Epoch:    3 [      0/  39996 ( 0%)]        Loss: -0.1809    Data Time: 0.01s       Train Time: 0.20s
+2022-07-21 06:54:52 [INFO ]  Evaluation at Epoch 3
+2022-07-21 06:54:53 [INFO ]  Validation accuracy: 74.99 macro_fscore: 74.98     micro_fscore: 74.99     TPR_GAP: 12.09  FPR_GAP: 12.09  PPR_GAP: 8.67
+2022-07-21 06:54:53 [INFO ]  Test accuracy: 75.47       macro_fscore: 75.47     micro_fscore: 75.47     TPR_GAP: 11.43  FPR_GAP: 11.43  PPR_GAP: 7.95
+2022-07-21 06:54:53 [INFO ]  Epoch:    4 [      0/  39996 ( 0%)]        Loss: -0.1584    Data Time: 0.01s       Train Time: 0.20s
+2022-07-21 06:55:01 [INFO ]  Evaluation at Epoch 4
+2022-07-21 06:55:02 [INFO ]  Validation accuracy: 75.36 macro_fscore: 75.34     micro_fscore: 75.36     TPR_GAP: 12.23  FPR_GAP: 12.23  PPR_GAP: 9.27
+2022-07-21 06:55:02 [INFO ]  Test accuracy: 75.73       macro_fscore: 75.70     micro_fscore: 75.73     TPR_GAP: 13.03  FPR_GAP: 13.03  PPR_GAP: 9.38
+2022-07-21 06:55:02 [INFO ]  Epoch:    5 [      0/  39996 ( 0%)]        Loss: -0.1741    Data Time: 0.02s       Train Time: 0.20s
+2022-07-21 06:55:10 [INFO ]  Epochs since last improvement: 1
+2022-07-21 06:55:10 [INFO ]  Evaluation at Epoch 5
+2022-07-21 06:55:11 [INFO ]  Validation accuracy: 75.22 macro_fscore: 75.15     micro_fscore: 75.22     TPR_GAP: 10.86  FPR_GAP: 10.86  PPR_GAP: 6.30
+2022-07-21 06:55:11 [INFO ]  Test accuracy: 75.44       macro_fscore: 75.36     micro_fscore: 75.44     TPR_GAP: 10.99  FPR_GAP: 10.99  PPR_GAP: 6.50
+2022-07-21 06:55:11 [INFO ]  Epoch:    6 [      0/  39996 ( 0%)]        Loss: -0.2291    Data Time: 0.01s       Train Time: 0.20s
+2022-07-21 06:55:19 [INFO ]  Epochs since last improvement: 2
+2022-07-21 06:55:19 [INFO ]  Evaluation at Epoch 6
+2022-07-21 06:55:20 [INFO ]  Validation accuracy: 74.94 macro_fscore: 74.93     micro_fscore: 74.94     TPR_GAP: 9.14   FPR_GAP: 9.14   PPR_GAP: 1.42
+2022-07-21 06:55:20 [INFO ]  Test accuracy: 75.17       macro_fscore: 75.17     micro_fscore: 75.17     TPR_GAP: 9.69   FPR_GAP: 9.69   PPR_GAP: 2.85
+2022-07-21 06:55:20 [INFO ]  Epoch:    7 [      0/  39996 ( 0%)]        Loss: -0.1665    Data Time: 0.01s       Train Time: 0.21s
+2022-07-21 06:55:28 [INFO ]  Epochs since last improvement: 3
+2022-07-21 06:55:28 [INFO ]  Evaluation at Epoch 7
+2022-07-21 06:55:29 [INFO ]  Validation accuracy: 74.98 macro_fscore: 74.97     micro_fscore: 74.98     TPR_GAP: 9.40   FPR_GAP: 9.40   PPR_GAP: 5.25
+2022-07-21 06:55:29 [INFO ]  Test accuracy: 75.38       macro_fscore: 75.38     micro_fscore: 75.38     TPR_GAP: 10.85  FPR_GAP: 10.85  PPR_GAP: 6.88
+2022-07-21 06:55:29 [INFO ]  Epoch:    8 [      0/  39996 ( 0%)]        Loss: -0.2003    Data Time: 0.01s       Train Time: 0.21s
+2022-07-21 06:55:37 [INFO ]  Epochs since last improvement: 4
+2022-07-21 06:55:37 [INFO ]  Evaluation at Epoch 8
+2022-07-21 06:55:38 [INFO ]  Validation accuracy: 74.04 macro_fscore: 73.54     micro_fscore: 74.04     TPR_GAP: 10.18  FPR_GAP: 10.18  PPR_GAP: 6.12
+2022-07-21 06:55:38 [INFO ]  Test accuracy: 74.22       macro_fscore: 73.75     micro_fscore: 74.22     TPR_GAP: 10.17  FPR_GAP: 10.17  PPR_GAP: 6.96
+2022-07-21 06:55:38 [INFO ]  Epoch:    9 [      0/  39996 ( 0%)]        Loss: -0.2118    Data Time: 0.01s       Train Time: 0.21s
+2022-07-21 06:55:46 [INFO ]  Epochs since last improvement: 5
+2022-07-21 06:55:46 [INFO ]  Evaluation at Epoch 9
+2022-07-21 06:55:47 [INFO ]  Validation accuracy: 73.14 macro_fscore: 72.87     micro_fscore: 73.14     TPR_GAP: 9.11   FPR_GAP: 9.11   PPR_GAP: 5.97
+2022-07-21 06:55:47 [INFO ]  Test accuracy: 73.36       macro_fscore: 73.14     micro_fscore: 73.36     TPR_GAP: 8.46   FPR_GAP: 8.46   PPR_GAP: 6.07
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="5.-Analyze-the-results">
+<h2>5. Analyze the results<a class="headerlink" href="#5.-Analyze-the-results" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fairlib</span> <span class="kn">import</span> <span class="n">analysis</span>
+</pre></div>
+</div>
+</div>
+<p>Here we define a list of hyperparameters that will be repeatedly used for analysis.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shared_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Random seed</span>
+    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">2022</span><span class="p">,</span>
+
+    <span class="c1"># The name of the dataset, corresponding dataloader will be used,</span>
+    <span class="s2">&quot;dataset&quot;</span><span class="p">:</span>  <span class="s2">&quot;Moji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Specifiy the path to the input data</span>
+    <span class="s2">&quot;data_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;data/deepmoji&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Device for computing, -1 is the cpu; non-negative numbers indicate GPU id.</span>
+    <span class="s2">&quot;device_id&quot;</span><span class="p">:</span>    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># The default path for saving experimental results</span>
+    <span class="s2">&quot;results_dir&quot;</span><span class="p">:</span>  <span class="s2">&quot;results&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Will be used for saving experimental results</span>
+    <span class="s2">&quot;project_dir&quot;</span><span class="p">:</span>  <span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+
+    <span class="c1"># We will focusing on TPR GAP, implying the Equalized Odds for binary classification.</span>
+    <span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;TPR_GAP&quot;</span><span class="p">,</span>
+
+    <span class="c1"># The overall performance will be measured as accuracy</span>
+    <span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Model selections are based on distance to optimum, see section 4 in our paper for more details</span>
+    <span class="s2">&quot;selection_criterion&quot;</span><span class="p">:</span>  <span class="s2">&quot;DTO&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Default dirs for saving checkpoints</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span>   <span class="s2">&quot;models&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;checkpoint_name&quot;</span><span class="p">:</span>  <span class="s2">&quot;checkpoint_epoch&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Loading experimental results</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span>   <span class="mi">1</span><span class="p">,</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<section id="Epoch-Selection">
+<h3>Epoch Selection<a class="headerlink" href="#Epoch-Selection" title="Permalink to this headline"></a></h3>
+<p>Here we demostrate the usage of DTO for epoch selection (i.e., post-hoc early stopping). <code class="docutils literal notranslate"><span class="pre">model_selection</span></code> retrieves experimental results for a single method, selects the desired <strong>epoch</strong> for each run, and saves the resulting df for a later process.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analysis</span><span class="o">.</span><span class="n">model_selection</span><span class="p">(</span>
+    <span class="c1"># exp_id started with model_id will be treated as the same method, e.g, vanilla, and adv</span>
+    <span class="n">model_id</span><span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vanilla&quot;</span><span class="p">),</span>
+
+    <span class="c1"># the tuned hyperparameters of a methods, which will be used to group multiple runs together.</span>
+    <span class="n">index_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span> <span class="s2">&quot;BTObj&quot;</span><span class="p">,</span> <span class="s2">&quot;adv_debiasing&quot;</span><span class="p">],</span>
+
+    <span class="c1"># to convenient the further analysis, we will store the resulting DataFrame to the specified path</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;results/Vanilla_df.pkl&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Follwoing options are predefined</span>
+    <span class="n">results_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;results_dir&quot;</span><span class="p">],</span>
+    <span class="n">project_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;project_dir&quot;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span>
+    <span class="n">GAP_metric_name</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">],</span>
+    <span class="n">Performance_metric_name</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">],</span>
+    <span class="c1"># We use DTO for epoch selection</span>
+    <span class="n">selection_criterion</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;selection_criterion&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_name</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_name&quot;</span><span class="p">],</span>
+    <span class="c1"># If retrive results in parallel</span>
+    <span class="n">n_jobs</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.3s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.3s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+  <div id="df-c40046f9-240d-43b7-a414-a7a4b61b37e6">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>epoch</th>
+      <th>dev_DTO</th>
+      <th>test_DTO</th>
+      <th>dev_performance</th>
+      <th>dev_fairness</th>
+      <th>test_performance</th>
+      <th>test_fairness</th>
+      <th>opt_dir</th>
+    </tr>
+    <tr>
+      <th>BT</th>
+      <th>BTObj</th>
+      <th>adv_debiasing</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>NaN</th>
+      <th>NaN</th>
+      <th>False</th>
+      <td>1</td>
+      <td>0.001907</td>
+      <td>0.0</td>
+      <td>0.719625</td>
+      <td>0.624825</td>
+      <td>0.72043</td>
+      <td>0.632535</td>
+      <td>results/dev/Moji/vanilla/opt.yaml</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-c40046f9-240d-43b7-a414-a7a4b61b37e6')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-c40046f9-240d-43b7-a414-a7a4b61b37e6 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-c40046f9-240d-43b7-a414-a7a4b61b37e6');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analysis</span><span class="o">.</span><span class="n">model_selection</span><span class="p">(</span>
+    <span class="n">model_id</span><span class="o">=</span> <span class="p">(</span><span class="s2">&quot;BT_Adv&quot;</span><span class="p">),</span>
+    <span class="n">index_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span> <span class="s2">&quot;BTObj&quot;</span><span class="p">,</span> <span class="s2">&quot;adv_debiasing&quot;</span><span class="p">],</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;results/BT_ADV_df.pkl&quot;</span><span class="p">,</span>
+    <span class="c1"># Follwoing options are predefined</span>
+    <span class="n">results_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;results_dir&quot;</span><span class="p">],</span>
+    <span class="n">project_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;project_dir&quot;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">],</span>
+    <span class="n">GAP_metric_name</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;GAP_metric_name&quot;</span><span class="p">],</span>
+    <span class="n">Performance_metric_name</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;Performance_metric_name&quot;</span><span class="p">],</span>
+    <span class="n">selection_criterion</span> <span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;selection_criterion&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_dir</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">],</span>
+    <span class="n">checkpoint_name</span><span class="o">=</span> <span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;checkpoint_name&quot;</span><span class="p">],</span>
+    <span class="n">n_jobs</span><span class="o">=</span><span class="n">Shared_options</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.5s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.5s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+  <div id="df-4c39c40d-c13c-4077-b6eb-5060c8ef512a">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>epoch</th>
+      <th>dev_DTO</th>
+      <th>test_DTO</th>
+      <th>dev_performance</th>
+      <th>dev_fairness</th>
+      <th>test_performance</th>
+      <th>test_fairness</th>
+      <th>opt_dir</th>
+    </tr>
+    <tr>
+      <th>BT</th>
+      <th>BTObj</th>
+      <th>adv_debiasing</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Downsampling</th>
+      <th>EO</th>
+      <th>True</th>
+      <td>1</td>
+      <td>0.005648</td>
+      <td>0.015392</td>
+      <td>0.749375</td>
+      <td>0.908632</td>
+      <td>0.751688</td>
+      <td>0.903068</td>
+      <td>results/dev/Moji/BT_Adv/opt.yaml</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-4c39c40d-c13c-4077-b6eb-5060c8ef512a')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-4c39c40d-c13c-4077-b6eb-5060c8ef512a button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-4c39c40d-c13c-4077-b6eb-5060c8ef512a');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div></div>
+</div>
+<p>We have preprocessed the results with the <code class="docutils literal notranslate"><span class="pre">model_selection</span></code> function, and the resulting dfs can be downloaded as follows:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span>!wget --no-check-certificate &#39;https://docs.google.com/uc?export=download&amp;id=1M0G6PyPuDC8Y_2nL9XKYCt10IUzbSvfl&#39; -O retrived_results.tar.gz
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+--2022-07-21 06:55:48--  https://docs.google.com/uc?export=download&amp;id=1M0G6PyPuDC8Y_2nL9XKYCt10IUzbSvfl
+Resolving docs.google.com (docs.google.com)... 108.177.97.138, 108.177.97.102, 108.177.97.100, ...
+Connecting to docs.google.com (docs.google.com)|108.177.97.138|:443... connected.
+HTTP request sent, awaiting response... 303 See Other
+Location: https://doc-0g-0k-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/d9ah1be1dhjtrm0rinvfdje85fkvmrdh/1658386500000/17527887236587461918/*/1M0G6PyPuDC8Y_2nL9XKYCt10IUzbSvfl?e=download&amp;uuid=2bc658ea-acf2-4d5e-8ae5-920657110366 [following]
+Warning: wildcards not supported in HTTP.
+--2022-07-21 06:55:51--  https://doc-0g-0k-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/d9ah1be1dhjtrm0rinvfdje85fkvmrdh/1658386500000/17527887236587461918/*/1M0G6PyPuDC8Y_2nL9XKYCt10IUzbSvfl?e=download&amp;uuid=2bc658ea-acf2-4d5e-8ae5-920657110366
+Resolving doc-0g-0k-docs.googleusercontent.com (doc-0g-0k-docs.googleusercontent.com)... 74.125.204.132, 2404:6800:4008:c04::84
+Connecting to doc-0g-0k-docs.googleusercontent.com (doc-0g-0k-docs.googleusercontent.com)|74.125.204.132|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 790461 (772K) [application/x-gzip]
+Saving to: ‘retrived_results.tar.gz’
+
+retrived_results.ta 100%[===================&gt;] 771.93K  --.-KB/s    in 0.006s
+
+2022-07-21 06:55:51 (129 MB/s) - ‘retrived_results.tar.gz’ saved [790461/790461]
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span>!tar -xf retrived_results.tar.gz
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Model-Selection">
+<h3>Model Selection<a class="headerlink" href="#Model-Selection" title="Permalink to this headline"></a></h3>
+<p>Here we demonstrate the application of <code class="docutils literal notranslate"><span class="pre">final_results_df</span></code>, which loads cached results with <code class="docutils literal notranslate"><span class="pre">retrive_results</span></code> for all methods, select the best hyperparameter combinations for each technique, and present the result in a DataFrame</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_results</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">retrive_results</span><span class="p">(</span><span class="s2">&quot;Moji&quot;</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s2">&quot;analysis/results&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_main_results</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">final_results_df</span><span class="p">(</span>
+    <span class="n">results_dict</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">,</span>
+    <span class="n">pareto</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">pareto_selection</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="n">selection_criterion</span> <span class="o">=</span> <span class="s2">&quot;DTO&quot;</span><span class="p">,</span>
+    <span class="n">return_dev</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_conf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">Moji_main_results</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+  <div id="df-2a5c685c-02c6-40b9-8b06-374cb782d5d9">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Models</th>
+      <th>test_performance mean</th>
+      <th>test_performance std</th>
+      <th>test_fairness mean</th>
+      <th>test_fairness std</th>
+      <th>dev_performance mean</th>
+      <th>dev_performance std</th>
+      <th>dev_fairness mean</th>
+      <th>dev_fairness std</th>
+      <th>DTO</th>
+      <th>epoch list</th>
+      <th>opt_dir list</th>
+      <th>is_pareto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>GDEO</td>
+      <td>0.752763</td>
+      <td>0.004999</td>
+      <td>0.892255</td>
+      <td>0.007860</td>
+      <td>0.749350</td>
+      <td>0.003494</td>
+      <td>0.912672</td>
+      <td>0.002766</td>
+      <td>0.269694</td>
+      <td>[2, 12, 5, 9, 10]</td>
+      <td>[G:\Experimental_results\GroupDifference\Moji\...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>BTFairBatch</td>
+      <td>0.746837</td>
+      <td>0.003407</td>
+      <td>0.899351</td>
+      <td>0.004936</td>
+      <td>0.743975</td>
+      <td>0.004236</td>
+      <td>0.919254</td>
+      <td>0.004731</td>
+      <td>0.272437</td>
+      <td>[8, 6, 9, 5, 7]</td>
+      <td>[G:\Experimental_results\FairBatch\Moji\BTInit...</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Vanilla</td>
+      <td>0.722981</td>
+      <td>0.004576</td>
+      <td>0.611870</td>
+      <td>0.014356</td>
+      <td>0.726650</td>
+      <td>0.003673</td>
+      <td>0.632302</td>
+      <td>0.013370</td>
+      <td>0.476849</td>
+      <td>[2, 11, 2, 5, 2]</td>
+      <td>[G:\Experimental_results\vanilla\Moji\0\opt.ya...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>BTEO</td>
+      <td>0.753927</td>
+      <td>0.001433</td>
+      <td>0.877469</td>
+      <td>0.003756</td>
+      <td>0.746325</td>
+      <td>0.000998</td>
+      <td>0.896874</td>
+      <td>0.005401</td>
+      <td>0.274892</td>
+      <td>[8, 6, 9, 4, 5]</td>
+      <td>[G:\Experimental_results\GatedBT\Moji\GatedBT_...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>GatedDAdv</td>
+      <td>0.750163</td>
+      <td>0.006945</td>
+      <td>0.908679</td>
+      <td>0.021678</td>
+      <td>0.745600</td>
+      <td>0.004828</td>
+      <td>0.928670</td>
+      <td>0.022488</td>
+      <td>0.266004</td>
+      <td>[24, 13, 19, 4, 3]</td>
+      <td>[G:\Experimental_results\hypertune3\Moji\hyper...</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>FairBatch</td>
+      <td>0.751488</td>
+      <td>0.005772</td>
+      <td>0.904373</td>
+      <td>0.008213</td>
+      <td>0.746050</td>
+      <td>0.003896</td>
+      <td>0.914526</td>
+      <td>0.006020</td>
+      <td>0.266276</td>
+      <td>[9, 9, 6, 6, 5]</td>
+      <td>[G:\Experimental_results\FairBatch\Moji\FairBa...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>GatedAdv</td>
+      <td>0.753113</td>
+      <td>0.005196</td>
+      <td>0.890065</td>
+      <td>0.013302</td>
+      <td>0.748975</td>
+      <td>0.003805</td>
+      <td>0.910838</td>
+      <td>0.010314</td>
+      <td>0.270257</td>
+      <td>[11, 4, 4, 13, 12]</td>
+      <td>[G:\Experimental_results\hypertune2\Moji\hyper...</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>DelayedCLS_Adv</td>
+      <td>0.761015</td>
+      <td>0.003081</td>
+      <td>0.882425</td>
+      <td>0.015918</td>
+      <td>0.751675</td>
+      <td>0.003481</td>
+      <td>0.899346</td>
+      <td>0.011417</td>
+      <td>0.266341</td>
+      <td>[13, 1, 3, 13, 1]</td>
+      <td>[/data/cephfs/punim1421/Fair_NLP_Classificatio...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>GDMean</td>
+      <td>0.752163</td>
+      <td>0.002130</td>
+      <td>0.901389</td>
+      <td>0.003916</td>
+      <td>0.749050</td>
+      <td>0.001368</td>
+      <td>0.922430</td>
+      <td>0.005829</td>
+      <td>0.266735</td>
+      <td>[11, 12, 7, 2, 2]</td>
+      <td>[G:\Experimental_results\GroupDifference\Moji\...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>GatedBTEO</td>
+      <td>0.762106</td>
+      <td>0.002592</td>
+      <td>0.900764</td>
+      <td>0.014701</td>
+      <td>0.759775</td>
+      <td>0.003798</td>
+      <td>0.909445</td>
+      <td>0.006631</td>
+      <td>0.257762</td>
+      <td>[3, 1, 3, 1, 11]</td>
+      <td>[G:\Experimental_results\GatedBT\Moji\GatedBT_...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>BTGatedAdv</td>
+      <td>0.735459</td>
+      <td>0.028830</td>
+      <td>0.866150</td>
+      <td>0.028232</td>
+      <td>0.730150</td>
+      <td>0.024594</td>
+      <td>0.886862</td>
+      <td>0.030537</td>
+      <td>0.296476</td>
+      <td>[5, 19, 19, 6, 1]</td>
+      <td>[G:\Experimental_results\hypertune2\Moji\hyper...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Adv</td>
+      <td>0.756414</td>
+      <td>0.007271</td>
+      <td>0.893286</td>
+      <td>0.005623</td>
+      <td>0.747425</td>
+      <td>0.004549</td>
+      <td>0.912125</td>
+      <td>0.008507</td>
+      <td>0.265936</td>
+      <td>[9, 14, 18, 5, 16]</td>
+      <td>[G:\Experimental_results\hypertune\Moji\hypert...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>OldFairBatch</td>
+      <td>0.750638</td>
+      <td>0.006012</td>
+      <td>0.905537</td>
+      <td>0.005046</td>
+      <td>0.744525</td>
+      <td>0.004995</td>
+      <td>0.917734</td>
+      <td>0.004761</td>
+      <td>0.266655</td>
+      <td>[5, 7, 8, 13, 7]</td>
+      <td>[G:\Experimental_results\Original_FairBatch\Mo...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>FairSCL</td>
+      <td>0.757314</td>
+      <td>0.003441</td>
+      <td>0.878219</td>
+      <td>0.004314</td>
+      <td>0.752825</td>
+      <td>0.001872</td>
+      <td>0.898325</td>
+      <td>0.002579</td>
+      <td>0.271527</td>
+      <td>[12, 5, 13, 1, 1]</td>
+      <td>[G:\Experimental_results\FairSCL\Moji\FSCL_0.3...</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>INLP</td>
+      <td>0.733433</td>
+      <td>NaN</td>
+      <td>0.855982</td>
+      <td>NaN</td>
+      <td>0.727625</td>
+      <td>NaN</td>
+      <td>0.859686</td>
+      <td>NaN</td>
+      <td>0.302983</td>
+      <td>[103]</td>
+      <td>[G:\Experimental_results\INLP\Moji\INLP_True_b...</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>DAdv</td>
+      <td>0.755464</td>
+      <td>0.004076</td>
+      <td>0.904023</td>
+      <td>0.011218</td>
+      <td>0.748550</td>
+      <td>0.002405</td>
+      <td>0.915601</td>
+      <td>0.005007</td>
+      <td>0.262697</td>
+      <td>[6, 1, 7, 3, 5]</td>
+      <td>[G:\Experimental_results\hypertune\Moji\hypert...</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-2a5c685c-02c6-40b9-8b06-374cb782d5d9')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-2a5c685c-02c6-40b9-8b06-374cb782d5d9 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-2a5c685c-02c6-40b9-8b06-374cb782d5d9');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div></div>
+</div>
+</section>
+<section id="Create-\LaTeX{}-tabels">
+<h3>Create <span class="math notranslate nohighlight">\(\LaTeX{}\)</span> tabels<a class="headerlink" href="#Create-\LaTeX{}-tabels" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Moji_main_results</span><span class="o">.</span><span class="n">to_latex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{lrrrrrrrrrlll}
+\toprule
+        Models &amp;  test\_performance mean &amp;  test\_performance std &amp;  test\_fairness mean &amp;  test\_fairness std &amp;  dev\_performance mean &amp;  dev\_performance std &amp;  dev\_fairness mean &amp;  dev\_fairness std &amp;      DTO &amp;         epoch list &amp;                                       opt\_dir list &amp;  is\_pareto \\
+\midrule
+          GDEO &amp;               0.752763 &amp;              0.004999 &amp;            0.892255 &amp;           0.007860 &amp;              0.749350 &amp;             0.003494 &amp;           0.912672 &amp;          0.002766 &amp; 0.269694 &amp;  [2, 12, 5, 9, 10] &amp; [G:\textbackslash Experimental\_results\textbackslash GroupDifference\textbackslash Moji\textbackslash G... &amp;       True \\
+   BTFairBatch &amp;               0.746837 &amp;              0.003407 &amp;            0.899351 &amp;           0.004936 &amp;              0.743975 &amp;             0.004236 &amp;           0.919254 &amp;          0.004731 &amp; 0.272437 &amp;    [8, 6, 9, 5, 7] &amp; [G:\textbackslash Experimental\_results\textbackslash FairBatch\textbackslash Moji\textbackslash BTInitF... &amp;      False \\
+       Vanilla &amp;               0.722981 &amp;              0.004576 &amp;            0.611870 &amp;           0.014356 &amp;              0.726650 &amp;             0.003673 &amp;           0.632302 &amp;          0.013370 &amp; 0.476849 &amp;   [2, 11, 2, 5, 2] &amp; [G:\textbackslash Experimental\_results\textbackslash vanilla\textbackslash Moji\textbackslash 0\textbackslash opt.yam... &amp;       True \\
+          BTEO &amp;               0.753927 &amp;              0.001433 &amp;            0.877469 &amp;           0.003756 &amp;              0.746325 &amp;             0.000998 &amp;           0.896874 &amp;          0.005401 &amp; 0.274892 &amp;    [8, 6, 9, 4, 5] &amp; [G:\textbackslash Experimental\_results\textbackslash GatedBT\textbackslash Moji\textbackslash GatedBT\_R... &amp;       True \\
+     GatedDAdv &amp;               0.750163 &amp;              0.006945 &amp;            0.908679 &amp;           0.021678 &amp;              0.745600 &amp;             0.004828 &amp;           0.928670 &amp;          0.022488 &amp; 0.266004 &amp; [24, 13, 19, 4, 3] &amp; [G:\textbackslash Experimental\_results\textbackslash hypertune3\textbackslash Moji\textbackslash hypert... &amp;      False \\
+     FairBatch &amp;               0.751488 &amp;              0.005772 &amp;            0.904373 &amp;           0.008213 &amp;              0.746050 &amp;             0.003896 &amp;           0.914526 &amp;          0.006020 &amp; 0.266276 &amp;    [9, 9, 6, 6, 5] &amp; [G:\textbackslash Experimental\_results\textbackslash FairBatch\textbackslash Moji\textbackslash FairBat... &amp;       True \\
+      GatedAdv &amp;               0.753113 &amp;              0.005196 &amp;            0.890065 &amp;           0.013302 &amp;              0.748975 &amp;             0.003805 &amp;           0.910838 &amp;          0.010314 &amp; 0.270257 &amp; [11, 4, 4, 13, 12] &amp; [G:\textbackslash Experimental\_results\textbackslash hypertune2\textbackslash Moji\textbackslash hypert... &amp;      False \\
+DelayedCLS\_Adv &amp;               0.761015 &amp;              0.003081 &amp;            0.882425 &amp;           0.015918 &amp;              0.751675 &amp;             0.003481 &amp;           0.899346 &amp;          0.011417 &amp; 0.266341 &amp;  [13, 1, 3, 13, 1] &amp; [/data/cephfs/punim1421/Fair\_NLP\_Classification... &amp;       True \\
+        GDMean &amp;               0.752163 &amp;              0.002130 &amp;            0.901389 &amp;           0.003916 &amp;              0.749050 &amp;             0.001368 &amp;           0.922430 &amp;          0.005829 &amp; 0.266735 &amp;  [11, 12, 7, 2, 2] &amp; [G:\textbackslash Experimental\_results\textbackslash GroupDifference\textbackslash Moji\textbackslash G... &amp;       True \\
+     GatedBTEO &amp;               0.762106 &amp;              0.002592 &amp;            0.900764 &amp;           0.014701 &amp;              0.759775 &amp;             0.003798 &amp;           0.909445 &amp;          0.006631 &amp; 0.257762 &amp;   [3, 1, 3, 1, 11] &amp; [G:\textbackslash Experimental\_results\textbackslash GatedBT\textbackslash Moji\textbackslash GatedBT\_R... &amp;       True \\
+    BTGatedAdv &amp;               0.735459 &amp;              0.028830 &amp;            0.866150 &amp;           0.028232 &amp;              0.730150 &amp;             0.024594 &amp;           0.886862 &amp;          0.030537 &amp; 0.296476 &amp;  [5, 19, 19, 6, 1] &amp; [G:\textbackslash Experimental\_results\textbackslash hypertune2\textbackslash Moji\textbackslash hypert... &amp;       True \\
+           Adv &amp;               0.756414 &amp;              0.007271 &amp;            0.893286 &amp;           0.005623 &amp;              0.747425 &amp;             0.004549 &amp;           0.912125 &amp;          0.008507 &amp; 0.265936 &amp; [9, 14, 18, 5, 16] &amp; [G:\textbackslash Experimental\_results\textbackslash hypertune\textbackslash Moji\textbackslash hypertu... &amp;       True \\
+  OldFairBatch &amp;               0.750638 &amp;              0.006012 &amp;            0.905537 &amp;           0.005046 &amp;              0.744525 &amp;             0.004995 &amp;           0.917734 &amp;          0.004761 &amp; 0.266655 &amp;   [5, 7, 8, 13, 7] &amp; [G:\textbackslash Experimental\_results\textbackslash Original\_FairBatch\textbackslash Moj... &amp;       True \\
+       FairSCL &amp;               0.757314 &amp;              0.003441 &amp;            0.878219 &amp;           0.004314 &amp;              0.752825 &amp;             0.001872 &amp;           0.898325 &amp;          0.002579 &amp; 0.271527 &amp;  [12, 5, 13, 1, 1] &amp; [G:\textbackslash Experimental\_results\textbackslash FairSCL\textbackslash Moji\textbackslash FSCL\_0.31... &amp;      False \\
+          INLP &amp;               0.733433 &amp;                   NaN &amp;            0.855982 &amp;                NaN &amp;              0.727625 &amp;                  NaN &amp;           0.859686 &amp;               NaN &amp; 0.302983 &amp;              [103] &amp; [G:\textbackslash Experimental\_results\textbackslash INLP\textbackslash Moji\textbackslash INLP\_True\_ba... &amp;       True \\
+          DAdv &amp;               0.755464 &amp;              0.004076 &amp;            0.904023 &amp;           0.011218 &amp;              0.748550 &amp;             0.002405 &amp;           0.915601 &amp;          0.005007 &amp; 0.262697 &amp;    [6, 1, 7, 3, 5] &amp; [G:\textbackslash Experimental\_results\textbackslash hypertune\textbackslash Moji\textbackslash hypertu... &amp;       True \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Create-plots">
+<h3>Create plots<a class="headerlink" href="#Create-plots" title="Permalink to this headline"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_plot_df</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">final_results_df</span><span class="p">(</span>
+    <span class="n">results_dict</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">,</span>
+    <span class="n">pareto</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">pareto_selection</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="n">selection_criterion</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_dev</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analysis</span><span class="o">.</span><span class="n">tables_and_figures</span><span class="o">.</span><span class="n">make_zoom_plot</span><span class="p">(</span>
+    <span class="n">Moji_plot_df</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">zoom_xlim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">),</span>
+    <span class="n">zoom_ylim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_fairlib_demo_47_0.png" src="../_images/tutorial_fairlib_demo_47_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="6.-Cutomize-pipeline-for-fairness">
+<h2>6. Cutomize pipeline for fairness<a class="headerlink" href="#6.-Cutomize-pipeline-for-fairness" title="Permalink to this headline"></a></h2>
+<p>Check out the website <a class="reference external" href="https://hanxudong.github.io/fairlib/">https://hanxudong.github.io/fairlib/</a> for detailed docs.</p>
+<ul class="simple">
+<li><p>Visualization</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/HanXudong/fairlib/blob/main/tutorial/interactive_plots.ipynb">Interactive plots</a> demonstrates creating interactive plots for comparing different methods, and demonstrating DTO and constrained selection.</p></li>
+<li><p><a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_plot_gallery.html">Plot gallery</a> presents a list of examples for presenting experimental results, e.g., hyperparameter tuning and trade-off plots with zoomed-in area.</p></li>
+</ul>
+</li>
+<li><p>Customized Dataset and Models</p>
+<ul>
+<li><p><a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_customized_datasets_and_dataloaders.html">The dataset document</a> provides instructions for customizing datasets and dataloaders.</p></li>
+<li><p><a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_customized_models.html">The model document</a> provides instructions for customizing model architectures and register models.</p></li>
+<li><p>Besides text inputs, we also provide examples for customizing datasets and models with <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_COMPAS.html">structured inputs</a> and <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_notebooks/tutorial_colored_MNIST.html">images</a>.</p></li>
+</ul>
+</li>
+<li><p>Customized Metrics</p>
+<ul>
+<li><p>This <a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_customized_evaluation.html">document</a> provides instructions for customizing evaluation metrics.</p></li>
+<li><p>Single metric evaluations can be seen from <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/47f4b332e15ff8f22b238db6be983ec753fd2537/fairlib/src/evaluators/evaluator.py#L94">there</a>.</p></li>
+<li><p>Metric aggregations such as the default root mean square aggregation can be found from <a class="reference external" href="https://github.com/HanXudong/fairlib/blob/47f4b332e15ff8f22b238db6be983ec753fd2537/fairlib/src/evaluators/evaluator.py#L75">there</a>.</p></li>
+</ul>
+</li>
+<li><p>Customized Debiasing Methods</p>
+<ul>
+<li><p><a class="reference external" href="https://hanxudong.github.io/fairlib/tutorial_customized_methods.html">Please see the document</a> for instructions about adding method-specific options and integrating methods with <em>fairlib</em>.</p></li>
+</ul>
+</li>
+</ul>
+<script type="application/vnd.jupyter.widget-state+json">
+{"0598af4dcad946c3b5b27dc73dafda3a": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_101c33c843274092888ae0b593e11084", "max": 39, "min": 0, "orientation": "horizontal", "style": "IPY_MODEL_267c639152c247bfbb01672e66107207", "value": 39}}, "05c0c0bae60a4c958f6571576dfcd470": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "07824111751947f1af0e3f3409cf8897": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "08b65a34ffbf43fa94aa81bdfa88a839": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "0f5858dbd88d4a8f95d74f8c2f3df4ab": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "101c33c843274092888ae0b593e11084": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "155d359ac2d749169a0d52c591f0d8ea": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1f572cf5213c400f86b91e4cb9c5ab03": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_223a07676d284ddc9f88eb557535be33", "IPY_MODEL_6d8e56dae7c74b51870b8f205f9c2a51", "IPY_MODEL_30564c39e4fc42f9a62391eb4ccbeef5"], "layout": "IPY_MODEL_5cf1fb49370f458aa4b34f1d4654c3c0"}}, "223a07676d284ddc9f88eb557535be33": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_9f28af0718b04e7489b8d81c554b8f0a", "placeholder": "\u200b", "style": "IPY_MODEL_56054bc9fdae4f4aa8d1dd3b2230349e", "value": "100%"}}, "267c639152c247bfbb01672e66107207": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "2821e713f31b46efa2e90d699e0dc83c": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "2980b492e74549938e9f0fb78237923d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_5456c00ca1a44bf3b7bece88b94250d3", "placeholder": "\u200b", "style": "IPY_MODEL_f490accfcad641b19c214d9ea5bc422d", "value": " 39/39 [00:05&lt;00:00,  7.37it/s]"}}, "29a861a0df0549bcba58054ef6558903": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "30564c39e4fc42f9a62391eb4ccbeef5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_7bc47b609afe4320a0c754fde01ba508", "placeholder": "\u200b", "style": "IPY_MODEL_29a861a0df0549bcba58054ef6558903", "value": " 39/39 [00:05&lt;00:00,  8.66it/s]"}}, "37c4e040cfea4f8c948c358014f0cd00": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_74be6f341a894c7682aad6de3b63c4cc", "IPY_MODEL_b9a94eeed9d241a4be13e1ab3b2540d8", "IPY_MODEL_88d78f31f08b48608809cd0a211a1fdb"], "layout": "IPY_MODEL_155d359ac2d749169a0d52c591f0d8ea"}}, "3c29777eb0e64033896044125f33ca3b": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "54535b16f2d3462bad55b950d081f572": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5456c00ca1a44bf3b7bece88b94250d3": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "56054bc9fdae4f4aa8d1dd3b2230349e": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "5ae45a0c9008496fb0e4347da96546d5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_a43ba65c1600446f899efa4e5372f0ad", "placeholder": "\u200b", "style": "IPY_MODEL_c2d89f3eb92e40b684686fac9636537a", "value": "100%"}}, "5cf1fb49370f458aa4b34f1d4654c3c0": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "686ff88b3e02409db49eef590197e51f": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_5ae45a0c9008496fb0e4347da96546d5", "IPY_MODEL_9dd2932943e24383a4cff1cc6df0fad4", "IPY_MODEL_c9f3ba4aa2c2405faf9ecb026b233379"], "layout": "IPY_MODEL_0f5858dbd88d4a8f95d74f8c2f3df4ab"}}, "6d8e56dae7c74b51870b8f205f9c2a51": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_c8f1fe9931524c4cb344fd8551e8d918", "max": 39, "min": 0, "orientation": "horizontal", "style": "IPY_MODEL_c3ad77793bd342308f942eeaf7c6db5e", "value": 39}}, "7041c8004d7f4c2b9f22b200f60394bd": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_842e1f5c6d43472b9cb8690e3d2b6bc0", "placeholder": "\u200b", "style": "IPY_MODEL_76c8de3762d948679a2241e3651476a5", "value": "100%"}}, "74be6f341a894c7682aad6de3b63c4cc": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_79aacc7e95bd41d1a7491d300ce44408", "placeholder": "\u200b", "style": "IPY_MODEL_a993fd47b6a24182a0769207fe5896ff", "value": "100%"}}, "76c8de3762d948679a2241e3651476a5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "79aacc7e95bd41d1a7491d300ce44408": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7bc47b609afe4320a0c754fde01ba508": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "842e1f5c6d43472b9cb8690e3d2b6bc0": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "88d78f31f08b48608809cd0a211a1fdb": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_a99b784af7c747cb92b304e024cb45e7", "placeholder": "\u200b", "style": "IPY_MODEL_a826fe75b14e466d9fbff54cd4fd78c7", "value": " 39/39 [00:04&lt;00:00,  9.36it/s]"}}, "9dd2932943e24383a4cff1cc6df0fad4": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_2821e713f31b46efa2e90d699e0dc83c", "max": 39, "min": 0, "orientation": "horizontal", "style": "IPY_MODEL_07824111751947f1af0e3f3409cf8897", "value": 39}}, "9f28af0718b04e7489b8d81c554b8f0a": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a43ba65c1600446f899efa4e5372f0ad": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a826fe75b14e466d9fbff54cd4fd78c7": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "a993fd47b6a24182a0769207fe5896ff": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "a99b784af7c747cb92b304e024cb45e7": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "b5e8af5d11954cdbbdb77bdb205e31ec": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_7041c8004d7f4c2b9f22b200f60394bd", "IPY_MODEL_0598af4dcad946c3b5b27dc73dafda3a", "IPY_MODEL_2980b492e74549938e9f0fb78237923d"], "layout": "IPY_MODEL_3c29777eb0e64033896044125f33ca3b"}}, "b9a94eeed9d241a4be13e1ab3b2540d8": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_05c0c0bae60a4c958f6571576dfcd470", "max": 39, "min": 0, "orientation": "horizontal", "style": "IPY_MODEL_08b65a34ffbf43fa94aa81bdfa88a839", "value": 39}}, "be8088868f094bee8ad0ca7a1e74e122": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "c2d89f3eb92e40b684686fac9636537a": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "c3ad77793bd342308f942eeaf7c6db5e": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "c8f1fe9931524c4cb344fd8551e8d918": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "c9f3ba4aa2c2405faf9ecb026b233379": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_54535b16f2d3462bad55b950d081f572", "placeholder": "\u200b", "style": "IPY_MODEL_be8088868f094bee8ad0ca7a1e74e122", "value": " 39/39 [00:05&lt;00:00,  7.89it/s]"}}, "f490accfcad641b19c214d9ea5bc422d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}}
+</script></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tutorial_notebooks.html" class="btn btn-neutral float-left" title="Interactive Demos" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Image_Inputs.html" class="btn btn-neutral float-right" title="Customized models and datasets for CV" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

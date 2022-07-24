@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualization &mdash; fairlib  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fairlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials &amp; Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>fairlib</em> Quick-start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_notebooks.html">Interactive Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_datasets_and_dataloaders.html">Adding Customized Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_evaluation.html">Adding Customized Evaluation Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_models.html">Adding Customized NN Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_customized_methods.html">Adding Customized Debiasing Methods</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Component Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_benchmark_datasets.html">Benchmark Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_bias_detection.html">Bias Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_bias_mitigation.html">Bias Mitigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_component_hyperparameter_tuning.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripts Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial_usage.html"><em>fairlib</em> Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_script_data_manipulation.html">Analysis Robustness to Label Distribution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_evaluators.html">Evaluator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_dataloaders.html">DataLoader Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_networks.html">Network Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_api_debiasing.html">Debiasing Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fairlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Visualization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="visualization">
+<h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fairlib</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</pre></div>
+</div>
+<section id="load-experimental-results">
+<h2>Load experimental results<a class="headerlink" href="#load-experimental-results" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_results</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">retrive_results</span><span class="p">(</span><span class="s2">&quot;Moji&quot;</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s2">&quot;../analysis/results&quot;</span><span class="p">)</span>
+<span class="n">Bios_results</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">retrive_results</span><span class="p">(</span><span class="s2">&quot;Bios_gender&quot;</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s2">&quot;../analysis/results&quot;</span><span class="p">)</span>
+<span class="n">Bios_intersection_results</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">retrive_results</span><span class="p">(</span><span class="s2">&quot;Bios_both&quot;</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s2">&quot;../analysis/results&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;Standard&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;Vanilla&quot;</span><span class="p">]</span>
+<span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;ADAdv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;GatedDAdv&quot;</span><span class="p">]</span>
+<span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;FairBatch&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;OldFairBatch&quot;</span><span class="p">]</span>
+<span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;EO$_</span><span class="si">{CLA}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">[</span><span class="s2">&quot;GDEO&quot;</span><span class="p">]</span>
+
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Moji_plot_df</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">final_results_df</span><span class="p">(</span>
+    <span class="n">results_dict</span> <span class="o">=</span> <span class="n">Moji_results</span><span class="p">,</span>
+    <span class="n">model_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span> <span class="s2">&quot;BTEO&quot;</span><span class="p">,</span> <span class="s2">&quot;Adv&quot;</span><span class="p">,</span> <span class="s2">&quot;DAdv&quot;</span><span class="p">,</span> <span class="s2">&quot;ADAdv&quot;</span><span class="p">,</span> <span class="s2">&quot;FairBatch&quot;</span><span class="p">,</span> <span class="s2">&quot;FairSCL&quot;</span><span class="p">,</span> <span class="s2">&quot;EO$_</span><span class="si">{CLA}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;INLP&quot;</span><span class="p">],</span>
+    <span class="n">pareto</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">pareto_selection</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="n">selection_criterion</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_dev</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-plot">
+<h2>Basic Plot<a class="headerlink" href="#basic-plot" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">plot_df</span><span class="p">,</span> <span class="n">figure_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">plot_df</span><span class="p">[</span><span class="s2">&quot;Fairness&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_df</span><span class="p">[</span><span class="s2">&quot;test_fairness mean&quot;</span><span class="p">]</span>
+    <span class="n">plot_df</span><span class="p">[</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_df</span><span class="p">[</span><span class="s2">&quot;test_performance mean&quot;</span><span class="p">]</span>
+
+    <span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> 
+    <span class="k">with</span> <span class="n">sns</span><span class="o">.</span><span class="n">axes_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">):</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">plot_df</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Fairness&quot;</span><span class="p">,</span>
+            <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Models&quot;</span><span class="p">,</span>
+            <span class="n">markers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="s2">&quot;Models&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">figure_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;plots&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">figure_name</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">960</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span> 
+
+
+<span class="n">make_plot</span><span class="p">(</span><span class="n">Moji_plot_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../../_images/tutorial_plot_gallery_7_0.png" /></p>
+</section>
+<section id="zoomed-plots">
+<h2>Zoomed Plots<a class="headerlink" href="#zoomed-plots" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">tables_and_figures</span><span class="o">.</span><span class="n">make_zoom_plot</span><span class="p">(</span>
+    <span class="n">Moji_plot_df</span><span class="p">,</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.48</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">zoom_xlim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.65</span><span class="p">,</span><span class="mf">0.77</span><span class="p">),</span>
+    <span class="n">zoom_ylim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.98</span><span class="p">),</span>
+    <span class="c1"># figure_name = &quot;moji_fairlib&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../../_images/tutorial_plot_gallery_9_0.png" /></p>
+</section>
+<section id="auc-performance-fairness-tradeoff">
+<h2>AUC - Performance-Fairness Tradeoff<a class="headerlink" href="#auc-performance-fairness-tradeoff" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">adv_pareto_df</span> <span class="o">=</span> <span class="n">Moji_plot_df</span><span class="p">[</span><span class="n">Moji_plot_df</span><span class="p">[</span><span class="s2">&quot;Models&quot;</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;Adv&quot;</span><span class="p">]</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">adv_pareto_df</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;test_performance mean&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;test_fairness mean&quot;</span><span class="p">,</span>
+            <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Models&quot;</span><span class="p">,</span>
+            <span class="n">markers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="s2">&quot;Models&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="n">_xlim</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+<span class="n">_ylim</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+
+<span class="n">_tmp_df</span> <span class="o">=</span> <span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">auc_performance_fairness_tradeoff</span><span class="p">(</span>
+    <span class="n">adv_pareto_df</span><span class="p">,</span>
+    <span class="c1"># random_performance = 0.5,</span>
+    <span class="n">performance_threshold</span> <span class="o">=</span> <span class="mf">0.70</span><span class="p">,</span> 
+    <span class="c1"># interpolation = &quot;constant&quot;,</span>
+    <span class="n">interpolation</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">_tmp_df</span><span class="p">[</span><span class="s2">&quot;test_performance mean&quot;</span><span class="p">],</span> <span class="n">_tmp_df</span><span class="p">[</span><span class="s2">&quot;test_fairness mean&quot;</span><span class="p">],</span>  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.30</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">_xlim</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">_ylim</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0.8888970059716558, 0.9854552013667007)
+</pre></div>
+</div>
+<p><img alt="png" src="../../_images/tutorial_plot_gallery_11_1.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">auc_performance_fairness_tradeoff</span><span class="p">(</span>
+    <span class="n">adv_pareto_df</span><span class="p">,</span>
+    <span class="c1"># random_performance = 0.5,</span>
+    <span class="n">performance_threshold</span> <span class="o">=</span> <span class="mf">0.70</span><span class="p">,</span> 
+    <span class="c1"># interpolation = &quot;constant&quot;,</span>
+    <span class="n">interpolation</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.051836936857947394
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fairlib</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">auc_performance_fairness_tradeoff</span><span class="p">(</span>
+    <span class="n">adv_pareto_df</span><span class="p">,</span>
+    <span class="n">random_performance</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">performance_threshold</span> <span class="o">=</span> <span class="mf">0.70</span><span class="p">,</span> 
+    <span class="c1"># interpolation = &quot;constant&quot;,</span>
+    <span class="n">interpolation</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="n">normalization</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.1727897895264913
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Xudong Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
