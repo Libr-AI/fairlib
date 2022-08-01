@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from pathlib import Path
 from sklearn.model_selection import train_test_split
+from ..utils.preprocessing import onehot_encoder
 
 target_variable = "income"
 target_value = ">50K"
@@ -62,10 +63,15 @@ class Adult:
 
         data_file_path = os.path.join(self.dest_folder,  'adult.data')
         test_file_path = os.path.join(self.dest_folder,  'adult.test')
+        
+        # Drop the first line of test set, which is "|1x3 Cross validator"
+        with open(test_file_path, 'r') as fin:
+            data = fin.read().splitlines(True)
+        with open(test_file_path, 'w') as fout:
+            fout.writelines([i[:-2]+"\n" for i in data[1:]])
 
         train_df = pd.read_csv(data_file_path,sep=',',names=columns)
-        test_df = pd.read_csv(test_file_path,sep=',',names=columns)[1:]
-        test_df["age"] = test_df[1:]["age"].astype(str).astype(int)
+        test_df = pd.read_csv(test_file_path,sep=',',names=columns)
 
         # Convert columns of type ``object`` to ``category`` 
         train_df = convert_object_type_to_category(train_df)
@@ -77,21 +83,31 @@ class Adult:
     def processing(self):
         # Create splits
         test_df = self.test_df
-        train_df, dev_df = train_test_split(self.train_df, test_size=0.1, random_state=42)
+        train_df = self.train_df
 
         cat_cols = train_df.select_dtypes(include='category').columns
         vocab_dict = {}
         for col in cat_cols:
             vocab_dict[col] = list(set(train_df[col].cat.categories)-{"?"})
+        print(vocab_dict)
 
         temp_dict = train_df.describe().to_dict()
         mean_std_dict = {}
         for key, value in temp_dict.items():
             mean_std_dict[key] = [value['mean'],value['std']]
+        print(mean_std_dict)
 
         train_df=preprocessing(train_df, mean_std_dict, vocab_dict)
-        dev_df=preprocessing(dev_df, mean_std_dict, vocab_dict)
         test_df=preprocessing(test_df, mean_std_dict, vocab_dict)
+
+        encoder = onehot_encoder(["workclass","education","marital-status", "occupation", "relationship", "native-country"])
+        encoder.fit(train_df)
+        
+        train_df = encoder.transform(train_df).dropna()
+        test_df = encoder.transform(test_df).dropna()
+
+
+        train_df, dev_df = train_test_split(train_df, test_size=0.1, random_state=42)
 
         train_df.to_pickle(os.path.join(self.dest_folder, "Adult_train.pkl"))
         dev_df.to_pickle(os.path.join(self.dest_folder, "Adult_dev.pkl"))
