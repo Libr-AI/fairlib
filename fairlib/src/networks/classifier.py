@@ -1,5 +1,8 @@
-import torch.nn as nn
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.autograd import grad
 import logging
 import numpy as np
 
@@ -191,3 +194,36 @@ class BERTClassifier(BaseModel):
         model_parameters = filter(lambda p: p.requires_grad, self.bert.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         return params
+
+class ConvNet(BaseModel):
+
+    def __init__(self, args):
+        super(ConvNet, self).__init__()
+        self.args = args
+
+        self.conv1 = nn.Conv2d(3, 20, 5, 1)
+        self.conv2 = nn.Conv2d(20, 50, 5, 1)
+
+        self.classifier = MLP(args)
+
+        self.init_for_training()
+
+    def forward(self, input_data, group_label = None):
+        x = input_data
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = x.view(-1, 4 * 4 * 50)
+
+        return self.classifier(x, group_label)
+
+    def hidden(self, input_data, group_label = None):
+        x = input_data
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = x.view(-1, 4 * 4 * 50)
+
+        return self.classifier.hidden(x, group_label)
