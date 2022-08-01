@@ -1,25 +1,10 @@
 import sys
 import torch
 import logging
-from .loaders import *
+from .loaders import default_dataset_roots, name2loader
 from . import utils
 from .encoder import text2id
 from collections import defaultdict
-
-if sys.platform == "win32":
-    default_dataset_roots = dict(
-        Moji= r'.\data\deepmoji',
-        Bios_gender= r'.\data\bios',
-        Bios_economy= r'.\data\bios',
-        Bios_both= r'.\data\bios',
-    )
-else:
-    default_dataset_roots = dict(
-        Moji='./data/deepmoji',
-        Bios_gender='./data/bios_gender_economy',
-        Bios_economy='./data/bios_gender_economy',
-        Bios_both='./data/bios_gender_economy',
-    )
 
 def get_dataloaders(args):
     """Initialize the torch dataloaders according to arguments.
@@ -33,27 +18,9 @@ def get_dataloaders(args):
     Returns:
         tuple: dataloaders for training set, development set, and test set.
     """
-    assert args.dataset in [
-        "Sample", "test", "Moji", 
-        "Bios_gender", "Bios_economy", "Bios_both",
-        "Valence",
-        ], "Not implemented"
-
-    if args.dataset == "Moji":
-        task_dataloader = DeepMojiDataset
-    elif args.dataset in ["Bios_gender", "Bios_economy", "Bios_both"]:
-        task_dataloader = BiosDataset
-        args.protected_task = args.dataset.split("_")[1]
-    elif args.dataset == "test":
-        task_dataloader = TestDataset
-    elif args.dataset == "Sample":
-        task_dataloader = SampleDataset
-    elif args.dataset == "Valence":
-        task_dataloader = ValenceDataset
-    else:
-        pass
+    task_dataloader = name2loader(args)
     
-    if args.encoder_architecture == "Fixed":
+    if args.encoder_architecture in ["Fixed", "MNIST"]:
         pass
     elif args.encoder_architecture == "BERT":
         # Init the encoder form text to idx.
