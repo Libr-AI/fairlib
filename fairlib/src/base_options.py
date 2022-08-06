@@ -295,6 +295,9 @@ class BaseOptions(object):
         # Decoupling adversarial training
         parser.add_argument('--adv_decoupling', action='store_true', default=False,
                             help='decoupling the training and regularization of the adv discriminator and the main task model.')
+        # Decoupling adversarial training
+        parser.add_argument('--adv_decoupling_labelled_proportion', type=pos_float, default=1.0,
+                            help='proportion of instances that are labelled with protected labels. If the original protected labels have already included NAN, set this to 1.')
 
         # Use uniform soft-labels for the adversarial regularization
         parser.add_argument('--adv_uniform_label', action='store_true', default=False,
@@ -512,8 +515,6 @@ class BaseOptions(object):
             
             # Init discriminator for adversarial training
             if state.adv_debiasing:
-                if state.adv_decoupling:
-                    raise NotImplementedError
 
                 state.opt.discriminator = networks.adv.Discriminator(state)
                 logging.info('Discriminator built!')

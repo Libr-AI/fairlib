@@ -47,6 +47,10 @@ class BaseDataset(torch.utils.data.Dataset):
 
         self.adv_balanced_training()
 
+        if self.split == "train":
+            self.adv_decoupling()
+
+
         print("Loaded data shapes: {}, {}, {}".format(self.X.shape, self.y.shape, self.protected_label.shape))
 
     def __len__(self):
@@ -134,7 +138,21 @@ class BaseDataset(torch.utils.data.Dataset):
             else:
                 raise NotImplementedError
         return None
-    
+
+    def adv_decoupling(self):
+        """Simulating unlabelled protected labels through assigning -1 to instances.
+
+        Returns:
+            None
+        """
+        if self.args.adv_decoupling and self.args.adv_decoupling_labelled_proportion < 1:
+            self.adv_instance_weights[
+                np.random.rand(len(self.protected_label)) > self.args.adv_decoupling_labelled_proportion
+                ] = -1
+        else:
+            pass
+        return None
+
     def regression_init(self):
         if not self.args.regression:
             self.regression_label = np.array([0 for _ in range(len(self.protected_label))])
