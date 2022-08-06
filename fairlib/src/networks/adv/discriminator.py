@@ -29,14 +29,20 @@ def adv_train_batch(model, discriminators, batch, args):
     text = batch[0]
     tags = batch[1].long()
     p_tags = batch[2].float()
+    adv_instance_weights = batch[4].float()
 
-    if args.adv_BT is not None and args.adv_BT == "Reweighting":
-        adv_instance_weights = batch[4].float()
-        adv_instance_weights = adv_instance_weights.to(args.device)
+    # Remove instances that are not annotated with protected labels.
+    if args.adv_decoupling:
+        decoupling_masks = (adv_instance_weights != -1)
+        text = text[decoupling_masks]
+        tags = tags[decoupling_masks]
+        p_tags = p_tags[decoupling_masks]
+        adv_instance_weights = adv_instance_weights[decoupling_masks]
 
     text = text.to(args.device)
     tags = tags.to(args.device)
     p_tags = p_tags.to(args.device)
+    adv_instance_weights = adv_instance_weights.to(args.device)
         
         # hidden representations from the model
     if args.gated:
