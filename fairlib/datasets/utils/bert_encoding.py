@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from transformers import *
+from transformers import BertModel, BertTokenizer
 import pickle
 from tqdm.auto import tqdm, trange
 
