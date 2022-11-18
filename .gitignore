@@ -13,6 +13,7 @@ data/*
 !results/final/
 
 __pycache__/
+.ipynb_checkpoints
 
 # Distribution / packaging
 .Python

@@ -7,11 +7,11 @@ class text2id():
         if args.encoder_architecture == "Fixed":
             self.encoder = None
         elif args.encoder_architecture == "BERT":
-            self.model_name = 'bert-base-cased'
+            self.model_name = 'bert-base-uncased'
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         else:
             raise NotImplementedError
     
     def encoder(self, sample):
         encodings = self.tokenizer(sample, truncation=True, padding=True)
-        return encodings["input_ids"]
+        return encodings["input_ids"], encodings['token_type_ids'], encodings['attention_mask']

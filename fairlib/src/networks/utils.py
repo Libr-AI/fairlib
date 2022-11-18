@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 from ..evaluators import print_network, present_evaluation_scores
 import pandas as pd
+from sklearn.metrics import accuracy_score
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
@@ -22,6 +23,10 @@ def train_epoch(model, iterator, args, epoch):
     for it, batch in enumerate(iterator):
         
         text = batch[0].squeeze()
+        if len(batch) == 7:
+            mask = torch.stack(batch[6]).float().squeeze()
+            mask = mask.to(args.device)
+
         tags = batch[1].long().squeeze()
         p_tags = batch[2].float().squeeze()
 
@@ -45,10 +50,12 @@ def train_epoch(model, iterator, args, epoch):
         if args.gated:
             predictions = model(text, p_tags)
         else:
-            predictions = model(text)
+            if len(batch) == 7:
+                predictions = model(text, mask)
+            else:
+                predictions = model(text)
 
         predictions = predictions if not args.regression else predictions.squeeze()
-
         # main tasks loss
         # add the weighted loss
         if args.BT is not None and args.BT == "Reweighting":
@@ -153,6 +160,8 @@ def eval_epoch(model, iterator, args):
 
         tags = batch[1]
         p_tags = batch[2]
+        if len(batch) == 7:
+            mask = torch.stack(batch[6]).float().squeeze().to(device)
 
         text = text.to(device)
         tags = tags.to(device).long()
@@ -170,7 +179,10 @@ def eval_epoch(model, iterator, args):
         if args.gated:
             predictions = model(text, p_tags)
         else:
-            predictions = model(text)
+            if len(batch) == 7:
+                predictions = model(text, mask)
+            else:
+                predictions = model(text)
 
         predictions = predictions if not args.regression else predictions.squeeze()
 
@@ -205,6 +217,7 @@ class BaseModel(nn.Module):
         self.to(self.device)
 
         self.learning_rate = self.args.lr
+        
         self.optimizer = Adam(
             filter(lambda p: p.requires_grad, self.parameters()), 
             lr=self.learning_rate,
@@ -274,6 +287,7 @@ class BaseModel(nn.Module):
 
         epochs_since_improvement = 0
         best_valid_loss = 1e+5
+        best_valid_acc = 0
 
         for epoch in range(self.args.opt.epochs):
             
@@ -299,9 +313,13 @@ class BaseModel(nn.Module):
             if self.args.adv_debiasing and self.args.adv_update_frequency == "Epoch":
                 self.args.discriminator.train_self(self)
 
+            epoch_valid_acc = accuracy_score(valid_labels, valid_preds)
             # Check if there was an improvement
-            is_best = epoch_valid_loss < best_valid_loss
-            best_valid_loss = min(epoch_valid_loss, best_valid_loss)
+            #is_best = epoch_valid_loss < best_valid_loss
+            #best_valid_loss = min(epoch_valid_loss, best_valid_loss)
+            
+            is_best = epoch_valid_acc > best_valid_acc
+            best_valid_acc = max(epoch_valid_acc, best_valid_acc)
 
             if not is_best:
                 epochs_since_improvement += 1
@@ -317,7 +335,7 @@ class BaseModel(nn.Module):
                     model = self, 
                     iterator = self.args.opt.test_generator, 
                     args = self.args)
-
+                
                 present_evaluation_scores(
                     valid_preds, valid_labels, valid_private_labels,
                     test_preds, test_labels, test_private_labels,

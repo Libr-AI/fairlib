@@ -3,6 +3,11 @@ from ..utils import BaseDataset
 from pathlib import Path
 import pandas as pd
 
+gender2id = {
+    "m":0,
+    "f":1
+}
+
 class FCL_BiosDataset(BaseDataset):
     embedding_type = "bert_avg_SE"
     text_type = "hard_text"
@@ -19,7 +24,8 @@ class FCL_BiosDataset(BaseDataset):
         self.args.protected_task = "gender"
 
         data = pd.read_pickle(Path(self.args.data_dir) / self.filename)
-
+        data["gender_class"] = data["gender_class"].map(gender2id)
+        
         data = data[data["p"].isin(self.selected_classes[:self.args.num_classes])]
 
         if self.args.protected_task in ["economy", "both"] and self.args.full_label:

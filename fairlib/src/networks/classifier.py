@@ -140,8 +140,8 @@ class MLP(BaseModel):
                 raise "not implemented yet"
 
 class BERTClassifier(BaseModel):
-    model_name = 'bert-base-cased'
-    n_freezed_layers = 10
+    model_name = 'bert-base-uncased'
+    n_freezed_layers = 0
 
     def __init__(self, args):
         super(BERTClassifier, self).__init__()
@@ -169,10 +169,12 @@ class BERTClassifier(BaseModel):
         self.freeze_roberta_layers(self.n_freezed_layers)
 
         self.init_for_training()
+        
+        print("Number of trainable parameters:", self.trainable_parameter_counting())
 
-    def forward(self, input_data, group_label = None):
-        bert_output = self.bert(input_data)[1]
-
+    def forward(self, input_data, mask=None, group_label = None):
+        bert_output = self.bert(input_data, encoder_attention_mask=mask.T)[1]
+        #bert_output = self.bert(input_data)[1]
         return self.classifier(bert_output, group_label)
     
     def hidden(self, input_data, group_label = None):
@@ -182,7 +184,7 @@ class BERTClassifier(BaseModel):
 
     def freeze_roberta_layers(self, number_of_layers):
         "number of layers: the first number of layers to be freezed"
-        assert (number_of_layers < 14 and number_of_layers > -14), "beyond the total number of RoBERTa layer groups(14)."
+        assert (number_of_layers <= 14 and number_of_layers >= -14), "beyond the total number of RoBERTa layer groups(14)."
         for target_layer in self.bert_layers[:number_of_layers]:
                 for param in target_layer.parameters():
                     param.requires_grad = False

@@ -30,6 +30,7 @@ class BaseDataset(torch.utils.data.Dataset):
         self.instance_weights = []
         self.adv_instance_weights = []
         self.regression_label = []
+        self.mask = None
 
         self.load_data()
 
@@ -59,6 +60,8 @@ class BaseDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         'Generates one sample of data'
+        if self.mask is not None:
+            return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index], self.regression_label[index], self.mask[index]
         return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index], self.regression_label[index]
     
     def load_data(self):
