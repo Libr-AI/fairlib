@@ -17,7 +17,8 @@ class BiosDataset(BaseDataset):
 
         data = pd.read_pickle(Path(self.args.data_dir) / self.filename)
         
-        data["gender_class"] = data["gender_class"].map(gender2id)
+        if type(data["gender_class"][0]) == str:
+            data["gender_class"] = data["gender_class"].map(gender2id)
 
         if self.args.protected_task in ["economy", "both"] and self.args.full_label:
             selected_rows = (data["economy_label"] != "Unknown")

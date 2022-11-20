@@ -7,7 +7,7 @@ class text2id():
         if args.encoder_architecture == "Fixed":
             self.encoder = None
         elif args.encoder_architecture == "BERT":
-            self.model_name = 'bert-base-uncased'
+            self.model_name = 'bert-base-cased'
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         else:
             raise NotImplementedError
