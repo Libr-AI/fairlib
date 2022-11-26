@@ -126,6 +126,13 @@ class SubDiscriminator(BaseDiscriminator):
         else:
             pass
 
+        # Add the onehot target to the input of adv
+        if self.args.adv_gated and self.args.adv_gated_type == "Inputs":
+            self.input_dim = self.input_dim + self.args.num_classes
+            # One-hot mapping for the class
+            self.mapping = torch.eye(self.args.num_classes, requires_grad=False)
+            self.mapping = self.mapping.to(self.args.device)
+
         if args.adv_n_hidden == 0:
             self.output_layer = nn.Linear(self.input_dim, args.num_groups)
 
@@ -138,7 +145,7 @@ class SubDiscriminator(BaseDiscriminator):
         self.hidden_layers = self.init_hidden_layers()
             
         # Augmentation layers
-        if self.args.adv_gated:
+        if self.args.adv_gated and self.args.adv_gated_type == "Augmentation":
             if self.args.adv_n_hidden == 0:
                 logging.info("Gated component requires at least one hidden layers in the model")
                 pass
@@ -162,7 +169,14 @@ class SubDiscriminator(BaseDiscriminator):
         self.init_for_training()
 
     def forward(self, input_data, group_label = None):
-        # input_data = self.grad_rev(input_data)
+        if (self.args.adv_gated):
+            assert group_label is not None, "Group labels are needed for augmentation"
+            
+            if (self.args.adv_gated_type == "Inputs"):
+                # Get one hot representations of y
+                onehot_y = self.mapping[group_label.long()]
+                # Concat 
+                input_data = torch.cat([input_data, onehot_y], dim=1)
         
         # Main model
         main_output = input_data
@@ -170,8 +184,9 @@ class SubDiscriminator(BaseDiscriminator):
             main_output = layer(main_output)
 
         # Augmentation
-        if self.args.adv_gated and self.args.adv_n_hidden > 0:
-            assert group_label is not None, "Group labels are needed for augmentaiton"
+        if (self.args.adv_gated) and (
+            self.args.adv_n_hidden > 0) and (
+            self.args.adv_gated_type == "Augmentation"):
 
             specific_output = self.augmentation_components(input_data, group_label)
 
@@ -181,16 +196,24 @@ class SubDiscriminator(BaseDiscriminator):
         return output
     
     def hidden(self, input_data, group_label = None):
-        # input_data = self.grad_rev(input_data)
-
+        if (self.args.adv_gated):
+            assert group_label is not None, "Group labels are needed for augmentation"
+            
+            if (self.args.adv_gated_type == "Inputs"):
+                # Get one hot representations of y
+                onehot_y = self.mapping[group_label.long()]
+                # Concat 
+                input_data = torch.cat([input_data, onehot_y], dim=1)
+        
         # Main model
         main_output = input_data
         for layer in self.hidden_layers:
             main_output = layer(main_output)
 
         # Augmentation
-        if self.args.adv_gated and self.args.adv_n_hidden > 0:
-            assert group_label is not None, "Group labels are needed for augmentaiton"
+        if (self.args.adv_gated) and (
+            self.args.adv_n_hidden > 0) and (
+            self.args.adv_gated_type == "Augmentation"):
 
             specific_output = self.augmentation_components(input_data, group_label)
 
