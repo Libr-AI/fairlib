@@ -6,7 +6,6 @@ import time
 from pathlib import Path
 from ..evaluators import print_network, present_evaluation_scores, validation_is_best
 import pandas as pd
-from .knn_labels import KNN_labels
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
@@ -64,22 +63,6 @@ def train_epoch(model, iterator, args, epoch):
         else:
             loss = criterion(predictions, tags if not args.regression else regression_tags)
 
-        # Simulating fairness without demographics in using KNN based labels
-        # TODO: it currently only supports a subset of debiasing methods, check the usage carefully
-        if args.knn_labels:
-            p_tags = KNN_labels(
-                criterion = criterion, tags = tags if not args.regression else regression_tags, 
-                predictions = predictions, text = text, model = model, loss = loss, 
-                p = args.knn_labels_p, k = args.knn_labels_k)
-            batch = batch.copy()
-            batch[2] = p_tags
-
-            if args.UKNN_debiasing and (args.UKNN_lambda != 0):
-                loss = loss + args.UKNN_loss(
-                    predictions, tags, p_tags, 
-                    regression_tags = None if not args.regression else regression_tags,
-                )
-                
         if args.ARL:
             # loss = loss + args.ARL_loss.get_arl_loss(model, batch, predictions, args)
             loss = args.ARL_loss.get_arl_loss(model, batch, predictions, args)
