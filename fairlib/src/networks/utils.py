@@ -4,8 +4,9 @@ import logging
 from torch.optim import Adam
 import time
 from pathlib import Path
-from ..evaluators import print_network, present_evaluation_scores
+from ..evaluators import print_network, present_evaluation_scores, validation_is_best
 import pandas as pd
+from .knn_labels import KNN_labels
 
 # train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
@@ -25,6 +26,16 @@ def train_epoch(model, iterator, args, epoch):
         tags = batch[1].long().squeeze()
         p_tags = batch[2].float().squeeze()
 
+        text = text.to(args.device)
+        tags = tags.to(args.device)
+        p_tags = p_tags.to(args.device)
+
+        if args.encoder_architecture == "BERT":
+            # Modify the inputs for BERT models
+            mask = torch.stack(batch["attention_mask"]).float().squeeze().T
+            mask = mask.to(args.device)
+            text = (text, mask)
+
         if args.BT is not None and args.BT == "Reweighting":
             instance_weights = batch[3].float()
             instance_weights = instance_weights.to(args.device)
@@ -32,10 +43,6 @@ def train_epoch(model, iterator, args, epoch):
         if args.regression:
             regression_tags = batch[5].float().squeeze()
             regression_tags = regression_tags.to(args.device)
-
-        text = text.to(args.device)
-        tags = tags.to(args.device)
-        p_tags = p_tags.to(args.device)
 
         data_t += (time.time() - data_t0)
         t0 = time.time()
@@ -57,10 +64,38 @@ def train_epoch(model, iterator, args, epoch):
         else:
             loss = criterion(predictions, tags if not args.regression else regression_tags)
 
+        # Simulating fairness without demographics in using KNN based labels
+        # TODO: it currently only supports a subset of debiasing methods, check the usage carefully
+        if args.knn_labels:
+            p_tags = KNN_labels(
+                criterion = criterion, tags = tags if not args.regression else regression_tags, 
+                predictions = predictions, text = text, model = model, loss = loss, 
+                p = args.knn_labels_p, k = args.knn_labels_k)
+            batch = batch.copy()
+            batch[2] = p_tags
+
+            if args.UKNN_debiasing and (args.UKNN_lambda != 0):
+                loss = loss + args.UKNN_loss(
+                    predictions, tags, p_tags, 
+                    regression_tags = None if not args.regression else regression_tags,
+                )
+                
+        if args.ARL:
+            # loss = loss + args.ARL_loss.get_arl_loss(model, batch, predictions, args)
+            loss = args.ARL_loss.get_arl_loss(model, batch, predictions, args)
+
         if args.adv_debiasing:
             # Update discriminator if needed
             if args.adv_update_frequency == "Batch":
-                args.discriminator.train_self_batch(model, batch)
+                # Update the class-specific discriminator
+                if args.adv_gated and (args.adv_gated_type == "Separate"):
+                    for tmp_y in range(args.num_classes):
+                        tmp_y_mask = list(torch.where(tags == tmp_y)[0].cpu().numpy())
+                        if len(tmp_y_mask) > 0:
+                            _batch = [i[tmp_y_mask] for i in batch]
+                            args.discriminator[tmp_y].train_self_batch(model, _batch)
+                else:
+                    args.discriminator.train_self_batch(model, batch)
 
             # get hidden representations
             if args.gated:
@@ -68,10 +103,20 @@ def train_epoch(model, iterator, args, epoch):
             else:
                 hs = model.hidden(text)
 
-            adv_losses = args.discriminator.adv_loss(hs, tags, p_tags)
+            # Get adv losses
+            if args.adv_gated and (args.adv_gated_type == "Separate"):
+                for tmp_y in range(args.num_classes):
+                    tmp_y_mask = list(torch.where(tags == tmp_y)[0].cpu().numpy())
+                    if len(tmp_y_mask) > 0:
+                        tmp_y_adv_losses = args.discriminator[tmp_y].adv_loss(hs[tmp_y_mask], tags[tmp_y_mask], p_tags[tmp_y_mask])
 
-            for adv_loss in adv_losses:
-                loss = loss - (adv_loss / args.adv_num_subDiscriminator)
+                        for tmp_y_adv_loss in tmp_y_adv_losses:
+                            loss = loss - (tmp_y_adv_loss / (args.adv_num_subDiscriminator * args.num_classes))
+            else:
+                adv_losses = args.discriminator.adv_loss(hs, tags, p_tags)
+
+                for adv_loss in adv_losses:
+                    loss = loss - (adv_loss / args.adv_num_subDiscriminator)
 
         if args.FCL:
             # get hidden representations
@@ -89,7 +134,7 @@ def train_epoch(model, iterator, args, epoch):
                 predictions, tags, p_tags, 
                 regression_tags = None if not args.regression else regression_tags,
                 )
-
+        optimizer.zero_grad()
         loss.backward()
 
         # Zero gradients of the cls head 
@@ -121,11 +166,17 @@ def train_epoch(model, iterator, args, epoch):
                     iterator = args.opt.dev_generator, 
                     args = args)
 
+                is_best = validation_is_best(
+                    valid_preds, valid_labels, valid_private_labels,
+                    model, epoch_valid_loss, selection_criterion = "DTO",
+                    performance_metric = "accuracy", fairness_metric="TPR_GAP"
+                    )
+
                 present_evaluation_scores(
                     valid_preds, valid_labels, valid_private_labels,
                     test_preds, test_labels, test_private_labels,
-                    epoch=epoch+(it / len(iterator)), epochs_since_improvement=None, model=model, epoch_valid_loss=None,
-                    is_best=False, 
+                    epoch=epoch+(it / len(iterator)), epochs_since_improvement=None, model=model,
+                    epoch_valid_loss=None, is_best=is_best
                     )
                 
                 model.train()
@@ -157,6 +208,12 @@ def eval_epoch(model, iterator, args):
         text = text.to(device)
         tags = tags.to(device).long()
         p_tags = p_tags.to(device).float()
+
+        if args.encoder_architecture == "BERT":
+            # Modify the inputs for BERT models
+            mask = torch.stack(batch["attention_mask"]).float().squeeze().T
+            mask = mask.to(args.device)
+            text = (text, mask)
 
         if args.BT is not None and args.BT == "Reweighting":
             instance_weights = batch[3].float()
@@ -220,7 +277,9 @@ class BaseModel(nn.Module):
             self.criterion = torch.nn.MSELoss(reduction = reduction)
         else:
             self.criterion = torch.nn.CrossEntropyLoss(reduction = reduction)
-        
+
+        self.best_valid_loss = 1e+5
+
         print_network(self, verbose=True)
 
     def init_hyperparameters(self):
@@ -273,7 +332,7 @@ class BaseModel(nn.Module):
             logging.info("Reinitialized DyBT sampler for dataloader")
 
         epochs_since_improvement = 0
-        best_valid_loss = 1e+5
+        # best_valid_loss = 1e+5
 
         for epoch in range(self.args.opt.epochs):
             
@@ -300,8 +359,13 @@ class BaseModel(nn.Module):
                 self.args.discriminator.train_self(self)
 
             # Check if there was an improvement
-            is_best = epoch_valid_loss < best_valid_loss
-            best_valid_loss = min(epoch_valid_loss, best_valid_loss)
+            # is_best = epoch_valid_loss < best_valid_loss
+            # best_valid_loss = min(epoch_valid_loss, best_valid_loss)
+            is_best = validation_is_best(
+                valid_preds, valid_labels, valid_private_labels,
+                self, epoch_valid_loss, selection_criterion = "DTO",
+                performance_metric = "accuracy", fairness_metric="TPR_GAP"
+                )
 
             if not is_best:
                 epochs_since_improvement += 1
