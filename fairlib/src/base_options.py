@@ -344,6 +344,7 @@ class BaseOptions(object):
         parser.add_argument("--GBT_alpha", type=float, default=1, help="interpolation for generalized BT")
 
         # ARL
+        parser.add_argument('--ARL', action='store_true', default=False,
                             help='Perform adversarial reweighted learning (ARL)')
         parser.add_argument('--ARL_n',type=pos_int, default=1,
                             help='Update the adversary n times per main model update')
@@ -529,6 +530,9 @@ class BaseOptions(object):
                 # if state.adv_decoupling:
                 #     raise NotImplementedError
 
+                if state.adv_gated and (state.adv_gated_type == "Separate"):
+                    # Train a set of discriminators for each class
+                    state.opt.discriminator = [networks.adv.Discriminator(state) for _ in range(state.num_classes)]
                 else:
                     # All other adv settings
                     state.opt.discriminator = networks.adv.Discriminator(state)
