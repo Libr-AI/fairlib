@@ -14,4 +14,4 @@ class text2id():
     
     def encoder(self, sample):
         encodings = self.tokenizer(sample, truncation=True, padding=True)
-        return encodings["input_ids"]
+        return encodings["input_ids"], encodings['token_type_ids'], encodings['attention_mask']

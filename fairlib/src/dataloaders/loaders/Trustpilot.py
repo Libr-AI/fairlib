@@ -23,8 +23,12 @@ class TrustpilotDataset(BaseDataset):
         if self.args.protected_task == "gender":
             self.protected_label = data["gender_label"].astype(np.int32) # Gender
         elif self.args.protected_task == "age":
-            self.protected_label = data["age_label"].astype(np.int32) # Economy
+            self.protected_label = data["age_label"].astype(np.int32) # Age
         elif self.args.protected_task == "country":
-            self.protected_label = data["country_label"].astype(np.int32) # Economy
+            self.protected_label = data["country_label"].astype(np.int32) # Country
+        elif self.args.protected_task == "intersection":
+            self.protected_label = np.array(
+                [4*_g+2*_a+_c for _g,_a,_c in zip(list(data["gender_label"]), list(data["age_label"]), data["country_label"])]
+                ).astype(np.int32) # Intersection
         else:
             raise NotImplementedError

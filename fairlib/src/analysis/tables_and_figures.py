@@ -504,4 +504,4 @@ def make_zoom_plot(
     ax.indicate_inset_zoom(axins, edgecolor="black")
     
     if figure_name is not None:
-        fig.savefig(figure_name, dpi=960, bbox_inches="tight") 
+        fig.savefig(figure_name+".pdf", format="pdf", dpi=960, bbox_inches="tight")

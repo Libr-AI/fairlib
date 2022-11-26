@@ -43,7 +43,7 @@ class Bios:
             avg_data, cls_data = self.encoder.encode(text_data)
             split_df["bert_avg_SE"] = list(avg_data)
             split_df["bert_cls_SE"] = list(cls_data)
-            split_df["gender_class"] = split_df["g"]
+            split_df["gender_class"] = split_df["g"].map(gender2id)
             split_df["profession_class"] = split_df["p"].map(professions2id)
 
             split_df.to_pickle(Path(self.dest_folder) / "bios_{}_df.pkl".format(split))

@@ -1,7 +1,6 @@
 import numpy as np
 import torch
-from transformers import *
-import pickle
+from transformers import BertModel, BertTokenizer
 from tqdm.auto import tqdm, trange
 
 class BERT_encoder:

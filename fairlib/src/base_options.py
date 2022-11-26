@@ -16,6 +16,7 @@ from . import networks
 from .networks import adv
 from .networks import FairCL
 from .networks.DyBT import Group_Difference_Loss
+from .networks.ARL import ARL
 
 class State(object):
 
@@ -185,6 +186,8 @@ class BaseOptions(object):
                             help='how many batches to wait before logging training status')
         parser.add_argument('--save_batch_results', action='store_true', default=False, 
                             help='if saving batch evaluation results')
+        parser.add_argument('--save_models', action='store_true', default=False, 
+                            help='if saving model parameters')
         parser.add_argument('--checkpoint_interval', type=int, default=1, metavar='N',
                             help='checkpoint interval (epoch)')
         parser.add_argument('--dataset', type=str, default='Moji',
@@ -282,6 +285,8 @@ class BaseOptions(object):
         # Gated adv
         parser.add_argument('--adv_gated',  action='store_true', default=False, 
                             help='gated discriminator for augmented inputs given target labels')
+        parser.add_argument('--adv_gated_type', type=str, default="Augmentation",
+                            help='Augmentation | Inputs | Separate')
         parser.add_argument('--adv_BT', type=str, default=None, help='instacne reweighting for adv')
         parser.add_argument('--adv_BTObj', type=str, default=None, help='instacne reweighting for adv')
 
@@ -337,6 +342,13 @@ class BaseOptions(object):
         parser.add_argument('--GBTObj', type=str, default=None, help='joint | y | g | y_cond_g | g_cond_y')
         parser.add_argument('--GBT_N', type=nonneg_int, default=None, help='size of the manipulated dataset')
         parser.add_argument("--GBT_alpha", type=float, default=1, help="interpolation for generalized BT")
+
+        # ARL
+        parser.add_argument('--ARL', action='store_true', default=False,
+                            help='Perform adversarial reweighted learning (ARL)')
+        parser.add_argument('--ARL_n',type=pos_int, default=1,
+                            help='Update the adversary n times per main model update')
+
 
     def get_dummy_state(self, *cmdargs, yaml_file=None, **opt_pairs):
         if yaml_file is None:
@@ -515,8 +527,15 @@ class BaseOptions(object):
             
             # Init discriminator for adversarial training
             if state.adv_debiasing:
+                # if state.adv_decoupling:
+                #     raise NotImplementedError
 
-                state.opt.discriminator = networks.adv.Discriminator(state)
+                if state.adv_gated and (state.adv_gated_type == "Separate"):
+                    # Train a set of discriminators for each class
+                    state.opt.discriminator = [networks.adv.Discriminator(state) for _ in range(state.num_classes)]
+                else:
+                    # All other adv settings
+                    state.opt.discriminator = networks.adv.Discriminator(state)
                 logging.info('Discriminator built!')
                 # adv.utils.print_network(state.opt.discriminator.subdiscriminators[0])
 
@@ -529,6 +548,11 @@ class BaseOptions(object):
             # Init the group difference loss
             if (state.DyBT is not None) and (state.DyBT == "GroupDifference"):
                 state.opt.group_difference_loss = Group_Difference_Loss(state)
+
+            # Init the ARL for unsupervised training
+            if state.ARL:
+                assert not state.adv_debiasing, "ARL is unsupervised bias mitigation, which cannot be used together with adversarial training"
+                state.opt.ARL_loss = ARL(state)
 
         return state
 

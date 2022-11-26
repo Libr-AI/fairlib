@@ -45,15 +45,15 @@ def save_checkpoint(
     _state = {
         'epoch': epoch,
         'epochs_since_improvement': epochs_since_improvement,
-        # 'model': model.state_dict(),
         'loss': loss,
-        # 'dev_predictions': dev_predictions,
-        # 'test_predictions': test_predictions,
         "valid_confusion_matrices" : valid_confusion_matrices,
         "test_confusion_matrices" : test_confusion_matrices,
         'dev_evaluations': dev_evaluations,
         'test_evaluations': test_evaluations
         }
+
+    if model.args.save_models:
+        _state["model"] = model.state_dict()
 
     if dev_predictions is not None:
         _state["dev_predictions"] = dev_predictions

@@ -180,7 +180,7 @@ class FairBatch(Sampler):
     def adjust_lambda(self):
         """Adjusts the lambda values for FairBatch algorithm.
         
-        The detailed algorithms are decribed in the paper.
+        The detailed algorithms are described in the paper.
 
         """
         epoch_loss = self.epoch_loss()

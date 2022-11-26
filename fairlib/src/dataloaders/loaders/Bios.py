@@ -12,14 +12,18 @@ class BiosDataset(BaseDataset):
 
         data = pd.read_pickle(Path(self.args.data_dir) / self.filename)
 
-        if self.args.protected_task in ["economy", "both"] and self.args.full_label:
+        # if self.args.protected_task in ["economy", "both"] and self.args.full_label:
+        if self.args.protected_task in ["gender", "economy", "both", "intersection"] and self.args.full_label:
             selected_rows = (data["economy_label"] != "Unknown")
             data = data[selected_rows]
 
         if self.args.encoder_architecture == "Fixed":
             self.X = list(data[self.embedding_type])
         elif self.args.encoder_architecture == "BERT":
-            self.X = self.args.text_encoder.encoder(list(data[self.text_type]))
+            _input_ids, _token_type_ids, _attention_mask = self.args.text_encoder.encoder(list(data[self.text_type]))
+            self.X = _input_ids
+            self.addition_values["input_ids"] = _input_ids
+            self.addition_values['attention_mask'] = _attention_mask
         else:
             raise NotImplementedError
 
@@ -28,5 +32,9 @@ class BiosDataset(BaseDataset):
             self.protected_label = data["gender_class"].astype(np.int32) # Gender
         elif self.args.protected_task == "economy":
             self.protected_label = data["economy_class"].astype(np.int32) # Economy
+        elif self.args.protected_task == "intersection":
+            self.protected_label = np.array(
+                [2*_e+_g for _e,_g in zip(list(data["economy_class"]), list(data["gender_class"]))]
+                ).astype(np.int32) # Intersection
         else:
             self.protected_label = data["intersection_class"].astype(np.int32) # Intersection

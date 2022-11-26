@@ -76,7 +76,7 @@ def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
         method (str, optional): Downsampling | Resampling. Defaults to "Downsampling".
 
     Returns:
-        list: a list of indices of selected instacnes.
+        list: a list of indices of selected instances.
     """
 
     # init a dict for storing the index of each group.
@@ -133,7 +133,7 @@ def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
         weighting_counter = Counter(y)
 
         # a list of (weights, actual length)
-        condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_y] for (_y, _g) in group_idx.keys()])
+        candidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_y] for (_y, _g) in group_idx.keys()])
 
         distinct_y_label = set(y)
         distinct_g_label = set(protected_label)
@@ -141,7 +141,7 @@ def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
         # iterate each main task class
         for y in distinct_y_label:
             if method == "Downsampling":
-                selected = int(condidate_selected * weighting_counter[y])
+                selected = int(candidate_selected * weighting_counter[y])
             elif method == "Resampling":
                 selected = int(weighting_counter[y] / len(distinct_g_label))
             for g in distinct_g_label:
@@ -157,7 +157,7 @@ def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
         weighting_counter = Counter(protected_label)
         # a list of (weights, actual length)
         # Noticing that if stratified_g, the order within the key has been changed.
-        condidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_g] for (_y, _g) in group_idx.keys()])
+        candidate_selected = min([len(group_idx[(_y, _g)])/weighting_counter[_g] for (_y, _g) in group_idx.keys()])
 
         distinct_y_label = set(y)
         distinct_g_label = set(protected_label)
@@ -166,7 +166,7 @@ def get_sampled_indices(BTObj, y, protected_label, method = "Downsampling"):
         # for y in distinct_y_label:
         for g in distinct_g_label:
             if method == "Downsampling":
-                selected = int(condidate_selected * weighting_counter[g])
+                selected = int(candidate_selected * weighting_counter[g])
             elif method == "Resampling":
                 selected = int(weighting_counter[g] / len(distinct_y_label))
             # for g in distinct_g_label:

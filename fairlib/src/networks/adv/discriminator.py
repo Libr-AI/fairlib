@@ -43,8 +43,16 @@ def adv_train_batch(model, discriminators, batch, args):
     tags = tags.to(args.device)
     p_tags = p_tags.to(args.device)
     adv_instance_weights = adv_instance_weights.to(args.device)
+
+    if args.encoder_architecture == "BERT":
+        # Modify the inputs for BERT models
+        attention_mask = torch.stack(batch["attention_mask"]).float().squeeze().T
+        if args.adv_decoupling:
+            attention_mask = attention_mask[decoupling_masks]
+        attention_mask = attention_mask.to(args.device)
+        text = (text, attention_mask)
         
-        # hidden representations from the model
+    # hidden representations from the model
     if args.gated:
         hs = model.hidden(text, p_tags).detach()
     else:
