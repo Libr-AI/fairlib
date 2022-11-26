@@ -25,7 +25,6 @@ class MLP(BaseModel):
 
         # Init batch norm, dropout, and activation function
         self.init_hyperparameters()
-        self.cls_parameter = self.get_cls_parameter()
 
         # Init hidden layers
         self.hidden_layers = self.init_hidden_layers()
@@ -50,6 +49,8 @@ class MLP(BaseModel):
                     device=self.args.device,
                     sample_component=self.hidden_layers
                 )
+        
+        self.cls_parameter = self.get_cls_parameter()
         
         self.init_for_training()
 
@@ -141,7 +142,7 @@ class MLP(BaseModel):
 
 class BERTClassifier(BaseModel):
     model_name = 'bert-base-cased'
-    n_freezed_layers = 10
+    n_freezed_layers = 12
 
     def __init__(self, args):
         super(BERTClassifier, self).__init__()
@@ -171,12 +172,14 @@ class BERTClassifier(BaseModel):
         self.init_for_training()
 
     def forward(self, input_data, group_label = None):
-        bert_output = self.bert(input_data)[1]
+        input_ids, input_masks = input_data
+        bert_output = self.bert(input_ids, encoder_attention_mask=input_masks)[1]
 
         return self.classifier(bert_output, group_label)
     
     def hidden(self, input_data, group_label = None):
-        bert_output = self.bert(input_data)[1]
+        input_ids, input_masks = input_data
+        bert_output = self.bert(input_ids, encoder_attention_mask=input_masks)[1]
 
         return self.classifier.hidden(bert_output, group_label)
 
