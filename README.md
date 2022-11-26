@@ -10,7 +10,7 @@ For those who want to start with *fairlib* now, you can try our [Colab Tutorial]
 
 ## Installation
 
-*fairlib* currently requires Python3.7+ and [Pytorch](https://pytorch.org) 1.10 or higher.
+*fairlib* currently requires Python3.8+ and [Pytorch](https://pytorch.org) 1.10 or higher.
 Dependencies of the core modules are listed in [`requirements.txt`](https://github.com/HanXudong/fairlib/blob/main/requirements.txt). 
 We *strongly* recommend using a [venv](https://docs.python.org/3/library/venv.html) or [conda](https://www.anaconda.com/) environment for installation.
 
@@ -20,7 +20,7 @@ If you do not need further modifications, you can install it with:
 
 ```bash
 # Start a new virtual environment:
-conda create -n fairlib python=3.7
+conda create -n fairlib python=3.8
 conda activate fairlib
 
 pip install fairlib
