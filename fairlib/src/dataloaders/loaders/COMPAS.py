@@ -19,3 +19,7 @@ class COMPASDataset(BaseDataset):
             self.protected_label =np.array(list(data["sex"])).astype(np.int32) # Gender
         elif self.args.protected_task == "race":
             self.protected_label = np.array(list(data["race"])).astype(np.int32) # Race
+        elif self.args.protected_task == "intersection":
+            self.protected_label = np.array(
+                [_r+_s*3 for _r,_s in zip(list(data["race"]), list(data["sex"]))]
+                ).astype(np.int32) # Intersectional
