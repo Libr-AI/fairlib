@@ -30,6 +30,7 @@ class BaseDataset(torch.utils.data.Dataset):
         self.instance_weights = []
         self.adv_instance_weights = []
         self.regression_label = []
+        self.addition_values = {}
 
         self.load_data()
 
@@ -50,7 +51,6 @@ class BaseDataset(torch.utils.data.Dataset):
         if self.split == "train":
             self.adv_decoupling()
 
-
         print("Loaded data shapes: {}, {}, {}".format(self.X.shape, self.y.shape, self.protected_label.shape))
 
     def __len__(self):
@@ -59,7 +59,25 @@ class BaseDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         'Generates one sample of data'
-        return self.X[index], self.y[index], self.protected_label[index], self.instance_weights[index], self.adv_instance_weights[index], self.regression_label[index]
+        _X = self.X[index]
+        _y = self.y[index]
+        _protected_label = self.protected_label[index]
+        _instance_weights = self.instance_weights[index]
+        _adv_instance_weights = self.adv_instance_weights[index]
+        _regression_label = self.regression_label[index]
+
+        data_dict = {
+            0:_X,
+            1:_y,
+            2:_protected_label,
+            3:_instance_weights,
+            4:_adv_instance_weights,
+            5:_regression_label,
+        }
+        for _k in self.addition_values.keys():
+            if _k not in data_dict.keys():
+                data_dict[_k] = self.addition_values[_k][index]
+        return data_dict
     
     def load_data(self):
         pass
@@ -78,6 +96,9 @@ class BaseDataset(torch.utils.data.Dataset):
             self.X = self.X[selected_index]
             self.y = self.y[selected_index]
             self.protected_label = self.protected_label[selected_index]
+
+            for _k in self.addition_values.keys():
+                self.addition_values[_k] = [self.addition_values[_k][index] for index in selected_index]
 
     def balanced_training(self):
         if (self.args.BT is None) or (self.split != "train"):
@@ -111,6 +132,9 @@ class BaseDataset(torch.utils.data.Dataset):
                 _protected_label = [self.protected_label[index] for index in selected_index]
                 self.protected_label = np.array(_protected_label)
                 self.instance_weights = np.array([1 for _ in range(len(self.protected_label))])
+
+                for _k in self.addition_values.keys():
+                    self.addition_values[_k] = [self.addition_values[_k][index] for index in selected_index]
 
             else:
                 raise NotImplementedError
@@ -152,7 +176,7 @@ class BaseDataset(torch.utils.data.Dataset):
         else:
             pass
         return None
-
+    
     def regression_init(self):
         if not self.args.regression:
             self.regression_label = np.array([0 for _ in range(len(self.protected_label))])
