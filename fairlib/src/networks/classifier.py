@@ -25,10 +25,11 @@ class MLP(BaseModel):
 
         # Init batch norm, dropout, and activation function
         self.init_hyperparameters()
-        self.cls_parameter = self.get_cls_parameter()
 
         # Init hidden layers
         self.hidden_layers = self.init_hidden_layers()
+
+        self.cls_parameter = self.get_cls_parameter()
 
         # Augmentation layers
         if self.args.gated:
