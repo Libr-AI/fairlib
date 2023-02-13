@@ -92,12 +92,24 @@ or describe it in Issues.
 
 Cite Us
 ```
-@article{han2022fairlib,
-  title={fairlib: A Unified Framework for Assessing and Improving Classification Fairness},
-  author={Han, Xudong and Shen, Aili and Li, Yitong and Frermann, Lea and Baldwin, Timothy and Cohn, Trevor},
-  journal={arXiv preprint arXiv:2205.01876},
-  year={2022}
+@inproceedings{han-etal-2022-fairlib,
+    title = "{F}air{L}ib: A Unified Framework for Assessing and Improving Fairness",
+    author = "Han, Xudong  and
+      Shen, Aili  and
+      Li, Yitong  and
+      Frermann, Lea  and
+      Baldwin, Timothy  and
+      Cohn, Trevor",
+    booktitle = "Proceedings of the The 2022 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = dec,
+    year = "2022",
+    address = "Abu Dhabi, UAE",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.emnlp-demos.7",
+    pages = "60--71",
+    abstract = "This paper presents FairLib, an open-source python library for assessing and improving model fairness. It provides a systematic framework for quickly accessing benchmark datasets, reproducing existing debiasing baseline models, developing new methods, evaluating models with different metrics, and visualizing their results.Its modularity and extensibility enable the framework to be used for diverse types of inputs, including natural language, images, and audio.We implement 14 debiasing methods, including pre-processing,at-training-time, and post-processing approaches. The built-in metrics cover the most commonly acknowledged fairness criteria and can be further generalized and customized for fairness evaluation.",
 }
+
 ```
 
 
