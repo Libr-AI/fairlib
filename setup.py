@@ -28,7 +28,8 @@ except:
         "pickle5",
         "transformers",
         "sacremoses",
-        "sentencepiece"
+        "sentencepiece",
+        "torchvision"
     ]
 
 
