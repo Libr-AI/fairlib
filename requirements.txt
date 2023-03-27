@@ -11,4 +11,4 @@ pickle5==0.0.12
 transformers==4.11.3
 sacremoses==0.0.53
 sentencepiece
-torchvision==0.11.1
+torchvision==0.11.0
