@@ -7,8 +7,8 @@ torch==1.10.0
 PyYAML==6.0
 seaborn==0.11.2
 matplotlib==3.5.0
-pickle5==0.0.12
+pickle5==0.0.12 ; python_version < '3.8'
 transformers==4.11.3
 sacremoses==0.0.53
 sentencepiece
-torchvision==0.11.0
+torchvision==0.11.1
