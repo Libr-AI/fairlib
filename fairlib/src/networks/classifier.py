@@ -29,6 +29,8 @@ class MLP(BaseModel):
         # Init hidden layers
         self.hidden_layers = self.init_hidden_layers()
 
+        self.cls_parameter = self.get_cls_parameter()
+
         # Augmentation layers
         if self.args.gated:
             if self.args.n_hidden == 0:
