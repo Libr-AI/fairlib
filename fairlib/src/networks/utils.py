@@ -207,7 +207,6 @@ def eval_epoch(model, iterator, args):
         tags = tags.to(device).long()
         p_tags = p_tags.to(device).float()
 
-        if args.encoder_architecture == "BERT":
         if args.encoder_architecture != "Fixed":
             # Modify the inputs for models like BERT
             mask = torch.stack(batch["attention_mask"]).float().squeeze().T
