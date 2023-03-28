@@ -100,7 +100,7 @@ Cite Us
       Frermann, Lea  and
       Baldwin, Timothy  and
       Cohn, Trevor",
-    booktitle = "Proceedings of the The 2022 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
     month = dec,
     year = "2022",
     address = "Abu Dhabi, UAE",

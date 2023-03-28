@@ -6,8 +6,8 @@ import time
 from pathlib import Path
 from ..evaluators import print_network, present_evaluation_scores, validation_is_best
 import pandas as pd
+from .knn_labels import KNN_labels
 
-# train the main model with adv loss
 def train_epoch(model, iterator, args, epoch):
 
     epoch_loss = 0
@@ -25,12 +25,8 @@ def train_epoch(model, iterator, args, epoch):
         tags = batch[1].long().squeeze()
         p_tags = batch[2].float().squeeze()
 
-        text = text.to(args.device)
-        tags = tags.to(args.device)
-        p_tags = p_tags.to(args.device)
-
-        if args.encoder_architecture == "BERT":
-            # Modify the inputs for BERT models
+        if args.encoder_architecture != "Fixed":
+            # Modify the inputs for models like BERT
             mask = torch.stack(batch["attention_mask"]).float().squeeze().T
             mask = mask.to(args.device)
             text = (text, mask)
@@ -42,6 +38,10 @@ def train_epoch(model, iterator, args, epoch):
         if args.regression:
             regression_tags = batch[5].float().squeeze()
             regression_tags = regression_tags.to(args.device)
+
+        text = text.to(args.device)
+        tags = tags.to(args.device)
+        p_tags = p_tags.to(args.device)
 
         data_t += (time.time() - data_t0)
         t0 = time.time()
@@ -63,6 +63,21 @@ def train_epoch(model, iterator, args, epoch):
         else:
             loss = criterion(predictions, tags if not args.regression else regression_tags)
 
+        # Simulating fairness without demographics in using KNN based labels
+        if args.knn_labels:
+            p_tags = KNN_labels(
+                criterion = criterion, tags = tags if not args.regression else regression_tags, 
+                predictions = predictions, text = text, model = model, loss = loss, 
+                p = args.knn_labels_p, k = args.knn_labels_k)
+            batch = batch.copy()
+            batch[2] = p_tags
+
+            if args.UKNN_debiasing and (args.UKNN_lambda != 0):
+                loss = loss + args.UKNN_loss(
+                    predictions, tags, p_tags, 
+                    regression_tags = None if not args.regression else regression_tags,
+                )
+                
         if args.ARL:
             # loss = loss + args.ARL_loss.get_arl_loss(model, batch, predictions, args)
             loss = args.ARL_loss.get_arl_loss(model, batch, predictions, args)
@@ -192,8 +207,8 @@ def eval_epoch(model, iterator, args):
         tags = tags.to(device).long()
         p_tags = p_tags.to(device).float()
 
-        if args.encoder_architecture == "BERT":
-            # Modify the inputs for BERT models
+        if args.encoder_architecture != "Fixed":
+            # Modify the inputs for models like BERT
             mask = torch.stack(batch["attention_mask"]).float().squeeze().T
             mask = mask.to(args.device)
             text = (text, mask)

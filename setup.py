@@ -25,10 +25,11 @@ except:
         "PyYAML",
         "seaborn",
         "matplotlib",
-        "pickle5",
+        "pickle5 ; python_version < '3.8'",
         "transformers",
         "sacremoses",
-        "sentencepiece"
+        "sentencepiece",
+        "torchvision"
     ]
 
 

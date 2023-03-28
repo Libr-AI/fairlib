@@ -17,6 +17,7 @@ from .networks import adv
 from .networks import FairCL
 from .networks.DyBT import Group_Difference_Loss
 from .networks.ARL import ARL
+from .networks.knn_labels import KNN_Loss
 
 class State(object):
 
@@ -343,6 +344,20 @@ class BaseOptions(object):
         parser.add_argument('--GBT_N', type=nonneg_int, default=None, help='size of the manipulated dataset')
         parser.add_argument("--GBT_alpha", type=float, default=1, help="interpolation for generalized BT")
 
+
+        # KNN labels
+        parser.add_argument("--knn_labels",action='store_true', default=False,
+                            help='Replace actual protected labels with knn_labels')
+        parser.add_argument('--knn_labels_k', type=nonneg_int, default=5, help='number of instances for knn')
+        parser.add_argument('--knn_labels_p', type=nonneg_int, default=2, help='power of the distance metric for knn')
+
+        # KNN label debiasing
+        parser.add_argument('--UKNN_debiasing', action='store_true', default=False,
+                            help='Perform simple debiasing based on KNN proxy labels')
+
+        parser.add_argument("--UKNN_lambda", type=float, default=0, 
+                            help="weights of the UKNN regularization")
+
         # ARL
         parser.add_argument('--ARL', action='store_true', default=False,
                             help='Perform adversarial reweighted learning (ARL)')
@@ -548,6 +563,10 @@ class BaseOptions(object):
             # Init the group difference loss
             if (state.DyBT is not None) and (state.DyBT == "GroupDifference"):
                 state.opt.group_difference_loss = Group_Difference_Loss(state)
+            
+            # Init the UKNN loss for unsupervised bias mitigation
+            if state.knn_labels and state.UKNN_debiasing and (state.UKNN_lambda != 0):
+                state.opt.UKNN_loss = KNN_Loss(state)
 
             # Init the ARL for unsupervised training
             if state.ARL:
